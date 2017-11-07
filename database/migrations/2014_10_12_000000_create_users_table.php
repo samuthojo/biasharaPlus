@@ -15,11 +15,21 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('business_id'); //like account number
             $table->string('name');
+            $table->string('username');
             $table->string('email')->unique();
+            $table->string('phone_number');
             $table->string('password');
+            $table->string('subscription');
+            $table->date('subscription_start_date');
+            $table->date('subscription_end_date');
+            $table->double('total_cc', 17, 3);
+            $table->string('country');
+            $table->string('image');
             $table->rememberToken();
-            $table->timestamps();
+            $table->timestamps(); //created_at == reg_date
+            $table->softDeletes();
         });
     }
 
