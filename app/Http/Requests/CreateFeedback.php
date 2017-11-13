@@ -24,11 +24,11 @@ class CreateFeedback extends FormRequest
   public function rules()
   {
       return [
-          'user_id' => 'required',
+          'email' => 'required|email',
           'subject' => 'required',
           'feedback' => 'required',
       ];
   }
-
+  
 
 }

@@ -7,9 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class PriceLists extends Controller
 {
-  public function __construct() {
-    //$this->middleware('auth:api');
-  }
 
   public function priceList() {
     $price_list = \App\PriceList::all([

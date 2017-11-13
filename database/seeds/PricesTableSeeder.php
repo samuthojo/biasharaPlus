@@ -12,7 +12,7 @@ class PricesTableSeeder extends Seeder
     public function run()
     {
       $faker = Faker\Factory::create();
-      for($i = 1; $i < 4; $i++) {
+      for($i = 1; $i < 7; $i++) {
         \App\Price::create([
           'product_id' => $i,
           'price_list_id' => $i,

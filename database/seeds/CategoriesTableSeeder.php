@@ -12,7 +12,7 @@ class CategoriesTableSeeder extends Seeder
     public function run()
     {
       $faker = Faker\Factory::create();
-      for($i = 1; $i < 4; $i++) {
+      for($i = 1; $i < 7; $i++) {
         \App\Category::create([
           'name' => $faker->word(1),
         ]);

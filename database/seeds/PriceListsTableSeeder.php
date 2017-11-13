@@ -11,10 +11,12 @@ class PriceListsTableSeeder extends Seeder
      */
     public function run()
     {
+      $names = ['asst_spvsr', 'spvsr', 'asst_man', 'man',
+                'retail', 'novus'];
       $faker = Faker\Factory::create();
-      for($i = 1; $i < 4; $i++) {
+      foreach($names as $my_name) {
         \App\PriceList::create([
-          'name' => $faker->word(1),
+          'name' => $my_name,
           'color' => $faker->hexcolor,
           'effective_date' => $faker->date,
         ]);

@@ -7,12 +7,12 @@ use App\Http\Requests\CreateFeedback;
 
 class Feedbacks extends Controller
 {
-  
+
     public function store(CreateFeedback $request) {
-      $user_id = $request->input('user_id');
+      $email = $request->input('email');
       $subject = $request->input('subject');
       $feedback = $request->input('feedback');
-      \App\Feedback::create(compact('user_id', 'subject',
+      \App\Feedback::create(compact('email', 'subject',
                                     'feedback'));
 
       return response()->json([

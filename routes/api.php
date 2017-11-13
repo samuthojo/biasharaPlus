@@ -17,10 +17,11 @@ Route::prefix('v2')->group( function() {
 });
 
 Route::middleware('auth:api')->prefix('v2')->group( function() {
-  Route::get('retail', 'Retail@retail');
-  Route::get('wholesale', 'WholeSale@wholesale');
+  Route::get('retail/{country}', 'Retail@retail');
+  Route::get('wholesale/{country}', 'WholeSale');
   Route::get('price_list', 'PriceLists@priceList');
   Route::post('feed_back', 'Feedbacks@store');
   Route::get('account_detail', 'Users@accountDetail');
   Route::post('update_subscription', 'Users@updateSubscription');
+  Route::post('receive_payment', 'Payments');
 });
