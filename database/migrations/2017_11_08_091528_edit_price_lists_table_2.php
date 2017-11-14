@@ -14,7 +14,7 @@ class EditPriceListsTable2 extends Migration
     public function up()
     {
         Schema::table('price_lists', function (Blueprint $table) {
-            $table->date('effective_date')->change();
+            // $table->date('effective_date')->change();
         });
     }
 
