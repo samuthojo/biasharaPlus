@@ -53,7 +53,7 @@
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
             "php artisan optimize",
             "php artisan config:clear",
-            "php artisan passport:install"
+            "php artisan passport:install --force"
         ],
         "post-update-cmd": [
           "Illuminate\\Foundation\\ComposerScripts::postUpdate",
