@@ -13,13 +13,13 @@ class PriceListsTableSeeder extends Seeder
     {
       $names = ['asst_spvsr', 'spvsr', 'asst_man', 'man',
                 'retail', 'novus'];
-      $faker = Faker\Factory::create();
-      foreach($names as $my_name) {
-        \App\PriceList::create([
-          'name' => $my_name,
-          'color' => $faker->hexcolor,
-          'effective_date' => $faker->date,
-        ]);
-      }
+      // $faker = Faker\Factory::create();
+      // foreach($names as $my_name) {
+      //   \App\PriceList::create([
+      //     'name' => $my_name,
+      //     'color' => $faker->hexcolor,
+      //     'effective_date' => $faker->date,
+      //   ]);
+      // }
     }
 }

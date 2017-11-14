@@ -11,15 +11,15 @@ class VersionsTableSeeder extends Seeder
      */
     public function run()
     {
-      $faker = Faker\Factory::create();
-
-      for ($i=1; $i < 4; $i++) {
-          $version = [
-            'version_number' => $i,
-            'status' => ($i == 1) ? 1 : 0,
-            'features' => 'More security fixes',
-          ];
-          \App\Version::create($version);
-      }
+      // $faker = Faker\Factory::create();
+      //
+      // for ($i=1; $i < 4; $i++) {
+      //     $version = [
+      //       'version_number' => $i,
+      //       'status' => ($i == 1) ? 1 : 0,
+      //       'features' => 'More security fixes',
+      //     ];
+      //     \App\Version::create($version);
+      // }
     }
 }
