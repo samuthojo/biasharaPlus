@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Utils\Utils;
 use App\Http\Requests\CreateUser;
+use App\Http\Requests\CheckUserExistence;
+use App\Http\Requests\UpdateSubscription;
 
 class Users extends Controller
 {
@@ -19,7 +22,7 @@ class Users extends Controller
 
     const PACKAGE_3 = 10000;
 
-    public function checkUserExistence(Request $request)
+    public function checkUserExistence(CheckUserExistence $request)
     {
       extract($request->all(), EXTR_PREFIX_ALL, 'posted');
 
@@ -75,7 +78,7 @@ class Users extends Controller
       return response(compact('user', 'version'), 200);
     }
 
-    public function updateSubscription(Request $request) {
+    public function updateSubscription(UpdateSubscription $request) {
       $conditions = [
         ['reference_no', '=', $request->input('reference_no')],
         ['user_id', '=', 0],
@@ -83,10 +86,8 @@ class Users extends Controller
       try {
         $payment = \App\Payment::where($conditions)->firstOrFail();
         $user = \App\User::where($request->only('email'))->first();
-        $subscrEndDate = \App\Utils\Utils::
-                              timestampConverter($user->subscription_end_date);
-        $today = \App\Utils\Utils::
-                      timestampConverter(date('Y-m-d'));
+        $subscrEndDate = Utils::timestampConverter($user->subscription_end_date);
+        $today = Utils::timestampConverter(date('Y-m-d'));
         if($today < $subscrEndDate) {
           //Subscription not expired
           return $this->subscriptionNotExpired($payment, $user);
@@ -106,8 +107,7 @@ class Users extends Controller
     private function subscriptionNotExpired($payment, $user) {
       $amount = $payment->amount;
       $email = $user->email;
-      $subscrEndDate = \App\Utils\Utils::
-                            timestampConverter($user->subscription_end_date);
+      $subscrEndDate = Utils::timestampConverter($user->subscription_end_date);
       DB::beginTransaction();
       try {
 
@@ -158,8 +158,7 @@ class Users extends Controller
       $amount = $payment->amount;
       $email = $user->email;
       $subscrStartDate = $payment->date_payed;
-      $longStartDate = \App\Utils\Utils::
-                          timestampConverter($subscrStartDate);
+      $longStartDate = Utils::timestampConverter($subscrStartDate);
       DB::beginTransaction();
       try {
           if($amount >= self::PACKAGE_1 && $amount < self::PACKAGE_2) {
