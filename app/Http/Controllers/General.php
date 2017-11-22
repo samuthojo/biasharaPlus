@@ -6,5 +6,8 @@ use Illuminate\Http\Request;
 
 class General extends Controller
 {
-    //
+    public function logout()
+    {
+      
+    }
 }

@@ -16,7 +16,7 @@ class CreatePriceListsTable extends Migration
         Schema::create('price_lists', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->date('effective_data');
+            $table->string('effective_data');
             $table->string('color');
             $table->timestamps();
             $table->softDeletes();
