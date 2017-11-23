@@ -1,13 +1,18 @@
-$(document).ready(function () {
-  $(".alert-success").fadeOut(1500);
-});
-
 $(function () {
   $.ajaxSetup({
       headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
+
+  $("body").on('hidden.bs.modal', '.modal', function (e) {
+    
+  });
+
+});
+
+$(document).ready(function () {
+  $(".alert-success").fadeOut(1500);
 });
 
 function showModal(id) {

@@ -47,7 +47,7 @@ class Users extends Controller
       $user = null;
 
       if($request->hasFile('image_url')) {
-        $imageUrl = $this->handleImage($request->file('image_url'));
+        $imageUrl = Utils::handleImage($request->file('image_url'), $this->images);
         $user = $this->saveUserWithImage($imageUrl, $request);
       } else {
         $user = \App\User::create($request->all());
@@ -57,12 +57,6 @@ class Users extends Controller
       $token = $user->createToken($posted_email)->accessToken;
 
       return response()->json(compact('user', 'token'), 201);
-    }
-
-    private function handleImage($image) {
-      $imageName = $image->getClientOriginalName();
-      $image->move($this->images, $imageName);
-      return $this->images . $imageName;
     }
 
     private function saveUserWithImage($imageUrl, $request) {

@@ -22,8 +22,12 @@
   'text' =>  'You are about to delete this product!',
   'action' => 'Confirm',
   'function' => '',])
-
 @section('content')
+@if(request()->session()->has('message'))
+<div id="alert-success" class="alert alert-success">
+  {{request()->session()->pull('message')}}
+</div>
+@endif
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 style="font-weight: bold;" class="panel-title pull-left">
@@ -52,17 +56,17 @@
             @foreach($products as $product)
               <tr class="{{($loop->index % 2 == 0) ? 'success' : ''}}">
                 <td class="details-control" title="view more"
-                  onclick="productMoreDetails({{asset('uploads/products/' . $product->image)}}, '{{$product->description}}')">
+                  onclick="productMoreDetails({{$product->id}})">
                 </td>
                 <td>{{$loop->iteration}}</td>
-                <td>{{$product->name}}</td>
-                <td>{{$product->category}}</td>
-                <td>{{$product->code}}</td>
-                <td>{{$product->cc}}</td>
+                <td id="{{'product_name_' . $product->id}}">{{$product->name}}</td>
+                <td id="{{'category_name_' . $product->id}}">{{$product->category_name}}</td>
+                <td id="{{'product_code_' . $product->id}}">{{$product->code}}</td>
+                <td id="{{'product_cc_' . $product->id}}">{{$product->cc}}</td>
                 <td>
                   <div class="btn-group">
                     <button class="btn btn-warning" title="edit product"
-                      onclick="showModal('edit_product_modal')">
+                      onclick="showEditProductModal({{$product->id}})">
                       <span class="glyphicon glyphicon-pencil"></span>
                     </button>
                     <button class="btn btn-default" title="view price">

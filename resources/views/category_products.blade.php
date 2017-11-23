@@ -7,11 +7,11 @@
 
 <style>
   td.details-control {
-    background: url('../images/details_open.png') no-repeat center;
+    background: url('../../../images/details_open.png') no-repeat center;
     cursor: pointer;
   }
   tr.shown td.details-control {
-    background: url('../images/details_close.png') no-repeat center;
+    background: url('../../../images/details_close.png') no-repeat center;
   }
 </style>
 @include('modals.add_product_modal')
@@ -28,13 +28,26 @@
 
   <div class="panel-heading">
     <h3 style="font-weight: bold;" class="panel-title pull-left">
-      Products, {{$category->name}}
+      {{$category->name}} Products:
     </h3>
-    <span onclick="showModal('add_product_modal')"
+    <div class="btn-group pull-right">
+      <a class="btn btn-success" href="{{url('/categories')}}"
+        title="back">
+        <i class="fa fa-arrow-left"
+          style="font-size: 16px;"></i>
+      </a>
+      <button class="btn btn-success"
+        title="add product"
+        onclick="showModal('add_product_modal')">
+        <i class="fa fa-plus-circle"
+          style="font-size: 16px;"></i>
+      </button>
+    </div>
+    <!-- <span onclick="showModal('add_product_modal')"
       title="add product" style="cursor: pointer;"
       class="pull-right text-success">
       <i class="fa fa-plus-circle fa-2x"></i>
-    </span>
+    </span> -->
     <div class="clearfix"></div>
   </div>
 
@@ -52,7 +65,8 @@
         <tbody>
           @foreach($products as $product)
             <tr class="{{($loop->index % 2 == 0) ? 'success' : ''}}">
-              <td class="details-control" title="view more"></td>
+              <td class="details-control" title="view more"
+                onclick="moreDetails({{$product->id}})"></td>
               <td>{{$loop->iteration}}</td>
               <td>{{$product->name}}</td>
               <td>{{$product->code}}</td>
@@ -84,7 +98,7 @@
 
 <script>
   $(function() {
-    myDataTable({{$category->name}});
+    myDataTable('{{$category->name}}');
   });
 </script>
 @endsection

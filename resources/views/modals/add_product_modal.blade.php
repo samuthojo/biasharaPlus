@@ -22,21 +22,29 @@
                   <option value="{{$category->id}}">{{$category->name}}</option>
                 @endforeach
               </select>
+              <span id="category_id_error"
+                class="text-danger" style="display: none;"></span>
             </div>
             <div class="form-group">
               <label for="product_name">Name:</label>
               <input type="text" class="form-control" name="name"
                 id="product_name" placeholder="product name">
+              <span id="product_name_error"
+                class="text-danger" style="display: none;"></span>
             </div>
             <div class="form-group">
               <label for="product_code">Code:</label>
               <input type="text" class="form-control" name="code"
                 id="product_code" placeholder="product code">
+              <span id="product_code_error"
+                class="text-danger" style="display: none;"></span>
             </div>
             <div class="form-group">
               <label for="product_cc">CC:</label>
               <input type="text" class="form-control" name="cc"
                 id="product_cc" placeholder="product cc">
+              <span id="product_cc_error"
+                class="text-danger" style="display: none;"></span>
             </div>
             <div class="form-group">
               <label for="product_description">Description:</label>
@@ -47,11 +55,14 @@
             <div class="form-group">
               <label for="product_image">Picture:</label>
               <input type="file" name="image" id="product_image">
+              <span id="product_image_error"
+                class="text-danger" style="display: none;"></span>
             </div>
             <div class="form-group">
               <button class="btn btn-default"
                 data-dismiss="modal">Cancel</button>
-              <button class="btn btn-success">Add</button>
+              <button class="btn btn-success"
+                type="button" onclick="addProduct()">Add</button>
             </div>
           </form>
         </div>

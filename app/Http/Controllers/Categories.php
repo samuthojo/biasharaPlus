@@ -19,29 +19,21 @@ class Categories extends Controller
 
     public function store(AddCategory $request)
     {
-      \App\Category::create($request->all());
-      session([
-        'message' => 'Category created successfully',
-      ]);
-      return 1;
+      $category = \App\Category::create($request->all());
+      session(['message' => 'Category created successfully',]);
+      return $category;
     }
 
     public function update(EditCategory $request, $id)
     {
-      return \App\Category::updateOrCreate(['id' => $id,],
-                              ['name' => $request->name,]);
+      return \App\Category::updateOrCreate(compact('id'), ['name' => $request->name,]);
     }
 
     public function destroy($id)
     {
-      \App\Category::where('id', $id)
-                   ->update([
-                     'status' => false,
-                   ]);
-     session([
-       'message' => 'Category deleted successfully',
-     ]);
-     return 1;
+     $category = \App\Category::updateOrCreate(compact('id'), ['status' => false,]);
+     session(['message' => 'Category deleted successfully',]);
+     return $category;
     }
 
     public function products(\App\Category $category)

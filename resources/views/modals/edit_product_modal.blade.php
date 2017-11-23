@@ -12,7 +12,7 @@
       <div class="modal-body">
         <div class="container">
           @include('errors')
-          <form name="edit_product_form" 
+          <form name="edit_product_form"
             id="edit_product_form">
             <div class="form-group">
               <label for="edit_category_id">Category</label>
@@ -52,7 +52,9 @@
             <div class="form-group">
               <button class="btn btn-default"
                 data-dismiss="modal">Cancel</button>
-              <button class="btn btn-success">Save</button>
+              <button class="btn btn-success"
+                type="button"
+                onclick="attemptEditProduct()">Save</button>
             </div>
           </form>
         </div>

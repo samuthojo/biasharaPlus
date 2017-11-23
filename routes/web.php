@@ -19,6 +19,10 @@ Route::post('/categories/{category}', 'Categories@update')->name('categories.upd
 Route::delete('/categories/{category}', 'Categories@destroy')->name('categories.destroy');
 Route::get('/categories/{category}/products', 'Categories@products')->name('categories.products');
 Route::get('/products', 'Products@index')->name('products.index');
+Route::post('/products', 'Products@store')->name('products.store');
+Route::post('/products/{product}', 'Products@update')->name('products.update');
+Route::get('/products/{product}/more_details', 'Products@moreDetails')->name('products.moreDetails');
+Route::delete('/products/{product}', 'Products@destroy')->name('products.destroy');
 Route::get('/priceLists', 'CmsPriceLists@index')->name('priceLists.index');
 Route::get('/users', 'CmsUsers@index')->name('users.index');
 Route::get('/logout', 'General@logout')->name('logout');
