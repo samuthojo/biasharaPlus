@@ -20,18 +20,15 @@ class Products extends Controller
                                   $myProd = $prod;
                                   $myProd->category_name =
                                             $prod->category()->first()->name;
-                                  $myProd->category_id =
-                                            $prod->category()->first()->id;
                                   return $myProd;
                                 });
         $categories = \App\Category::all();
       return view('products', compact('products', 'categories'));
     }
 
-    public function moreDetails(\App\Product $product)
+    public function productDetails(\App\Product $product)
     {
       $product->category_name = $product->category()->first()->name;
-      $product->category_id = $product->category()->first()->id;
 
       return $product;
     }
@@ -49,7 +46,6 @@ class Products extends Controller
       session(['message' => 'Product added successfully',]);
 
       $product->category_name = $product->category()->first()->name;
-      $product->category_id = $product->category()->first()->id;
 
       return $product;
     }
@@ -61,7 +57,6 @@ class Products extends Controller
       $product =  \App\Product::create($data);
 
       $product->category_name = $product->category()->first()->name;
-      $product->category_id = $product->category()->first()->id;
 
       return $product;
     }
@@ -73,7 +68,6 @@ class Products extends Controller
       $product =  \App\Product::updateOrCreate(compact('id'), $data);
 
       $product->category_name = $product->category()->first()->name;
-      $product->category_id = $product->category()->first()->id;
 
       return $product;
     }
@@ -91,7 +85,6 @@ class Products extends Controller
       session(['message' => 'Product updated successfully',]);
 
       $product->category_name = $product->category()->first()->name;
-      $product->category_id = $product->category()->first()->id;
 
       return $product;
     }
@@ -102,8 +95,22 @@ class Products extends Controller
       session(['message' => 'Product deleted successfully',]);
 
       $product->category_name = $product->category()->first()->name;
-      $product->category_id = $product->category()->first()->id;
 
       return $product;
+    }
+
+    public function prices(\App\Product $product)
+    {
+      $prices = $product->prices()->get()
+                                  ->map( function($price) {
+                                    $myPrice = $price;
+                                    $myPrice->pricelist_name =
+                                            $price->priceList()->first()->name;
+                                    return $myPrice;
+                                  });
+      $pricelists = \App\PriceList::latest('created_at')
+                                  ->where('status', true)
+                                  ->get();
+      return view('product_prices', compact('prices', 'pricelists', 'product'));
     }
 }

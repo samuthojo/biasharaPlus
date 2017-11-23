@@ -13,16 +13,23 @@
 
 Route::view('terms', 'terms');
 Route::redirect('/', '/categories', 301);
+
 Route::get('/categories', 'Categories@index')->name('categories.index');
 Route::post('/categories', 'Categories@store')->name('categories.store');
 Route::post('/categories/{category}', 'Categories@update')->name('categories.update');
 Route::delete('/categories/{category}', 'Categories@destroy')->name('categories.destroy');
 Route::get('/categories/{category}/products', 'Categories@products')->name('categories.products');
+
 Route::get('/products', 'Products@index')->name('products.index');
 Route::post('/products', 'Products@store')->name('products.store');
 Route::post('/products/{product}', 'Products@update')->name('products.update');
-Route::get('/products/{product}/more_details', 'Products@moreDetails')->name('products.moreDetails');
+Route::get('/products/{product}/product_details', 'Products@productDetails')->name('products.productDetails');
 Route::delete('/products/{product}', 'Products@destroy')->name('products.destroy');
+Route::get('/products/{product}/prices', 'Products@prices')->name('products.prices');
+
+Route::post('/prices/{price}', 'CmsPrices@update')->name('CmsPrices.update');
+Route::post('/prices', 'CmsPrices@store')->name('CmsPrices.store');
+
 Route::get('/priceLists', 'CmsPriceLists@index')->name('priceLists.index');
 Route::get('/users', 'CmsUsers@index')->name('users.index');
 Route::get('/logout', 'General@logout')->name('logout');

@@ -46,14 +46,14 @@
           <td id="{{'category_' . $category->id}}">{{$category->name}}</td>
           <td>
             <div class="btn-group" title="edit category">
-              <button class="btn btn-warning"
-                onclick="showEditCategoryModal({{$category->id}})">
-                <span class="glyphicon glyphicon-pencil"></span>
-              </button>
               <a class="btn btn-default" title="view products"
                href="{{url('/categories/' . $category->id . '/products')}}">
                 <span class="glyphicon glyphicon-eye-open"></span>
               </a>
+              <button class="btn btn-warning"
+                onclick="showEditCategoryModal({{$category->id}})">
+                <span class="glyphicon glyphicon-pencil"></span>
+              </button>
               <button class="btn btn-danger" title="delete category"
                 onclick="showDeleteConfirmationModal({{$category->id}})">
                 <span class="glyphicon glyphicon-trash"></span>

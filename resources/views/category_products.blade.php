@@ -21,9 +21,15 @@
   'title' => 'Confirm',
   'text' =>  'You are about to delete this product!',
   'action' => 'Confirm',
-  'function' => '',])
+  'function' => 'deleteCategoryProducts()',])
 
 @section('content')
+@if(request()->session()->has('message'))
+<div id="alert-success" class="alert alert-success">
+  {{request()->session()->pull('message')}}
+</div>
+@endif
+@include('alerts.success-alert')
 <div class="panel panel-default">
 
   <div class="panel-heading">
@@ -73,16 +79,16 @@
               <td>{{$product->cc}}</td>
               <td>
                 <div class="btn-group">
+                  <a class="btn btn-default" title="view prices"
+                    href="{{url('/products/' . $product->id . '/prices')}}">
+                    <span class="glyphicon glyphicon-eye-open"></span>
+                  </a>
                   <button class="btn btn-warning" title="edit product"
-                    onclick="">
+                    onclick="showEditProductsModal({{$product->id}})">
                     <span class="glyphicon glyphicon-pencil"></span>
                   </button>
-                  <button class="btn btn-default" title="view price"
-                    onclick="">
-                    <span class="glyphicon glyphicon-eye-open"></span>
-                  </button>
                   <button class="btn btn-danger" title="delete product"
-                    onclick="">
+                    onclick="showProductsDeleteModal({{$product->id}})">
                     <span class="glyphicon glyphicon-trash"></span>
                   </button>
                 </div>

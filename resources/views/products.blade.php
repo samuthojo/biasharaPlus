@@ -21,13 +21,14 @@
   'title' => 'Confirm',
   'text' =>  'You are about to delete this product!',
   'action' => 'Confirm',
-  'function' => '',])
+  'function' => 'deleteProduct()',])
 @section('content')
 @if(request()->session()->has('message'))
 <div id="alert-success" class="alert alert-success">
   {{request()->session()->pull('message')}}
 </div>
 @endif
+@include('alerts.success-alert')
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 style="font-weight: bold;" class="panel-title pull-left">
@@ -65,15 +66,16 @@
                 <td id="{{'product_cc_' . $product->id}}">{{$product->cc}}</td>
                 <td>
                   <div class="btn-group">
+                    <a class="btn btn-default" title="view prices"
+                      href="{{url('/products/' . $product->id . '/prices')}}">
+                      <span class="glyphicon glyphicon-eye-open"></span>
+                    </a>
                     <button class="btn btn-warning" title="edit product"
                       onclick="showEditProductModal({{$product->id}})">
                       <span class="glyphicon glyphicon-pencil"></span>
                     </button>
-                    <button class="btn btn-default" title="view price">
-                      <span class="glyphicon glyphicon-eye-open"></span>
-                    </button>
                     <button class="btn btn-danger" title="delete product"
-                      onclick="showModal('delete_confirmation_modal')">
+                      onclick="showProductDeleteModal({{$product->id}})">
                       <span class="glyphicon glyphicon-trash"></span>
                     </button>
                   </div>
