@@ -43,33 +43,36 @@ $(document).ready( function() {
     $(this).next().fadeOut(0);
   });
 
-});
+  // Add event listener for opening and closing details
+  $('#myTable tbody').on('click', 'td.details-control', function () {
+    var tr = $(this).closest('tr');
+    var row = table.row( tr );
 
-function productMoreDetails(product_id) {
-  var tr = $("td.details-control").closest('tr');
-  var row = table.row( tr );
+    var product_id = row.data()[1];
 
-  if ( row.child.isShown() ) {
-      // This row is already open - close it
-      row.child.hide();
-      tr.removeClass('shown');
-  }
-  else {
-    var link = "/products/" + product_id + "/product_details";
-         $.getJSON(link)
-          .done( function (product) {
-            row.child.hide();
-            tr.removeClass('shown');
-            row.child(format(product)).show();
+    if ( row.child.isShown() ) {
+        // This row is already open - close it
+        row.child.hide();
+        tr.removeClass('shown');
+    }
+    else {
+      var link = "/products/" + product_id + "/product_details";
+           $.getJSON(link)
+            .done( function (product) {
+              row.child.hide();
+              tr.removeClass('shown');
+              row.child(format(product)).show();
+              tr.addClass('shown');
+            })
+            .fail( function (error) {
+              console.log(error);
+            });
+            row.child(format2()).show();
             tr.addClass('shown');
-          })
-          .fail( function (error) {
-            console.log(error);
-          });
-          row.child(format2()).show();
-          tr.addClass('shown');
-  }
-}
+    }
+  });
+
+});
 
 function format(product) {
   return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+

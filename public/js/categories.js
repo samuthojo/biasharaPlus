@@ -1,5 +1,11 @@
 var category_id = "";
 
+$(document).ready(function () {
+  $(":text").keydown(function() {
+    $(this).next().fadeOut(0);
+  });
+});
+
 function addCategory() {
   $.ajax({
          type: "post",
@@ -11,9 +17,7 @@ function addCategory() {
          error: function(error) {
            data = JSON.parse(error.responseText);
            $("#category_name_error").text(data.errors.name);
-           $("#category_name_error").fadeIn(0, function() {
-             $("#category_name_error").fadeOut(1000);
-           });
+           $("#category_name_error").fadeIn(0);
          }
        });
 }
@@ -41,9 +45,7 @@ function attemptEditCategory() {
     error: function(error) {
       data = JSON.parse(error.responseText);
       $("#edit_category_name_error").text(data.errors.name);
-      $("#edit_category_name_error").fadeIn(0, function() {
-        $("#edit_category_name_error").fadeOut(1500);
-      });
+      $("#edit_category_name_error").fadeIn(0);
     }
   });
 }
@@ -57,8 +59,17 @@ function deleteCategory() {
   $.ajax({
     type: 'delete',
     url: '/categories/' + category_id,
-    success: function() {
-      window.location.href = "/categories";
+    success: function(table) {
+      $(".my_loader").fadeOut(0);
+      $(".btn-success").prop("disabled", false);
+      closeModal("delete_confirmation_modal");
+      $("#categoriesTable").html(table);
+      $("#success-alert").text("Category deleted successfully");
+      $("#success-alert").fadeIn(0, function() {
+        $("#success-alert").fadeOut(1500);
+      });
     }
   });
+  $(".btn-success").prop("disabled", true);
+  $(".my_loader").fadeIn(0);
 }

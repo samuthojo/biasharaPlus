@@ -4,10 +4,12 @@
   @include('header')
 @endsection
 
+@section('content')
+
 @include('modals.add_pricelist_modal')
 @include('modals.edit_pricelist_modal')
-@section('content')
-  <div class="panel panel-default">
+
+  <div class="panel panel-success">
     <div class="panel-heading">
       <h3 style="font-weight: bold;" class="panel-title pull-left">
         PriceLists:

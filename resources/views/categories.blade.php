@@ -2,9 +2,11 @@
 
 @section('more')
   @include('header')
+  <script src="{{asset('js/categories.js')}}"></script>
 @endsection
 
-<script src="{{asset('js/categories.js')}}"></script>
+@section('content')
+
 @include('modals.add_category_modal')
 @include('modals.edit_category_modal')
 @include('modals.confirmation_modal',
@@ -13,14 +15,14 @@
   'text' =>  'You are about to delete this category!',
   'action' => 'Confirm',
   'function' => 'deleteCategory()',])
-@section('content')
+
 @if(request()->session()->has('message'))
 <div id="alert-success" class="alert alert-success">
   {{request()->session()->pull('message')}}
 </div>
 @endif
 @include('alerts.success-alert')
-<div class="panel panel-default">
+<div class="panel panel-success">
   <div class="panel-heading">
     <h3 style="font-weight: bold;"class="panel-title pull-left">
       Product Categories: </h3>
@@ -28,11 +30,10 @@
       title="add category">
        <i class="fa fa-plus-circle fa-2x text-success" style="cursor: pointer;"></i>
      </span>
-     </button>
      <div class="clearfix"></div>
   </div>
   <div class="panel-body">
-    <div class="table-responsive">
+    <div id="categoriesTable" class="table-responsive">
     <table id="myTable" class="table table-hover">
       <thead>
         <th>No.</th>

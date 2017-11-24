@@ -1,3 +1,4 @@
+
 $(function () {
   $.ajaxSetup({
       headers: {
@@ -6,7 +7,7 @@ $(function () {
   });
 
   $("body").on('hidden.bs.modal', '.modal', function (e) {
-    
+    //do something when modals are hidden
   });
 
 });

@@ -14,7 +14,7 @@
           <form name="add_product_form"
             id="add_product_form">
             <div class="form-group">
-              <label for="category_id">Category</label>
+              <label for="category_id">Category:</label>
               <select class="form-control" name="category_id"
                 id="category_id" style="width: 180px">
                 <option value="" selected disabled>choose category</option>

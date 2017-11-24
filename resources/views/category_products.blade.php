@@ -3,17 +3,19 @@
 @section('more')
   @include('header')
   <script src="{{asset('js/category_products.js')}}"></script>
+  <style>
+    td.details-control {
+      background: url('../../../images/details_open.png') no-repeat center;
+      cursor: pointer;
+    }
+    tr.shown td.details-control {
+      background: url('../../../images/details_close.png') no-repeat center;
+    }
+  </style>
 @endsection
 
-<style>
-  td.details-control {
-    background: url('../../../images/details_open.png') no-repeat center;
-    cursor: pointer;
-  }
-  tr.shown td.details-control {
-    background: url('../../../images/details_close.png') no-repeat center;
-  }
-</style>
+@section('content')
+
 @include('modals.add_product_modal')
 @include('modals.edit_product_modal')
 @include('modals.confirmation_modal',
@@ -23,14 +25,13 @@
   'action' => 'Confirm',
   'function' => 'deleteCategoryProducts()',])
 
-@section('content')
 @if(request()->session()->has('message'))
 <div id="alert-success" class="alert alert-success">
   {{request()->session()->pull('message')}}
 </div>
 @endif
 @include('alerts.success-alert')
-<div class="panel panel-default">
+<div class="panel panel-success">
 
   <div class="panel-heading">
     <h3 style="font-weight: bold;" class="panel-title pull-left">
@@ -62,6 +63,7 @@
       <table id="myTable" class="table table-hover">
         <thead>
           <th></th>
+          <th style="display: none;"></th>
           <th>No.</th>
           <th>Name</th>
           <th>Code</th>
@@ -71,8 +73,8 @@
         <tbody>
           @foreach($products as $product)
             <tr class="{{($loop->index % 2 == 0) ? 'success' : ''}}">
-              <td class="details-control" title="view more"
-                onclick="moreDetails({{$product->id}})"></td>
+              <td class="details-control" title="view more"></td>
+              <td style="display: none;">{{$product->id}}</td>
               <td>{{$loop->iteration}}</td>
               <td>{{$product->name}}</td>
               <td>{{$product->code}}</td>

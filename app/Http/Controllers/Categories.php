@@ -32,8 +32,10 @@ class Categories extends Controller
     public function destroy($id)
     {
      $category = \App\Category::updateOrCreate(compact('id'), ['status' => false,]);
-     session(['message' => 'Category deleted successfully',]);
-     return $category;
+     $categories = \App\Category::latest('created_at')
+                                ->where('status', true)
+                                ->get();
+     return view('categories_table', compact('categories'));
     }
 
     public function products(\App\Category $category)

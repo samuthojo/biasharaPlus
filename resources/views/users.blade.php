@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-  <div class="panel panel-default">
+  <div class="panel panel-success">
     <div class="panel-heading">
       <h3 style="font-weight: bold;" class="panel-title pull-left">
         Users:

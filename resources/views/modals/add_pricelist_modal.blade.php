@@ -9,7 +9,7 @@
         <button class="close" data-dismiss="modal">
           &times;
         </button>
-        <h4 class="modal-title">Add Pricelist</h4>
+        <h4 class="modal-title">Add PriceList</h4>
       </div>
 
       <div class="modal-body">

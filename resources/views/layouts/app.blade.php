@@ -46,7 +46,9 @@
       position: absolute;
       display: block;
       background-color: #3c763d;
+      font-weight: bold;
       width: 50%;
+      text-align: center;
       padding: 20px;
       color: #fff;
       top: 40%;
@@ -56,36 +58,47 @@
       z-index: 1;
       opacity: 0.85;
     }
-    #alert-error {
-      position: absolute;
-      display: block;
-      background-color: #f44336;
-      width: 50%;
-      padding: 20px;
-      color: #fff;
-      top: 20%;
-      left: 50%;
-      transform: translate(-50%,-50%);
-      -ms-transform: translate(-50%,-50%);
-      z-index: 1;
-      opacity: 0.6;
+    .panel-heading h3 {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: normal;
+      width: 75%;
+      padding-top: 8px;
     }
-    .close {
-      margin-left: 15px;
-      color: white;
-      font-weight: bold;
-      float: right;
-      font-size: 22px;
-      line-height: 20px;
-      cursor: pointer;
-      transition: 0.3s;
+    .panel-title {
+      color: #f0ad4e;
+    }
+    .modal-title {
+      color: #3c763d;
     }
     .loader {
-      z-index: 9999;
+        z-index: 9999;
         text-align: center;
         align-content: center;
         padding-bottom: 10px;
         display: none;
+    }
+    .navbar-default .navbar-nav>li>a {
+      color: #3c763d;
+      /*color: #555;*/
+      /*color: #777;*/
+    }
+    .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+      color: #f0ad4e;
+      background-color: #e7e7e7;
+      font-weight: bold;
+    }
+    .navbar-default .navbar-nav>li>a:hover {
+      color: #f0ad4e;
+    }
+    .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
+      color: #f0ad4e;
+      background-color: #e7e7e7;
+    }
+    .navbar-default .navbar-nav .open .dropdown-menu>li>a {
+        /*color: #555;*/
+        color: #3c763d;
     }
   </style>
 
@@ -101,41 +114,50 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="{{url('/')}}">BiasharaPlus</a>
+      <a class="navbar-brand" href="{{url('/')}}"
+        style="color: #3c763d; font-family: Brush Script MT,cursive;
+        font-size: 20px; font-weight: bold;">BiasharaPlus</a>
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav" id="link_section">
-      <li class="active link" id="categories">
+      <li class="{{ request()->is('categories*') ? 'active' : '' }}"
+        id="categories">
         <a href="{{url('/categories')}}">
           Categories
         </a>
       </li>
-      <li class="link" id="products">
+      <li class="{{ request()->is('products*') ? 'active' : '' }}"
+         id="products">
         <a href="{{url('/products')}}">
           Products
         </a>
       </li>
-      <li class="link" id="priceLists">
+      <li class="{{ request()->is('priceLists*') ? 'active' : '' }}"
+        id="priceLists">
         <a href="{{url('/priceLists')}}">
           PriceLists
         </a>
       </li>
-      <li class="link" id="users">
+      <li class="{{ request()->is('users*') ? 'active' : '' }}"
+        id="users">
         <a href="{{url('/users')}}">
           Users
         </a>
       </li>
-      <li class="link" id="versions">
+      <li class="{{ request()->is('versions*') ? 'active' : '' }}"
+        id="versions">
         <a href="{{url('/versions')}}">
           Versions
         </a>
       </li>
-      <li class="link" id="notifications">
+      <li class="{{ request()->is('notifications*') ? 'active' : '' }}"
+        id="notifications">
         <a href="{{url('/notifications')}}">
           Notifications
         </a>
       </li>
-      <li class="link" id="feedback">
+      <li class="{{ request()->is('feedback*') ? 'active' : '' }}"
+        id="feedback">
         <a href="{{url('/feedback')}}">
           Feedback
         </a>

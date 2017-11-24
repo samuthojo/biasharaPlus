@@ -5,17 +5,18 @@
   <script src="{{asset('js/product_prices.js')}}"></script>
 @endsection
 
+@section('content')
+
 @include('modals.add_price_modal')
 @include('modals.edit_price_modal')
 
-@section('content')
 @if(request()->session()->has('message'))
 <div id="alert-success" class="alert alert-success">
   {{request()->session()->pull('message')}}
 </div>
 @endif
 @include('alerts.success-alert')
-  <div class="panel panel-default">
+  <div class="panel panel-success">
     <div class="panel-heading">
       <h3 style="font-weight: bold;" class="panel-title pull-left">
         {{$product->name}} Prices:
