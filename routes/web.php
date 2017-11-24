@@ -12,8 +12,8 @@
 */
 
 Route::view('terms', 'terms');
-Route::redirect('/', '/categories', 301);
 
+Route::get('/', 'Categories@index');
 Route::get('/categories', 'Categories@index')->name('categories.index');
 Route::post('/categories', 'Categories@store')->name('categories.store');
 Route::post('/categories/{category}', 'Categories@update')->name('categories.update');
