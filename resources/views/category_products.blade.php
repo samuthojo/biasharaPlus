@@ -82,7 +82,7 @@
               <td>
                 <div class="btn-group">
                   <a class="btn btn-default" title="view prices"
-                    href="{{url('/products/' . $product->id . '/prices')}}">
+                    href="{{url('/categories/' . $category->id . '/products/' . $product->id . '/prices')}}">
                     <span class="glyphicon glyphicon-eye-open"></span>
                   </a>
                   <button class="btn btn-warning" title="edit product"

@@ -40,7 +40,7 @@ class Products extends Controller
         $imageUrl = Utils::handleImage($request->file('image'), $this->images);
         $product = $this->saveProductWithImage($imageUrl, $request);
       } else {
-        $product = \App\Product::create($request->all());
+        $product = $this->saveProductWithNoImage($request);
       }
 
       session(['message' => 'Product added successfully',]);
@@ -52,13 +52,52 @@ class Products extends Controller
 
     private function saveProductWithImage($imageUrl, $request)
     {
-      $data = $request->except('image');
-      $data = array_add($data, 'image', $imageUrl);
-      $product =  \App\Product::create($data);
+      DB::beginTransaction();
+      $product = null;
+      try {
+        $data = $request->except('image');
+        $data = array_add($data, 'image', $imageUrl);
+        $product =  \App\Product::create($data);
 
-      $product->category_name = $product->category()->first()->name;
+        //now insert a price for this product in each pricelist
+        $this->insertPrices($product->id);
+
+        DB::commit();
+      }
+      catch(Throwable $e) {
+        DB::rollBack();
+        return response()->json(["message" => "Error, product not added"], 500);
+      }
 
       return $product;
+    }
+
+    private function saveProductWithNoImage($request)
+    {
+      DB::beginTransaction();
+      $product = null;
+      try {
+        $product = \App\Product::create($request->all());
+
+        //now insert a price for this product in each pricelist
+        $this->insertPrices($product->id);
+
+        DB::commit();
+      }
+      catch(Throwable $e) {
+        DB::rollBack();
+        return response()->json(["message" => "Error, product not added"], 500);
+      }
+
+      return $product;
+    }
+
+    private function insertPrices($product_id)
+    {
+      $priceListIds = \App\PriceList::pluck('id');
+      foreach($priceListIds as $price_list_id) {
+        \App\PriceList::create(compact('product_id', 'price_list_id'));
+      }
     }
 
     private function updateProductWithImage($imageUrl, $request, $id)
@@ -66,8 +105,6 @@ class Products extends Controller
       $data = $request->except('image');
       $data = array_add($data, 'image', $imageUrl);
       $product =  \App\Product::updateOrCreate(compact('id'), $data);
-
-      $product->category_name = $product->category()->first()->name;
 
       return $product;
     }

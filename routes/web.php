@@ -19,6 +19,7 @@ Route::post('/categories', 'Categories@store')->name('categories.store');
 Route::post('/categories/{category}', 'Categories@update')->name('categories.update');
 Route::delete('/categories/{category}', 'Categories@destroy')->name('categories.destroy');
 Route::get('/categories/{category}/products', 'Categories@products')->name('categories.products');
+Route::get('/categories/{category}/products/{product}/prices', 'Categories@productPrices')->name('categories.productPrices');
 
 Route::get('/products', 'Products@index')->name('products.index');
 Route::post('/products', 'Products@store')->name('products.store');

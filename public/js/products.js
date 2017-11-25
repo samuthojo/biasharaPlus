@@ -114,12 +114,12 @@ function addProduct() {
          },
          error: function(error) {
            data = JSON.parse(error.responseText);
-           showProductErrors(data.errors);
+           showAddProductErrors(data.errors);
          }
        });
 }
 
-function showProductErrors(errors) {
+function showAddProductErrors(errors) {
   if(errors.category_id != null) {
     $("#category_id_error").text(errors.category_id);
     $("#category_id_error").fadeIn(0);

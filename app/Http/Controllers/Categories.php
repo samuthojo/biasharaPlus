@@ -46,4 +46,20 @@ class Categories extends Controller
       return view('category_products', compact('products', 'categories',
                                         'category'));
     }
+
+    public function productPrices($categoryId, $productId)
+    {
+      $product = \App\Product::find($productId);
+      $prices = $product->prices()->get()
+                                  ->map( function($price) {
+                                    $myPrice = $price;
+                                    $myPrice->pricelist_name =
+                                            $price->priceList()->first()->name;
+                                    return $myPrice;
+                                  });
+      $pricelists = \App\PriceList::latest('created_at')
+                                  ->where('status', true)
+                                  ->get();
+      return view('product_prices', compact('prices', 'pricelists', 'product'));
+    }
 }

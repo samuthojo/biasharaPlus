@@ -11,7 +11,7 @@ class Utils
   }
 
   public static function handleImage($image, $location) {
-    $imageName = $image->getClientOriginalName();
+    $imageName = time() . "." . $image->getClientOriginalExtension();
     $image->move($location, $imageName);
     return $location . $imageName;
   }

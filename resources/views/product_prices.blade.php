@@ -22,7 +22,7 @@
         {{$product->name}} Prices:
       </h3>
       <a class="btn btn-success pull-right" title="back"
-        href="{{url('/categories/' . $product->id . '/products')}}"
+        href="{{'../'}}"
         style="cursor: pointer;">
         <i class="fa fa-arrow-left" style="font-size: 18px;"></i>
       </a>
