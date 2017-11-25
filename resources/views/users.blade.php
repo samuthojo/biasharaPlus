@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-  <div class="panel panel-success">
+  <div class="panel panel-default">
     <div class="panel-heading">
       <h3 style="font-weight: bold;" class="panel-title pull-left">
         Users:
@@ -28,7 +28,7 @@
           </thead>
           <tbody>
             @foreach($users as $user)
-              <tr class="{{($loop->index % 2 == 0) ? 'success' : ''}}">
+              <tr class="{{($loop->index % 2 == 0) ? 'active' : ''}}">
                 <td>{{$loop->iteration}}</td>
                 <td>{{$user->username}}</td>
                 <td>{{$user->country}}</td>

@@ -16,7 +16,7 @@
 </div>
 @endif
 @include('alerts.success-alert')
-  <div class="panel panel-success">
+  <div class="panel panel-default">
     <div class="panel-heading">
       <h3 style="font-weight: bold;" class="panel-title pull-left">
         {{$product->name}} Prices:
@@ -46,7 +46,7 @@
           </thead>
           <tbody>
             @foreach($prices as $price)
-              <tr class="{{($loop->index % 2 == 0) ? 'success' : ''}}">
+              <tr class="{{($loop->index % 2 == 0) ? 'active' : ''}}">
                 <td>{{$loop->iteration}}</td>
                 <td id="{{'pricelist_name_' . $price->id}}">{{$price->pricelist_name}}</td>
                 <td id="{{'tanzania_' . $price->id}}">{{$price->tanzania}}</td>

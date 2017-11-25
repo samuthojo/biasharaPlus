@@ -9,7 +9,7 @@
 @include('modals.add_pricelist_modal')
 @include('modals.edit_pricelist_modal')
 
-  <div class="panel panel-success">
+  <div class="panel panel-default">
     <div class="panel-heading">
       <h3 style="font-weight: bold;" class="panel-title pull-left">
         PriceLists:
@@ -33,7 +33,7 @@
           </thead>
           <tbody>
             @foreach($priceLists as $priceList)
-              <tr class="{{($loop->index % 2 == 0) ? 'success' : ''}}">
+              <tr class="{{($loop->index % 2 == 0) ? 'active' : ''}}">
                 <td>{{$loop->iteration}}</td>
                 <td>{{$priceList->name}}</td>
                 <td>{{$priceList->effective_date}}</td>

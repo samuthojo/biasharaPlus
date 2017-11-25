@@ -22,7 +22,7 @@
 </div>
 @endif
 @include('alerts.success-alert')
-<div class="panel panel-success">
+<div class="panel panel-default">
   <div class="panel-heading">
     <h3 style="font-weight: bold;"class="panel-title pull-left">
       Product Categories: </h3>
@@ -42,7 +42,7 @@
       </thead>
       <tbody>
         @foreach($categories as $category)
-        <tr class="{{($loop->index % 2 == 0) ? 'success' : ''}}">
+        <tr class="{{($loop->index % 2 == 0) ? 'active' : ''}}">
           <td>{{$loop->iteration}}</td>
           <td id="{{'category_' . $category->id}}">{{$category->name}}</td>
           <td>

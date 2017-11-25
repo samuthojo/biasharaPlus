@@ -6,7 +6,7 @@
   </thead>
   <tbody>
     @foreach($categories as $category)
-    <tr class="{{($loop->index % 2 == 0) ? 'success' : ''}}">
+    <tr class="{{($loop->index % 2 == 0) ? 'active' : ''}}">
       <td>{{$loop->iteration}}</td>
       <td id="{{'category_' . $category->id}}">{{$category->name}}</td>
       <td>
