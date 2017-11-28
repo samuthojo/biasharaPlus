@@ -2,12 +2,20 @@
 
 @section('more')
   @include('header')
+  <script src="{{asset('js/pricelists.js')}}"></script>
 @endsection
 
 @section('content')
 
 @include('modals.add_pricelist_modal')
 @include('modals.edit_pricelist_modal')
+@include('modals.confirmation_modal',
+  ['id' => 'delete_confirmation_modal',
+  'title' => 'Confirm',
+  'text' =>  'You are about to delete this PriceList!',
+  'action' => 'Confirm',
+  'function' => 'deletePriceList()',])
+@include('alerts.success-alert')
 
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -22,7 +30,7 @@
       <div class="clearfix"></div>
     </div>
     <div class="panel-body">
-      <div class="table-responsive">
+      <div id="priceListsTable" class="table-responsive">
         <table id="myTable" class="table table-hover">
           <thead>
             <th>No.</th>
@@ -41,10 +49,12 @@
                 <td>
                   <div class="btn-group">
                     <button class="btn btn-warning" title="edit price-list"
-                      onclick="showModal('edit_pricelist_modal')">
+                      onclick="showEditPriceListModal({{$priceList}})">
                       <span class="glyphicon glyphicon-pencil"></span>
                     </button>
-                    <button class="btn btn-danger" title="delete price-list">
+                    <button class="btn btn-danger"
+                      onclick="showPriceListDeleteModal({{$priceList->id}})"
+                      title="delete price-list">
                       <span class="glyphicon glyphicon-trash"></span>
                     </button>
                   </div>

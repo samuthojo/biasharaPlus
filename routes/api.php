@@ -22,6 +22,7 @@ Route::middleware('auth:api')->prefix('v2')->group( function() {
   Route::get('price_list', 'PriceLists@priceList');
   Route::post('feed_back', 'Feedbacks@store');
   Route::get('account_detail', 'Users@accountDetail');
+  Route::get('app_details', 'App');
   Route::post('update_subscription', 'Users@updateSubscription');
   Route::post('receive_payment', 'Payments');
 });

@@ -23,6 +23,7 @@
               <input type="text" class="form-control"
                 placeholder="pricelist name"
                 name="name" id="pricelist_name">
+             <span id="pricelist_name_error" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -31,6 +32,7 @@
               <input type="text" class="form-control"
                 placeholder="effective date"
                 name="effective_date" id="effective_date">
+              <span id="effective_date_error" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -39,6 +41,7 @@
               <input type="text" class="form-control"
                 placeholder="pricelist color"
                 name="color" id="pricelist_color">
+              <span id="pricelist_color_error" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -47,9 +50,10 @@
                 Cancel
               </button>
               <button class="btn btn-success"
-                type="submit">
+                type="button" onclick="addPriceList()">
                 Add
               </button>
+              @include('inline_loader')
             </div>
 
           </form>

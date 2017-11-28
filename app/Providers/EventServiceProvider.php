@@ -16,6 +16,18 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Event' => [
             'App\Listeners\EventListener',
         ],
+        'App\Events\PriceListDeleted' => [
+          'App\Listeners\DeletePriceListPrices',
+        ],
+        'App\Events\ProductDeleted' => [
+          'App\Listeners\DeleteProductPrices',
+        ],
+        'App\Events\CategoryDeleted' => [
+          'App\Listeners\DeleteCategoryProducts',
+        ],
+        'App\Events\UserDeleted' => [
+          'App\Listeners\DeleteUserDevices',
+        ],
     ];
 
     /**

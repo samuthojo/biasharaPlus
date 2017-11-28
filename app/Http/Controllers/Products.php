@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Cms\AddProduct;
 use App\Http\Requests\Cms\EditProduct;
 use App\Utils\Utils;
+use Illuminate\Support\Facades\DB;
+use App\Events\ProductDeleted;
 
 class Products extends Controller
 {
@@ -14,7 +16,6 @@ class Products extends Controller
     public function index()
     {
         $products = \App\Product::latest('created_at')
-                                ->where('status', true)
                                 ->get()
                                 ->map( function($prod) {
                                   $myProd = $prod;
@@ -35,18 +36,28 @@ class Products extends Controller
 
     public function store(AddProduct $request)
     {
-      $product = null;
+      $product = $this->saveProduct($request);
+
+      $products = \App\Product::latest('created_at')
+                               ->get()
+                               ->map( function($prod) {
+                                  $myProd = $prod;
+                                  $myProd->category_name =
+                                    $prod->category()->first()->name;
+                                  return $myProd;
+                                });
+      return view('tables.products_table', compact('products'));
+    }
+
+    public function saveProduct($request)
+    {
+      $product =  null;
       if($request->hasFile('image')) {
         $imageUrl = Utils::handleImage($request->file('image'), $this->images);
         $product = $this->saveProductWithImage($imageUrl, $request);
       } else {
         $product = $this->saveProductWithNoImage($request);
       }
-
-      session(['message' => 'Product added successfully',]);
-
-      $product->category_name = $product->category()->first()->name;
-
       return $product;
     }
 
@@ -96,8 +107,36 @@ class Products extends Controller
     {
       $priceListIds = \App\PriceList::pluck('id');
       foreach($priceListIds as $price_list_id) {
-        \App\PriceList::create(compact('product_id', 'price_list_id'));
+        \App\Price::create(compact('product_id', 'price_list_id'));
       }
+    }
+
+    public function update(EditProduct $request, $id)
+    {
+      $product = $this->updateProduct($request, $id);
+
+      $products = \App\Product::latest('created_at')
+                              ->get()
+                              ->map( function($prod) {
+                                $myProd = $prod;
+                                $myProd->category_name =
+                                  $prod->category()->first()->name;
+                                return $myProd;
+                              });
+      return view('tables.products_table', compact('products'));
+    }
+
+    public function updateProduct($request, $id)
+    {
+      $product = null;
+      if($request->hasFile('image')) {
+        $imageUrl = Utils::handleImage($request->file('image'), $this->images);
+        $product = $this->updateProductWithImage($imageUrl, $request, $id);
+      } else {
+        $product = \App\Product::updateOrCreate(compact('id'), $request->all());
+      }
+
+      return $product;
     }
 
     private function updateProductWithImage($imageUrl, $request, $id)
@@ -109,36 +148,39 @@ class Products extends Controller
       return $product;
     }
 
-    public function update(EditProduct $request, $id)
-    {
-      $product = null;
-      if($request->hasFile('image')) {
-        $imageUrl = Utils::handleImage($request->file('image'), $this->images);
-        $product = $this->updateProductWithImage($imageUrl, $request, $id);
-      } else {
-        $product = \App\Product::updateOrCreate(compact('id'), $request->all());
-      }
-
-      session(['message' => 'Product updated successfully',]);
-
-      $product->category_name = $product->category()->first()->name;
-
-      return $product;
-    }
-
     public function destroy($id)
     {
-      $product = \App\Product::updateOrCreate(compact('id'), ['status' => false,]);
-      session(['message' => 'Product deleted successfully',]);
+      $product = \App\Product::find($id);
+      $this->deleteProduct($id);
 
-      $product->category_name = $product->category()->first()->name;
+      //Dispatch event to softy delete all prices of this product
+      event(new ProductDeleted($product));
 
-      return $product;
+      $products = \App\Product::latest('created_at')
+                              ->get()
+                              ->map( function($prod) {
+                                $myProd = $prod;
+                                $myProd->category_name =
+                                  $prod->category()->first()->name;
+                                return $myProd;
+                              });
+      return view('tables.products_table', compact('products'));
+    }
+
+    public function deleteProduct($id)
+    {
+      \App\Product::where(compact('id'))->delete();
     }
 
     public function prices(\App\Product $product)
     {
-      $prices = $product->prices()->get()
+      return view('product_prices', $this->pricesData($product));
+    }
+
+    public function pricesData($product)
+    {
+      $prices = $product->prices()->latest('created_at')
+                                  ->get()
                                   ->map( function($price) {
                                     $myPrice = $price;
                                     $myPrice->pricelist_name =
@@ -146,8 +188,7 @@ class Products extends Controller
                                     return $myPrice;
                                   });
       $pricelists = \App\PriceList::latest('created_at')
-                                  ->where('status', true)
                                   ->get();
-      return view('product_prices', compact('prices', 'pricelists', 'product'));
+      return compact('prices', 'pricelists', 'product');
     }
 }

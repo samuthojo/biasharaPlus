@@ -90,7 +90,8 @@
       font-weight: bold;
     }
     .navbar-default .navbar-nav>li>a:hover {
-      color: #f0ad4e;
+      /*color: #f0ad4e;*/
+      color: #777;
     }
     .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
       color: #f0ad4e;
@@ -132,9 +133,9 @@
           Products
         </a>
       </li>
-      <li class="{{ request()->is('priceLists*') ? 'active' : '' }}"
+      <li class="{{ request()->is('pricelists*') ? 'active' : '' }}"
         id="priceLists">
-        <a href="{{url('/priceLists')}}">
+        <a href="{{url('/pricelists')}}">
           PriceLists
         </a>
       </li>
@@ -169,7 +170,14 @@
           <span class="glyphicon glyphicon-user"></span> Account
           <span class="caret"></span>
           <ul class="dropdown-menu">
-            <li><a href="{{ route('logout') }}">Logout</a></li>
+            <li>
+              <a href="{{ route('logout') }}"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                Logout
+              </a>
+              <form id="logout-form" action="{{ route('logout') }}"
+                method="POST" style="display: none;">{{ csrf_field() }}</form>
+            </li>
             <li class="divider"></li>
             <li>
               <a href="{{ route('change_password') }}">

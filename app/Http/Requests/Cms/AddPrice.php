@@ -13,7 +13,7 @@ class AddPrice extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,13 @@ class AddPrice extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+      return [
+          'product_id' => 'integer',
+          'price_list_id' => 'integer',
+          'price' => 'integer',
+          'tanzania' => 'integer',
+          'kenya' => 'integer',
+          'uganda' => 'integer',
+      ];
     }
 }

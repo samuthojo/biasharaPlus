@@ -11,16 +11,16 @@ class PricesTableSeeder extends Seeder
      */
     public function run()
     {
-      // $faker = Faker\Factory::create();
-      // for($i = 1; $i < 7; $i++) {
-      //   \App\Price::create([
-      //     'product_id' => $i,
-      //     'price_list_id' => $i,
-      //     'price' => $faker->numberBetween(1000, 20000),
-      //     'tanzania' => $faker->numberBetween(1000, 20000),
-      //     'kenya' => $faker->numberBetween(1000, 20000),
-      //     'uganda' => $faker->numberBetween(1000, 20000),
-      //   ]);
-      // }
+      $faker = Faker\Factory::create();
+      for($i = 1; $i < 7; $i++) {
+        \App\Price::create([
+          'product_id' => $i,
+          'price_list_id' => $i,
+          'price' => $faker->numberBetween(1000, 20000),
+          'tanzania' => $faker->numberBetween(1000, 20000),
+          'kenya' => $faker->numberBetween(1000, 20000),
+          'uganda' => $faker->numberBetween(1000, 20000),
+        ]);
+      }
     }
 }

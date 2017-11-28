@@ -21,10 +21,10 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('phone_number');
             $table->string('password');
-            $table->string('subscription');
+            $table->string('subscription')->nullable();
             $table->date('subscription_start_date');
             $table->date('subscription_end_date');
-            $table->double('total_cc', 17, 3);
+            $table->double('total_cc', 17, 3)->nullable();
             $table->string('country');
             $table->string('image');
             $table->rememberToken();

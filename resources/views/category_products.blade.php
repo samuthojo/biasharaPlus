@@ -16,8 +16,8 @@
 
 @section('content')
 
-@include('modals.add_product_modal')
-@include('modals.edit_product_modal')
+@include('modals.add_category_product_modal')
+@include('modals.edit_category_product_modal')
 @include('modals.confirmation_modal',
   ['id' => 'delete_confirmation_modal',
   'title' => 'Confirm',
@@ -45,7 +45,7 @@
       </a>
       <button class="btn btn-success"
         title="add product"
-        onclick="showModal('add_product_modal')">
+        onclick="showModal('add_category_product_modal')">
         <i class="fa fa-plus-circle"
           style="font-size: 16px;"></i>
       </button>
@@ -59,7 +59,7 @@
   </div>
 
   <div class="panel-body">
-    <div class="table-responsive">
+    <div id="categoryProductsTable" class="table-responsive">
       <table id="myTable" class="table table-hover">
         <thead>
           <th></th>
@@ -86,11 +86,11 @@
                     <span class="glyphicon glyphicon-eye-open"></span>
                   </a>
                   <button class="btn btn-warning" title="edit product"
-                    onclick="showEditProductsModal({{$product->id}})">
+                    onclick="showEditProductsModal({{$product}})">
                     <span class="glyphicon glyphicon-pencil"></span>
                   </button>
                   <button class="btn btn-danger" title="delete product"
-                    onclick="showProductsDeleteModal({{$product->id}})">
+                    onclick="showProductsDeleteModal({{$product}})">
                     <span class="glyphicon glyphicon-trash"></span>
                   </button>
                 </div>
@@ -107,6 +107,9 @@
 <script>
   $(function() {
     myDataTable('{{$category->name}}');
+    $(":text").keydown(function() {
+      $(this).next().fadeOut(0);
+    });
   });
 </script>
 @endsection

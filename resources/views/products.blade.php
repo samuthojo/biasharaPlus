@@ -44,7 +44,7 @@
       <div class="clearfix"></div>
     </div>
     <div class="panel-body">
-      <div class="table-responsive">
+      <div id="productsTable" class="table-responsive">
         <table id="myTable" class="table table-hover">
           <thead>
             <th></th>
@@ -73,7 +73,7 @@
                       <span class="glyphicon glyphicon-eye-open"></span>
                     </a>
                     <button class="btn btn-warning" title="edit product"
-                      onclick="showEditProductModal({{$product->id}})">
+                      onclick="showEditProductModal({{$product}})">
                       <span class="glyphicon glyphicon-pencil"></span>
                     </button>
                     <button class="btn btn-danger" title="delete product"

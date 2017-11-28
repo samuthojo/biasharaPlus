@@ -16,11 +16,14 @@ class Users extends Controller
     private $images = 'uploads/users/';
 
     //User packages
-    const PACKAGE_1 = 1000;
+    $package_1 = \App\Bundle::where('name', 'package_1')
+                             ->pluck('price')->first();
 
-    const PACKAGE_2 = 5000;
+    $package_2 = \App\Bundle::where('name', 'package_2')
+                             ->pluck('price')->first();
 
-    const PACKAGE_3 = 10000;
+    $package_3 = \App\Bundle::where('name', 'package_3')
+                             ->pluck('price')->first();
 
     public function checkUserExistence(CheckUserExistence $request)
     {
@@ -68,7 +71,7 @@ class Users extends Controller
     public function accountDetail() {
       $user = Auth::user();
       $version = \App\Version::where('status', true)
-                             ->get(['id', 'version_number', 'features']);
+                             ->first(['id', 'version_number', 'features']);
       return response(compact('user', 'version'), 200);
     }
 
@@ -105,7 +108,7 @@ class Users extends Controller
       DB::beginTransaction();
       try {
 
-          if($amount >= self::PACKAGE_1 && $amount < self::PACKAGE_2) {
+          if($amount >= $this->package_1 && $amount < $this->package_2) {
             $longEndDate = $subscrEndDate + (30*24*60*60);
             $subscrEndDate = date("Y-m-d", $longEndDate);
             $user = \App\User::updateOrCreate(compact('email'), [
@@ -113,7 +116,7 @@ class Users extends Controller
               'subscription' => 'premium',
             ]);
           }
-          else if($amount >= self::PACKAGE_2 && $amount < self::PACKAGE_3) {
+          else if($amount >= $this->package_2 && $amount < $this->package_3) {
             $longEndDate = $subscrEndDate + (180*24*60*60);
             $subscrEndDate = date("Y-m-d", $longEndDate);
             $user = \App\User::updateOrCreate(compact('email'), [
@@ -121,7 +124,7 @@ class Users extends Controller
               'subscription' => 'premium',
             ]);
           }
-          else if($amount >= self::PACKAGE_3) {
+          else if($amount >= $this->package_3) {
             $longEndDate = $subscrEndDate + (360*24*60*60);
             $subscrEndDate = date("Y-m-d", $longEndDate);
             $user = \App\User::updateOrCreate(compact('email'), [
@@ -155,7 +158,7 @@ class Users extends Controller
       $longStartDate = Utils::timestampConverter($subscrStartDate);
       DB::beginTransaction();
       try {
-          if($amount >= self::PACKAGE_1 && $amount < self::PACKAGE_2) {
+          if($amount >= $this->package_1 && $amount < $this->package_2) {
             $longEndDate = $longStartDate + (30*24*60*60);
             $subscrEndDate = date("Y-m-d", $longEndDate);
             $user = \App\User::updateOrCreate(compact('email'), [
@@ -164,7 +167,7 @@ class Users extends Controller
               'subscription' => 'premium',
             ]);
           }
-          else if($amount >= self::PACKAGE_2 && $amount < self::PACKAGE_3) {
+          else if($amount >= $this->package_2 && $amount < $this->package_3) {
             $longEndDate = $longStartDate + (180*24*60*60);
             $subscrEndDate = date("Y-m-d", $longEndDate);
             $user = \App\User::updateOrCreate(compact('email'), [
@@ -173,7 +176,7 @@ class Users extends Controller
               'subscription' => 'premium',
             ]);
           }
-          else if($amount >= self::PACKAGE_3) {
+          else if($amount >= $this->package_3) {
             $longEndDate = $longStartDate + (360*24*60*60);
             $subscrEndDate = date("Y-m-d", $longEndDate);
             $user = \App\User::updateOrCreate(compact('email'), [

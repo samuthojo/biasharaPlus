@@ -15,14 +15,16 @@
             id="edit_price_form">
             <div class="form-group">
               <label for="edit_price_list_id">PriceList:</label>
-              <select class="form-control" name="price_list_id"
-                id="edit_price_list_id" style="width: 180px">
-                <option value="" selected disabled>choose pricelist</option>
-                @foreach($pricelists as $pricelist)
-                  <option value="{{$pricelist->id}}">{{$pricelist->name}}</option>
-                @endforeach
-              </select>
-              <span id="edit_pricelist_id_error"
+              <input type="text" class="form-control" 
+                id="edit_price_list_id" readonly>
+              <!-- <span id="edit_pricelist_id_error"
+                class="text-danger" style="display: none;"></span> -->
+            </div>
+            <div class="form-group">
+              <label for="edit_price">Price:</label>
+              <input type="text" class="form-control" name="price"
+                id="edit_price" placeholder="Price">
+              <span id="edit_price_error"
                 class="text-danger" style="display: none;"></span>
             </div>
             <div class="form-group">

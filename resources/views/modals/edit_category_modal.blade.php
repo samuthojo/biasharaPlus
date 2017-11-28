@@ -29,6 +29,7 @@
                   onclick="attemptEditCategory()">
                   Save
                 </button>
+                @include('inline_loader')
               </div>
             </form>
           </div>

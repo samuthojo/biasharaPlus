@@ -24,6 +24,7 @@
                   data-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-success"
                   onclick="addCategory()">Add</button>
+                @include('inline_loader')
               </div>
             </form>
           </div>

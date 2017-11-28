@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\Cms\AddCategory;
 use App\Http\Requests\Cms\EditCategory;
+use App\Http\Controllers\Products;
+use App\Http\Requests\Cms\AddCategoryProduct;
+use App\Http\Requests\Cms\UpdateCategoryProduct;
+use App\Events\CategoryDeleted;
+use App\Events\ProductDeleted;
 
 class Categories extends Controller
 {
@@ -12,7 +17,6 @@ class Categories extends Controller
     {
       return view('categories', [
         'categories' => \App\Category::latest('created_at')
-                                     ->where('status', true)
                                      ->get(),
       ]);
     }
@@ -31,18 +35,21 @@ class Categories extends Controller
 
     public function destroy($id)
     {
-     $category = \App\Category::updateOrCreate(compact('id'), ['status' => false,]);
+      $category = \App\Category::find($id);
+      $category->delete();
+
+     //Dispatch event to softly delete all of this category's products
+     event(new CategoryDeleted($category));
+
      $categories = \App\Category::latest('created_at')
-                                ->where('status', true)
                                 ->get();
-     return view('categories_table', compact('categories'));
+     return view('tables.categories_table', compact('categories'));
     }
 
     public function products(\App\Category $category)
     {
-      $products = $category->products()->get();
-      $categories = \App\Category::where('status', true)
-                                 ->get();
+      $products = $category->products()->latest('created_at')->get();
+      $categories = \App\Category::all();
       return view('category_products', compact('products', 'categories',
                                         'category'));
     }
@@ -50,16 +57,50 @@ class Categories extends Controller
     public function productPrices($categoryId, $productId)
     {
       $product = \App\Product::find($productId);
-      $prices = $product->prices()->get()
-                                  ->map( function($price) {
-                                    $myPrice = $price;
-                                    $myPrice->pricelist_name =
-                                            $price->priceList()->first()->name;
-                                    return $myPrice;
-                                  });
-      $pricelists = \App\PriceList::latest('created_at')
-                                  ->where('status', true)
-                                  ->get();
-      return view('product_prices', compact('prices', 'pricelists', 'product'));
+      $productsController = new Products();
+
+      return view('product_prices', $productsController->pricesData($product));
+    }
+
+    public function addProduct(AddCategoryProduct $request, $categoryId) {
+
+      $request->category_id = $categoryId;
+
+      $productsController = new Products();
+      $product = $productsController->saveProduct($request);
+
+      $category = \App\Category::find($categoryId);
+      $products = $category->products()->latest('created_at')->get();
+
+     return view('tables.category_products_table', compact('products', 'category'));
+    }
+
+    public function updateProduct(UpdateCategoryProduct $request,
+                                    $categoryId, $productId)
+    {
+      $request->category_id = $categoryId;
+
+      $productsController = new Products();
+      $product = $productsController->updateProduct($request, $productId);
+
+      $category = \App\Category::find($categoryId);
+      $products = $category->products()->latest('created_at')->get();
+
+      return view('tables.category_products_table', compact('products', 'category'));
+    }
+
+    public function deleteProduct($categoryId, $productId)
+    {
+      $product = \App\Product::find($productId);
+      $productsController = new Products();
+      $productsController->deleteProduct($productId);
+
+      //Dispatch event to softly delete all this product's prices
+      event(new ProductDeleted($product));
+
+      $category = \App\Category::find($categoryId);
+      $products = $category->products()->latest('created_at')->get();
+
+      return view('tables.category_products_table', compact('products', 'category'));
     }
 }
