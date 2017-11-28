@@ -31,6 +31,7 @@ class UsersTableSeeder extends Seeder
       \App\User::create([
         'username' => 'admin',
         'password' => Hash::make('@dm!n'),
+        'is_admin' => true,
       ]);
 
     }

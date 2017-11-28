@@ -49,4 +49,19 @@ Route::middleware('auth')->group(function () {
   Route::delete('/pricelists/{pricelist}', 'CmsPricelists@destroy')->name('cms_pricelists.destroy');
 
   Route::get('/users', 'CmsUsers@index')->name('users.index');
+  Route::get('/users/{user}/payments', 'CmsUsers@userPayments')->name('users.userPayments');
+});
+
+Route::middleware('auth')->group(function () {
+  Route::get('/versions', 'Versions@index')->name('versions.index');
+  Route::get('/versions/{version}/version_details', 'Versions@versionDetails')->name('versions.versionDetails');
+  Route::post('/versions', 'Versions@store')->name('versions.store');
+  Route::post('/versions/{version}', 'Versions@update')->name('versions.update');
+});
+
+Route::middleware('auth')->group(function () {
+  Route::get('/bundles', 'Bundles@index')->name('bundles.index');
+  Route::post('/bundles/{bundle}', 'Bundles@update')->name('bundles.update');
+
+  Route::get('/feedback', 'CmsFeedback@index')->name('cms_feedback.index');
 });

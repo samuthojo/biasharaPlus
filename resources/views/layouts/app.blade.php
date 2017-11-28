@@ -163,6 +163,24 @@
           Feedback
         </a>
       </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">More
+          <span class="caret"></span>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="{{url('/bundles')}}">
+                Bundles
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href="#">
+                PayBill Numbers
+              </a>
+           </li>
+          </ul>
+        </a>
+      </li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <li class="dropdown">

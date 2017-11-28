@@ -28,6 +28,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\UserDeleted' => [
           'App\Listeners\DeleteUserDevices',
         ],
+        'App\Events\VersionCreated' => [
+          'App\Listeners\DeactivateOldVersions',
+        ],
     ];
 
     /**

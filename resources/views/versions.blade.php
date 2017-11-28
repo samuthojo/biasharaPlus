@@ -2,7 +2,7 @@
 
 @section('more')
   @include('header')
-  <script src="{{asset('js/products.js')}}"></script>
+  <script src="{{asset('js/versions.js')}}"></script>
   <style>
     td.details-control {
       background: url('../images/details_open.png') no-repeat center;
@@ -16,69 +16,58 @@
 
 @section('content')
 
-@include('modals.add_product_modal')
-@include('modals.edit_product_modal')
-@include('modals.confirmation_modal',
-  ['id' => 'delete_confirmation_modal',
+@include('modals.add_version_modal')
+@include('modals.edit_version_modal')
+{{--@include('modals.confirmation_modal',
+  ['id' => 'deactivate_confirmation_modal',
   'title' => 'Confirm',
-  'text' =>  'You are about to delete this product!',
+  'text' =>  'Mark version as old!',
   'action' => 'Confirm',
-  'function' => 'deleteProduct()',])
+  'function' => 'setInActive()',])
+@include('modals.confirmation_modal',
+  ['id' => 'activate_confirmation_modal',
+  'title' => 'Confirm',
+  'text' =>  'Mark version as current!',
+  'action' => 'Confirm',
+  'function' => 'setActive()',])--}}
 
-@if(request()->session()->has('message'))
-<div id="alert-success" class="alert alert-success">
-  {{request()->session()->pull('message')}}
-</div>
-@endif
 @include('alerts.success-alert')
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 style="font-weight: bold;" class="panel-title pull-left">
-        Products:
+        Versions:
       </h3>
       <span class="pull-right text-success"
-        title="add product" style="cursor: pointer;"
-        onclick="showModal('add_product_modal')">
+        title="add version" style="cursor: pointer;"
+        onclick="showModal('add_version_modal')">
         <i class="fa fa-plus-circle fa-2x"></i>
       </span>
       <div class="clearfix"></div>
     </div>
     <div class="panel-body">
-      <div id="productsTable" class="table-responsive">
+      <div id="versionsTable" class="table-responsive">
         <table id="myTable" class="table table-hover">
           <thead>
             <th></th>
             <th style="display: none;"></th>
             <th>No.</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Code</th>
-            <th>CC</th>
+            <th>Version</th>
+            <th>Status</th>
             <th>Action</th>
           </thead>
           <tbody>
-            @foreach($products as $product)
+            @foreach($versions as $version)
               <tr class="{{($loop->index % 2 == 0) ? 'active' : ''}}">
                 <td class="details-control" title="view more"></td>
-                <td style="display: none;">{{$product->id}}</td>
+                <td style="display: none;">{{$version->id}}</td>
                 <td>{{$loop->iteration}}</td>
-                <td id="{{'product_name_' . $product->id}}">{{$product->name}}</td>
-                <td id="{{'category_name_' . $product->id}}">{{$product->category_name}}</td>
-                <td id="{{'product_code_' . $product->id}}">{{$product->code}}</td>
-                <td id="{{'product_cc_' . $product->id}}">{{$product->cc}}</td>
+                <td>{{$version->version_number}}</td>
+                <td>{{($version->status) ? 'Current' : 'Old'}}</td>
                 <td>
                   <div class="btn-group">
-                    <a class="btn btn-default" title="view prices"
-                      href="{{url('/products/' . $product->id . '/prices')}}">
-                      <span class="glyphicon glyphicon-eye-open"></span>
-                    </a>
-                    <button class="btn btn-warning" title="edit product"
-                      onclick="showEditProductModal({{$product}})">
+                    <button class="btn btn-warning" title="edit version"
+                      onclick="showEditVersionModal({{$version}})">
                       <span class="glyphicon glyphicon-pencil"></span>
-                    </button>
-                    <button class="btn btn-danger" title="delete product"
-                      onclick="showProductDeleteModal({{$product->id}})">
-                      <span class="glyphicon glyphicon-trash"></span>
                     </button>
                   </div>
                 </td>
@@ -103,39 +92,35 @@
              exportOptions: {
                columns: ":not(:last-child)"
              },
-             title: "Products",
-             messageTop: "The List Of Products As Of {{date('d-m-Y')}}"
+             title: "Versions",
+             messageTop: "The List Of Versions As Of {{date('d-m-Y')}}"
            },
             {
               extend: 'excel',
               exportOptions: {
                 columns: ":not(:last-child)"
               },
-              title: "Products",
-              messageTop: "The List Of Products As Of {{date('d-m-Y')}}"
+              title: "Versions",
+              messageTop: "The List Of Versions As Of {{date('d-m-Y')}}"
            },
             {
               extend: 'pdf',
               exportOptions: {
                 columns: ":not(:last-child)"
               },
-              title: "Products",
-              messageTop: "The List Of Products As Of {{date('d-m-Y')}}"
+              title: "Versions",
+              messageTop: "The List Of Versions As Of {{date('d-m-Y')}}"
            }
        ],
        iDisplayLength: 8,
        bLengthChange: false
      });
 
-     $("#category_id").click(function() {
-       $(this).next().fadeOut(0);
-     });
-
-     $("#edit_category_id").click(function() {
-       $(this).next().fadeOut(0);
-     });
-
      $(":text").keydown(function() {
+       $(this).next().fadeOut(0);
+     });
+
+     $("textarea").keydown(function() {
        $(this).next().fadeOut(0);
      });
 
@@ -144,7 +129,7 @@
        var tr = $(this).closest('tr');
        var row = table.row( tr );
 
-       var product_id = row.data()[1];
+       var version_id = row.data()[1];
 
        if ( row.child.isShown() ) {
            // This row is already open - close it
@@ -152,12 +137,12 @@
            tr.removeClass('shown');
        }
        else {
-         var link = "/products/" + product_id + "/product_details";
+         var link = "/versions/" + version_id + "/version_details";
               $.getJSON(link)
-               .done( function (product) {
+               .done( function (version) {
                  row.child.hide();
                  tr.removeClass('shown');
-                 row.child(format(product)).show();
+                 row.child(format(version)).show();
                  tr.addClass('shown');
                })
                .fail( function (error) {

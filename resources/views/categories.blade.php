@@ -12,7 +12,7 @@
 @include('modals.confirmation_modal',
   ['id' => 'delete_confirmation_modal',
   'title' => 'Confirm',
-  'text' =>  'You are about to delete this category!',
+  'text' =>  'Delete this category and its products!',
   'action' => 'Confirm',
   'function' => 'deleteCategory()',])
 

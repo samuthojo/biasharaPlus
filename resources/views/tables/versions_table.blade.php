@@ -3,35 +3,23 @@
     <th></th>
     <th style="display: none;"></th>
     <th>No.</th>
-    <th>Name</th>
-    <th>Category</th>
-    <th>Code</th>
-    <th>CC</th>
+    <th>Version</th>
+    <th>Status</th>
     <th>Action</th>
   </thead>
   <tbody>
-    @foreach($products as $product)
+    @foreach($versions as $version)
       <tr class="{{($loop->index % 2 == 0) ? 'active' : ''}}">
         <td class="details-control" title="view more"></td>
-        <td style="display: none;">{{$product->id}}</td>
+        <td style="display: none;">{{$version->id}}</td>
         <td>{{$loop->iteration}}</td>
-        <td id="{{'product_name_' . $product->id}}">{{$product->name}}</td>
-        <td id="{{'category_name_' . $product->id}}">{{$product->category_name}}</td>
-        <td id="{{'product_code_' . $product->id}}">{{$product->code}}</td>
-        <td id="{{'product_cc_' . $product->id}}">{{$product->cc}}</td>
+        <td>{{$version->version_number}}</td>
+        <td>{{($version->status) ? 'Current' : 'Old'}}</td>
         <td>
           <div class="btn-group">
-            <a class="btn btn-default" title="view prices"
-              href="{{url('/products/' . $product->id . '/prices')}}">
-              <span class="glyphicon glyphicon-eye-open"></span>
-            </a>
             <button class="btn btn-warning" title="edit product"
-              onclick="showEditProductModal({{$product->id}})">
+              onclick="showEditVersionModal({{$version}})">
               <span class="glyphicon glyphicon-pencil"></span>
-            </button>
-            <button class="btn btn-danger" title="delete product"
-              onclick="showProductDeleteModal({{$product->id}})">
-              <span class="glyphicon glyphicon-trash"></span>
             </button>
           </div>
         </td>
@@ -53,39 +41,35 @@ function callMe() {
            exportOptions: {
              columns: ":not(:last-child)"
            },
-           title: "Products",
-           messageTop: "The List Of Products As Of {{date('d-m-Y')}}"
+           title: "Versions",
+           messageTop: "The List Of Versions As Of {{date('d-m-Y')}}"
          },
           {
             extend: 'excel',
             exportOptions: {
               columns: ":not(:last-child)"
             },
-            title: "Products",
-            messageTop: "The List Of Products As Of {{date('d-m-Y')}}"
+            title: "Versions",
+            messageTop: "The List Of Versions As Of {{date('d-m-Y')}}"
          },
           {
             extend: 'pdf',
             exportOptions: {
               columns: ":not(:last-child)"
             },
-            title: "Products",
-            messageTop: "The List Of Products As Of {{date('d-m-Y')}}"
+            title: "Versions",
+            messageTop: "The List Of Versions As Of {{date('d-m-Y')}}"
          }
      ],
      iDisplayLength: 8,
      bLengthChange: false
    });
 
-   $("#category_id").click(function() {
-     $(this).next().fadeOut(0);
-   });
-
-   $("#edit_category_id").click(function() {
-     $(this).next().fadeOut(0);
-   });
-
    $(":text").keydown(function() {
+     $(this).next().fadeOut(0);
+   });
+
+   $("textarea").keydown(function() {
      $(this).next().fadeOut(0);
    });
 
@@ -94,7 +78,7 @@ function callMe() {
      var tr = $(this).closest('tr');
      var row = table.row( tr );
 
-     var product_id = row.data()[1];
+     var version_id = row.data()[1];
 
      if ( row.child.isShown() ) {
          // This row is already open - close it
@@ -102,12 +86,12 @@ function callMe() {
          tr.removeClass('shown');
      }
      else {
-       var link = "/products/" + product_id + "/product_details";
+       var link = "/versions/" + version_id + "/version_details";
             $.getJSON(link)
-             .done( function (product) {
+             .done( function (version) {
                row.child.hide();
                tr.removeClass('shown');
-               row.child(format(product)).show();
+               row.child(format(version)).show();
                tr.addClass('shown');
              })
              .fail( function (error) {
@@ -118,5 +102,4 @@ function callMe() {
      }
    });
 }
-
 </script>

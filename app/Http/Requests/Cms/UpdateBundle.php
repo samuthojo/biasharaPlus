@@ -4,7 +4,7 @@ namespace App\Http\Requests\Cms;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AttemptLogin extends FormRequest
+class UpdateBundle extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class AttemptLogin extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,7 @@ class AttemptLogin extends FormRequest
     public function rules()
     {
         return [
-            //
+            'price' => 'required|integer',
         ];
     }
 }

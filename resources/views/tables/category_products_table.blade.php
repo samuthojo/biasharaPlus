@@ -44,4 +44,77 @@
       $(this).next().fadeOut(0);
     });
   });
+  function myDataTable(category_name) {
+    table = $("#myTable").DataTable({
+       dom: 'Bfrtip',
+       buttons: [
+           {
+             extend: 'print',
+             exportOptions: {
+               columns: ":not(:last-child)"
+             },
+             title: category_name + " Products",
+             messageTop: category_name + " Products As Of {{date('d-m-Y')}}"
+           },
+            {
+              extend: 'excel',
+              exportOptions: {
+                columns: ":not(:last-child)"
+              },
+              title: category_name + " Products",
+              messageTop: category_name + " Products As Of {{date('d-m-Y')}}"
+           },
+            {
+              extend: 'pdf',
+              exportOptions: {
+                columns: ":not(:last-child)"
+              },
+              title: category_name + " Products",
+              messageTop: category_name + " Products As Of {{date('d-m-Y')}}"
+           }
+       ],
+       iDisplayLength: 8,
+       bLengthChange: false
+     });
+
+    //  $("#category_id").click(function() {
+    //    $(this).next().fadeOut(0);
+    //  });
+     //
+    //  $("#edit_category_id").click(function() {
+    //    $(this).next().fadeOut(0);
+    //  });
+
+
+     // Add event listener for opening and closing details
+     $('#myTable tbody').on('click', 'td.details-control', function () {
+       var tr = $("td.details-control").closest('tr');
+       var row = table.row( tr );
+
+       var product_id = row.data()[1];
+
+       if ( row.child.isShown() ) {
+           // This row is already open - close it
+           row.child.hide();
+           tr.removeClass('shown');
+       }
+       else {
+         var link = "/products/" + product_id + "/product_details";
+              $.getJSON(link)
+               .done( function (product) {
+                 row.child.hide();
+                 tr.removeClass('shown');
+                 row.child(format(product)).show();
+                 tr.addClass('shown');
+               })
+               .fail( function (error) {
+                 console.log(error);
+               });
+               row.child(format2()).show();
+               tr.addClass('shown');
+       }
+     });
+
+  }
+
 </script>

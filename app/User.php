@@ -31,10 +31,10 @@ class User extends Authenticatable
 
 
     public function devices() {
-      return $this->hasMany('App\Device');
+      return $this->hasMany('App\UserDevice');
     }
 
-    public function feedbacks() {
-      return $this->hasMany('App\Feedback');
-    }
+    // public function feedbacks() {
+    //   return $this->hasMany('App\Feedback');
+    // }
 }

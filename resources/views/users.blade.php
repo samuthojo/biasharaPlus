@@ -2,9 +2,20 @@
 
 @section('more')
   @include('header')
+  <style>
+    .container-fluid {
+      line-height: 30px;
+    }
+  </style>
 @endsection
 
 @section('content')
+  <div class="container-fluid" style="margin-bottom: 10px;">
+    <span class="text-success" style="font-weight: bold;">Summary:</span><br>
+    <span class="text-success">Total User Accounts:</span> {{$total_accounts}}<br>
+    <span class="text-success">Total Free Accounts:</span> {{$free_accounts}}<br>
+    <span class="text-success">Total Premium Accounts:</span> {{$premium_accounts}}<br>
+  </div>
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 style="font-weight: bold;" class="panel-title pull-left">
@@ -38,9 +49,10 @@
                 <td>{{$user->subscription_start_date}}</td>
                 <td>{{$user->subscription_end_date}}</td>
                 <td>
-                  <button class="btn btn-warning" title="view payment">
+                  <a href="{{url('/users/' . $user->id . '/payments')}}"
+                    class="btn btn-warning" title="view payment">
                     <span class="glyphicon glyphicon-eye-open"></span>
-                  </button>
+                  </a>
                 </td>
               </tr>
             @endforeach
