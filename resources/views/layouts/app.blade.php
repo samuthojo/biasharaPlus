@@ -180,7 +180,7 @@
             </li>
             <li class="divider"></li>
             <li>
-              <a href="{{ route('change_password') }}">
+              <a href="#">
                 Change password
               </a>
            </li>

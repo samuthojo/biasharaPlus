@@ -49,8 +49,4 @@ Route::middleware('auth')->group(function () {
   Route::delete('/pricelists/{pricelist}', 'CmsPricelists@destroy')->name('cms_pricelists.destroy');
 
   Route::get('/users', 'CmsUsers@index')->name('users.index');
-
-  Route::get('/change_password', 'General@logout')->name('change_password');
 });
-
-// Route::get('/home', 'HomeController@index')->name('home');
