@@ -13,10 +13,12 @@ class Payments extends Controller
 
       $user = Auth::user();
 
-      if(strcasecmp($user->username, 'ipf_pay') == 0) {
+      if($user->is_system) {
+        //From ipf_pay or any other authorized system
         $payment = $this->savePayment($request);
-        
-        return response()->json(['message' => 'success',], 201);
+
+        return response()->json(['message' => 'success',
+                                 'payment' => $payment, ], 201);
       }
       else {
         $payment = $this->savePayment($request);

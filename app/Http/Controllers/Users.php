@@ -57,28 +57,27 @@ class Users extends Controller
 
     public function checkSystemExistence(CheckSystemExistence $request)
     {
-        $user = null;
-        $token = null;
+       $user = null;
+       $token = null;
        if(Auth::attempt($request->all())) {
          $user = Auth::user();
          if($user->is_system) {
            $token = $user->createToken($request->username)->accessToken;
+           return response()->json(compact('user', 'token'), 200);
          }
        }
-       else {
-         return response()->json([
-           'message' => 'user does not exist',
-         ], 404);
-       }
 
-      return response()->json(compact('user', 'token'), 200);
+       return response()->json([
+         'message' => 'system does not exist',
+       ], 404);
+
     }
 
     public function sendUserDetails(CreateUser $request) {
 
       $user = null;
 
-      if($request->hasFile('image_url')) {
+      if($request->has('image_url') && $request->hasFile('image_url')) {
         $imageUrl = Utils::handleImage($request->file('image_url'), $this->images);
         $user = $this->saveUserWithImage($imageUrl, $request);
       } else {

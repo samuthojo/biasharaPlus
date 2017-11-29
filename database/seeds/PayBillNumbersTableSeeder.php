@@ -11,15 +11,15 @@ class PayBillNumbersTableSeeder extends Seeder
      */
     public function run()
     {
-      // $providers = ["Vodacom", "Tigo", "Airtel", ];
-      // $phone_numbers = ["0767188777", "0718728778", "0767188777", ];
-      // $index = 0;
-      // foreach ($providers  as $provider) {
-      //   \App\PayBillNumber::create([
-      //     'service_provider' => $provider,
-      //     'phone_number' => $phone_numbers[$index],
-      //   ]);
-      //   $index++;
-      // }
+      $providers = ["Vodacom", "Tigo", "Airtel", ];
+      $phone_numbers = ["0767188777", "0718728778", "0767188777", ];
+      $index = 0;
+      foreach ($providers  as $provider) {
+        \App\PayBillNumber::create([
+          'service_provider' => $provider,
+          'phone_number' => $phone_numbers[$index],
+        ]);
+        $index++;
+      }
     }
 }
