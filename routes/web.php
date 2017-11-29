@@ -64,4 +64,7 @@ Route::middleware('auth')->group(function () {
   Route::post('/bundles/{bundle}', 'Bundles@update')->name('bundles.update');
 
   Route::get('/feedback', 'CmsFeedback@index')->name('cms_feedback.index');
+
+  Route::view('/notifications', 'notifications')->name('notifications');
+  Route::post('/notifications', 'Notifications@sendNotification');
 });

@@ -35,7 +35,7 @@ function addVersion() {
            $(".btn-success").prop("disabled", false);
            closeModal("add_version_modal");
            $("#versionsTable").html(table);
-           $("#success-alert").text("Version added successfully");
+           $("#success-alert").text("Version added successfully, users notified");
            $("#success-alert").fadeIn(0, function() {
              $("#success-alert").fadeOut(1500);
            });

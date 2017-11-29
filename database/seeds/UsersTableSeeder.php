@@ -33,6 +33,12 @@ class UsersTableSeeder extends Seeder
         'password' => Hash::make('@dm!n'),
         'is_admin' => true,
       ]);
+      \App\User::create([
+        'username' => 'ipf_pay',
+        'password' => Hash::make('!pf_sms'),
+        'is_admin' => true,
+        'is_system' => true,
+      ]);
 
     }
 }

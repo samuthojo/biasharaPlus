@@ -9,21 +9,31 @@ use Illuminate\Support\Facades\DB;
 use App\Utils\Utils;
 use App\Http\Requests\CreateUser;
 use App\Http\Requests\CheckUserExistence;
+use App\Http\Requests\CheckSystemExistence;
 use App\Http\Requests\UpdateSubscription;
 
 class Users extends Controller
 {
     private $images = 'uploads/users/';
 
-    //User packages
-    $package_1 = \App\Bundle::where('name', 'package_1')
-                             ->pluck('price')->first();
+    //The success message to return on updateSubscription
+    private $successMessage = 'subscription updated';
 
-    $package_2 = \App\Bundle::where('name', 'package_2')
-                             ->pluck('price')->first();
+    private $package_1;
+    private $package_2;
+    private $package_3;
 
-    $package_3 = \App\Bundle::where('name', 'package_3')
-                             ->pluck('price')->first();
+    //User packages(bundles)
+    public function __construct() {
+      $this->package_1 = \App\Bundle::where('name', 'package_1')
+                               ->pluck('price')->first();
+
+      $this->package_2 = \App\Bundle::where('name', 'package_2')
+                               ->pluck('price')->first();
+
+      $this->package_3 = \App\Bundle::where('name', 'package_3')
+                               ->pluck('price')->first();
+    }
 
     public function checkUserExistence(CheckUserExistence $request)
     {
@@ -41,6 +51,24 @@ class Users extends Controller
       }
 
       $token = $user->createToken($posted_email)->accessToken;
+
+      return response()->json(compact('user', 'token'), 200);
+    }
+
+    public function checkSystemExistence(CheckSystemExistence $request)
+    {
+
+       if(Auth::attempt($request->all())) {
+         $user = Auth::user();
+         if($user->is_system) {
+           $token = $user->createToken($request->username)->accessToken;
+         }
+       }
+       else {
+         return response()->json([
+           'message' => 'user does not exist',
+         ], 404);
+       }
 
       return response()->json(compact('user', 'token'), 200);
     }
@@ -138,7 +166,9 @@ class Users extends Controller
 
           DB::commit();
 
-          return response()->json(compact('user'), 200);
+          $message = $this->successMessage;
+
+          return response()->json(compact('message', 'user'), 200);
       }
 
       catch(Throwable $e) {
@@ -191,7 +221,9 @@ class Users extends Controller
 
           DB::commit();
 
-          return response()->json(compact('user'), 200);
+          $message = $this->successMessage;
+
+          return response()->json(compact('message', 'user'), 200);
       }
 
       catch(Throwable $e) {

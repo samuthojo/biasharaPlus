@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Cms;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreatePayment extends FormRequest
+class GeneralNews extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,8 @@ class CreatePayment extends FormRequest
     public function rules()
     {
         return [
-            'sender' => 'required',
-            'amount' => 'required',
-            'date_payed' => 'required',
-            'operator_type' => 'required',
-            'reference_no' => 'required|unique:payments',
-            'total_to_date' => 'required',
+            'title' => 'required',
+            'news' => 'required',
         ];
     }
 }
