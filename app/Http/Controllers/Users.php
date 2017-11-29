@@ -57,7 +57,8 @@ class Users extends Controller
 
     public function checkSystemExistence(CheckSystemExistence $request)
     {
-
+        $user = null;
+        $token = null;
        if(Auth::attempt($request->all())) {
          $user = Auth::user();
          if($user->is_system) {
