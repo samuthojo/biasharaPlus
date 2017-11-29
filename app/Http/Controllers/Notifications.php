@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Fcm\Fcm;
-use App\Http\Requests\Cms\GeneralNews;
 
 class Notifications extends Controller
 {
@@ -14,6 +13,23 @@ class Notifications extends Controller
     const NEW_PRODUCTS = 1;
 
     const GENERAL_NEWS = 2;
+
+    public function sendNotification(Request $request) {
+      switch($request->type) {
+        case self::NEW_VERSION: {
+          return $this->pleaseUpdateApplication();
+          break;
+        }
+        case self::NEW_PRODUCTS: {
+          return $this->newProducts();
+          break;
+        }
+        case self::GENERAL_NEWS: {
+          return $this->generalNews($request);
+          break;
+        }
+      }
+    }
 
     //notify users of the new version
     public function pleaseUpdateApplication()
@@ -27,16 +43,7 @@ class Notifications extends Controller
       $data["message"] = "A new version with more features, tap to view";
 
       //sending push message to users who subscribed to the topic 'all'
-      $status = $fcm->sendToTopic('all', $data);
-
-      if($status) {
-        session(['message' => 'Notification sent', ]);
-        return redirect()->route('notifications');
-      }
-      else if ($status == 0){
-        session(['message' => 'Sending failed', ]);
-      }
-
+      return $status = $fcm->sendToTopic('all', $data);
     }
 
     //notify users of the new version
@@ -51,7 +58,7 @@ class Notifications extends Controller
       $data["message"] = "New Features: " . $version->features;
 
       //sending push message to users who subscribed to the topic 'all'
-      return $fcm->sendToTopic('all', $data);
+      return $status = $fcm->sendToTopic('all', $data);
     }
 
     //notify users of new products
@@ -66,20 +73,12 @@ class Notifications extends Controller
       $data["message"] = "New Products were added, tap to view!";
 
       //sending push message to users who subscribed to the topic 'all'
-      $status = $fcm->sendToTopic('all', $data);
-
-      if($status) {
-        session(['message' => 'Notification sent', ]);
-        return redirect()->route('notifications');
-      }
-      else if ($status == 0){
-        session(['message' => 'Sending failed', ]);
-      }
+      return $status = $fcm->sendToTopic('all', $data);
 
     }
 
     //notify users on some new (important) information
-    public function generalNews(GeneralNews $request)
+    public function generalNews(Request $request)
     {
       $fcm = new FCM();
 
@@ -90,15 +89,6 @@ class Notifications extends Controller
       $data["message"] = $request->news;
 
       //sending push message to users who subscribed to the topic 'all'
-      $status = $fcm->sendToTopic('all', $data);
-
-      if($status) {
-        session(['message' => 'Notification sent', ]);
-        return redirect()->route('notifications');
-      }
-      else if ($status == 0){
-        session(['message' => 'Sending failed', ]);
-      }
-
+      return $status = $fcm->sendToTopic('all', $data);
     }
 }

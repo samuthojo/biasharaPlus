@@ -51,6 +51,7 @@
                 data-dismiss="modal">Cancel</button>
               <button class="btn btn-success"
                 type="button" onclick="addPrice()">Add</button>
+              @include('inline_loader')
             </div>
           </form>
         </div>

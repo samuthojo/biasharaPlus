@@ -10,22 +10,7 @@
   style="display: none;">
 </div>
 
-@if(request()->session()->has('message'))
-<div id="alert-success" class="alert alert-success">
-  {{request()->session()->pull('message')}}
-</div>
-@endif
-
 @include('alerts.success-alert')
-@if ($errors->any())
-  <div class="alert alert-danger" style="display: inline-block;">
-      <ul>
-          @foreach ($errors->all() as $error)
-              <li>{{ $error }}</li>
-          @endforeach
-      </ul>
-  </div>
-@endif
 
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -36,9 +21,8 @@
   <div class="panel-body">
     <div class="container">
 
-      <form name="notification_form" id="notification_form"
-        method="post" action="{{url('/notifications')}}">
-        {{ csrf_field() }}
+      <form name="notification_form" id="notification_form">
+
         <div class="form-group">
           <label for="type">Notification Type: </label>
           <select id="type" name="type" onchange="generalNews()"
@@ -52,20 +36,22 @@
         <div class="form-group" id="notification_title" style="display:none;">
           <label for="title">Title:</option>
           <input type="text" id="title" name="title" class="form-control"
-            placeholder="title" value="{{ old('title')}}">
+            placeholder="title">
         </div>
 
         <div class="form-group" id="general_news" style="display:none;">
           <label for="news">News:</option>
           <textarea id="news" name="news"
             class="form-control" placeholder="news"
-            rows="3" style="width: 180px" value="{{ old('news') }}"></textarea>
+            rows="3" style="width: 180px"></textarea>
         </div>
 
         <div class="form-group" id="submit_button">
-          <button class="btn btn-success" type="submit">
+          <button class="btn btn-success" type="button"
+            onclick="sendNotification()">
             Send
           </button>
+          @include('inline_loader')
         </div>
 
       </form>
@@ -73,9 +59,4 @@
     </div>
   </div>
 </div>
-<script>
-  $(function() {
-    $("#type").val("{{old('type')}}");
-  });
-</script>
 @endsection

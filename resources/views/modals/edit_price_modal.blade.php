@@ -15,7 +15,7 @@
             id="edit_price_form">
             <div class="form-group">
               <label for="edit_price_list_id">PriceList:</label>
-              <input type="text" class="form-control" 
+              <input type="text" class="form-control"
                 id="edit_price_list_id" readonly>
               <!-- <span id="edit_pricelist_id_error"
                 class="text-danger" style="display: none;"></span> -->
@@ -53,6 +53,7 @@
                 data-dismiss="modal">Cancel</button>
               <button class="btn btn-success"
                 type="button" onclick="attemptUpdatePrice()">Save</button>
+              @include('inline_loader')
             </div>
           </form>
         </div>

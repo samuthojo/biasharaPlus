@@ -24,8 +24,8 @@ class Versions extends Controller
     {
       $version = \App\Version::create($request->all());
 
-      // Dispatch event to deactivate old versions and mark the newly
-      // created version as active
+      // Dispatch event to deactivate old versions, mark the newly
+      // created version as active and notify users of the new version
       event(new VersionCreated($version));
 
       $versions = \App\Version::latest('created_at')->get();
