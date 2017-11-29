@@ -5,13 +5,19 @@ $(function () {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
     statusCode: {
-      401: function() {
-        window.location.href = "/login";
+        401: function() {
+          window.location.href = "/login";
+      }
     }
   });
 
   $("body").on('hidden.bs.modal', '.modal', function (e) {
-    //do something when modals are hidden
+    $(".modal-body").find('input, textarea, select').each(function(){
+       $(this).val("");
+    });
+    $(".modal-body").find('span').each(function(){
+       $(this).fadeOut(0);
+    });
   });
 
 });
