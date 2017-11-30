@@ -3,36 +3,59 @@
 @section('more')
   {{--<script src="{{asset('js/feedback.js')}}"></script>--}}
   <style>
-    body {
-      width: 850px;
-      margin: 20px auto;
-      text-align: center;
-      background-color: transparent;
+    .feedback {
+      background-color: #e7e7e7;
+      padding-left: 0;
+      padding-right: 0;
     }
-    .container {
-      /*background-color: #000;*/
+    .feedback-container {
+      width: 100%;
     }
-    .row {
-      /*background-color: #fff;*/
-    }
-    .col-sm-6 {
-      /*background-color: #555;*/
-    }
-    .col-sm-12 {
+    .header {
+      /*border-bottom: thin solid #3c763d;*/
+      padding: 10px;
       text-align: left;
-      margin-bottom: 20px;
+      color: #3c763d;
+      font-size: 20px;
+      font-weight: bold;
+      width: 100%;
     }
-    .col-sm-12.title {
-      height: auto;
-      margin-bottom: 0;
+    .header-border-bottom {
+      border-bottom: thin solid #3c763d;
+      /*border-bottom: thin solid #f0ad4e;*/
+      width: 100%;
     }
-    .col-sm-12.feedback {
-      height: auto;
-      margin-bottom: 0;
+    .footer-border-bottom {
+      border-bottom: thin solid #3c763d;
+      /*border-bottom: thin solid #f0ad4e;*/
+      /*border-bottom: thin solid #e7e7e7;*/
+      width: 100%;
     }
-    .col-sm-12.footer {
-      height: auto;
-      margin-bottom: 0;
+    .content {
+      padding: 10px;
+      text-align: justify;
+      color: #3c763d;
+      width: 100%;
+    }
+    .footer {
+      color: #f0ad4e;
+      padding: 10px;
+      text-align: right;
+      /*border-top: thin solid #3c763d;*/
+      width: 100%;
+    }
+    .email {
+      float: left;
+      cursor: pointer;
+    }
+    .date {
+      /*float: right;*/
+    }
+    .no-feedback {
+      text-align: center;
+      font-size: 30px;
+      font-weight: bold;
+      color: #3c763d;
     }
   </style>
 @endsection
@@ -44,36 +67,45 @@
   'text' =>  'Delete this feedback!',
   'action' => 'Confirm',
   'function' => 'deleteFeedback()',])
+  <div class="container">
+    @if($feedbacks->count() > 0)
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6 feedback">
 
-<div class="container">
-  <div class="row">
-
-    <div class="col-sm-6">
-      @if($feedbacks->count() > 0)
         @foreach($feedbacks as $feedback)
-          <div class="col-sm-12">
-            <div class="col-sm-12 title">
-              <span class="text-success" style="float:left; font-weight: bold;">
-                {{$feedback->subject}}
-              </span>
-            </div>
-            <div class="col-sm-12 feedback">
-              {{$feedback->feedback}}
-            </div>
-            <div class="col-sm-12 footer">
-              <span class="text-white" style="float:left; font-weight: bold;">
-                {{$feedback->email}}
-              </span>
-            </div>
+        <div class="feedback-container">
+          <div class="header">
+            {{$feedback->subject}}
           </div>
+          <div class="header-border-bottom"></div>
+
+          <div class="content">
+            {{$feedback->feedback}}
+          </div>
+
+          <div class="footer">
+            <span class="date">
+              {{\Carbon\Carbon::parse($feedback->created_at)->format("j M \\'y")}}
+            </span>
+            <span class="email">{{$feedback->email}}</span>
+          </div>
+          <div class="footer-border-bottom"></div>
+
+        </div>
         @endforeach
 
-      @else
-      <h4 style="font-weight: bold; color: #777;">No feedback yet</h4>
-      @endif
+      </div>
+      <div class="col-sm-3"></div>
     </div>
-
+    @else
+    <div class="row" style="height: 100%;">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6 feedback" style="text-align: center;">
+        <span class="no-feedback">No feedback yet</span>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+    @endif
   </div>
-</div>
-
 @endsection

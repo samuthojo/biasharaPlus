@@ -120,7 +120,7 @@ class Users extends Controller
         $payment = \App\Payment::where($conditions)->firstOrFail();
         $user = \App\User::where($request->only('email'))->first();
         $subscrEndDate = Utils::timestampConverter($user->subscription_end_date);
-        $today = Utils::timestampConverter(date('Y-m-d'));
+        $today = Utils::timestampConverter(date('d-m-Y'));
         if($today < $subscrEndDate) {
           //Subscription not expired
           return $this->subscriptionNotExpired($payment, $user);
@@ -131,7 +131,7 @@ class Users extends Controller
       }
       catch(ModelNotFoundException $e) {
         return response()->json([
-          'message' => 'Reference_no already in use',
+          'message' => 'Reference_no already in use or invalid',
         ], 200);
       }
     }
@@ -146,7 +146,7 @@ class Users extends Controller
 
           if($amount >= $this->package_1 && $amount < $this->package_2) {
             $longEndDate = $subscrEndDate + (30*24*60*60);
-            $subscrEndDate = date("Y-m-d", $longEndDate);
+            $subscrEndDate = date("d-m-Y", $longEndDate);
             $user = \App\User::updateOrCreate(compact('email'), [
               'subscription_end_date' => $subscrEndDate,
               'subscription' => 'premium',
@@ -154,7 +154,7 @@ class Users extends Controller
           }
           else if($amount >= $this->package_2 && $amount < $this->package_3) {
             $longEndDate = $subscrEndDate + (180*24*60*60);
-            $subscrEndDate = date("Y-m-d", $longEndDate);
+            $subscrEndDate = date("d-m-Y", $longEndDate);
             $user = \App\User::updateOrCreate(compact('email'), [
               'subscription_end_date' => $subscrEndDate,
               'subscription' => 'premium',
@@ -162,7 +162,7 @@ class Users extends Controller
           }
           else if($amount >= $this->package_3) {
             $longEndDate = $subscrEndDate + (360*24*60*60);
-            $subscrEndDate = date("Y-m-d", $longEndDate);
+            $subscrEndDate = date("d-m-Y", $longEndDate);
             $user = \App\User::updateOrCreate(compact('email'), [
               'subscription_end_date' => $subscrEndDate,
               'subscription' => 'premium',
@@ -198,7 +198,7 @@ class Users extends Controller
       try {
           if($amount >= $this->package_1 && $amount < $this->package_2) {
             $longEndDate = $longStartDate + (30*24*60*60);
-            $subscrEndDate = date("Y-m-d", $longEndDate);
+            $subscrEndDate = date("d-m-Y", $longEndDate);
             $user = \App\User::updateOrCreate(compact('email'), [
               'subscription_start_date' => $subscrStartDate,
               'subscription_end_date' => $subscrEndDate,
@@ -207,7 +207,7 @@ class Users extends Controller
           }
           else if($amount >= $this->package_2 && $amount < $this->package_3) {
             $longEndDate = $longStartDate + (180*24*60*60);
-            $subscrEndDate = date("Y-m-d", $longEndDate);
+            $subscrEndDate = date("d-m-Y", $longEndDate);
             $user = \App\User::updateOrCreate(compact('email'), [
               'subscription_start_date' => $subscrStartDate,
               'subscription_end_date' => $subscrEndDate,
@@ -216,7 +216,7 @@ class Users extends Controller
           }
           else if($amount >= $this->package_3) {
             $longEndDate = $longStartDate + (360*24*60*60);
-            $subscrEndDate = date("Y-m-d", $longEndDate);
+            $subscrEndDate = date("d-m-Y", $longEndDate);
             $user = \App\User::updateOrCreate(compact('email'), [
               'subscription_start_date' => $subscrStartDate,
               'subscription_end_date' => $subscrEndDate,

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class ResetPasswordController extends Controller
 {
@@ -54,7 +54,7 @@ class ResetPasswordController extends Controller
         $user = Auth::user();
         $username = $user->username;
         $password = $request->current_password;
-        if(Auth::attempt()) {
+        if(Auth::attempt(compact('username', 'password'))) {
           $this->resetPassword($user, $request->password);
         }
         else {
