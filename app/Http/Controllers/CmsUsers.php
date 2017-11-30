@@ -12,7 +12,7 @@ class CmsUsers extends Controller
                                ->count();
 
     $free_accounts = \App\User::where('is_admin', false)
-                              ->where('subscription', 'FREE')
+                              ->where('subscription', 'free')
                               ->count();
     $premium_accounts = \App\User::where('is_admin', false)
                                  ->where('subscription', 'premium')
