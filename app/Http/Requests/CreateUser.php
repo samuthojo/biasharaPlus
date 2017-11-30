@@ -27,7 +27,7 @@ class CreateUser extends FormRequest
             'username' => 'required',
             'email' => 'required|email|unique:users',
             'phone_number' => 'required|min:8',
-            'image_url' => 'nullable|file|image|max:2048',
+            'image_url' => 'nullable',
             'subscription_start_date' => 'required',
             'subscription_end_date' => 'required',
             'total_cc' => 'required',

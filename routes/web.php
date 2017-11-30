@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
   Route::post('/pricelists', 'CmsPricelists@store')->name('cms_pricelists.store');
   Route::post('/pricelists/{pricelist}', 'CmsPricelists@update')->name('cms_pricelists.update');
   Route::delete('/pricelists/{pricelist}', 'CmsPricelists@destroy')->name('cms_pricelists.destroy');
+  Route::get('/all_pricelists', 'CmsPricelists@pricelists');
 
   Route::get('/users', 'CmsUsers@index')->name('users.index');
   Route::get('/all_users', 'CmsUsers@users')->name('users.users');

@@ -43,6 +43,10 @@ class Users extends Controller
       {
         $user = \App\User::where('email', $posted_email)
                          ->firstOrFail();
+
+        $user_id = $user->id;
+        $device_id = $posted_device_id;
+        $device = \App\UserDevice::updateOrCreate(compact('user_id', 'device_id'));
       }
       catch(ModelNotFoundException $e) {
         return response()->json([

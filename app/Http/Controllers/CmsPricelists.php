@@ -70,4 +70,12 @@ class CmsPricelists extends Controller
       $priceLists = \App\PriceList::latest('updated_at')->get();
       return view('tables.pricelists_table', compact('priceLists'));
     }
+
+    public function pricelists()
+    {
+      $pricelists = DB::table('price_lists')
+                      ->select('id', 'name', 'effective_date', 'color')
+                      ->get();
+      return compact('pricelists');
+    }
 }

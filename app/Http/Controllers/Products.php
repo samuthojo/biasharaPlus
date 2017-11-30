@@ -194,7 +194,9 @@ class Products extends Controller
 
     public function products()
     {
-      $products = \App\Product::all();
+      $products = DB::table('products')
+                      ->select('id', 'name', 'code', 'cc', 'image')
+                      ->get();
       return compact('products');
     }
 }
