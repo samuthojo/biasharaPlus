@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('more')
-  {{--<script src="{{asset('js/change_password.js')}}"></script>--}}
   <style>
     #error-alert {
       display: inline-block;

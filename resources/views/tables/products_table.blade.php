@@ -26,7 +26,7 @@
               <span class="glyphicon glyphicon-eye-open"></span>
             </a>
             <button class="btn btn-warning" title="edit product"
-              onclick="showEditProductModal({{$product->id}})">
+              onclick="showEditProductModal({{$product}})">
               <span class="glyphicon glyphicon-pencil"></span>
             </button>
             <button class="btn btn-danger" title="delete product"

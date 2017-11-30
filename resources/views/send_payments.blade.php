@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('more')
-  {{--<script src="{{asset('js/send_payments.js')}}"></script>--}}
   <link href="{{ asset('css/datepicker.css') }}" rel="stylesheet">
   <script src="{{asset('js/datepicker.js')}}"></script>
   <script>
