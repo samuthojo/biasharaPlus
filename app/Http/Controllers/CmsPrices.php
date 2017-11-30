@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Cms\AddPrice;
 use App\Http\Requests\Cms\UpdatePrice;
 
@@ -28,17 +29,13 @@ class CmsPrices extends Controller
 
     public function prices()
     {
-      $prices = \App\Price::all()
-                          ->map( function($price) {
-                            $myPrice = $price;
-                            $price_list = $price->priceList()->first();
-                            $product = $price->product()->first();
-                            $price->price_list = $price_list->name;
-                            $price->product_name = $product->name;
-
-                            return $myPrice;
-                          });
-
+      $prices = DB::table('prices')
+                  ->join('price_lists', 'price_lists.id', '=', 'prices.price_list_id')
+                  ->join('products', 'products.id', '=', 'prices.product_id')
+                  ->select('prices.id', 'price', 'tanzania', 'kenya', 'uganda',
+                           'products.name as product_name',
+                           'price_lists.name as price_list')
+                  ->get();
       return compact('prices');
     }
 
