@@ -146,7 +146,7 @@
 
      // Add event listener for opening and closing details
      $('#myTable tbody').on('click', 'td.details-control', function () {
-       var tr = $("td.details-control").closest('tr');
+       var tr = $(this).closest('tr');
        var row = table.row( tr );
 
        var product_id = row.data()[1];
