@@ -40,7 +40,7 @@ class Notifications extends Controller
       $data["type"] = self::NEW_VERSION;
       $data["date"] = (now()->format('Y-m-d'));
       $data["title"] = "New Version";
-      $data["message"] = "A new version with more features, tap to view";
+      $data["message"] = "A new version with more features is out, go to download";
 
       //sending push message to users who subscribed to the topic 'all'
       return $status = $fcm->sendToTopic('all', $data);

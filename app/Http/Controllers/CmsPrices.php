@@ -26,6 +26,22 @@ class CmsPrices extends Controller
       return view('tables.product_prices_table', compact('prices', 'product'));
     }
 
+    public function prices()
+    {
+      $prices = \App\Price::all()
+                          ->map( function($price) {
+                            $myPrice = $price;
+                            $price_list = $price->priceList()->first();
+                            $product = $price->product()->first();
+                            $price->price_list = $price_list->name;
+                            $price->product_name = $product->name;
+
+                            return $myPrice;
+                          });
+
+      return compact('prices');
+    }
+
     public function store(AddPrice $request)
     {
       $price = \App\Price::create($request->all());

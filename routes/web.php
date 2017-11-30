@@ -20,6 +20,7 @@ Auth::routes();
 Route::middleware('auth')->group(function () {
   Route::get('/', 'Categories@index')->name('home');
   Route::get('/categories', 'Categories@index')->name('categories.index');
+  Route::get('/all_categories', 'Categories@categories')->name('categories.categories');
   Route::post('/categories', 'Categories@store')->name('categories.store');
   Route::post('/categories/{category}', 'Categories@update')->name('categories.update');
   Route::delete('/categories/{category}', 'Categories@destroy')->name('categories.destroy');
@@ -37,9 +38,11 @@ Route::middleware('auth')->group(function () {
   Route::get('/products/{product}/product_details', 'Products@productDetails')->name('products.productDetails');
   Route::delete('/products/{product}', 'Products@destroy')->name('products.destroy');
   Route::get('/products/{product}/prices', 'Products@prices')->name('products.prices');
+  Route::get('/all_products', 'Products@products');
 
   Route::post('/prices/{price}', 'CmsPrices@update')->name('CmsPrices.update');
   Route::post('/prices', 'CmsPrices@store')->name('CmsPrices.store');
+  Route::get('/all_prices', 'CmsPrices@prices');
 });
 
 Route::middleware('auth')->group(function () {
@@ -75,4 +78,6 @@ Route::middleware('auth')->group(function () {
   Route::post('/pay_bill_numbers', 'PayBillNumbers@store');
   Route::post('/pay_bill_numbers/{payBillNumber}', 'PayBillNumbers@update');
   Route::delete('/pay_bill_numbers/{payBillNumber}', 'PayBillNumbers@destroy');
+
+  Route::view('/change_password', 'change_password')->name('change_password');
 });

@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('more')
-  @include('header')
   {{--<script src="{{asset('js/feedback.js')}}"></script>--}}
   <style>
     body {

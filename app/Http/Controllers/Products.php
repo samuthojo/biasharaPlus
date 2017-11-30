@@ -191,4 +191,10 @@ class Products extends Controller
                                   ->get();
       return compact('prices', 'pricelists', 'product');
     }
+
+    public function products()
+    {
+      $products = \App\Product::all();
+      return compact('products');
+    }
 }

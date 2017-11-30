@@ -77,23 +77,27 @@ class Users extends Controller
 
       $user = null;
 
-      if($request->has('image_url') && $request->hasFile('image_url')) {
-        $imageUrl = Utils::handleImage($request->file('image_url'), $this->images);
-        $user = $this->saveUserWithImage($imageUrl, $request);
-      } else {
-        $user = \App\User::create($request->all());
+      DB::beginTransaction();
+      try {
+        $user = \App\User::create($request->except('device_id'));
+
+        $device = \App\UserDevice::create([
+          'user_id' => $user->id,
+          'device_id' => $request->device_id,
+        ]);
+
+        DB::commit();
+      } catch(Throwable $e) {
+        DB::rollBack();
+        return response()->json([
+         "message" => $e->getMessage(),
+        ], 500);
       }
 
       $posted_email = $request->input('email');
       $token = $user->createToken($posted_email)->accessToken;
 
       return response()->json(compact('user', 'token'), 201);
-    }
-
-    private function saveUserWithImage($imageUrl, $request) {
-      $data = $request->except('image_url');
-      $data = array_add($data, 'image_url', $imageUrl);
-      return \App\User::create($data);
     }
 
     public function accountDetail() {

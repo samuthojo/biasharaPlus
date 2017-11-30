@@ -103,4 +103,9 @@ class Categories extends Controller
 
       return view('tables.category_products_table', compact('products', 'category'));
     }
+
+    public function categories()
+    {
+      return \App\Category::all(['id', 'name']);
+    }
 }

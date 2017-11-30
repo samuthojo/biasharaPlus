@@ -198,7 +198,7 @@
             </li>
             <li class="divider"></li>
             <li>
-              <a href="#">
+              <a href="{{ route('change_password') }}">
                 Change password
               </a>
            </li>

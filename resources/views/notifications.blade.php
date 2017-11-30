@@ -1,25 +1,30 @@
 @extends('layouts.app')
 
 @section('more')
-  @include('header')
   <script src="{{asset('js/notifications.js')}}"></script>
+  <style>
+    #error-alert {
+      display: inline-block;
+    }
+  </style>
 @endsection
 
 @section('content')
-<div id="error-alert" class="alert alert-danger"
-  style="display: none;">
-</div>
 
 @include('alerts.success-alert')
 
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 style="font-weight: bold;"class="panel-title pull-left">
+    <h3 style="font-weight: bold;" class="panel-title pull-left">
       Notifications: </h3>
      <div class="clearfix"></div>
   </div>
   <div class="panel-body">
     <div class="container">
+
+      <div id="error-alert" class="alert alert-danger"
+        style="display: none;">
+      </div>
 
       <form name="notification_form" id="notification_form">
 
@@ -28,6 +33,7 @@
           <select id="type" name="type" onchange="generalNews()"
             class="form-control">
             <option value="" selected disabled>Choose Type</option>
+            <<option value="0">New Version</option>
             <option value="1">New Products</option>
             <option value="2">General News</option>
           </select>
@@ -43,10 +49,10 @@
           <label for="news">News:</option>
           <textarea id="news" name="news"
             class="form-control" placeholder="news"
-            rows="3" style="width: 180px"></textarea>
+            rows="3" style="width: 195px;"></textarea>
         </div>
 
-        <div class="form-group" id="submit_button">
+        <div class="form-group">
           <button class="btn btn-success" type="button"
             onclick="sendNotification()">
             Send

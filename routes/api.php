@@ -15,7 +15,6 @@ Route::prefix('v2')->group( function() {
   Route::post('check_user_existence', 'Users@checkUserExistence');
   Route::post('send_user_details', 'Users@sendUserDetails');
   Route::post('check_system_existence', 'Users@checkSystemExistence');
-  Route::get('/categories', 'ApiCategories@categories');
 });
 
 Route::middleware('auth:api')->prefix('v2')->group( function() {

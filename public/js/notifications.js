@@ -25,15 +25,18 @@ function generalNews() {
 }
 
 function sendNotification() {
-  notification_type = parseInt($("#type").val());
+  type = $("#type").val();
+
   if(type == "" || type == null) {
     $("#error-alert").text("Please select a notification type");
     $("#error-alert").fadeIn(0);
   }
-  else if(type == 1) {
+  else if(type == 0 || type == 1) {
+    notification_type = type;
     send();
   }
   else if (type == 2) {
+    notification_type = type;
     sendNewsNotification();
   }
 }
