@@ -35,6 +35,6 @@ class CmsUsers extends Controller
 
   public function users()
   {
-    return $users = \App\User::all(['id', 'username']);
+    return $users = \App\User::all(['id', 'username', 'is_admin']);
   }
 }
