@@ -2,9 +2,21 @@
 
 @section('more')
   {{--<script src="{{asset('js/send_payments.js')}}"></script>--}}
+  <link href="{{ asset('css/datepicker.css') }}" rel="stylesheet">
+  <script src="{{asset('js/datepicker.js')}}"></script>
+  <script>
+    $(document).ready( function() {
+      $('[data-toggle="datepicker"]').datepicker({
+          format: 'yyyy-mm-dd'
+      });
+    });
+  </script>
   <style>
     #error-alert {
       display: inline-block;
+    }
+    form {
+      width: 100%;
     }
   </style>
 @endsection
@@ -43,7 +55,7 @@
       @endif
 
       <form name="send_payment_form" id="send_payment_form"
-        method="post" action="">
+        method="post" action="{{ route('post_payments') }}">
         {{ csrf_field() }}
         <div class="form-group">
           <label for="sender">Sender:</option>
@@ -56,31 +68,36 @@
         <div class="form-group">
           <label for="amount">Amount:</option>
           <input type="text" id="amount" name="amount"
-            class="form-control" placeholder="Amount">
+            class="form-control" placeholder="Amount"
+            value="{{ old('amount') }}">
         </div>
 
         <div class="form-group">
           <label for="date_payed">Date Payed:</option>
           <input type="text" id="date_payed" name="date_payed"
-            class="form-control" placeholder="Date Payed">
+            class="form-control" placeholder="Date Payed"
+            value="{{ old('date_payed') }}" data-toggle="datepicker">
         </div>
 
         <div class="form-group">
           <label for="operator_type">Operator Type:</option>
           <input type="text" id="operator_type" name="operator_type"
-            class="form-control" placeholder="Operator Type">
+            class="form-control" placeholder="Operator Type"
+            value="{{ old('operator_type') }}">
         </div>
 
         <div class="form-group">
           <label for="reference_no">Reference Number:</option>
           <input type="text" id="reference_no" name="reference_no"
-            class="form-control" placeholder="Reference Number">
+            class="form-control" placeholder="Reference Number"
+            value="{{ old('reference_no') }}">
         </div>
 
         <div class="form-group">
           <label for="total_to_date">Total To Date:</option>
           <input type="text" id="total_to_date" name="total_to_date"
-            class="form-control" placeholder="Total to date">
+            class="form-control" placeholder="Total to date"
+            value="{{ old('total_to_date') }}">
         </div>
 
         <div class="form-group">

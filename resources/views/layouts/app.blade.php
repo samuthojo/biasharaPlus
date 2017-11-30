@@ -178,6 +178,12 @@
                 PayBill Numbers
               </a>
            </li>
+           <li class="divider"></li>
+            <li>
+              <a href="{{url('/send_payments')}}">
+                Send Payments
+              </a>
+           </li>
           </ul>
         </a>
       </li>

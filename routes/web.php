@@ -80,5 +80,8 @@ Route::middleware('auth')->group(function () {
   Route::post('/pay_bill_numbers/{payBillNumber}', 'PayBillNumbers@update');
   Route::delete('/pay_bill_numbers/{payBillNumber}', 'PayBillNumbers@destroy');
 
+  Route::view('/send_payments', 'send_payments')->name('payments_page');
+  Route::post('/send_payments', 'CmsPayments@store')->name('post_payments');
+
   Route::view('/change_password', 'change_password')->name('change_password');
 });
