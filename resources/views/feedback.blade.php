@@ -15,18 +15,24 @@
       /*border-bottom: thin solid #3c763d;*/
       padding: 10px;
       text-align: left;
-      color: #3c763d;
+      color: #555;
+      /*color: #3c763d;*/
       font-size: 20px;
       font-weight: bold;
       width: 100%;
     }
     .header-border-bottom {
-      border-bottom: thin solid #3c763d;
+      border-bottom: thin solid #555;
+      /*border-bottom: thin solid #3c763d;*/
       /*border-bottom: thin solid #f0ad4e;*/
       width: 100%;
     }
+    .feedback-container:last-child .footer-border-bottom {
+      border-bottom: none;
+    }
     .footer-border-bottom {
-      border-bottom: thin solid #3c763d;
+      border-bottom: thin solid #555;
+      /*border-bottom: thin solid #3c763d;*/
       /*border-bottom: thin solid #f0ad4e;*/
       /*border-bottom: thin solid #e7e7e7;*/
       width: 100%;
