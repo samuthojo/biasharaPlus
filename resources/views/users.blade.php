@@ -3,18 +3,29 @@
 @section('more')
   @include('header')
   <style>
-    .container-fluid {
+    .sub-title {
+      color: #3c763d;
+    }
+    .value {
+      font-weight: bold;
+    }
+    .summary {
       line-height: 30px;
     }
   </style>
 @endsection
 
 @section('content')
-  <div class="container-fluid" style="margin-bottom: 10px;">
-    <span class="text-success" style="font-weight: bold;">Summary:</span><br>
-    <span class="text-success">Total User Accounts:</span> {{$total_accounts}}<br>
-    <span class="text-success">Total Free Accounts:</span> {{$free_accounts}}<br>
-    <span class="text-success">Total Premium Accounts:</span> {{$premium_accounts}}<br>
+  <div class="row">
+    <div class="container-fluid summary" style="margin-bottom: 10px;">
+      <span class="text-success" style="font-weight: bold;">Summary:</span><br>
+      <span class="sub-title">Total User Accounts: </span>
+        <span class="value">{{sprintf('%s', number_format($total_accounts))}}</span><br>
+      <span class="sub-title">Total Free Accounts: </span>
+      <span class="value">{{sprintf('%s', number_format($free_accounts))}}</span><br>
+      <span class="sub-title">Total Premium Accounts: </span>
+      <span class="value">{{sprintf('%s', number_format($premium_accounts))}}</span><br>
+    </div>
   </div>
   <div class="panel panel-default">
     <div class="panel-heading">

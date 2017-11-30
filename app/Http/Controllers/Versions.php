@@ -11,7 +11,7 @@ class Versions extends Controller
 {
     public function index()
     {
-      $versions = \App\Version::latest('created_at')->get();
+      $versions = \App\Version::latest('updated_at')->get();
       return view('versions', compact('versions'));
     }
 
@@ -28,14 +28,14 @@ class Versions extends Controller
       // created version as active and notify users of the new version
       event(new VersionCreated($version));
 
-      $versions = \App\Version::latest('created_at')->get();
+      $versions = \App\Version::latest('updated_at')->get();
       return view('tables.versions_table', compact('versions'));
     }
 
     public function update(UpdateVersion $request, $id)
     {
       $version = \App\Version::updateOrCreate(compact('id'), $request->all());
-      $versions = \App\Version::latest('created_at')->get();
+      $versions = \App\Version::latest('updated_at')->get();
       return view('tables.versions_table', compact('versions'));
     }
 }

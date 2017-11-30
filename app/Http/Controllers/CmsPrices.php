@@ -15,7 +15,7 @@ class CmsPrices extends Controller
       $product = $price->product()->first();
 
       $prices = $product->prices()
-                        ->latest('created_at')
+                        ->latest('updated_at')
                         ->get()
                         ->map( function($price) {
                           $myPrice = $price;

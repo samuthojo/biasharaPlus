@@ -29,13 +29,13 @@ class UsersTableSeeder extends Seeder
       //     \App\User::create($user);
       // }
       \App\User::create([
-        'username' => 'admin',
-        'password' => Hash::make('@dm!n'),
+        'username' => env('ADMIN_USERNAME'),
+        'password' => Hash::make(env('ADMIN_PASSWORD')),
         'is_admin' => true,
       ]);
       \App\User::create([
-        'username' => 'ipf_pay',
-        'password' => Hash::make('!pf_sms'),
+        'username' => env('IPF_PAY_USERNAME'),
+        'password' => Hash::make(env('IPF_PAY_PASSWORD')),
         'is_admin' => true,
         'is_system' => true,
       ]);

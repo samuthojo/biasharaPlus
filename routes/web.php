@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function () {
   Route::delete('/pricelists/{pricelist}', 'CmsPricelists@destroy')->name('cms_pricelists.destroy');
 
   Route::get('/users', 'CmsUsers@index')->name('users.index');
+  Route::get('/all_users', 'CmsUsers@users')->name('users.users');
   Route::get('/users/{user}/payments', 'CmsUsers@userPayments')->name('users.userPayments');
 });
 
@@ -67,4 +68,11 @@ Route::middleware('auth')->group(function () {
 
   Route::view('/notifications', 'notifications')->name('notifications');
   Route::post('/notifications', 'Notifications@sendNotification');
+});
+
+Route::middleware('auth')->group(function () {
+  Route::get('/pay_bill_numbers', 'PayBillNumbers@index');
+  Route::post('/pay_bill_numbers', 'PayBillNumbers@store');
+  Route::post('/pay_bill_numbers/{payBillNumber}', 'PayBillNumbers@update');
+  Route::delete('/pay_bill_numbers/{payBillNumber}', 'PayBillNumbers@destroy');
 });

@@ -15,7 +15,7 @@ class Products extends Controller
 
     public function index()
     {
-        $products = \App\Product::latest('created_at')
+        $products = \App\Product::latest('updated_at')
                                 ->get()
                                 ->map( function($prod) {
                                   $myProd = $prod;
@@ -38,7 +38,7 @@ class Products extends Controller
     {
       $product = $this->saveProduct($request);
 
-      $products = \App\Product::latest('created_at')
+      $products = \App\Product::latest('updated_at')
                                ->get()
                                ->map( function($prod) {
                                   $myProd = $prod;
@@ -115,7 +115,7 @@ class Products extends Controller
     {
       $product = $this->updateProduct($request, $id);
 
-      $products = \App\Product::latest('created_at')
+      $products = \App\Product::latest('updated_at')
                               ->get()
                               ->map( function($prod) {
                                 $myProd = $prod;
@@ -156,7 +156,7 @@ class Products extends Controller
       //Dispatch event to softy delete all prices of this product
       event(new ProductDeleted($product));
 
-      $products = \App\Product::latest('created_at')
+      $products = \App\Product::latest('updated_at')
                               ->get()
                               ->map( function($prod) {
                                 $myProd = $prod;
@@ -179,7 +179,7 @@ class Products extends Controller
 
     public function pricesData($product)
     {
-      $prices = $product->prices()->latest('created_at')
+      $prices = $product->prices()->latest('updated_at')
                                   ->get()
                                   ->map( function($price) {
                                     $myPrice = $price;
@@ -187,7 +187,7 @@ class Products extends Controller
                                             $price->priceList()->first()->name;
                                     return $myPrice;
                                   });
-      $pricelists = \App\PriceList::latest('created_at')
+      $pricelists = \App\PriceList::latest('updated_at')
                                   ->get();
       return compact('prices', 'pricelists', 'product');
     }

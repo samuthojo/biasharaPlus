@@ -8,7 +8,7 @@ class CmsFeedback extends Controller
 {
     public function index()
     {
-      $feedbacks = \App\Feedback::latest('created_at')->get();
+      $feedbacks = \App\Feedback::latest('updated_at')->get();
       return view('feedback', compact('feedbacks'));
     }
 }

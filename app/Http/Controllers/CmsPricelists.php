@@ -13,14 +13,14 @@ class CmsPricelists extends Controller
     public function index()
     {
       return view('priceLists', [
-        'priceLists' => \App\PriceList::latest('created_at')->get(),
+        'priceLists' => \App\PriceList::latest('updated_at')->get(),
       ]);
     }
 
     public function store(CreatePriceList $request)
     {
       $priceList = $this->savePriceList($request);
-      $priceLists = \App\PriceList::latest('created_at')->get();
+      $priceLists = \App\PriceList::latest('updated_at')->get();
       return view('tables.pricelists_table', compact('priceLists'));
     }
 
@@ -55,7 +55,7 @@ class CmsPricelists extends Controller
     public function update(UpdatePriceList $request, $id)
     {
       \App\PriceList::where('id', $id)->update($request->all());
-      $priceLists = \App\PriceList::latest('created_at')->get();
+      $priceLists = \App\PriceList::latest('updated_at')->get();
       return view('tables.pricelists_table', compact('priceLists'));
     }
 
@@ -67,7 +67,7 @@ class CmsPricelists extends Controller
       //Dispatch event to softly delete all this priceList's prices
       event(new PriceListDeleted($priceList));
 
-      $priceLists = \App\PriceList::latest('created_at')->get();
+      $priceLists = \App\PriceList::latest('updated_at')->get();
       return view('tables.pricelists_table', compact('priceLists'));
     }
 }

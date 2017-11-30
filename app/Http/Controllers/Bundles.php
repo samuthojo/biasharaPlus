@@ -9,14 +9,14 @@ class Bundles extends Controller
 {
     public function index()
     {
-      $bundles = \App\Bundle::latest('created_at')->get();
+      $bundles = \App\Bundle::latest('updated_at')->get();
       return view('bundles', compact('bundles'));
     }
 
     public function update(UpdateBundle $request, $id)
     {
       \App\Bundle::updateOrCreate(compact('id'), $request->all());
-      $bundles = \App\Bundle::latest('created_at')->get();
+      $bundles = \App\Bundle::latest('updated_at')->get();
       return view('tables.bundles_table', compact('bundles'));
     }
 }

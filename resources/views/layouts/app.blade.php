@@ -174,7 +174,7 @@
             </li>
             <li class="divider"></li>
             <li>
-              <a href="#">
+              <a href="{{url('/pay_bill_numbers')}}">
                 PayBill Numbers
               </a>
            </li>
