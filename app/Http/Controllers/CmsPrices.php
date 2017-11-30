@@ -29,13 +29,17 @@ class CmsPrices extends Controller
 
     public function prices()
     {
-      $prices = DB::table('prices')
-                  ->join('price_lists', 'price_lists.id', '=', 'prices.price_list_id')
-                  ->join('products', 'products.id', '=', 'prices.product_id')
-                  ->select('prices.id', 'price', 'tanzania', 'kenya', 'uganda',
-                           'products.name as product_name',
-                           'price_lists.name as price_list')
-                  ->get();
+      $priceListNames = \App\PriceList::pluck('name');
+      $prices = array();
+      foreach ($priceListNames as $priceListName) {
+        $prices[$priceListName] =
+                  DB::table('prices')
+                    ->join('price_lists', 'price_lists.id', '=', 'prices.price_list_id')
+                    ->join('products', 'products.id', '=', 'prices.product_id')
+                    ->where('price_lists.name', '=', $priceListName)
+                    ->select('prices.id', 'products.name as product_name')
+                    ->get();
+      }
       return compact('prices');
     }
 
