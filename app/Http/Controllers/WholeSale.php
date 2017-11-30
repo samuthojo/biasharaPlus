@@ -18,7 +18,7 @@ class WholeSale extends Controller
     $wholesale = array();
 
     //Price_list_names
-    $leaveOut = ['retail', 'novus'];
+    $leaveOut = ['RETAIL', 'NOVUS'];
     $priceListNames = \App\PriceList::whereNotIn('name', $leaveOut)
                                      ->pluck('name');
 
