@@ -61,7 +61,8 @@
       text-align: center;
       font-size: 30px;
       font-weight: bold;
-      color: #3c763d;
+      /*color: #3c763d;*/
+      color: #555;
     }
   </style>
 @endsection

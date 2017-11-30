@@ -21,7 +21,7 @@ class Retail extends Controller
             ->join('prices', 'price_lists.id', '=', 'prices.price_list_id')
             ->join('products', 'prices.product_id', '=', 'products.id')
             ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->where('price_lists.name', '=', 'retail')
+            ->where('price_lists.name', '=', 'RETAIL')
             ->select('price_lists.id', 'products.name as product_name',
               'products.code', 'products.cc', 'products.image',
               'products.description', 'categories.name as cat_name');
@@ -31,7 +31,7 @@ class Retail extends Controller
             ->join('prices', 'price_lists.id', '=', 'prices.price_list_id')
             ->join('products', 'prices.product_id', '=', 'products.id')
             ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->where('price_lists.name', '=', 'novus')
+            ->where('price_lists.name', '=', 'NOVUS')
             ->select('price_lists.id',
               'products.name as product_name', 'products.code', 'products.cc',
               'products.image', 'products.description',
