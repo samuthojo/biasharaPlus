@@ -16,10 +16,11 @@
         <td>
           <div class="btn-group">
             <button class="btn btn-warning" title="edit price-list"
-              onclick="showModal('edit_pricelist_modal')">
+              onclick="showEditPriceListModal({{$priceList}})">
               <span class="glyphicon glyphicon-pencil"></span>
             </button>
-            <button class="btn btn-danger" title="delete price-list">
+            <button class="btn btn-danger" title="delete price-list"
+              onclick="showPriceListDeleteModal({{$priceList->id}})">
               <span class="glyphicon glyphicon-trash"></span>
             </button>
           </div>

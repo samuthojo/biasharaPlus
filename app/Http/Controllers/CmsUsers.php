@@ -26,7 +26,7 @@ class CmsUsers extends Controller
 
   public function userPayments(\App\User $user)
   {
-    $payments = \App\Payment::where('id', $user->id)
+    $payments = \App\Payment::where('user_id', $user->id)
                             ->latest('updated_at')
                             ->get();
 
