@@ -65,7 +65,9 @@
                 <td id="{{'product_name_' . $product->id}}">{{$product->name}}</td>
                 <td id="{{'category_name_' . $product->id}}">{{$product->category_name}}</td>
                 <td id="{{'product_code_' . $product->id}}">{{$product->code}}</td>
-                <td id="{{'product_cc_' . $product->id}}">{{$product->cc}}</td>
+                <td id="{{'product_cc_' . $product->id}}">
+                  {{sprintf('%s', number_format($product->cc, 3))}}
+                </td>
                 <td>
                   <div class="btn-group">
                     <a class="btn btn-default" title="view prices"

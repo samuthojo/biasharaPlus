@@ -78,7 +78,7 @@
               <td>{{$loop->iteration}}</td>
               <td>{{$product->name}}</td>
               <td>{{$product->code}}</td>
-              <td>{{$product->cc}}</td>
+              <td>{{sprintf('%s', number_format($product->cc, 3))}}</td>
               <td>
                 <div class="btn-group">
                   <a class="btn btn-default" title="view prices"

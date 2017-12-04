@@ -25,13 +25,13 @@ class Users extends Controller
 
     //User packages(bundles)
     public function __construct() {
-      $this->package_1 = \App\Bundle::where('name', 'package_1')
+      $this->package_1 = \App\Bundle::where('name', 'Package_1')
                                ->pluck('price')->first();
 
-      $this->package_2 = \App\Bundle::where('name', 'package_2')
+      $this->package_2 = \App\Bundle::where('name', 'Package_2')
                                ->pluck('price')->first();
 
-      $this->package_3 = \App\Bundle::where('name', 'package_3')
+      $this->package_3 = \App\Bundle::where('name', 'Package_3')
                                ->pluck('price')->first();
     }
 
