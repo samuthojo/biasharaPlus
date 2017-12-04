@@ -4,12 +4,18 @@
   {{--<script src="{{asset('js/feedback.js')}}"></script>--}}
   <style>
     .feedback {
+      /*background-color: #e7e7e7;*/
       background-color: #e7e7e7;
       padding-left: 0;
       padding-right: 0;
     }
     .feedback-container {
       width: 100%;
+    }
+    .feedback-container:hover {
+      background-color: #cec;
+      /*background-color: #ee7;*/
+      cursor: pointer;
     }
     .header {
       /*border-bottom: thin solid #3c763d;*/
@@ -27,15 +33,15 @@
       /*border-bottom: thin solid #f0ad4e;*/
       width: 100%;
     }
-    .feedback-container:last-child .footer-border-bottom {
-      border-bottom: none;
-    }
     .footer-border-bottom {
       border-bottom: thin solid #555;
       /*border-bottom: thin solid #3c763d;*/
       /*border-bottom: thin solid #f0ad4e;*/
       /*border-bottom: thin solid #e7e7e7;*/
       width: 100%;
+    }
+    .feedback-container:last-child .footer-border-bottom {
+      border-bottom: none;
     }
     .content {
       padding: 10px;
@@ -77,8 +83,8 @@
   <div class="container">
     @if($feedbacks->count() > 0)
     <div class="row">
-      <div class="col-sm-3"></div>
-      <div class="col-sm-6 feedback">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-8 feedback">
 
         @foreach($feedbacks as $feedback)
         <div class="feedback-container">
@@ -103,7 +109,7 @@
         @endforeach
 
       </div>
-      <div class="col-sm-3"></div>
+      <div class="col-sm-2"></div>
     </div>
     @else
     <div class="row" style="height: 100%;">
