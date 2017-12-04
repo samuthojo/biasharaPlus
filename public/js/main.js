@@ -7,6 +7,9 @@ $(function () {
     statusCode: {
         401: function() {
           window.location.href = "/login";
+      },
+        419: function() {
+          window.location.href = "/login";
       }
     }
   });
