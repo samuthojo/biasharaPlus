@@ -3,13 +3,16 @@
 @section('more')
   @include('header')
   <style>
-    .table-bordered>thead>tr>th {
+    .table-bordered>thead>tr>th:first-child {
       /*color: #3c763d;*/
-      color: #000;
+      width: 145px;
+      text-align: left;
     }
 
     .table-bordered>tbody>tr>th {
-      color: #000;
+      /*box-sizing: border-box;*/
+      width: 145px;
+      text-align: left;
     }
 
     h4 {
