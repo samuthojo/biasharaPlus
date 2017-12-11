@@ -3,29 +3,65 @@
 @section('more')
   @include('header')
   <style>
-    .sub-title {
+    .table-bordered>thead>tr>th {
       color: #3c763d;
     }
-    .value {
-      font-weight: bold;
+
+    .table-bordered>tbody>tr>th {
+      color: #3c763d;
     }
-    .summary {
-      line-height: 30px;
+
+    h4 {
+      font-weight: bold;
+      font-size: 1.25em;
     }
   </style>
 @endsection
 
 @section('content')
-  <div class="row">
-    <div class="container-fluid summary" style="margin-bottom: 10px;">
-      <span class="text-success" style="font-weight: bold;">Summary:</span><br>
-      <span class="sub-title">Total User Accounts: </span>
-        <span class="value">{{sprintf('%s', number_format($total_accounts))}}</span><br>
-      <span class="sub-title">Total Free Accounts: </span>
-      <span class="value">{{sprintf('%s', number_format($free_accounts))}}</span><br>
-      <span class="sub-title">Total Premium Accounts: </span>
-      <span class="value">{{sprintf('%s', number_format($premium_accounts))}}</span><br>
+  <div class="container-fluid">
+
+    <div class="table-responsive">
+
+      <h4 class="text-success" style="color: #f0ad4e;">Summary: </h4>
+      <table class="table table-hover table-condensed table-bordered">
+        <thead>
+          <tr>
+            <th>Accounts:</th>
+            <th>Total</th>
+            <th>Tanzania</th>
+            <th>Kenya</th>
+            <th>Uganda</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>User Accounts</th>
+            <td>{{sprintf('%s', number_format($total_accounts))}}</td>
+            <td>{{sprintf('%s', number_format($tz_accounts))}}</td>
+            <td>{{sprintf('%s', number_format($kenya_accounts))}}</td>
+            <td>{{sprintf('%s', number_format($uganda_accounts))}}</td>
+          </tr>
+          <tr>
+            <th>Free Accounts</th>
+            <td>{{sprintf('%s', number_format($free_accounts))}}</td>
+            <td>{{sprintf('%s', number_format($free_tz_accounts))}}</td>
+            <td>{{sprintf('%s', number_format($free_kenya_accounts))}}</td>
+            <td>{{sprintf('%s', number_format($free_uganda_accounts))}}</td>
+          </tr>
+          <tr>
+            <th>Premium Accounts</th>
+            <td>{{sprintf('%s', number_format($premium_accounts))}}</td>
+            <td>{{sprintf('%s', number_format($premium_tz_accounts))}}</td>
+            <td>{{sprintf('%s', number_format($premium_kenya_accounts))}}</td>
+            <td>{{sprintf('%s', number_format($premium_uganda_accounts))}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+
     </div>
+
   </div>
   <div class="panel panel-default">
     <div class="panel-heading">
