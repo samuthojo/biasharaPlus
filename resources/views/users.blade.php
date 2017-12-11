@@ -90,7 +90,22 @@
               <tr class="{{($loop->index % 2 == 0) ? 'active' : ''}}">
                 <td>{{$loop->iteration}}</td>
                 <td>{{$user->username}}</td>
-                <td>{{$user->country}}</td>
+                @php
+                  $myCountry = $user->country;
+                  if($myCountry == '0') {
+                    $country = 'Tanzania';
+                  }
+                  else if($myCountry == '1') {
+                    $country = 'Kenya';
+                  }
+                  else if($myCountry == '2') {
+                    $country = 'Uganda';
+                  }
+                  else {
+                    $country = $myCountry;
+                  }
+                @endphp
+                <td>{{$country}}</td>
                 <td>{{$user->email}}</td>
                 <td>{{$user->phone_number}}</td>
                 <td>{{$user->subscription}}</td>
