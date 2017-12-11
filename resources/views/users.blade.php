@@ -4,11 +4,12 @@
   @include('header')
   <style>
     .table-bordered>thead>tr>th {
-      color: #3c763d;
+      /*color: #3c763d;*/
+      color: #000;
     }
 
     .table-bordered>tbody>tr>th {
-      color: #3c763d;
+      color: #000;
     }
 
     h4 {
