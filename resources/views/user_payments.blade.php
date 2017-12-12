@@ -9,7 +9,22 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 style="font-weight: bold;" class="panel-title pull-left">
-        Payments, User: {{$user->username. ', Country: '.  $user->country}}
+        @php
+          $myCountry = $user->country;
+          if($myCountry == '0') {
+            $country = 'Tanzania';
+          }
+          else if($myCountry == '1') {
+            $country = 'Kenya';
+          }
+          else if($myCountry == '2') {
+            $country = 'Uganda';
+          }
+          else {
+            $country = $myCountry;
+          }
+        @endphp
+        Payments, User: {{$user->username. ', Country: '.  $country}}
       </h3>
       <div class="btn-group pull-right">
         <a class="btn btn-success" href="{{url('/users')}}"
