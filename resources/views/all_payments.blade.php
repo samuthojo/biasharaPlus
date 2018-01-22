@@ -17,8 +17,8 @@
 
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 style="font-weight: bold;" class="panel-title pull-left">
-        All Payments
+      <h3 style="font-weight: bold;" class="panel-title">
+        All Payments:
       </h3>
     </div>
     <div class="panel-body">
@@ -30,7 +30,7 @@
             <th>Amount</th>
             <th>ReferenceNo.</th>
             <th>Operator</th>
-            <th>Total To Date</th>
+            <th>Total To Date (Tshs)</th>
           </thead>
           <tbody>
             @foreach($payments as $payment)
@@ -39,7 +39,7 @@
                   {{\Carbon\Carbon::parse($payment->date_payed)->format('d-m-Y')}}
                 </td>
                 <td>{{$payment->sender}}</td>
-                <td>{{$payment->amount}}</td>
+                <td>{{number_format($payment->amount)}}</td>
                 <td>{{$payment->reference_no}}</td>
                 <td>{{$payment->operator_type}}</td>
                 <td>{{number_format($payment->total_to_date)}}</td>
