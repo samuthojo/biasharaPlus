@@ -184,6 +184,12 @@
                 Send Payments
               </a>
            </li>
+           <li class="divider"></li>
+            <li>
+              <a href="{{url('/all_payments')}}">
+                All Payments
+              </a>
+           </li>
           </ul>
         </a>
       </li>

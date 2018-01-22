@@ -25,4 +25,10 @@ class CmsPayments extends Controller
       $data = array_add($data, 'date_payed', $date_payed);
       return $payment = \App\Payment::create($data);
     }
+
+    public function payments()
+    {
+      $payments = \App\Payment::latest('created_at')->get();
+      return view('all_payments', compact('payments'));
+    }
 }

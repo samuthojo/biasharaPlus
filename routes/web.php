@@ -83,5 +83,7 @@ Route::middleware('auth')->group(function () {
   Route::view('/send_payments', 'send_payments')->name('payments_page');
   Route::post('/send_payments', 'CmsPayments@store')->name('post_payments');
 
+  Route::view('/all_payments', 'CmsPayments@payments')->name('all_payments');
+
   Route::view('/change_password', 'change_password')->name('change_password');
 });
