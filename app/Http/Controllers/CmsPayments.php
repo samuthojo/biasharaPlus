@@ -28,7 +28,7 @@ class CmsPayments extends Controller
 
     public function payments()
     {
-      $payments = \App\Payment::latest('created_at')->get();
+      $payments = \App\Payment::latest('date_payed')->get();
       return view('all_payments', compact('payments'));
     }
 }
