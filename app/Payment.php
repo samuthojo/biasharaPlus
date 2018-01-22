@@ -10,4 +10,9 @@ class Payment extends Model
     use SoftDeletes;
 
     protected $guarded = ['id', ];
+
+    public function getDatePayedAttribute($value)
+    {
+      return \Carbon\Carbon::parse($value)->format('d-m-Y');
+    }
 }
