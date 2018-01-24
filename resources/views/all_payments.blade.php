@@ -30,6 +30,7 @@
             <th>Amount</th>
             <th>ReferenceNo.</th>
             <th>Operator</th>
+            <th>Status</th>
             <th>Total To Date (Tshs)</th>
           </thead>
           <tbody>
@@ -42,6 +43,14 @@
                 <td>{{number_format($payment->amount)}}</td>
                 <td>{{$payment->reference_no}}</td>
                 <td>{{$payment->operator_type}}</td>
+                @php
+                  $class = 'text-danger';
+                  if(strcasecmp('redeemed', $payment->redeemed) == 0)
+                  {
+                    $class = 'text-success';
+                  }
+                @endphp
+                <td class="{{$class}}">{{$payment->redeemed}}</td>
                 <td>{{number_format($payment->total_to_date)}}</td>
               </tr>
             @endforeach
