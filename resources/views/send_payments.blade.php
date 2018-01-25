@@ -102,7 +102,7 @@
           <label for="total_to_date">Total To Date:</option>
           <input type="text" id="total_to_date" name="total_to_date"
             class="form-control" placeholder="Total to date"
-            value="{{ old('total_to_date') }}">
+            value="0" readonly>
         </div>
 
         <div class="form-group">
