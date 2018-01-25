@@ -82,7 +82,7 @@
           <label for="operator_type">Operator Type:</option>
           <select id="operator_type" name="operator_type" style="width: 200px"
             class="form-control">
-            <option value="#">Choose operator</option>
+            <option value="">Choose operator</option>
             <option value="AIRTEL MONEY">AIRTEL MONEY</option>
             <option value="CASH">CASH</option>
             <option value="M-PESA">M-PESA</option>
