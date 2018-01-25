@@ -25,6 +25,7 @@ class CheckUserExistence extends FormRequest
     {
         return [
             'email' => 'required|email',
+            'device_id' => 'required',
         ];
     }
 }

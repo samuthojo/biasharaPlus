@@ -33,6 +33,7 @@ class CreateUser extends FormRequest
             'total_cc' => 'required',
             'business_id' => 'nullable|unique:users',
             'country' => 'required',
+            'device_id' => 'required',
         ];
     }
 

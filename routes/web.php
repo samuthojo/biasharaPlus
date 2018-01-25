@@ -75,7 +75,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-  Route::get('/pay_bill_numbers', 'PayBillNumbers@index');
+  Route::get('/pay_bill_numbers', 'PayBillNumbers@index')->name('paybill_numbers');
   Route::post('/pay_bill_numbers', 'PayBillNumbers@store');
   Route::post('/pay_bill_numbers/{payBillNumber}', 'PayBillNumbers@update');
   Route::delete('/pay_bill_numbers/{payBillNumber}', 'PayBillNumbers@destroy');

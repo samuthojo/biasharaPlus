@@ -36,21 +36,12 @@
           <tbody>
             @foreach($payments as $payment)
               <tr class="{{($loop->index % 2 == 0) ? 'active' : ''}}">
-                <td>
-                  {{$payment->date_payed}}
-                </td>
+                <td>{{$payment->date_payed}}</td>
                 <td>{{$payment->sender}}</td>
                 <td>{{number_format($payment->amount)}}</td>
                 <td>{{$payment->reference_no}}</td>
                 <td>{{$payment->operator_type}}</td>
-                @php
-                  $class = 'text-danger';
-                  if(strcasecmp('redeemed', $payment->redeemed) == 0)
-                  {
-                    $class = 'text-success';
-                  }
-                @endphp
-                <td class="{{$class}}">{{$payment->redeemed}}</td>
+                <td class="">{{$payment->redeemed}}</td>
                 <td>{{number_format($payment->total_to_date)}}</td>
               </tr>
             @endforeach

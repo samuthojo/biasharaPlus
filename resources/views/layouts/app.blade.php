@@ -163,8 +163,9 @@
           Feedback
         </a>
       </li>
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">More
+      <li class="dropdown {{areActiveRoutes(['bundles.index', 'notifications', 'paybill_numbers', 'payments_page', 'all_payments'])}}">
+        <a href="#" class="dropdown-toggle"
+          data-toggle="dropdown">More
           <span class="caret"></span>
           <ul class="dropdown-menu">
             <li>
@@ -195,7 +196,7 @@
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown">
+      <li class="dropdown {{isActiveRoute('change_password')}}">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           <span class="glyphicon glyphicon-user"></span> Account
           <span class="caret"></span>
