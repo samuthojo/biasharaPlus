@@ -41,7 +41,13 @@
                 <td>{{number_format($payment->amount)}}</td>
                 <td>{{$payment->reference_no}}</td>
                 <td>{{$payment->operator_type}}</td>
-                <td class="">{{$payment->redeemed}}</td>
+                @php
+                  $class = 'text-danger';
+                  if(strcasecmp('redeemed', $payment->redeemed) == 0) {
+                    $class = 'text-success';
+                  }
+                @endphp
+                <td class="{{$class}}">{{$payment->redeemed}}</td>
                 <td>{{number_format($payment->total_to_date)}}</td>
               </tr>
             @endforeach
@@ -55,7 +61,7 @@
       $.fn.dataTable.moment('DD-MM-YYYY'); //Sort the date column if present
       $("#myTable").dataTable({
           dom: 'Bfrtip',
-          "order": [[1, "desc"]],
+          "order": [[0, "desc"]],
           buttons: [
               {
                 extend: 'print',
