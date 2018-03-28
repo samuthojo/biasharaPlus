@@ -27,7 +27,13 @@ class Payments extends Controller
 
         $request->email = $user->email;
 
-        return $usersController->updateSubscription($request);
+        $reqObj = new UpdateSubscription;
+
+        foreach($request as $key => $value) {
+          $reqObj->$key = $value;
+        }
+
+        return $usersController->updateSubscription($reqObj, $user);
       }
 
     }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\CreatePayment;
+use App\Http\Controllers\Users;
+use App\Http\Requests\UpdateSubscription;
 
 class CmsPayments extends Controller
 {
@@ -11,10 +13,35 @@ class CmsPayments extends Controller
     {
       $payment = $this->savePayment($request);
 
+      $user = $this->findUser($request->sender);
+
+      if($user)
+      {
+        $request->email = $user->email;
+
+        $usersController = new Users();
+
+        $reqObj = new UpdateSubscription;
+
+        foreach($request as $key => $value) {
+          $reqObj->$key = $value;
+        }
+
+        $usersController->updateSubscription($reqObj, $user);
+      }
+
       session(['message' => 'Payment saved successfully', ]);
 
       return redirect()->route('payments_page')
                        ->with('message', 'Payment saved successfully');
+    }
+
+    private function findUser($phone_number)
+    {
+      return \App\User::all()->first(function ($value, $key) use ($phone_number)
+      {
+          return strpos($value->phone_number, $phone_number) !== FALSE;
+      });
     }
 
     public function savePayment($request)

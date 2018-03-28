@@ -111,14 +111,18 @@ class Users extends Controller
       return response(compact('user', 'version'), 200);
     }
 
-    public function updateSubscription(UpdateSubscription $request) {
+    public function updateSubscription(UpdateSubscription $request, $user = null) {
+
       $conditions = [
         ['reference_no', '=', $request->input('reference_no')],
         ['user_id', '=', 0],
       ];
+
       try {
         $payment = \App\Payment::where($conditions)->firstOrFail();
-        $user = \App\User::where($request->only('email'))->first();
+        if(!$user) {
+          $user = \App\User::where($request->only('email'))->first();
+        }
         $subscrEndDate = Utils::timestampConverter($user->subscription_end_date);
         $today = Utils::timestampConverter(date('d-m-Y'));
         if($today < $subscrEndDate) {
