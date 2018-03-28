@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CreatePayment;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Users;
+use App\Http\Requests\UpdateSubscription;
 
 class Payments extends Controller
 {
