@@ -45,7 +45,12 @@
                 <td>{{$loop->iteration}}</td>
                 <td>{{$priceList->name}}</td>
                 <td>{{$priceList->effective_date}}</td>
-                <td>{{$priceList->color}}</td>
+                <td>
+                  <button type="button" class="btn"
+                    style="{{'background-color:#' . $priceList->color}}">
+                    {{$priceList->color}}
+                  </button>
+                </td>
                 <td>
                   <div class="btn-group">
                     <button class="btn btn-warning" title="edit price-list"

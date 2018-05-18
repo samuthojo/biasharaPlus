@@ -111,6 +111,12 @@ class Users extends Controller
       return response(compact('user', 'version'), 200);
     }
 
+    public function updateAccountDetail(Request $request) {
+      $id = Auth::id();
+      $user = \App\User::updateOrCreate(compact('id'), $request->all());
+      return response(compact('user'), 200);
+    }
+
     public function updateSubscription(UpdateSubscription $request, $user = null) {
 
       $conditions = [
