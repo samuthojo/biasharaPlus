@@ -14,6 +14,8 @@ class Notifications extends Controller
 
     const GENERAL_NEWS = 2;
 
+    const PAYMENT_CONFIRMED = 3;
+
     public function sendNotification(Request $request) {
       switch($request->type) {
         case self::NEW_VERSION: {
@@ -90,5 +92,31 @@ class Notifications extends Controller
 
       //sending push message to users who subscribed to the topic 'all'
       return $status = $fcm->sendToTopic('all', $data);
+    }
+
+    //notify users on some new (important) information
+    public function paymentConfirmed($user)
+    {
+      $fcm = new FCM();
+
+      $data = array();
+      $data["type"] = self::PAYMENT_CONFIRMED;
+      $data["date"] = (now()->format('Y-m-d'));
+      $data["title"] = "Payment Confirmed";
+      $data["message"] = "Your payment was confirmed and subscription updated";
+
+      $device_ids = $this->getDeviceIds($user);
+      
+      return $status = $fcm->sendMultiple($device_ids, $data);
+    }
+
+    private function getDeviceIds($user) {
+      $device_ids = [];
+
+      foreach($user->devices()->get() as $index => $device) {
+        $device_ids[$index] = $device->device_id;
+      }
+
+      return $device_ids;
     }
 }

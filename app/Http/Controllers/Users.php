@@ -11,6 +11,7 @@ use App\Http\Requests\CreateUser;
 use App\Http\Requests\CheckUserExistence;
 use App\Http\Requests\CheckSystemExistence;
 use App\Http\Requests\UpdateSubscription;
+use App\Http\Controllers\Notifications;
 
 class Users extends Controller
 {
@@ -138,12 +139,35 @@ class Users extends Controller
         else {
           return $this->subscriptionExpired($payment, $user);
         }
+
+        $notification = new Notifications();
+        $notification->paymentConfirmed($user);
       }
       catch(ModelNotFoundException $e) {
-        return response()->json([
-          'message' => 'Reference_no already in use or invalid',
-        ], 200);
+
+        $this->paymentMayNeedConfirmation();
+
       }
+    }
+
+    private function paymentMayNeedConfirmation() {
+      $conditions = [
+        ['reference_no', '=', $request->input('reference_no')],
+        ['sender', '=', 'USER'],
+      ];
+
+      try {
+        $payment = \App\Payment::where($conditions)->firstOrFail();
+        //TODO: Send to bolt
+      }
+      catch(ModelNotFoundException $e) {
+
+        return response()->json([
+          'message' => 'Reference_no already in use',
+        ], 200);
+
+      }
+
     }
 
     //Update on top of existing subscription
