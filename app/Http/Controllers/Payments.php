@@ -21,9 +21,6 @@ class Payments extends Controller
         return response()->json(['message' => 'success',
                                  'payment' => $payment, ], 201);
       }
-      else {
-        
-      }
 
     }
 
