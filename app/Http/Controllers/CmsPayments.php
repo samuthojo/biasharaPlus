@@ -59,8 +59,9 @@ class CmsPayments extends Controller
       \App\Payment::latest('date_payed')
                   ->get()
                   ->map(function ($payment) {
-                    $payment->redeemed = ($payment->user_id != 0) ? 'Redeemed' :
-                                                                    'Not yet';
+                    $payment->redeemed =
+                    ($payment->user_id != 0 && $payment->sender != "USER") ?
+                                                    'Redeemed' : 'Not yet';
                     return $payment;
                   });
       return view('all_payments', compact('payments'));

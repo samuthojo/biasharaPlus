@@ -128,7 +128,7 @@ class Users extends Controller
       try {
         $payment = \App\Payment::where($conditions)->firstOrFail();
         if(!$user) {
-          $user = \App\User::where($request->only('email'))->first();
+          $user = Auth::user();
         }
         $subscrEndDate = Utils::timestampConverter($user->subscription_end_date);
         $today = Utils::timestampConverter(date('d-m-Y'));
@@ -145,28 +145,36 @@ class Users extends Controller
       }
       catch(ModelNotFoundException $e) {
 
-        $this->paymentMayNeedConfirmation();
+        $payment = \App\Payment::where($request->only('reference_no')->get();
+
+        if($payment) {
+
+          return response()->json([
+            'message' => 'Reference_no already in use',
+          ], 200);
+
+        } else {
+
+          $this->paymentMayNeedClarification($request, $user);
+
+        }
 
       }
     }
 
-    private function paymentMayNeedConfirmation() {
-      $conditions = [
-        ['reference_no', '=', $request->input('reference_no')],
-        ['sender', '=', 'USER'],
-      ];
+    private function paymentMayNeedClarification($request, $user) {
 
-      try {
-        $payment = \App\Payment::where($conditions)->firstOrFail();
-        //TODO: Send to bolt
-      }
-      catch(ModelNotFoundException $e) {
+      $payment = \App\Payment::create([
+                    'user_id' => $user->id,
+                    'sender' => 'USER',
+                    'reference_no' => $request->input('reference_no'),
+                    'total_to_date' => 0,
+                  ]);
 
-        return response()->json([
-          'message' => 'Reference_no already in use',
-        ], 200);
-
-      }
+      //Notify bolt about $payment
+      $notification = new Notifications();
+      $notification->clarifyPayment($request->input('reference_no'),
+                                    $user->email);
 
     }
 

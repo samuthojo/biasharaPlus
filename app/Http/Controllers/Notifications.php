@@ -16,6 +16,8 @@ class Notifications extends Controller
 
     const PAYMENT_CONFIRMED = 3;
 
+    const CLARIFY_PAYMENT = 4;
+
     public function sendNotification(Request $request) {
       switch($request->type) {
         case self::NEW_VERSION: {
@@ -106,7 +108,7 @@ class Notifications extends Controller
       $data["message"] = "Your payment was confirmed and subscription updated";
 
       $device_ids = $this->getDeviceIds($user);
-      
+
       return $status = $fcm->sendMultiple($device_ids, $data);
     }
 
@@ -118,5 +120,21 @@ class Notifications extends Controller
       }
 
       return $device_ids;
+    }
+
+    //Notify IPF_PAY of a payment that needs clarification
+    public function clarifyPayment($reference_no, $email)
+    {
+      $fcm = new FCM();
+
+      $data = array();
+      $data["type"] = self::CLARIFY_PAYMENT;
+      $data["date"] = (now()->format('Y-m-d'));
+      $data["title"] = "Clarify Payment";
+      $data["message"] = "Please clarify payment by user with email " . $email .
+                         " and the reference no: " . $reference_no;
+
+      //sending push message to users who subscribed to the topic 'clarifications'
+      return $status = $fcm->sendToTopic('clarifications', $data);
     }
 }

@@ -22,19 +22,7 @@ class Payments extends Controller
                                  'payment' => $payment, ], 201);
       }
       else {
-        $payment = $this->savePayment($request);
-
-        $usersController = new Users();
-
-        $request->email = $user->email;
-
-        $reqObj = new UpdateSubscription;
-
-        foreach($request as $key => $value) {
-          $reqObj->$key = $value;
-        }
-
-        return $usersController->updateSubscription($reqObj, $user);
+        
       }
 
     }
@@ -45,10 +33,6 @@ class Payments extends Controller
       $date_payed = $request->input('date_payed');
       $date_payed = \Carbon\Carbon::parse($date_payed)->format('Y-m-d');
       $data = array_add($data, 'date_payed', $date_payed);
-
-      if(!($user->is_system)) {
-          $data['sender'] = 'USER';
-      }
 
       return $payment = \App\Payment::create($data);
     }
