@@ -145,7 +145,7 @@ class Users extends Controller
       }
       catch(ModelNotFoundException $e) {
 
-        $payment = \App\Payment::where($request->only('reference_no')->get();
+        $payment = \App\Payment::where($request->only('reference_no'))->get();
 
         if($payment) {
 
