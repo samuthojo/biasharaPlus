@@ -174,7 +174,7 @@ class Users extends Controller
       //Notify bolt about $payment
       $notification = new Notifications();
       $notification->clarifyPayment($request->input('reference_no'),
-                                    $user->email);
+                                    $user);
 
     }
 

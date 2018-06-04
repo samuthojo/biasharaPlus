@@ -86,4 +86,6 @@ Route::middleware('auth')->group(function () {
   Route::get('/all_payments', 'CmsPayments@payments')->name('all_payments');
 
   Route::view('/change_password', 'change_password')->name('change_password');
+
+  Route::put('/payments/{payment}/redeem', 'CmsPayments@redeem');
 });

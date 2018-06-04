@@ -59,11 +59,33 @@ class CmsPayments extends Controller
       \App\Payment::latest('date_payed')
                   ->get()
                   ->map(function ($payment) {
-                    $payment->redeemed =
-                    ($payment->user_id != 0 && $payment->sender != "USER") ?
-                                                    'Redeemed' : 'Not yet';
+
+                    $payment->redeemed = false;
+
+                    if($payment->user_id != 0 && $payment->sender != "USER") {
+                      $payment->redeemed = true;
+                    }
+
                     return $payment;
+
                   });
       return view('all_payments', compact('payments'));
+    }
+
+    public function redeem(Request $request, $id) {
+
+      $this->validate($request, [
+        'operator_type' => 'required|string',
+        'date_payed' => 'required|string',
+        'sender' => 'required|string',
+        'amount' => 'required|numeric',
+      ]);
+
+      \App\Payment::where(compact('id'))->update($request->all());
+
+      $payment = \App\Payment::find($id);
+      $payment->redeemed = true;
+
+      return $payment;
     }
 }

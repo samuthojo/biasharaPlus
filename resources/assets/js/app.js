@@ -15,8 +15,5 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
-
-const app = new Vue({
-    el: '#app'
-});
+Vue.component('payment-table', require('./components/PaymentTable.vue'));
+Vue.component('payment-redeem-modal', require('./components/PaymentRedeemModal.vue'));

@@ -8,7 +8,7 @@
 
   <!--Pulling Awesome Font -->
   <link
-    href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
+    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
     rel="stylesheet">
 
   <!-- DataTable Css-->
@@ -18,9 +18,7 @@
   <link rel="stylesheet"
   	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-  <script
-  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-  </script>
+  <script src="/js/app.js"></script>
 
   <!-- DataTable -->
   <script type="text/javascript" charset="utf8"

@@ -21,39 +21,10 @@
         All Payments:
       </h3>
     </div>
-    <div class="panel-body">
-      <div id="allPaymentsTable" class="table-responsive">
-        <table id="myTable" class="table table-hover">
-          <thead>
-            <th>Date</th>
-            <th>Sender</th>
-            <th>Amount</th>
-            <th>ReferenceNo.</th>
-            <th>Operator</th>
-            <th>Status</th>
-            <th>Total To Date (Tshs)</th>
-          </thead>
-          <tbody>
-            @foreach($payments as $payment)
-              <tr class="{{($loop->index % 2 == 0) ? 'active' : ''}}">
-                <td>{{$payment->date_payed}}</td>
-                <td>{{$payment->sender}}</td>
-                <td>{{number_format($payment->amount)}}</td>
-                <td>{{$payment->reference_no}}</td>
-                <td>{{$payment->operator_type}}</td>
-                @php
-                  $class = 'text-danger';
-                  if(strcasecmp('redeemed', $payment->redeemed) == 0) {
-                    $class = 'text-success';
-                  }
-                @endphp
-                <td class="{{$class}}">{{$payment->redeemed}}</td>
-                <td>{{number_format($payment->total_to_date)}}</td>
-              </tr>
-            @endforeach
-          </tbody>
-        </table>
-      </div>
+    <div class="panel-body" id="paymentsSection">
+
+      <payment-table :payments="{{ $payments }}"></payment-table>
+
     </div>
   </div>
   <script>
@@ -92,6 +63,10 @@
           bLengthChange: false
       });
     });
+
+    new Vue({
+      el: '#paymentsSection'
+    })
   </script>
 
 @endsection
