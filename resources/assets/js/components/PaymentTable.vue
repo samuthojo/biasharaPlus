@@ -13,7 +13,7 @@
         <th>Total To Date (Tshs)</th>
       </thead>
       <tbody>
-          <tr v-for="(payment, n) in payments">
+          <tr v-for="(payment, n) in biasharaPayments">
             <td>{{ payment.date_payed }}</td>
             <td>{{ payment.sender }}</td>
             <td>{{ payment.amount | numberFormat }}</td>
@@ -41,13 +41,17 @@
       :show-modal="showRedeemModal"
       :index = paymentIndex
       :payment="payment"
-      @payment-redeemed="onPaymentRedeemed"/>
+      @payment-redeemed="onPaymentRedeemed"
+      @close="showRedeemModal = false"/>
 
   </div>
 
 </template>
 
 <script>
+
+var utils = require('../utilities/Utilities')
+
 export default {
   props: {
     payments: {
@@ -60,8 +64,17 @@ export default {
     return {
       showRedeemModal: false,
       payment: {},
-      paymentIndex: 0
+      paymentIndex: 0,
+      biasharaPayments: []
     }
+  },
+
+  created() {
+    this.biasharaPayments = this.payments
+  },
+
+  mounted() {
+    utils.initDataTable()
   },
 
   methods: {
@@ -74,7 +87,7 @@ export default {
     },
 
     onPaymentRedeemed(payload) {
-      this.payments.splice(payload.index, 1, payload.data)
+      this.biasharaPayments.splice(payload.index, 1, payload.payment)
 
       this.showRedeemModal = false
     }

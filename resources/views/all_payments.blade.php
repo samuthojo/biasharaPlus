@@ -28,42 +28,6 @@
     </div>
   </div>
   <script>
-    $(document).ready(function () {
-      $.fn.dataTable.moment('DD-MM-YYYY'); //Sort the date column if present
-      $("#myTable").dataTable({
-          dom: 'Bfrtip',
-          "order": [[0, "desc"]],
-          buttons: [
-              {
-                extend: 'print',
-                exportOptions: {
-                  columns: ":not(:last-child)"
-                },
-                title: "Payments",
-                messageTop: "Payments As Of {{date('d-m-Y')}}"
-              },
-               {
-                 extend: 'excel',
-                 exportOptions: {
-                   columns: ":not(:last-child)"
-                 },
-                 title: "Payments",
-                 messageTop: "Payments As Of {{date('d-m-Y')}}"
-              },
-               {
-                 extend: 'pdf',
-                 exportOptions: {
-                   columns: ":not(:last-child)"
-                 },
-                 title: "Payments",
-                 messageTop: "Payments As Of {{date('d-m-Y')}}"
-              }
-          ],
-          iDisplayLength: 8,
-          bLengthChange: false
-      });
-    });
-
     new Vue({
       el: '#paymentsSection'
     })

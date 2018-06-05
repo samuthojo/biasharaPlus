@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
         <div class="modal-header">
-          <button class="close" data-dismiss="modal">
+          <button class="close" @click="$emit('close')">
             &times;
           </button>
           <h4 class="modal-title">Redeem</h4>
@@ -65,7 +65,7 @@
                 </div>
                 <div class="form-group">
                   <button class="btn btn-default"
-                    data-dismiss="modal">Cancel</button>
+                    @click="$emit('close')">Cancel</button>
                   <button
                     type="submit"
                     class="btn btn-success">Redeem</button>

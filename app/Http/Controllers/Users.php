@@ -120,16 +120,27 @@ class Users extends Controller
 
     public function updateSubscription(UpdateSubscription $request, $user = null) {
 
-      $conditions = [
+      $conditions1 = [
         ['reference_no', '=', $request->input('reference_no')],
-        ['user_id', '=', 0],
+        ['user_id', '=', 0]
+      ];
+
+      $conditions2 = [
+        ['reference_no', '=', $request->input('reference_no')],
+        ['user_id', '<>', 0],
+        ['sender', '=', 'USER']
       ];
 
       try {
-        $payment = \App\Payment::where($conditions)->firstOrFail();
+        $payment = null;
+
         if(!$user) {
-          $user = Auth::user();
+          $user = \App\User::where('email', $request->email)->first();
+          $payment = \App\Payment::where($conditions1)->firstOrFail();
+        } else {
+          $payment = \App\Payment::where($conditions2)->firstOrFail();
         }
+
         $subscrEndDate = Utils::timestampConverter($user->subscription_end_date);
         $today = Utils::timestampConverter(date('d-m-Y'));
         if($today < $subscrEndDate) {
@@ -140,8 +151,6 @@ class Users extends Controller
           return $this->subscriptionExpired($payment, $user);
         }
 
-        $notification = new Notifications();
-        $notification->paymentConfirmed($user);
       }
       catch(ModelNotFoundException $e) {
 
@@ -173,8 +182,7 @@ class Users extends Controller
 
       //Notify bolt about $payment
       $notification = new Notifications();
-      $notification->clarifyPayment($request->input('reference_no'),
-                                    $user);
+      $notification->clarifyPayment($request->input('reference_no'), $user);
 
     }
 
@@ -217,6 +225,8 @@ class Users extends Controller
           DB::commit();
 
           $message = $this->successMessage;
+
+          $this->sendPushNotification($user);
 
           return response()->json(compact('message', 'user'), 200);
       }
@@ -273,6 +283,8 @@ class Users extends Controller
 
           $message = $this->successMessage;
 
+          $this->sendPushNotification($user);
+
           return response()->json(compact('message', 'user'), 200);
       }
 
@@ -283,6 +295,11 @@ class Users extends Controller
         ], 500);
       }
 
+    }
+
+    private function sendPushNotification($user) {
+      $notification = new Notifications();
+      $notification->paymentConfirmed($user);
     }
 
 }

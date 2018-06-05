@@ -17,17 +17,20 @@ class CmsPayments extends Controller
 
       if($user)
       {
-        $request->email = $user->email;
-
         $usersController = new Users();
 
         $reqObj = new UpdateSubscription;
 
-        foreach($request as $key => $value) {
+        $data = [
+          'email' => $user->email,
+          'reference_no' => $reference_no
+        ];
+
+        foreach($data as $key => $value) {
           $reqObj->$key = $value;
         }
 
-        $usersController->updateSubscription($reqObj, $user);
+        $usersController->updateSubscription($reqObj);
       }
 
       session(['message' => 'Payment saved successfully', ]);
@@ -81,11 +84,32 @@ class CmsPayments extends Controller
         'amount' => 'required|numeric',
       ]);
 
+      $user = \App\User::find($request->user_id);
+
+      $this->updateSubscription($user, $request->reference_no);
+
       \App\Payment::where(compact('id'))->update($request->all());
 
       $payment = \App\Payment::find($id);
       $payment->redeemed = true;
 
       return $payment;
+    }
+
+    private function updateSubscription($user, $reference_no) {
+      $usersController = new Users();
+
+      $reqObj = new UpdateSubscription;
+
+      $data = [
+        'email' => $user->email,
+        'reference_no' => $reference_no
+      ];
+
+      foreach($data as $key => $value) {
+        $reqObj->$key = $value;
+      }
+
+      $usersController->updateSubscription($reqObj, $user);
     }
 }

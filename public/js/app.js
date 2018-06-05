@@ -1376,7 +1376,7 @@ module.exports = function normalizeComponent (
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(13);
-module.exports = __webpack_require__(51);
+module.exports = __webpack_require__(54);
 
 
 /***/ }),
@@ -1401,7 +1401,7 @@ window.Vue = __webpack_require__(37);
  */
 
 Vue.component('payment-table', __webpack_require__(40));
-Vue.component('payment-redeem-modal', __webpack_require__(46));
+Vue.component('payment-redeem-modal', __webpack_require__(47));
 
 /***/ }),
 /* 14 */
@@ -40619,7 +40619,7 @@ var normalizeComponent = __webpack_require__(11)
 /* script */
 var __vue_script__ = __webpack_require__(44)
 /* template */
-var __vue_template__ = __webpack_require__(45)
+var __vue_template__ = __webpack_require__(46)
 /* template functional */
   var __vue_template_functional__ = false
 /* styles */
@@ -40693,7 +40693,7 @@ exports = module.exports = __webpack_require__(9)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -40786,6 +40786,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+
+
+var utils = __webpack_require__(45);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -40799,8 +40803,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       showRedeemModal: false,
       payment: {},
-      paymentIndex: 0
+      paymentIndex: 0,
+      biasharaPayments: []
     };
+  },
+  created: function created() {
+    this.biasharaPayments = this.payments;
+  },
+  mounted: function mounted() {
+    utils.initDataTable();
   },
 
 
@@ -40813,7 +40824,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.showRedeemModal = true;
     },
     onPaymentRedeemed: function onPaymentRedeemed(payload) {
-      this.payments.splice(payload.index, 1, payload.data);
+      this.biasharaPayments.splice(payload.index, 1, payload.payment);
 
       this.showRedeemModal = false;
     }
@@ -40848,6 +40859,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 /* 45 */
+/***/ (function(module, exports) {
+
+exports.initDataTable = function () {
+
+  $.fn.dataTable.moment('DD-MM-YYYY'); //Sort the date column if present
+
+  $("#myTable").dataTable({
+    dom: 'Bfrtip',
+    "order": [[0, "desc"]],
+    buttons: [{
+      extend: 'print',
+      exportOptions: {
+        columns: ":not(:last-child)"
+      },
+      title: "Payments",
+      messageTop: "Payments As Of " + moment().format('MMMM Do YYYY')
+    }, {
+      extend: 'excel',
+      exportOptions: {
+        columns: ":not(:last-child)"
+      },
+      title: "Payments",
+      messageTop: "Payments As Of " + moment().format('MMMM Do YYYY')
+    }, {
+      extend: 'pdf',
+      exportOptions: {
+        columns: ":not(:last-child)"
+      },
+      title: "Payments",
+      messageTop: "Payments As Of  " + moment().format('MMMM Do YYYY')
+    }],
+    iDisplayLength: 8,
+    bLengthChange: false
+  });
+};
+
+/***/ }),
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -40866,7 +40915,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.payments, function(payment, n) {
+            _vm._l(_vm.biasharaPayments, function(payment, n) {
               return _c("tr", [
                 _c("td", [_vm._v(_vm._s(payment.date_payed))]),
                 _vm._v(" "),
@@ -40935,7 +40984,12 @@ var render = function() {
           index: _vm.paymentIndex,
           payment: _vm.payment
         },
-        on: { "payment-redeemed": _vm.onPaymentRedeemed }
+        on: {
+          "payment-redeemed": _vm.onPaymentRedeemed,
+          close: function($event) {
+            _vm.showRedeemModal = false
+          }
+        }
       })
     ],
     1
@@ -40973,19 +41027,19 @@ if (false) {
 }
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(47)
+  __webpack_require__(48)
 }
 var normalizeComponent = __webpack_require__(11)
 /* script */
-var __vue_script__ = __webpack_require__(49)
+var __vue_script__ = __webpack_require__(50)
 /* template */
-var __vue_template__ = __webpack_require__(50)
+var __vue_template__ = __webpack_require__(53)
 /* template functional */
   var __vue_template_functional__ = false
 /* styles */
@@ -41025,13 +41079,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(48);
+var content = __webpack_require__(49);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -41051,7 +41105,7 @@ if(false) {
 }
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(9)(undefined);
@@ -41065,12 +41119,12 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ValidationFramework_Form__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ValidationFramework_Form__ = __webpack_require__(51);
 //
 //
 //
@@ -41246,7 +41300,134 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 50 */
+/* 51 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Form; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Errors_js__ = __webpack_require__(52);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var Form = function () {
+  function Form(data) {
+    _classCallCheck(this, Form);
+
+    this.originalData = data;
+
+    for (var field in data) {
+      this[field] = data[field];
+    }
+
+    this.errors = new __WEBPACK_IMPORTED_MODULE_0__Errors_js__["a" /* Errors */]();
+  }
+
+  _createClass(Form, [{
+    key: "submit",
+    value: function submit(requestType, url) {
+      var _this = this;
+
+      requestType = _.toLower(requestType);
+      return new Promise(function (resolve, reject) {
+        axios[requestType](url, _this.data()).then(function (response) {
+          return resolve(response);
+        }).catch(function (error) {
+          return reject(error);
+        });
+      });
+    }
+  }, {
+    key: "data",
+    value: function data() {
+      var data = _.clone(this);
+
+      delete data.originalData;
+
+      delete data.errors;
+
+      return data;
+    }
+  }, {
+    key: "onSuccess",
+    value: function onSuccess() {
+      this.errors.clear();
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      for (var field in this.originalData) {
+        this[field] = "";
+      }
+    }
+  }, {
+    key: "onFail",
+    value: function onFail(error) {
+      this.errors.record(error.response.data.errors);
+    }
+  }]);
+
+  return Form;
+}();
+
+/***/ }),
+/* 52 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Errors; });
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Errors = function () {
+  function Errors() {
+    _classCallCheck(this, Errors);
+
+    this.errors = {};
+  }
+
+  _createClass(Errors, [{
+    key: "has",
+    value: function has(field) {
+      return _.has(this.errors, field);
+    }
+  }, {
+    key: "any",
+    value: function any() {
+      return !_.isEmpty(this.errors);
+    }
+  }, {
+    key: "get",
+    value: function get(field) {
+      if (this.errors[field]) {
+        return this.errors[field][0];
+      }
+    }
+  }, {
+    key: "clear",
+    value: function clear(field) {
+      if (field) {
+        Vue.delete(this.errors, field);
+
+        return;
+      }
+      this.errors = {};
+    }
+  }, {
+    key: "record",
+    value: function record(errors) {
+      this.errors = errors;
+    }
+  }]);
+
+  return Errors;
+}();
+
+/***/ }),
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -41259,7 +41440,22 @@ var render = function() {
     [
       _c("div", { staticClass: "modal-dialog modal-sm" }, [
         _c("div", { staticClass: "modal-content" }, [
-          _vm._m(0),
+          _c("div", { staticClass: "modal-header" }, [
+            _c(
+              "button",
+              {
+                staticClass: "close",
+                on: {
+                  click: function($event) {
+                    _vm.$emit("close")
+                  }
+                }
+              },
+              [_vm._v("\n          ×\n        ")]
+            ),
+            _vm._v(" "),
+            _c("h4", { staticClass: "modal-title" }, [_vm._v("Redeem")])
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "modal-body" }, [
             _c("div", { staticClass: "container" }, [
@@ -41484,7 +41680,11 @@ var render = function() {
                       "button",
                       {
                         staticClass: "btn btn-default",
-                        attrs: { "data-dismiss": "modal" }
+                        on: {
+                          click: function($event) {
+                            _vm.$emit("close")
+                          }
+                        }
                       },
                       [_vm._v("Cancel")]
                     ),
@@ -41528,22 +41728,7 @@ var render = function() {
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c(
-        "button",
-        { staticClass: "close", attrs: { "data-dismiss": "modal" } },
-        [_vm._v("\n          ×\n        ")]
-      ),
-      _vm._v(" "),
-      _c("h4", { staticClass: "modal-title" }, [_vm._v("Redeem")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -41554,140 +41739,10 @@ if (false) {
 }
 
 /***/ }),
-/* 51 */
+/* 54 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Form; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Errors_js__ = __webpack_require__(56);
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-
-var Form = function () {
-  function Form(data) {
-    _classCallCheck(this, Form);
-
-    this.originalData = data;
-
-    for (var field in data) {
-      this[field] = data[field];
-    }
-
-    this.errors = new __WEBPACK_IMPORTED_MODULE_0__Errors_js__["a" /* Errors */]();
-  }
-
-  _createClass(Form, [{
-    key: "submit",
-    value: function submit(requestType, url) {
-      var _this = this;
-
-      requestType = _.toLower(requestType);
-      return new Promise(function (resolve, reject) {
-        axios[requestType](url, _this.data()).then(function (response) {
-          return resolve(response);
-        }).catch(function (error) {
-          return reject(error);
-        });
-      });
-    }
-  }, {
-    key: "data",
-    value: function data() {
-      var data = _.clone(this);
-
-      delete data.originalData;
-
-      delete data.errors;
-
-      return data;
-    }
-  }, {
-    key: "onSuccess",
-    value: function onSuccess() {
-      this.errors.clear();
-    }
-  }, {
-    key: "reset",
-    value: function reset() {
-      for (var field in this.originalData) {
-        this[field] = "";
-      }
-    }
-  }, {
-    key: "onFail",
-    value: function onFail(error) {
-      this.errors.record(error.response.data.errors);
-    }
-  }]);
-
-  return Form;
-}();
-
-/***/ }),
-/* 56 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Errors; });
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Errors = function () {
-  function Errors() {
-    _classCallCheck(this, Errors);
-
-    this.errors = {};
-  }
-
-  _createClass(Errors, [{
-    key: "has",
-    value: function has(field) {
-      return _.has(this.errors, field);
-    }
-  }, {
-    key: "any",
-    value: function any() {
-      return !_.isEmpty(this.errors);
-    }
-  }, {
-    key: "get",
-    value: function get(field) {
-      if (this.errors[field]) {
-        return this.errors[field][0];
-      }
-    }
-  }, {
-    key: "clear",
-    value: function clear(field) {
-      if (field) {
-        Vue.delete(this.errors, field);
-
-        return;
-      }
-      this.errors = {};
-    }
-  }, {
-    key: "record",
-    value: function record(errors) {
-      this.errors = errors;
-    }
-  }]);
-
-  return Errors;
-}();
 
 /***/ })
 /******/ ]);
