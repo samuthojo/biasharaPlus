@@ -185,7 +185,7 @@ class Users extends Controller
       $notification->clarifyPayment($request->input('reference_no'), $user);
 
       return response()->json([
-        'message' => 'Payment needs clarification, admin App notified!',
+        'message' => 'Payment needs clarification, Admin App notified!',
       ], 200);
 
     }
