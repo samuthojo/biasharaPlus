@@ -184,6 +184,10 @@ class Users extends Controller
       $notification = new Notifications();
       $notification->clarifyPayment($request->input('reference_no'), $user);
 
+      return response()->json([
+        'message' => 'Payment needs clarification, admin App notified!',
+      ], 200);
+
     }
 
     //Update on top of existing subscription
