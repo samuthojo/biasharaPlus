@@ -83,6 +83,7 @@
             <th>Country</th>
             <th>Email</th>
             <th>Phone Number</th>
+            <th>Level</th>
             <th>Subscription</th>
             <th>StartDate</th>
             <th>EndDate</th>
@@ -111,6 +112,7 @@
                 <td>{{$country}}</td>
                 <td>{{$user->email}}</td>
                 <td>{{$user->phone_number}}</td>
+                <td>{{$user->current_level}}</td>
                 <td>{{$user->subscription}}</td>
                 <td>{{$user->subscription_start_date}}</td>
                 <td>{{$user->subscription_end_date}}</td>
