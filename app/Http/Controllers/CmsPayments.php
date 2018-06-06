@@ -84,7 +84,7 @@ class CmsPayments extends Controller
         'amount' => 'required|numeric',
       ]);
 
-      $user = \App\User::find($request->user_id);
+      $user = $this->findUser($request->sender);
 
       $this->updateSubscription($user, $request->reference_no);
 
