@@ -93,7 +93,7 @@ class Users extends Controller
         ]);
 
         DB::commit();
-      } catch(Throwable $e) {
+      } catch(\Throwable $e) {
         DB::rollBack();
         return response()->json([
          "message" => $e->getMessage(),
