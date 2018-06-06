@@ -44,7 +44,7 @@ class Notifications extends Controller
       $data["type"] = self::NEW_VERSION;
       $data["date"] = (now()->format('Y-m-d'));
       $data["title"] = "New Version";
-      $data["message"] = "A new version with more features is out, go to download";
+      $data["message"] = "A new version with more features is now available tap to update!";
 
       //sending push message to users who subscribed to the topic 'all'
       return $status = $fcm->sendToTopic('all', $data);
@@ -74,7 +74,7 @@ class Notifications extends Controller
       $data["type"] = self::NEW_PRODUCTS;
       $data["date"] = (now()->format('Y-m-d'));
       $data["title"] = "New Products";
-      $data["message"] = "New Products were added, tap to view!";
+      $data["message"] = "New products were added, tap to view!";
 
       //sending push message to users who subscribed to the topic 'all'
       return $status = $fcm->sendToTopic('all', $data);
@@ -105,7 +105,10 @@ class Notifications extends Controller
       $data["type"] = self::PAYMENT_CONFIRMED;
       $data["date"] = (now()->format('Y-m-d'));
       $data["title"] = "Payment Confirmed";
-      $data["message"] = "Your payment was confirmed and subscription updated";
+      $data["message"] = "Thank you for your payment, you are now a premium " .
+                         "user until " .
+                         \Carbon\Carbon::parse($user->subscription_end_date)
+                                       ->format('d M Y');
 
       $device_ids = $this->getDeviceIds($user);
 
