@@ -242,7 +242,7 @@ class Users extends Controller
           return response()->json(compact('message', 'user'), 200);
       }
 
-      catch(Throwable $e) {
+      catch(\Throwable $e) {
         DB::rollBack();
         return response()->json([
           "message" => $e->getMessage(),
@@ -299,7 +299,7 @@ class Users extends Controller
           return response()->json(compact('message', 'user'), 200);
       }
 
-      catch(Throwable $e) {
+      catch(\Throwable $e) {
         DB::rollBack();
         return response()->json([
           "message" => $e->getMessage(),
