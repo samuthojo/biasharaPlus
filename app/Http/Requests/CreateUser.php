@@ -24,13 +24,13 @@ class CreateUser extends FormRequest
     public function rules()
     {
         return [
-            'username' => 'required',
+            'username' => 'required|unique:users',
             'email' => 'required|email|unique:users',
             'phone_number' => 'required|min:8',
             'image_url' => 'nullable',
             'subscription_start_date' => 'required',
             'subscription_end_date' => 'required',
-            'total_cc' => 'required',
+            'total_cc' => 'required|numeric',
             'business_id' => 'required|unique:users',
             'current_level' => 'required',
             'country' => 'required',

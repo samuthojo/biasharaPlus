@@ -12,6 +12,7 @@ use App\Http\Requests\CheckUserExistence;
 use App\Http\Requests\CheckSystemExistence;
 use App\Http\Requests\UpdateSubscription;
 use App\Http\Controllers\Notifications;
+use Illuminate\Validation\Rule;
 
 class Users extends Controller
 {
@@ -114,6 +115,13 @@ class Users extends Controller
 
     public function updateAccountDetail(Request $request) {
       $id = Auth::id();
+      $this->validate($request, [
+          'username' => ['nullable', Rule::unique('users')->ignore($id)],
+          'email' => ['nullable', 'email', Rule::unique('users')->ignore($id)],
+          'phone_number' => 'nullable|min:8',
+          'total_cc' => 'nullable|numeric',
+          'business_id' => ['nullable', Rule::unique('users')->ignore($id)],
+      ]);
       $user = \App\User::updateOrCreate(compact('id'), $request->all());
       return response(compact('user'), 200);
     }
