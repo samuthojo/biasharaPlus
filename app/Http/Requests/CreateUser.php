@@ -24,7 +24,6 @@ class CreateUser extends FormRequest
     public function rules()
     {
         return [
-            'username' => 'required|unique:users',
             'email' => 'required|email|unique:users',
             'phone_number' => 'required|min:8',
             'image_url' => 'nullable',

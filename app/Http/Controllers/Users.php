@@ -116,7 +116,6 @@ class Users extends Controller
     public function updateAccountDetail(Request $request) {
       $id = Auth::id();
       $this->validate($request, [
-          'username' => ['nullable', Rule::unique('users')->ignore($id)],
           'email' => ['nullable', 'email', Rule::unique('users')->ignore($id)],
           'phone_number' => 'nullable|min:8',
           'total_cc' => 'nullable|numeric',
