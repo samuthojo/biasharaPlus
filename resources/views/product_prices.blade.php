@@ -18,7 +18,7 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 style="font-weight: bold;" class="panel-title pull-left">
-        {{$product->name}} Prices:
+        {{$product->name}} Prices (CC: {{sprintf('%s', number_format($product->cc, 3))}}):
       </h3>
       <a class="btn btn-success pull-right" title="back"
         href="{{'../'}}"
