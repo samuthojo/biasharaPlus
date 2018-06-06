@@ -110,6 +110,6 @@ class CmsPayments extends Controller
         $reqObj->$key = $value;
       }
 
-      $usersController->updateSubscription($reqObj, $user);
+      $usersController->updateSubscription($reqObj);
     }
 }
