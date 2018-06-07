@@ -91,18 +91,29 @@ class CmsPayments extends Controller
       $user = $this->findUser($request->sender);
 
       if($user) {
-        $this->updateSubscription($user, $request->reference_no);
 
-        \App\Payment::where(compact('id'))->update($request->all());
+        $data = $this->updateSubscription($user, $request->reference_no);
 
-        $payment = \App\Payment::find($id);
-        $payment->redeemed = true;
+        try {
+          if($data->user) {
+            \App\Payment::where(compact('id'))->update($request->all());
 
-        return [
-          'error' => false,
-          'message' => 'Redeemed successfully',
-          'payment' => $payment
-        ];
+            $payment = \App\Payment::find($id);
+            $payment->redeemed = true;
+
+            return [
+              'error' => false,
+              'message' => 'Redeemed successfully',
+              'payment' => $payment
+            ];
+          }
+        } catch (\Throwable $e) {
+          return [
+            'error' => true,
+            'message' => $e->getMessage()
+          ];
+        }
+
       }
 
       return [
@@ -126,6 +137,6 @@ class CmsPayments extends Controller
         $reqObj->$key = $value;
       }
 
-      $usersController->updateSubscription($reqObj, $user);
+      return $usersController->updateSubscription($reqObj, $user);
     }
 }
