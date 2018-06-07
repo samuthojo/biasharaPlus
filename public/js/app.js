@@ -41113,7 +41113,7 @@ exports = module.exports = __webpack_require__(9)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -41125,6 +41125,9 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ValidationFramework_Form__ = __webpack_require__(51);
+//
+//
+//
 //
 //
 //
@@ -41232,6 +41235,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   data: function data() {
     return {
+      error: false,
+      showMessage: false,
+      serverMessage: '',
       id: "redeemPaymentModal",
       isLoading: false,
       form: new __WEBPACK_IMPORTED_MODULE_0__ValidationFramework_Form__["a" /* Form */]({
@@ -41249,6 +41255,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     this.form.reference_no = this.payment.reference_no;
   },
 
+
+  computed: {
+    responseClass: function responseClass() {
+      if (this.error) {
+        return 'text-danger';
+      }
+      return 'text-success';
+    }
+  },
 
   watch: {
     showModal: function showModal(val) {
@@ -41279,14 +41294,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var data = _ref.data;
 
 
-        var payload = {
-          payment: data,
-          index: _this.index
-        };
-
         _this.isLoading = false;
 
-        _this.$emit('payment-redeemed', payload);
+        if (data.error) {
+          _this.error = data.error;
+
+          _this.serverMessage = data.message;
+
+          _this.showMessage = true;
+
+          return;
+        } else {
+
+          var payload = {
+            payment: data.payment,
+            index: _this.index
+          };
+
+          _this.error = data.error;
+
+          _this.serverMessage = data.message;
+
+          _this.showMessage = true;
+
+          setTimeout(function () {
+            _this.showMessage = false;
+            _this.form.reset();
+            _this.$emit('payment-redeemed', payload);
+          }, 2000);
+        }
       }).catch(function (error) {
         console.error(error);
 
@@ -41718,7 +41754,15 @@ var render = function() {
                         })
                       ]
                     )
-                  ])
+                  ]),
+                  _vm._v(" "),
+                  _vm.showMessage
+                    ? _c("div", { staticClass: "form-group" }, [
+                        _c("span", { class: _vm.responseClass }, [
+                          _vm._v(_vm._s(_vm.serverMessage))
+                        ])
+                      ])
+                    : _vm._e()
                 ]
               )
             ])
