@@ -161,7 +161,7 @@ class Users extends Controller
       }
       catch(ModelNotFoundException $e) {
 
-        $payment = \App\Payment::where($request->only('reference_no'))->get();
+        $payment = \App\Payment::where($request->only('reference_no'))->first();
 
         if($payment) {
 
@@ -189,7 +189,7 @@ class Users extends Controller
 
       //Notify bolt about $payment
       $notification = new Notifications();
-      $notification->clarifyPayment($request->input('reference_no'), $user);
+      $notification->clarifyPayment($request->input('reference_no'), $user->email);
 
       return response()->json([
         'message' => 'Payment needs clarification, Admin App notified!',

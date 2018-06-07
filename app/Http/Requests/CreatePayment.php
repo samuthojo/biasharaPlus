@@ -28,7 +28,7 @@ class CreatePayment extends FormRequest
             'amount' => 'required|integer',
             'date_payed' => 'required',
             'operator_type' => 'required',
-            'reference_no' => 'required',
+            'reference_no' => 'required|unique:payments',
             'total_to_date' => 'required|integer',
         ];
     }

@@ -23,7 +23,7 @@ class CmsPayments extends Controller
 
         $data = [
           'email' => $user->email,
-          'reference_no' => $reference_no
+          'reference_no' => $request->reference_no
         ];
 
         foreach($data as $key => $value) {
@@ -31,6 +31,9 @@ class CmsPayments extends Controller
         }
 
         $usersController->updateSubscription($reqObj);
+      }
+      else {
+        return back()->with('errors', 'User with the given number not found');
       }
 
       session(['message' => 'Payment saved successfully', ]);
@@ -86,14 +89,25 @@ class CmsPayments extends Controller
 
       $user = $this->findUser($request->sender);
 
-      $this->updateSubscription($user, $request->reference_no);
+      if($user) {
+        $this->updateSubscription($user, $request->reference_no);
+      } else {
+        return [
+          'error' => true,
+          'message' => 'User with the given number not found'
+        ];
+      }
 
       \App\Payment::where(compact('id'))->update($request->all());
 
       $payment = \App\Payment::find($id);
       $payment->redeemed = true;
 
-      return $payment;
+      return [
+        'error' => false,
+        'message' => 'Redeemed successfully',
+        'payment' => $payment
+      ];
     }
 
     private function updateSubscription($user, $reference_no) {
@@ -110,6 +124,6 @@ class CmsPayments extends Controller
         $reqObj->$key = $value;
       }
 
-      $usersController->updateSubscription($reqObj);
+      $usersController->updateSubscription($reqObj, $user);
     }
 }

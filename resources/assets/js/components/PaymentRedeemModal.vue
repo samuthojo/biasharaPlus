@@ -73,6 +73,9 @@
                     <i class="fa fa-spinner fa-spin fa-3x fa-fw text-success"></i>
                   </span>
                 </div>
+                <div class="form-group" v-if="showMessage">
+                  <span :class="responseClass">{{ serverMessage }}</span>
+                </div>
               </form>
             </div>
         </div>
@@ -105,6 +108,9 @@ export default {
 
   data() {
     return {
+      error: false,
+      showMessage: false,
+      serverMessage: '',
       id: "redeemPaymentModal",
       isLoading: false,
       form: new Form({
@@ -121,6 +127,15 @@ export default {
   created() {
     this.id = this.id + this._uid
     this.form.reference_no = this.payment.reference_no
+  },
+
+  computed: {
+    responseClass: function () {
+      if(this.error) {
+        return 'text-danger';
+      }
+      return 'text-success';
+    }
   },
 
   watch: {
@@ -153,14 +168,37 @@ export default {
 
                .then(({data}) => {
 
-                 let payload = {
-                   payment: data,
-                   index: this.index
-                 }
-
                  this.isLoading = false
 
-                 this.$emit('payment-redeemed', payload)
+                 if(data.error) {
+                   this.error = data.error
+
+                   this.serverMessage = data.message
+
+                   this.showMessage = true
+
+                   return
+                 }
+                 else {
+
+                     let payload = {
+                       payment: data.payment,
+                       index: this.index
+                     }
+
+                     this.error = data.error
+
+                     this.serverMessage = data.message
+
+                     this.showMessage = true
+
+                     setTimeout( () => {
+                       this.showMessage = false
+                       this.form.reset()
+                       this.$emit('payment-redeemed', payload)
+                     }, 2000)
+
+                 }
 
                })
 

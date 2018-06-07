@@ -137,6 +137,11 @@ class Notifications extends Controller
       $data["message"] = "Please clarify payment by user with email " . $email .
                          " and the reference no: " . $reference_no;
 
+      $data["data"] = [
+          'email' => $email,
+          'reference_no' => $reference_no
+      ];
+
       //sending push message to users who subscribed to the topic 'clarifications'
       return $status = $fcm->sendToTopic('clarifications', $data);
     }
