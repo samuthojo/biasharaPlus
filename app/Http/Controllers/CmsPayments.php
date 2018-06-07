@@ -11,12 +11,13 @@ class CmsPayments extends Controller
 {
     public function store(CreatePayment $request)
     {
-      $payment = $this->savePayment($request);
 
       $user = $this->findUser($request->sender);
 
       if($user)
       {
+        $payment = $this->savePayment($request);
+
         $usersController = new Users();
 
         $reqObj = new UpdateSubscription;
@@ -91,23 +92,24 @@ class CmsPayments extends Controller
 
       if($user) {
         $this->updateSubscription($user, $request->reference_no);
-      } else {
+
+        \App\Payment::where(compact('id'))->update($request->all());
+
+        $payment = \App\Payment::find($id);
+        $payment->redeemed = true;
+
         return [
-          'error' => true,
-          'message' => 'User with the given number not found'
+          'error' => false,
+          'message' => 'Redeemed successfully',
+          'payment' => $payment
         ];
       }
 
-      \App\Payment::where(compact('id'))->update($request->all());
-
-      $payment = \App\Payment::find($id);
-      $payment->redeemed = true;
-
       return [
-        'error' => false,
-        'message' => 'Redeemed successfully',
-        'payment' => $payment
+        'error' => true,
+        'message' => 'User with the given number not found'
       ];
+
     }
 
     private function updateSubscription($user, $reference_no) {
