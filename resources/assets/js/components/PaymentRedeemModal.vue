@@ -114,7 +114,6 @@ export default {
       id: "redeemPaymentModal",
       isLoading: false,
       form: new Form({
-              reference_no: '',
               sender: '',
               date_payed: '',
               amount: '',
@@ -126,7 +125,6 @@ export default {
 
   created() {
     this.id = this.id + this._uid
-    this.form.reference_no = this.payment.reference_no
   },
 
   computed: {

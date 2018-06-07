@@ -127,15 +127,9 @@ class Users extends Controller
 
     public function updateSubscription(UpdateSubscription $request, $user = null) {
 
-      $conditions1 = [
-        ['reference_no', '=', $request->input('reference_no')],
+      $conditions = [
+        ['reference_no', '=', $request->reference_no],
         ['user_id', '=', 0]
-      ];
-
-      $conditions2 = [
-        ['reference_no', '=', $request->input('reference_no')],
-        ['user_id', '<>', 0],
-        ['sender', '=', 'USER']
       ];
 
       try {
@@ -143,9 +137,13 @@ class Users extends Controller
 
         if(!$user) {
           $user = \App\User::where('email', $request->email)->first();
-          $payment = \App\Payment::where($conditions1)->firstOrFail();
+          $payment = \App\Payment::where($conditions)->firstOrFail();
         } else {
-          $payment = \App\Payment::where($conditions2)->firstOrFail();
+          $conditions = [
+            ['reference_no', '=', $request->reference_no],
+            ['user_id', '=', $user->id]
+          ];
+          $payment = \App\Payment::where($conditions)->firstOrFail();
         }
 
         $subscrEndDate = Utils::timestampConverter($user->subscription_end_date);
@@ -161,7 +159,7 @@ class Users extends Controller
       }
       catch(ModelNotFoundException $e) {
 
-        $payment = \App\Payment::where($request->only('reference_no'))->first();
+        $payment = \App\Payment::where('reference_no', $request->reference_no)->first();
 
         if($payment) {
 
@@ -171,7 +169,7 @@ class Users extends Controller
 
         } else {
 
-          $this->paymentMayNeedClarification($request, $user);
+          return $this->paymentMayNeedClarification($request, $user);
 
         }
 
@@ -183,13 +181,18 @@ class Users extends Controller
       $payment = \App\Payment::create([
                     'user_id' => $user->id,
                     'sender' => 'USER',
-                    'reference_no' => $request->input('reference_no'),
+                    'reference_no' => $request->reference_no,
                     'total_to_date' => 0,
                   ]);
 
       //Notify bolt about $payment
-      $notification = new Notifications();
-      $notification->clarifyPayment($request->input('reference_no'), $user->email);
+      try {
+        $notification = new Notifications();
+        $notification->clarifyPayment($request->reference_no, $user->email);
+      }
+      catch(\Throwable $e) {
+
+      }
 
       return response()->json([
         'message' => 'Payment needs clarification, Admin App notified!',

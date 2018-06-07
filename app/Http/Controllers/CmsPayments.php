@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CreatePayment;
 use App\Http\Controllers\Users;
 use App\Http\Requests\UpdateSubscription;
+use App\Payment;
 
 class CmsPayments extends Controller
 {
@@ -79,7 +80,7 @@ class CmsPayments extends Controller
       return view('all_payments', compact('payments'));
     }
 
-    public function redeem(Request $request, $id) {
+    public function redeem(Request $request, Payment $payment) {
 
       $this->validate($request, [
         'operator_type' => 'required|string',
@@ -92,27 +93,18 @@ class CmsPayments extends Controller
 
       if($user) {
 
-        $data = $this->updateSubscription($user, $request->reference_no);
+        \App\Payment::where('id', $payment->id)->update($request->all());
 
-        try {
-          if($data->user) {
-            \App\Payment::where(compact('id'))->update($request->all());
+        $payment = \App\Payment::find($payment->id);
+        $payment->redeemed = true;
 
-            $payment = \App\Payment::find($id);
-            $payment->redeemed = true;
+        $this->updateSubscription($user, $payment->reference_no);
 
-            return [
-              'error' => false,
-              'message' => 'Redeemed successfully',
-              'payment' => $payment
-            ];
-          }
-        } catch (\Throwable $e) {
-          return [
-            'error' => true,
-            'message' => $e->getMessage()
-          ];
-        }
+        return [
+          'error' => false,
+          'message' => 'Redeemed successfully',
+          'payment' => $payment
+        ];
 
       }
 

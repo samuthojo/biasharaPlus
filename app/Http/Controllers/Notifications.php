@@ -109,6 +109,7 @@ class Notifications extends Controller
                          "user until " .
                          \Carbon\Carbon::parse($user->subscription_end_date)
                                        ->format('d M Y');
+      $data["data"] = $user;
 
       $device_ids = $this->getDeviceIds($user);
 
