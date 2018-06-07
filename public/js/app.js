@@ -41624,7 +41624,7 @@ var render = function() {
                       staticClass: "form-control",
                       attrs: {
                         type: "text",
-                        placeholder: "date",
+                        placeholder: "e.g. 2018-06-06",
                         name: "date_payed",
                         id: "date_payed"
                       },

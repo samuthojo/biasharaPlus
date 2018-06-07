@@ -44,7 +44,7 @@
                 <div class="form-group">
                   <label for="date_payed">Date Paid:</label>
                   <input type="text" class="form-control"
-                    placeholder="date"
+                    placeholder="e.g. 2018-06-06"
                     name="date_payed" id="date_payed"
                     v-model = "form.date_payed">
                   <span
