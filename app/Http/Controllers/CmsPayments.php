@@ -33,7 +33,7 @@ class CmsPayments extends Controller
         $usersController->updateSubscription($reqObj);
       }
       else {
-        return back()->with('errors', 'User with the given number not found');
+        return back()->withErrors(['User with the given number not found']);
       }
 
       session(['message' => 'Payment saved successfully', ]);
