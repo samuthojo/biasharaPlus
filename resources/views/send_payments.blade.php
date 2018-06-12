@@ -79,15 +79,15 @@
         </div>
 
         <div class="form-group">
-          <label for="operator_type">Operator Type:</option>
+          <label for="operator_type">Operator Type:</label>
           <select id="operator_type" name="operator_type" style="width: 200px"
             class="form-control">
             <option value="">Choose operator</option>
-            <option value="AIRTEL MONEY">AIRTEL MONEY</option>
-            <option value="CASH">CASH</option>
             <option value="M-PESA">M-PESA</option>
             <option value="TIGO-PESA">TIGO-PESA</option>
+            <option value="AIRTEL MONEY">AIRTEL MONEY</option>
             <option value="VOUCHER">VOUCHER</option>
+            <option value="CASH">CASH</option>
           </select>
         </div>
 

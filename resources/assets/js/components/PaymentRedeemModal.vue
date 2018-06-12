@@ -53,11 +53,16 @@
                     class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                  <label for="operator_type">Operator:</label>
-                  <input type="text" class="form-control"
-                    placeholder="operator"
-                    name="operator_type" id="operator_type"
-                    v-model = "form.operator_type">
+                  <label for="operator_type">Operator Type:</label>
+                  <select id="operator_type" name="operator_type" style="width: 200px" v-model="form.operator_type"
+                    class="form-control">
+                    <option value="">Choose operator</option>
+                    <option value="M-PESA">M-PESA</option>
+                    <option value="TIGO-PESA">TIGO-PESA</option>
+                    <option value="AIRTEL MONEY">AIRTEL MONEY</option>
+                    <option value="VOUCHER">VOUCHER</option>
+                    <option value="CASH">CASH</option>
+                  </select>
                   <span
                     v-show="form.errors.has('operator_type')"
                     v-text="form.errors.get('operator_type')"
