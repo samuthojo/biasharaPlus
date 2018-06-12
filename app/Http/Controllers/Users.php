@@ -205,14 +205,14 @@ class Users extends Controller
               'subscription' => 'premium',
             ]);
             } elseif ($amount >= $this->package_2 && $amount < $this->package_3) {
-                $longEndDate = $subscrEndDate + (180*24*60*60);
+                $longEndDate = $subscrEndDate + (182*24*60*60);
                 $subscrEndDate = date("d-m-Y", $longEndDate);
                 $user = \App\User::updateOrCreate(compact('email'), [
               'subscription_end_date' => $subscrEndDate,
               'subscription' => 'premium',
             ]);
             } elseif ($amount >= $this->package_3) {
-                $longEndDate = $subscrEndDate + (360*24*60*60);
+                $longEndDate = $subscrEndDate + (365*24*60*60);
                 $subscrEndDate = date("d-m-Y", $longEndDate);
                 $user = \App\User::updateOrCreate(compact('email'), [
               'subscription_end_date' => $subscrEndDate,
