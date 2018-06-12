@@ -174,7 +174,7 @@ class Users extends Controller
                     'sender' => $user->phone_number,
                     'reference_no' => $request->reference_no,
                     'total_to_date' => 0,
-                    'date_payed' => \Carbon\Carbon::now()->format('d-m-Y'),
+                    'date_payed' => \Carbon\Carbon::now()->format('Y-m-d'),
                   ]);
 
         //Notify bolt about $payment
