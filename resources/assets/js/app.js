@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -17,3 +16,4 @@ window.Vue = require('vue');
 
 Vue.component('payment-table', require('./components/PaymentTable.vue'));
 Vue.component('payment-redeem-modal', require('./components/PaymentRedeemModal.vue'));
+Vue.component('payment-delete-confirmation-modal', require('./components/PaymentDeleteConfirmationModal.vue'));

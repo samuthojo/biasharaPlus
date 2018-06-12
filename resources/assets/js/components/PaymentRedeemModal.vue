@@ -68,7 +68,8 @@
                     @click="$emit('close')">Cancel</button>
                   <button
                     type="submit"
-                    class="btn btn-success">Redeem</button>
+                    class="btn btn-success"
+                    :disabled="isLoading">Redeem</button>
                   <span class="my_loader" v-show="isLoading">
                     <i class="fa fa-spinner fa-spin fa-3x fa-fw text-success"></i>
                   </span>
@@ -86,7 +87,9 @@
 </template>
 
 <script>
-import { Form } from '../ValidationFramework/Form'
+import {
+  Form
+} from '../ValidationFramework/Form'
 
 export default {
   props: {
@@ -114,12 +117,12 @@ export default {
       id: "redeemPaymentModal",
       isLoading: false,
       form: new Form({
-              sender: '',
-              date_payed: '',
-              amount: '',
-              operator_type: '',
-              total_to_date: 0
-            })
+        sender: '',
+        date_payed: '',
+        amount: '',
+        operator_type: '',
+        total_to_date: 0
+      })
     }
   },
 
@@ -128,8 +131,8 @@ export default {
   },
 
   computed: {
-    responseClass: function () {
-      if(this.error) {
+    responseClass: function() {
+      if (this.error) {
         return 'text-danger';
       }
       return 'text-success';
@@ -137,16 +140,14 @@ export default {
   },
 
   watch: {
-    showModal: function (val) {
-      if(val) {
+    showModal: function(val) {
+      if (val) {
         $("#" + this.id).modal({
           backdrop: 'static',
           keyboard: false,
           show: true
         })
-      }
-
-      else {
+      } else {
         $("#" + this.id).modal('hide');
         $('body').removeClass("modal-open");
         $('body').removeAttr('style');
@@ -164,49 +165,50 @@ export default {
 
       this.form.submit('PUT', url)
 
-               .then(({data}) => {
+        .then(({
+          data
+        }) => {
 
-                 this.isLoading = false
+          this.isLoading = false
 
-                 if(data.error) {
-                   this.error = data.error
+          if (data.error) {
+            this.error = data.error
 
-                   this.serverMessage = data.message
+            this.serverMessage = data.message
 
-                   this.showMessage = true
+            this.showMessage = true
 
-                   return
-                 }
-                 else {
+            return
+          } else {
 
-                     let payload = {
-                       payment: data.payment,
-                       index: this.index
-                     }
+            let payload = {
+              payment: data.payment,
+              index: this.index
+            }
 
-                     this.error = data.error
+            this.error = data.error
 
-                     this.serverMessage = data.message
+            this.serverMessage = data.message
 
-                     this.showMessage = true
+            this.showMessage = true
 
-                     setTimeout( () => {
-                       this.showMessage = false
-                       this.form.reset()
-                       this.$emit('payment-redeemed', payload)
-                     }, 2000)
+            setTimeout(() => {
+              this.showMessage = false
+              this.form.reset()
+              this.$emit('payment-redeemed', payload)
+            }, 2000)
 
-                 }
+          }
 
-               })
+        })
 
-               .catch(error => {
-                 console.error(error)
+        .catch(error => {
+          console.error(error)
 
-                 this.isLoading = false
+          this.isLoading = false
 
-                 this.form.onFail(error)
-               })
+          this.form.onFail(error)
+        })
     }
   }
 

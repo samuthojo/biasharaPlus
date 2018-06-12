@@ -13,6 +13,8 @@ class Payment extends Model
 
     public function getDatePayedAttribute($value)
     {
-      return \Carbon\Carbon::parse($value)->format('d-m-Y');
+        if ($value) {
+            return \Carbon\Carbon::parse($value)->format('d-m-Y');
+        }
     }
 }

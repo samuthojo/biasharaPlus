@@ -12,123 +12,125 @@ class CmsPayments extends Controller
 {
     public function store(CreatePayment $request)
     {
+        $user = $this->findUser($request->sender);
 
-      $user = $this->findUser($request->sender);
+        if ($user) {
+            $payment = $this->savePayment($request);
 
-      if($user)
-      {
-        $payment = $this->savePayment($request);
+            $usersController = new Users();
 
-        $usersController = new Users();
+            $reqObj = new UpdateSubscription;
 
-        $reqObj = new UpdateSubscription;
-
-        $data = [
+            $data = [
           'email' => $user->email,
           'reference_no' => $request->reference_no
         ];
 
-        foreach($data as $key => $value) {
-          $reqObj->$key = $value;
+            foreach ($data as $key => $value) {
+                $reqObj->$key = $value;
+            }
+
+            $usersController->updateSubscription($reqObj);
+        } else {
+            return back()->withErrors(['User with the given number not found']);
         }
 
-        $usersController->updateSubscription($reqObj);
-      }
-      else {
-        return back()->withErrors(['User with the given number not found']);
-      }
+        session(['message' => 'Payment saved successfully', ]);
 
-      session(['message' => 'Payment saved successfully', ]);
-
-      return redirect()->route('payments_page')
+        return redirect()->route('payments_page')
                        ->with('message', 'Payment saved successfully');
     }
 
     private function findUser($phone_number)
     {
-      return \App\User::all()->first(function ($value, $key) use ($phone_number)
-      {
-          return strpos($value->phone_number, $phone_number) !== FALSE;
-      });
+        return \App\User::all()->first(function ($value, $key) use ($phone_number) {
+            return strpos($value->phone_number, $phone_number) !== false;
+        });
     }
 
     public function savePayment($request)
     {
-      $data = $request->except('date_payed');
-      $date_payed = $request->input('date_payed');
-      $date_payed = \Carbon\Carbon::parse($date_payed)->format('Y-m-d');
-      $data = array_add($data, 'date_payed', $date_payed);
-      return $payment = \App\Payment::create($data);
+        $data = $request->except('date_payed');
+        $date_payed = $request->input('date_payed');
+        $date_payed = \Carbon\Carbon::parse($date_payed)->format('Y-m-d');
+        $data = array_add($data, 'date_payed', $date_payed);
+        return $payment = \App\Payment::create($data);
     }
 
     public function payments()
     {
-      $payments =
+        $payments =
       \App\Payment::latest('date_payed')
                   ->get()
                   ->map(function ($payment) {
+                      $payment->redeemed = false;
 
-                    $payment->redeemed = false;
+                      if ($payment->user_id != 0 && $payment->amount != 0) {
+                          $payment->redeemed = true;
+                      }
 
-                    if($payment->user_id != 0 && $payment->sender != "USER") {
-                      $payment->redeemed = true;
-                    }
-
-                    return $payment;
-
+                      return $payment;
                   });
-      return view('all_payments', compact('payments'));
+        return view('all_payments', compact('payments'));
     }
 
-    public function redeem(Request $request, Payment $payment) {
-
-      $this->validate($request, [
+    public function redeem(Request $request, Payment $payment)
+    {
+        $this->validate($request, [
         'operator_type' => 'required|string',
         'date_payed' => 'required|string',
         'sender' => 'required|string',
         'amount' => 'required|numeric',
       ]);
 
-      $user = $this->findUser($request->sender);
+        $user = $this->findUser($request->sender);
 
-      if($user) {
+        if ($user) {
+            \App\Payment::where('id', $payment->id)->update($request->all());
 
-        \App\Payment::where('id', $payment->id)->update($request->all());
+            $payment = \App\Payment::find($payment->id);
+            $payment->redeemed = true;
 
-        $payment = \App\Payment::find($payment->id);
-        $payment->redeemed = true;
+            $this->updateSubscription($user, $payment->reference_no);
 
-        $this->updateSubscription($user, $payment->reference_no);
-
-        return [
+            return [
           'error' => false,
           'message' => 'Redeemed successfully',
           'payment' => $payment
         ];
+        }
 
-      }
-
-      return [
+        return [
         'error' => true,
         'message' => 'User with the given number not found'
       ];
-
     }
 
-    private function updateSubscription($user, $reference_no) {
-      $usersController = new Users();
+    private function updateSubscription($user, $reference_no)
+    {
+        $usersController = new Users();
 
-      $reqObj = new UpdateSubscription;
+        $reqObj = new UpdateSubscription;
 
-      $data = [
+        $data = [
         'email' => $user->email,
         'reference_no' => $reference_no
       ];
 
-      foreach($data as $key => $value) {
-        $reqObj->$key = $value;
-      }
+        foreach ($data as $key => $value) {
+            $reqObj->$key = $value;
+        }
 
-      return $usersController->updateSubscription($reqObj, $user);
+        return $usersController->updateSubscription($reqObj, $user);
+    }
+
+    public function destroy(Payment $payment)
+    {
+        $payment->forceDelete();
+
+        return [
+          'error' => false,
+          'message' => 'Record deleted successfully',
+        ];
     }
 }
