@@ -13,6 +13,7 @@ class Fcm {
     public function send($to, $message) {
         $fields = array(
             'to' => $to,
+            'content_available' => true,
             'data' => $message,
         );
         return $this->sendPushNotification($fields);
@@ -22,6 +23,7 @@ class Fcm {
     public function sendToTopic($to, $message) {
         $fields = array(
             'to' => '/topics/' . $to,
+            'content_available' => true,
             'data' => $message,
         );
         return $this->sendPushNotification($fields);
@@ -31,6 +33,7 @@ class Fcm {
     public function sendMultiple($registration_ids, $message) {
         $fields = array(
             'registration_ids' => $registration_ids,
+            'content_available' => true,
             'data' => $message,
         );
 

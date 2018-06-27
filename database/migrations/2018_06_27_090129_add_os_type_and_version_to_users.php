@@ -14,7 +14,7 @@ class AddOsTypeAndVersionToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-          $table->boolean('os_type')->nullable();//
+          $table->boolean('os_type')->nullable();//android: 0, apple: 1
           $table->string('version')->nullable();
         });
     }
