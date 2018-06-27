@@ -48,10 +48,12 @@ class Users extends Controller
                   
             $user_id = $user->id;
             
-            $user = \App\User::updateOrCreate(['id' => $user_id], [
-              'os_type' => $posted_os_type,
-              'version' => $posted_version
-            ]);
+            if($request->has(['os_type', 'version'])) {
+              $user = \App\User::updateOrCreate(['id' => $user_id], [
+                'os_type' => $posted_os_type,
+                'version' => $posted_version
+              ]);
+            }
             
             $device_id = $posted_device_id;
             $device = \App\UserDevice::updateOrCreate(compact('user_id', 'device_id'));
