@@ -26,6 +26,8 @@ class CheckUserExistence extends FormRequest
         return [
             'email' => 'required|email',
             'device_id' => 'required',
+            'os_type' => 'nullable|boolean',
+            'version' => 'nullable|string',
         ];
     }
 }
