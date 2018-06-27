@@ -26,6 +26,7 @@ class UpdateVersion extends FormRequest
          return [
              'version_number' => 'required|numeric',
              'features' => 'required',
+             'critical' =>'required|boolean',
          ];
      }
  }

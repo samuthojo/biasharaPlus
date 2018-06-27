@@ -26,6 +26,7 @@ class CreateVersion extends FormRequest
         return [
             'version_number' => 'required|numeric|unique:versions',
             'features' => 'required',
+            'critical' =>'required|boolean',
         ];
     }
 

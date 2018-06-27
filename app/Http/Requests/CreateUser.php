@@ -32,9 +32,11 @@ class CreateUser extends FormRequest
             'subscription_end_date' => 'required',
             'total_cc' => 'required|numeric',
             'business_id' => 'required|unique:users',
-            'current_level' => 'required',
             'country' => 'required',
             'device_id' => 'required',
+            'current_level' => 'required',
+            'os_type' => 'nullable|boolean',
+            'version' => 'nullable|string',
         ];
     }
 
