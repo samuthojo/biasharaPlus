@@ -36,6 +36,7 @@
   <style>
     body {
       margin-top: 70px;
+      background-color: rgb(238,238,238);
     }
     .form-control {
       width: auto;

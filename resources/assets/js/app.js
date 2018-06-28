@@ -23,7 +23,7 @@ Vue.component('payment-delete-confirmation-modal', deleteConfirm)
 
 Vue.component('accounts-chart', require('./components/AccountsChart.vue'))
 
-var paymentAdaption = require('./components/PaymentsAdaptionChart.vue')
+var paymentAdaption = require('./components/PaymentAdaptionChart.vue')
 
 Vue.component('payment-adaption-chart', paymentAdaption)
 
