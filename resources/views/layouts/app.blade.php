@@ -119,7 +119,7 @@
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav" id="link_section">
-      <li class="{{ (request()->is('categories*') || request()->is('/')) ? 'active' : '' }}"
+      <li class="{{ (request()->is('categories*')) ? 'active' : '' }}"
         id="categories">
         <a href="{{url('/categories')}}">
           Categories
