@@ -18,7 +18,7 @@ Route::view('/login', 'login');
 Auth::routes();
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', 'Categories@index')->name('home');
+    Route::get('/', 'DashboardController@index')->name('dashboard');
     Route::get('/categories', 'Categories@index')->name('categories.index');
     Route::get('/all_categories', 'Categories@categories')->name('categories.categories');
     Route::post('/categories', 'Categories@store')->name('categories.store');
@@ -90,4 +90,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/payments/{payment}/redeem', 'CmsPayments@redeem');
 
     Route::delete('/payments/{payment}', 'CmsPayments@destroy');
+});
+
+Route::middleware('auth')->prefix('/api')->group(function () {
+  Route::get('/accounts', 'DashboardController@accounts')->name('api.accounts');
+  Route::get('/payments', 'DashboardController@payments')->name('api.payments');
 });

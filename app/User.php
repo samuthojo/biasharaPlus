@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $guarded = ['id',];
-
+     
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -28,10 +28,32 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-
+    
+    /**
+     * The conditions for retrieving a normal user.
+     *
+     * @var array
+     */
+     protected static $conditions = [
+       ['is_admin', '=', false], ['is_system', '=', false],
+     ];
+     
     public function devices() {
       return $this->hasMany('App\UserDevice');
+    }
+    
+    public static function allUsers() {
+      return User::where(User::$conditions);
+    }
+        
+    public static function freeUsers() {
+      return User::where(User::$conditions)
+                 ->where('subscription', 'free');
+    }
+    
+    public static function premiumUsers() {
+      return User::where(User::$conditions)
+                 ->where('subscription', 'premium');
     }
 
     // public function feedbacks() {

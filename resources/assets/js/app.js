@@ -4,16 +4,39 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
-
-window.Vue = require('vue');
+require('./bootstrap')
 
 /**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
+ * Next, we will register Vue application components.
+ *
  */
 
-Vue.component('payment-table', require('./components/PaymentTable.vue'));
-Vue.component('payment-redeem-modal', require('./components/PaymentRedeemModal.vue'));
-Vue.component('payment-delete-confirmation-modal', require('./components/PaymentDeleteConfirmationModal.vue'));
+Vue.component('payment-table', require('./components/PaymentTable.vue'))
+
+var paymentRedeemModal = require('./components/PaymentRedeemModal.vue')
+
+Vue.component('payment-redeem-modal', paymentRedeemModal)
+
+var deleteConfirm = require('./components/PaymentDeleteConfirmationModal.vue')
+
+Vue.component('payment-delete-confirmation-modal', deleteConfirm)
+
+Vue.component('accounts-chart', require('./components/AccountsChart.vue'))
+
+var paymentAdaption = require('./components/PaymentAdaptionChart.vue')
+
+Vue.component('payment-adaption-chart', paymentAdaption)
+
+Vue.component('new-users-chart', require('./components/NewUsersChart.vue'))
+
+Vue.component('os-types-chart', require('./components/OsTypesChart.vue'))
+
+Vue.component('countries-chart', require('./components/CountriesChart.vue'))
+
+var totalPayments = require('./components/TotalPaymentsChart.vue')
+
+Vue.component('total-payments-chart', totalPayments)
+
+var serviceProviders = require('./components/ServiceProvidersChart.vue')
+
+Vue.component('service-providers-chart', serviceProviders)
