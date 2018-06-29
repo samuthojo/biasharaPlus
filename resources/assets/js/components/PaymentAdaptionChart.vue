@@ -51,7 +51,7 @@ export default {
         data.addRows($this.getRows())
         var el = document.getElementById('adaption_div')
         var options = {
-          title: 'Payment Adaption Rate',
+          title: 'Payment Adaption Rate (This week)',
           height: 400
         }
         var chart = new GoogleCharts.api.visualization.ColumnChart(el)
