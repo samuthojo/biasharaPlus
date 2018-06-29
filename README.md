@@ -25,7 +25,7 @@ Biashara plus is a well crafted and simple to use app that aims to help business
   $ heroku run:detached php artisan migrate:fresh --seed
   ```
 
-- Ensure file storage is enables
+- Ensure file storage is enabled
 
   ```sh
   $ php artisan storage:link
