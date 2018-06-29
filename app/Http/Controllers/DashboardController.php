@@ -62,6 +62,7 @@ class DashboardController extends Controller
     $conditions = [
       ['date_payed', '<=', $start_date],
       ['date_payed', '>=', $end_date],
+      ['amount', '>', 0],
     ];
     $query = 'date_payed, sum(amount) as total, count(date_payed) as count';
     $payments = Payment::where($conditions)
@@ -74,6 +75,7 @@ class DashboardController extends Controller
     $query = 'date_payed, sum(amount) as total, count(date_payed) as count';
     $payments = Payment::whereMonth('date_payed', (string)$month)
                        ->whereYear('date_payed', Date("Y"))
+                       ->where('amount', '>', 0)
                        ->select(DB::raw($query))
                        ->groupBy('date_payed')->get();
     return $payments;
