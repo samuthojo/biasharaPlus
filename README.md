@@ -4,14 +4,6 @@ Biashara plus is a well crafted and simple to use app that aims to help business
 
 ## Setup
 
-- Create a database
-
-  ```sh
-  $ username: admin
-  $ database: biasharaPlus
-  $ password: @dm!n
-  ```
-
 - Copy configuration
 
   ```sh
