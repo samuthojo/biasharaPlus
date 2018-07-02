@@ -115,8 +115,7 @@ class Users extends Controller
     public function accountDetail()
     {
         $user = Auth::user();
-        $version = \App\Version::where('status', true)
-                             ->first(['id', 'version_number', 'features']);
+        $version = \App\Version::where('status', true)->first();
         return response(compact('user', 'version'), 200);
     }
 
