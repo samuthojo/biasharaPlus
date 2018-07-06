@@ -13,6 +13,6 @@ class Utils
   public static function handleImage($image, $location) {
     $imageName = $image->getClientOriginalName();
     $image->move($location, $imageName);
-    return asset($location . $imageName);
+    return $imageName;
   }
 }
