@@ -17,6 +17,11 @@
 
   <link rel="stylesheet"
   	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    
+  <script type="text/javascript">
+    window.base_url = {{ asset('') }}
+    window.images_base_url = {{ asset('uploads/products') }}
+  </script>
 
   <script src="/js/app.js"></script>
 

@@ -10,7 +10,7 @@ function format(product) {
             '<th>Picture:</th>'+
             '<td>'+
               "<img class='img-rounded' alt='product picture' " +
-                  "src=" + product.image + " height='30%' width='auto'>" +
+                  "src=" + images_base_url + "/" + product.image + " height='30%' width='auto'>" +
             '</td>'+
         '</tr>'+
         '<tr>'+
