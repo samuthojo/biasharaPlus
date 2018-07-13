@@ -88,10 +88,6 @@ export default {
     this.biasharaPayments = this.payments
   },
 
-  mounted() {
-    utils.initDataTable()
-  },
-
   methods: {
     onRedeemPayment(payment, index) {
       this.payment = payment

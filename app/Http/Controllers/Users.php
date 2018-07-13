@@ -238,7 +238,7 @@ class Users extends Controller
 
             $this->sendPushNotification($user);
             
-            $this->sendMessage($user->phone_number);
+            // $this->sendMessage($user->phone_number);
 
             return response()->json(compact('message', 'user'), 200);
         } catch (\Throwable $e) {
@@ -293,7 +293,7 @@ class Users extends Controller
 
             $this->sendPushNotification($user);
             
-            $this->sendMessage($user->phone_number);
+            // $this->sendMessage($user->phone_number);
 
             return response()->json(compact('message', 'user'), 200);
         } catch (\Throwable $e) {
@@ -310,22 +310,22 @@ class Users extends Controller
         $notification->paymentConfirmed($user);
     }
     
-    private function sendMessage($phone_number)
-    {
-      $client = new Client(); //GuzzleHttp\Client
-      
-      $url = 'https://ipfsms-notification.herokuapp.com/api/v1/dispatcher';
-      
-      $result = $client->post($url, [
-          [
-            'channel' => 'sms',
-            'send_to' => $phone_number,
-            'payload' => [
-              'text' => trans('messages.subscribed'),
-            ],
-          ],
-      ]);
-      
-      return $result;
-    } 
+    // private function sendMessage($phone_number)
+    // {
+    //   $client = new Client(); //GuzzleHttp\Client
+    //   
+    //   $url = 'https://ipfsms-notification.herokuapp.com/api/v1/dispatcher';
+    //   
+    //   $result = $client->post($url, [
+    //       [
+    //         'channel' => 'sms',
+    //         'send_to' => $phone_number,
+    //         'payload' => [
+    //           'text' => trans('messages.subscribed'),
+    //         ],
+    //       ],
+    //   ]);
+    //   
+    //   return $result;
+    // } 
 }
