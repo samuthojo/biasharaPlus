@@ -15,8 +15,10 @@
   <link rel="stylesheet" type="text/css"
     href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
 
-  <link rel="stylesheet"
-  	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  {{--<link rel="stylesheet"
+  	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">--}}
+    
+  <link rel="stylesheet" href="/css/app.css">
 
   <script src="/js/app.js"></script>
 
@@ -25,9 +27,9 @@
     src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
 
   <!-- Latest compiled JavaScript -->
-  <script
+  {{--<script
     src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
-  </script>
+  </script>--}}
 
   <script src="{{asset('js/main.js')}}"></script>
 
