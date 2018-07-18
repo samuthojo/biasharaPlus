@@ -34,18 +34,39 @@
   <body class="app header-fixed sidebar-md-show sidebar-fixed">
     
     <header class="app-header navbar">
+      
       <!-- Header content here -->
             
       <a class="navbar-brand" href="{{ url('/') }}">
         <img src="{{ asset('images/logo2.png') }}" alt="BiasharaPlus Logo">
       </a>
       
-      <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" 
+      <button class="navbar-toggler sidebar-toggler" 
         type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
       </button>
       
       <ul class="nav navbar-nav mr-auto">
+        
+        <li class="nav-item px-3">
+          <a class="nav-link {{ isActiveRoute('users.index') }}" 
+             href="{{ route('users.index') }}">Users</a>
+        </li>
+        
+        <li class="nav-item px-3">
+          <a class="nav-link {{ isActiveRoute('versions.index') }}" 
+             href="{{ route('versions.index') }}">Versions</a>
+        </li>
+        
+        <li class="nav-item px-3">
+          <a class="nav-link {{ isActiveRoute('notifications') }}" 
+             href="{{ route('notifications') }}">Notifications</a>
+        </li>
+        
+        <li class="nav-item px-3">
+          <a class="nav-link {{ isActiveRoute('cms_feedback.index') }}" 
+             href="{{ route('cms_feedback.index') }}">Feedback</a>
+        </li>
         
         {{--<li class="nav-item px-3">
           <a class="btn btn-warning" href="https://coreui.io/pro/">Go Pro</a>
@@ -90,6 +111,8 @@
       <main class="main">
         
         <!-- Main content here -->
+        
+        @yield('breadcrumb')
         
         <div class="container mt-3">
           @include('loader')

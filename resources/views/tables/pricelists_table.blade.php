@@ -22,11 +22,11 @@
           <div class="btn-group">
             <button class="btn btn-warning" title="edit price-list"
               onclick="showEditPriceListModal({{$priceList}})">
-              <span class="glyphicon glyphicon-pencil"></span>
+              <span class="fa fa-pencil"></span>
             </button>
             <button class="btn btn-danger" title="delete price-list"
               onclick="showPriceListDeleteModal({{$priceList->id}})">
-              <span class="glyphicon glyphicon-trash"></span>
+              <span class="fa fa-trash"></span>
             </button>
           </div>
         </td>

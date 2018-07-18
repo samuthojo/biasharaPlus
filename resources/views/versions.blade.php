@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
 @section('more')
   @include('header')
@@ -67,7 +67,7 @@
                   <div class="btn-group">
                     <button class="btn btn-warning" title="edit version"
                       onclick="showEditVersionModal({{$version}})">
-                      <span class="glyphicon glyphicon-pencil"></span>
+                      <span class="fa fa-pencil"></span>
                     </button>
                   </div>
                 </td>
@@ -112,7 +112,7 @@
               messageTop: "The List Of Versions As Of {{date('d-m-Y')}}"
            }
        ],
-       iDisplayLength: 8,
+       iDisplayLength: 20,
        bLengthChange: false
      });
 

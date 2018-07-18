@@ -13,6 +13,10 @@
     "@coreui/coreui-plugin-npm-postinstall" "^1.0.2"
     bootstrap "^4.1.2"
 
+"@coreui/icons@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@coreui/icons/-/icons-0.3.0.tgz#d5bece91b1442a9543593d1146bc8042b18489e3"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"

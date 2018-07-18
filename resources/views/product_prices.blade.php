@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
 @section('more')
   @include('header')
@@ -65,7 +65,7 @@
                   <div class="btn-group">
                     <button class="btn btn-warning" title="update price"
                       onclick="showEditPriceModal({{$price}})">
-                      <span class="glyphicon glyphicon-pencil"></span>
+                      <span class="fa fa-pencil"></span>
                     </button>
                   </div>
                 </td>

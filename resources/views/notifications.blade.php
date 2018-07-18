@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
 @section('more')
   <script src="{{asset('js/notifications.js')}}"></script>

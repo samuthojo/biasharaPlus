@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
 @section('more')
   @include('header')
@@ -55,12 +55,12 @@
                   <div class="btn-group">
                     <button class="btn btn-warning" title="edit price-list"
                       onclick="showEditPriceListModal({{$priceList}})">
-                      <span class="glyphicon glyphicon-pencil"></span>
+                      <span class="fa fa-pencil"></span>
                     </button>
                     <button class="btn btn-danger"
                       onclick="showPriceListDeleteModal({{$priceList->id}})"
                       title="delete price-list">
-                      <span class="glyphicon glyphicon-trash"></span>
+                      <span class="fa fa-trash"></span>
                     </button>
                   </div>
                 </td>

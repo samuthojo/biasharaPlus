@@ -1,7 +1,18 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
 @section('more')
   @include('header')
+@endsection
+
+@section('breadcrumb')
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ route('users.index') }}">Users</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Payments</li>
+  </ol>
+</nav>
 @endsection
 
 @section('content')
@@ -26,13 +37,13 @@
         @endphp
         Payments, User: {{$user->username. ', Country: '.  $country}}
       </h3>
-      <div class="btn-group pull-right">
+      {{--<div class="btn-group pull-right">
         <a class="btn btn-success" href="{{url('/users')}}"
           title="back">
           <i class="fa fa-arrow-left"
             style="font-size: 16px;"></i>
         </a>
-      </div>
+      </div>--}}
       <div class="clearfix"></div>
     </div>
     <div class="panel-body">
@@ -92,7 +103,7 @@
                  messageTop: "{{$user->username}} As Of Payments As Of {{date('d-m-Y')}}"
               }
           ],
-          iDisplayLength: 8,
+          iDisplayLength: 20,
           bLengthChange: false
       });
     });

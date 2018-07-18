@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
 @section('more')
   @include('header')
@@ -23,13 +23,12 @@
 @endsection
 
 @section('content')
-  <div class="container-fluid">
 
     <div class="table-responsive">
 
-      <h4 class="text-success" style="color: #f0ad4e;">Summary: </h4>
-      <table class="table table-hover table-condensed table-bordered">
-        <thead>
+      <h4 style="color: #f0ad4e;">Summary: </h4>
+      <table class="table table-hover table-condensed table-bordered table-dark">
+        <thead class="thead-dark">
           <tr>
             <th>Accounts:</th>
             <th>Total</th>
@@ -40,21 +39,21 @@
         </thead>
         <tbody>
           <tr>
-            <th>User Accounts</th>
+            <th>All</th>
             <td>{{sprintf('%s', number_format($total_accounts))}}</td>
             <td>{{sprintf('%s', number_format($tz_accounts))}}</td>
             <td>{{sprintf('%s', number_format($kenya_accounts))}}</td>
             <td>{{sprintf('%s', number_format($uganda_accounts))}}</td>
           </tr>
           <tr>
-            <th>Free Accounts</th>
+            <th>Free</th>
             <td>{{sprintf('%s', number_format($free_accounts))}}</td>
             <td>{{sprintf('%s', number_format($free_tz_accounts))}}</td>
             <td>{{sprintf('%s', number_format($free_kenya_accounts))}}</td>
             <td>{{sprintf('%s', number_format($free_uganda_accounts))}}</td>
           </tr>
           <tr>
-            <th>Premium Accounts</th>
+            <th>Premium</th>
             <td>{{sprintf('%s', number_format($premium_accounts))}}</td>
             <td>{{sprintf('%s', number_format($premium_tz_accounts))}}</td>
             <td>{{sprintf('%s', number_format($premium_kenya_accounts))}}</td>
@@ -66,7 +65,6 @@
 
     </div>
 
-  </div>
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 style="font-weight: bold;" class="panel-title pull-left">
@@ -119,7 +117,7 @@
                 <td>
                   <a href="{{url('/users/' . $user->id . '/payments')}}"
                     class="btn btn-warning" title="view payment">
-                    <span class="glyphicon glyphicon-eye-open"></span>
+                    <span class="fa fa-eye"></span>
                   </a>
                 </td>
               </tr>
@@ -159,7 +157,7 @@
                  messageTop: "The List Of Users As Of {{date('d-m-Y')}}"
               }
           ],
-          iDisplayLength: 8,
+          iDisplayLength: 100,
           bLengthChange: false
       });
     });
