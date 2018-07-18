@@ -157,7 +157,7 @@
                  messageTop: "The List Of Users As Of {{date('d-m-Y')}}"
               }
           ],
-          iDisplayLength: 100,
+          iDisplayLength: 50,
           bLengthChange: false
       });
     });
