@@ -15,6 +15,7 @@
         <td>{{$loop->iteration}}</td>
         <td>{{$version->version_number}}</td>
         <td>{{($version->status) ? 'Current' : 'Old'}}</td>
+        <td>{{($version->critical) ? 'True' : 'False'}}</td>
         <td>
           <div class="btn-group">
             <button class="btn btn-warning" title="edit product"
@@ -66,6 +67,10 @@ function callMe() {
    });
 
    $(":text").keydown(function() {
+     $(this).next().fadeOut(0);
+   });
+   
+   $(":radio").keydown(function() {
      $(this).next().fadeOut(0);
    });
 

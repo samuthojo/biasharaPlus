@@ -45,8 +45,8 @@
         type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
       </button>
-      
-      <ul class="nav navbar-nav mr-auto">
+              
+      <ul class="nav navbar-nav mr-auto d-none d-md-flex">
         
         <li class="nav-item px-3">
           <a class="nav-link {{ isActiveRoute('users.index') }}" 
@@ -74,31 +74,30 @@
         
       </ul>
       
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav d-none d-md-flex">
+        
         <li class="nav-item px-3">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <span class="fa fa-user"></span> Account
-            <span class="caret"></span>
-            <ul class="dropdown-menu">
-              <li>
-                <a href="{{ route('logout') }}"
-                  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                  Logout
-                </a>
-                <form id="logout-form" action="{{ route('logout') }}"
-                  method="POST" style="display: none;">{{ csrf_field() }}</form>
-              </li>
-              <li class="divider"></li>
-              <li>
-                <a href="{{ route('change_password') }}">
-                  Change password
-                </a>
-             </li>
-            </ul>
-          </a>
+          
+          <div class="dropdown">
+            <a href="#" class="btn btn-light dropdown-toggle" data-toggle="dropdown">
+              <span class="fa fa-user"></span> Account
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{{ route('logout') }}"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                Logout
+              </a>
+              <form id="logout-form" action="{{ route('logout') }}"
+                method="POST" style="display: none;">{{ csrf_field() }}</form>
+              <a class="dropdown-item" href="{{ route('change_password') }}">
+                Change password
+              </a>
+            </div>
+          </div>
+          
         </li>
       </ul>
-      
+              
     </header>
     
     <div class="app-body">

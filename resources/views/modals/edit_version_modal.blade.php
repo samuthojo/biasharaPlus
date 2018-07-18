@@ -29,6 +29,25 @@
                   class="text-danger" style="display: none;"></span>
             </div>
             <div class="form-group">
+              <label>Critical:</label>
+              <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" 
+                    name="critical" id="edit_critical_true"
+                    value="1">True
+                </label>
+              </div>
+              <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" 
+                    name="critical" id="edit_critical_false"
+                    value="0">False
+                </label>
+              </div>
+              <span id="edit_critical_error"
+                  class="text-danger" style="display: none;"></span>
+            </div>
+            <div class="form-group">
               <button class="btn btn-default"
                 data-dismiss="modal">Cancel</button>
               <button class="btn btn-success"

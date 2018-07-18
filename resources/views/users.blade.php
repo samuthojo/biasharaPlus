@@ -39,11 +39,11 @@
         </thead>
         <tbody>
           <tr>
-            <th>All</th>
-            <td>{{sprintf('%s', number_format($total_accounts))}}</td>
-            <td>{{sprintf('%s', number_format($tz_accounts))}}</td>
-            <td>{{sprintf('%s', number_format($kenya_accounts))}}</td>
-            <td>{{sprintf('%s', number_format($uganda_accounts))}}</td>
+            <th>Premium</th>
+            <td>{{sprintf('%s', number_format($premium_accounts))}}</td>
+            <td>{{sprintf('%s', number_format($premium_tz_accounts))}}</td>
+            <td>{{sprintf('%s', number_format($premium_kenya_accounts))}}</td>
+            <td>{{sprintf('%s', number_format($premium_uganda_accounts))}}</td>
           </tr>
           <tr>
             <th>Free</th>
@@ -53,11 +53,11 @@
             <td>{{sprintf('%s', number_format($free_uganda_accounts))}}</td>
           </tr>
           <tr>
-            <th>Premium</th>
-            <td>{{sprintf('%s', number_format($premium_accounts))}}</td>
-            <td>{{sprintf('%s', number_format($premium_tz_accounts))}}</td>
-            <td>{{sprintf('%s', number_format($premium_kenya_accounts))}}</td>
-            <td>{{sprintf('%s', number_format($premium_uganda_accounts))}}</td>
+            <th>All</th>
+            <td>{{sprintf('%s', number_format($total_accounts))}}</td>
+            <td>{{sprintf('%s', number_format($tz_accounts))}}</td>
+            <td>{{sprintf('%s', number_format($kenya_accounts))}}</td>
+            <td>{{sprintf('%s', number_format($uganda_accounts))}}</td>
           </tr>
         </tbody>
       </table>

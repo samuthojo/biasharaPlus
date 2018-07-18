@@ -18,18 +18,6 @@
 
 @include('modals.add_version_modal')
 @include('modals.edit_version_modal')
-{{--@include('modals.confirmation_modal',
-  ['id' => 'deactivate_confirmation_modal',
-  'title' => 'Confirm',
-  'text' =>  'Mark version as old!',
-  'action' => 'Confirm',
-  'function' => 'setInActive()',])
-@include('modals.confirmation_modal',
-  ['id' => 'activate_confirmation_modal',
-  'title' => 'Confirm',
-  'text' =>  'Mark version as current!',
-  'action' => 'Confirm',
-  'function' => 'setActive()',])--}}
 
 @include('alerts.success-alert')
   <div class="panel panel-default">
@@ -53,6 +41,7 @@
             <th>No.</th>
             <th>Version</th>
             <th>Status</th>
+            <th>Critical</th>
             <th>Action</th>
           </thead>
           <tbody>
@@ -63,6 +52,7 @@
                 <td>{{$loop->iteration}}</td>
                 <td>{{$version->version_number}}</td>
                 <td>{{($version->status) ? 'Current' : 'Old'}}</td>
+                <td>{{($version->critical) ? 'True' : 'False'}}</td>
                 <td>
                   <div class="btn-group">
                     <button class="btn btn-warning" title="edit version"
@@ -117,6 +107,10 @@
      });
 
      $(":text").keydown(function() {
+       $(this).next().fadeOut(0);
+     });
+     
+     $(":radio").keydown(function() {
        $(this).next().fadeOut(0);
      });
 

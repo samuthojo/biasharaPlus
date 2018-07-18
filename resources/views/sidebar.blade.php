@@ -42,36 +42,33 @@
       <i class="nav-icon icon-drop"></i>Products</a>
     </li>
     
-    {{-- Learn DropDown Menu --}}
-    {{--<li class="nav-item nav-dropdown">
+    {{-- Learn Nav With DropDown Menu --}}
+    <li class="nav-item nav-dropdown">
       
       <a class="nav-link nav-dropdown-toggle" href="#">
-        Getting started
+        Account
       </a>
     
       <ul class="nav-dropdown-items">
         
         <li class="nav-item ">
-          <a class="nav-link" href="https://coreui.io/docs/getting-started/ui-kit/">
-            UI Kit
+          <a class="nav-link" href="{{ route('logout') }}"
+            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Logout
           </a>
+          <form id="logout-form" action="{{ route('logout') }}"
+            method="POST" style="display: none;">{{ csrf_field() }}</form>
         </li>
         
         <li class="nav-item ">
-          <a class="nav-link" href="https://coreui.io/docs/getting-started/introduction/">
-            Introduction
-          </a>
-        </li>
-        
-        <li class="nav-item ">
-          <a class="nav-link" href="https://coreui.io/docs/getting-started/browsers-devices/">
-            Browsers & devices
+          <a class="nav-link" href="{{ route('change_password') }}">
+            Change password
           </a>
         </li>
         
       </ul>
       
-    </li>--}}
+    </li>
     
   </ul>
   
