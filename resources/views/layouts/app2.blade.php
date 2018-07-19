@@ -41,7 +41,12 @@
         <img src="{{ asset('images/logo2.png') }}" alt="BiasharaPlus Logo">
       </a>
       
-      <button class="navbar-toggler sidebar-toggler" 
+      <button class="d-none d-md-inline navbar-toggler sidebar-toggler" 
+        type="button" data-toggle="sidebar-md-show">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <button class="d-md-none navbar-toggler sidebar-toggler" 
         type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -113,7 +118,7 @@
         
         @yield('breadcrumb')
         
-        <div class="container mt-3">
+        <div class="container mt-3 mb-3">
           @include('loader')
           @yield('content')
         </div>
@@ -122,8 +127,11 @@
       
     </div>
     
-    <footer class="app-footer">
+    <footer class="app-footer d-flex justify-content-center">
+      
       <!-- Footer content here -->
+      All Rights Reserved &copy; BiasharaPlus {{date('Y')}}
+      
     </footer>
     
   </body>
