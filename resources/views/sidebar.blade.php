@@ -20,13 +20,13 @@
     <li class="nav-item">
       <a class="nav-link {{ isActiveRoute('all_payments') }}" 
          href="{{ route('all_payments') }}">
-      <i class="nav-icon icon-drop"></i>Payments</a>
+      <i class="nav-icon fa fa-money"></i>Payments</a>
     </li>
     
     <li class="nav-item">
       <a class="nav-link {{ isActiveRoute('payments_page') }}" 
          href="{{ route('payments_page') }}">
-      <i class="nav-icon icon-drop"></i>Send</a>
+      <i class="nav-icon fa fa-send"></i>Send</a>
     </li>
     
     <li class="nav-title">Stock</li>
@@ -34,21 +34,23 @@
     <li class="nav-item">
       <a class="nav-link {{ isActiveRoute('categories.index') }}" 
          href="{{ route('categories.index') }}">
-      <i class="nav-icon icon-drop"></i>Categories</a>
+      <i class="nav-icon fa fa-folder"></i>Categories</a>
     </li>
     
     <li class="nav-item">
       <a class="nav-link {{ isActiveRoute('cms_pricelists.index') }}" 
          href="{{ route('cms_pricelists.index') }}">
-      <i class="nav-icon icon-drop"></i>PriceLists</a>
+      <i class="nav-icon fa fa-shopping-basket"></i>PriceLists</a>
     </li>
     
     <li class="nav-item">
       <a class="nav-link {{ isActiveRoute('products.index') }}" 
          href="{{ route('products.index') }}">
-      <i class="nav-icon icon-drop"></i>Products</a>
+      <i class="nav-icon fa fa-cart-plus"></i>Products</a>
     </li>
     
+    <li class="nav-title d-md-none">Others</li>
+
     <li class="nav-item d-md-none">
       <a class="nav-link {{ isActiveRoute('versions.index') }}" 
         href="{{ route('versions.index') }}">

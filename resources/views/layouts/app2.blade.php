@@ -84,17 +84,18 @@
         <li class="nav-item px-3">
           
           <div class="dropdown">
-            <a href="#" class="btn btn-light dropdown-toggle" data-toggle="dropdown">
+            <a href="#" class="btn btn-light dropdown-toggle text-success" 
+               data-toggle="dropdown">
               <span class="fa fa-user"></span> Account
             </a>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="{{ route('logout') }}"
+              <a class="dropdown-item text-success" href="{{ route('logout') }}"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 Logout
               </a>
               <form id="logout-form" action="{{ route('logout') }}"
                 method="POST" style="display: none;">{{ csrf_field() }}</form>
-              <a class="dropdown-item" href="{{ route('change_password') }}">
+              <a class="dropdown-item text-success" href="{{ route('change_password') }}">
                 Change password
               </a>
             </div>
