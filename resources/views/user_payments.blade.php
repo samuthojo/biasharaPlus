@@ -35,7 +35,7 @@
             $country = $myCountry;
           }
         @endphp
-        Payments, User: {{$user->username. ', Country: '.  $country}}
+        User: {{$user->username. ', Country: '.  $country}}
       </h3>
       {{--<div class="btn-group pull-right">
         <a class="btn btn-success" href="{{url('/users')}}"
