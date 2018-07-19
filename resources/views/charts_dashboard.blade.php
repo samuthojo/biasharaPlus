@@ -6,13 +6,13 @@
   
   <div class="row">
     
-    <div class="col-md-4">
+    <div class="col-lg-4">
       
       <accounts-chart/>
       
     </div>
     
-    <div class="col-md-8">
+    <div class="col-lg-8 mt-2 mt-lg-0">
       
       <payment-adaption-chart/>
       

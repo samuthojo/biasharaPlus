@@ -41,12 +41,12 @@
         <img src="{{ asset('images/logo2.png') }}" alt="BiasharaPlus Logo">
       </a>
       
-      <button class="d-none d-md-inline navbar-toggler sidebar-toggler" 
+      <button class="d-none d-lg-inline navbar-toggler sidebar-toggler" 
         type="button" data-toggle="sidebar-lg-show">
         <span class="navbar-toggler-icon"></span>
       </button>
       
-      <button class="d-md-none navbar-toggler sidebar-toggler" 
+      <button class="d-lg-none navbar-toggler sidebar-toggler" 
         type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
       </button>
