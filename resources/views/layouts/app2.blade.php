@@ -81,24 +81,22 @@
       
       <ul class="nav navbar-nav d-none d-md-flex">
         
-        <li class="nav-item px-3">
+        <li class="nav-item dropdown px-3">
           
-          <div class="dropdown">
-            <a href="#" class="btn btn-light dropdown-toggle text-success" 
-               data-toggle="dropdown">
-              <span class="fa fa-user"></span> Account
+          <a href="#" class="btn btn-light dropdown-toggle text-success" 
+             data-toggle="dropdown">
+            <span class="fa fa-user"></span> Account
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item text-success" href="{{ route('logout') }}"
+              onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+              Logout
             </a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item text-success" href="{{ route('logout') }}"
-                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                Logout
-              </a>
-              <form id="logout-form" action="{{ route('logout') }}"
-                method="POST" style="display: none;">{{ csrf_field() }}</form>
-              <a class="dropdown-item text-success" href="{{ route('change_password') }}">
-                Change password
-              </a>
-            </div>
+            <form id="logout-form" action="{{ route('logout') }}"
+              method="POST" style="display: none;">{{ csrf_field() }}</form>
+            <a class="dropdown-item text-success" href="{{ route('change_password') }}">
+              Change password
+            </a>
           </div>
           
         </li>
