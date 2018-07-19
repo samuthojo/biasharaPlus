@@ -8,6 +8,13 @@
       </a>
     </li>
     
+    <li class="nav-item d-md-none">
+      <a class="nav-link {{ isActiveRoute('users.index') }}" 
+        href="{{ route('users.index') }}">
+        <i class="nav-icon fa fa-users"></i> Users
+      </a>
+    </li>
+    
     <li class="nav-title">Transactions</li>
     
     <li class="nav-item">
@@ -40,6 +47,27 @@
       <a class="nav-link {{ isActiveRoute('products.index') }}" 
          href="{{ route('products.index') }}">
       <i class="nav-icon icon-drop"></i>Products</a>
+    </li>
+    
+    <li class="nav-item d-md-none">
+      <a class="nav-link {{ isActiveRoute('versions.index') }}" 
+        href="{{ route('versions.index') }}">
+        <i class="nav-icon fa fa-database"></i> Versions
+      </a>
+    </li>
+    
+    <li class="nav-item d-md-none">
+      <a class="nav-link {{ isActiveRoute('notifications') }}" 
+        href="{{ route('notifications') }}">
+        <i class="nav-icon fa fa-bell"></i> Notifications
+      </a>
+    </li>
+    
+    <li class="nav-item d-md-none">
+      <a class="nav-link {{ isActiveRoute('cms_feedback') }}" 
+        href="{{ route('cms_feedback.index') }}">
+        <i class="nav-icon fa fa-comments"></i> Feedback
+      </a>
     </li>
     
     {{-- Learn Nav With DropDown Menu --}}
