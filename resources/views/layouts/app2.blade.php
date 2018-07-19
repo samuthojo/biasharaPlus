@@ -31,7 +31,7 @@
       
   </head>
   
-  <body class="app header-fixed sidebar-md-show sidebar-fixed">
+  <body class="app header-fixed sidebar-lg-show sidebar-fixed">
     
     <header class="app-header navbar">
       
@@ -42,7 +42,7 @@
       </a>
       
       <button class="d-none d-md-inline navbar-toggler sidebar-toggler" 
-        type="button" data-toggle="sidebar-md-show">
+        type="button" data-toggle="sidebar-lg-show">
         <span class="navbar-toggler-icon"></span>
       </button>
       
@@ -51,7 +51,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
               
-      <ul class="nav navbar-nav mr-auto d-none d-md-flex">
+      <ul class="nav navbar-nav mr-auto d-none d-lg-flex">
         
         <li class="nav-item px-3">
           <a class="nav-link {{ isActiveRoute('users.index') }}" 
@@ -79,24 +79,26 @@
         
       </ul>
       
-      <ul class="nav navbar-nav d-none d-md-flex">
+      <ul class="nav navbar-nav d-none d-lg-flex">
         
-        <li class="nav-item dropdown px-3">
+        <li class="nav-item px-3">
           
-          <a href="#" class="btn btn-light dropdown-toggle text-success" 
-             data-toggle="dropdown">
-            <span class="fa fa-user"></span> Account
-          </a>
-          <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item text-success" href="{{ route('logout') }}"
-              onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-              Logout
+          <div class="dropdown">
+            <a href="#" class="btn btn-light dropdown-toggle text-success" 
+               data-toggle="dropdown">
+              <span class="fa fa-user"></span> Account
             </a>
-            <form id="logout-form" action="{{ route('logout') }}"
-              method="POST" style="display: none;">{{ csrf_field() }}</form>
-            <a class="dropdown-item text-success" href="{{ route('change_password') }}">
-              Change password
-            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item text-success" href="{{ route('logout') }}"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                Logout
+              </a>
+              <form id="logout-form" action="{{ route('logout') }}"
+                method="POST" style="display: none;">{{ csrf_field() }}</form>
+              <a class="dropdown-item text-success" href="{{ route('change_password') }}">
+                Change password
+              </a>
+            </div>
           </div>
           
         </li>

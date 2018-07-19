@@ -84,3 +84,6 @@ body {
 .breadcrumb {
   background-color: #fff;
 }
+.dropdown-menu {
+  padding: 0;
+}
