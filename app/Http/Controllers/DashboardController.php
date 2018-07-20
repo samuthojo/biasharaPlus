@@ -3,22 +3,51 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
-use App\Payment;
-use Illuminate\Support\Facades\DB;
+use App\Repositories\UserRepository;
+use App\Repositories\PaymentRepository;
+use League\Fractal\Resource\Collection;
 
 class DashboardController extends Controller
-{
-  public function index()
+{ 
+  
+  /**
+   * The user repository instance.
+   */
+  protected $users;
+  
+  /**
+   * The payment repository instance.
+   */
+  protected $payments;
+
+  /**
+   * Create a new controller instance.
+   *
+   * @param  UserRepository  $users
+   * @param  PaymentRepository  $payments
+   * @return void
+   */
+  public function __construct(UserRepository $users, 
+                              PaymentRepository $payments)
   {
-    return view('charts_dashboard');
+      $this->users = $users;
+      $this->payments = $payments;
+  }
+  
+  public function index()
+  { 
+    return view('charts_dashboard', [
+      'users' => $this->users->allUsers()->count(),
+      'android' => $this->users->allUsers()->where('os_type', 0)->count(),
+      'ios' => $this->users->allUsers()->where('os_type', 1)->count(),
+    ]);
   }
   
   public function accounts()
   {
-    $free = User::freeUsers()->count();
-    $premium = User::premiumUsers()->count();
-    $total = User::allUsers()->count();
+    $free = $this->users->freeUsers()->count();
+    $premium = $this->users->premiumUsers()->count();
+    $total = $this->users->allUsers()->count();
     
     $accounts = [
       'free' => [
@@ -38,48 +67,13 @@ class DashboardController extends Controller
   public function payments(Request $request)
   {
     if($request->has('days')) {
-      $days = $request->query('days');
-      //Return the payments for this week or for this month
-      return $this->paymentsForThisDays($days);
+      return $this->payments->paymentsInTheDays($request->query('days'));
     }
     else if($request->has('month')) {
-      $month = $request->query('month');
-      //Return the payments for the specified month
-      return $this->paymentsForTheMonth($month);
+      return $this->payments->paymentsInTheMonth($request->query('month'));
     }
     //Default to return the payments for this week
-    return $this->paymentsForThisDays(7);
+    return $this->payments->paymentsInTheDays(7);
   }
   
-  private function paymentsForThisDays($days) {
-    //Start at today's date
-    $start_date = Date('Y-m-d');
-    $date_array = explode('-', $start_date);
-    $today_secs = mktime(0, 0, 0, $date_array[1], $date_array[2], $date_array[0]);
-    //Subtract six days or 30 days
-    $secs = ($days == 7) ? $today_secs - (24*60*60*6) : $today_secs - (24*60*60*30);
-    $end_date = Date("Y-m-d", $secs);
-    $conditions = [
-      ['date_payed', '<=', $start_date],
-      ['date_payed', '>=', $end_date],
-      ['amount', '>', 0],
-    ];
-    $query = 'date_payed, sum(amount) as total, count(date_payed) as count';
-    $payments = Payment::where($conditions)
-                       ->select(DB::raw($query))
-                       ->groupBy('date_payed')
-                       ->oldest('date_payed')->get();
-    return $payments;
-  }
-  
-  private function paymentsForTheMonth($month) {
-    $query = 'date_payed, sum(amount) as total, count(date_payed) as count';
-    $payments = Payment::whereMonth('date_payed', (string)$month)
-                       ->whereYear('date_payed', Date("Y"))
-                       ->where('amount', '>', 0)
-                       ->select(DB::raw($query))
-                       ->groupBy('date_payed')
-                       ->oldest('date_payed')->get();
-    return $payments;
-  }
 }
