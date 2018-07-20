@@ -6,8 +6,8 @@
   <script>
     $(document).ready( function() {
       $('[data-toggle="datepicker"]').datepicker({
-          format: 'yyyy-mm-dd'
-          autoclose: true
+          format: 'yyyy-mm-dd',
+          autoHide: true
       });
     });
   </script>
