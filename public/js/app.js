@@ -51141,7 +51141,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -51197,19 +51197,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     draw: function draw() {
       var $this = this;
 
-      __WEBPACK_IMPORTED_MODULE_0_google_charts__["a" /* GoogleCharts */].load(drawAccountsChart, 'table');
+      __WEBPACK_IMPORTED_MODULE_0_google_charts__["a" /* GoogleCharts */].load(drawAccountsChart);
 
       function drawAccountsChart() {
-        var data = new __WEBPACK_IMPORTED_MODULE_0_google_charts__["a" /* GoogleCharts */].api.visualization.DataTable();
-        data.addColumn('string', 'Accounts');
-        data.addColumn('string', 'Number');
-        data.addColumn('string', 'Percent');
-        data.addRows([['Premium', $this.accounts.premium.number + '', $this.accounts.premium.percent + '%'], ['Free', $this.accounts.free.number + '', $this.accounts.free.percent + '%']]
-        // ['Total', ($this.accounts.total) + '', '100%']
-        );
+        var data = __WEBPACK_IMPORTED_MODULE_0_google_charts__["a" /* GoogleCharts */].api.visualization.arrayToDataTable([['Type', 'Number'], ['Premium', $this.accounts.premium.number], ['Free', $this.accounts.free.number]]);
+        // var data = new GoogleCharts.api.visualization.DataTable()
+        // data.addColumn('string', 'Accounts')
+        // data.addColumn('string', 'Number')
+        // data.addColumn('string', 'Percent')
+        // data.addRows([
+        //   ['Premium', $this.accounts.premium.number + '', $this.accounts.premium.percent + '%'],
+        //   ['Free', $this.accounts.free.number + '', $this.accounts.free.percent + '%'], 
+        //   // ['Total', ($this.accounts.total) + '', '100%']
+        // ])
         var el = document.getElementById('accounts_div');
-        var options = {};
-        var chart = new __WEBPACK_IMPORTED_MODULE_0_google_charts__["a" /* GoogleCharts */].api.visualization.Table(el);
+        var options = {
+          height: 200,
+          // colors: ['#28a745', '#ffc107'],
+          pieHole: 0.5,
+          title: 'Premium Vs Free Accounts',
+          titleTextStyle: {
+            fontName: '<global-font-name>',
+            fontSize: 12,
+            bold: true
+          }
+        };
+        var chart = new __WEBPACK_IMPORTED_MODULE_0_google_charts__["a" /* GoogleCharts */].api.visualization.PieChart(el);
         __WEBPACK_IMPORTED_MODULE_0_google_charts__["a" /* GoogleCharts */].api.visualization.events.addListener(chart, 'ready', myReadyHandler);
         chart.draw(data, options);
       }
@@ -51860,7 +51873,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -51871,6 +51884,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_google_charts__ = __webpack_require__(14);
 //
 //
 //
@@ -51884,10 +51898,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      loading: false
+      loading: false,
+      users: {}
     };
   },
   created: function created() {
@@ -51895,17 +51912,47 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     this.loading = true;
 
-    axios.get('/api/payments').then(function (_ref) {
+    axios.get('/api/users').then(function (_ref) {
       var data = _ref.data;
 
-      _this.payments = data;
+      _this.users = data;
 
       _this.draw();
     }).catch(function (error) {
-      console.error(error.response);
+      console.error(error);
 
       _this.loading = false;
     });
+  },
+
+  methods: {
+    draw: function draw() {
+      var $this = this;
+
+      __WEBPACK_IMPORTED_MODULE_0_google_charts__["a" /* GoogleCharts */].load(drawCountriesChart);
+
+      function drawCountriesChart() {
+        var data = __WEBPACK_IMPORTED_MODULE_0_google_charts__["a" /* GoogleCharts */].api.visualization.arrayToDataTable([['Country', 'Users'], ['Tanzania', $this.users.tanzania], ['Kenya', $this.users.kenya], ['Uganda', $this.users.uganda]]);
+        var el = document.getElementById('countries_div');
+        var options = {
+          height: 200,
+          // colors: ['#28a745', '#ffc107'],
+          title: 'Users Per Country',
+          titleTextStyle: {
+            fontName: '<global-font-name>',
+            fontSize: 12,
+            bold: true
+          }
+        };
+        var chart = new __WEBPACK_IMPORTED_MODULE_0_google_charts__["a" /* GoogleCharts */].api.visualization.PieChart(el);
+        __WEBPACK_IMPORTED_MODULE_0_google_charts__["a" /* GoogleCharts */].api.visualization.events.addListener(chart, 'ready', myReadyHandler);
+        chart.draw(data, options);
+      }
+
+      function myReadyHandler() {
+        $this.loading = false;
+      }
+    }
   }
 });
 

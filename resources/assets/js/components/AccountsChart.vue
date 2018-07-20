@@ -41,21 +41,36 @@ export default {
     draw() {
       var $this = this
 
-      GoogleCharts.load(drawAccountsChart, 'table')
+      GoogleCharts.load(drawAccountsChart)
             
       function drawAccountsChart() {
-        var data = new GoogleCharts.api.visualization.DataTable()
-        data.addColumn('string', 'Accounts')
-        data.addColumn('string', 'Number')
-        data.addColumn('string', 'Percent')
-        data.addRows([
-          ['Premium', $this.accounts.premium.number + '', $this.accounts.premium.percent + '%'],
-          ['Free', $this.accounts.free.number + '', $this.accounts.free.percent + '%'], 
-          // ['Total', ($this.accounts.total) + '', '100%']
+        var data = GoogleCharts.api.visualization.arrayToDataTable([
+            ['Type', 'Number'],
+            ['Premium', $this.accounts.premium.number],
+            ['Free', $this.accounts.free.number],
         ])
+        // var data = new GoogleCharts.api.visualization.DataTable()
+        // data.addColumn('string', 'Accounts')
+        // data.addColumn('string', 'Number')
+        // data.addColumn('string', 'Percent')
+        // data.addRows([
+        //   ['Premium', $this.accounts.premium.number + '', $this.accounts.premium.percent + '%'],
+        //   ['Free', $this.accounts.free.number + '', $this.accounts.free.percent + '%'], 
+        //   // ['Total', ($this.accounts.total) + '', '100%']
+        // ])
         var el = document.getElementById('accounts_div')
-        var options = {}
-        var chart = new GoogleCharts.api.visualization.Table(el)
+        var options = {
+          height: 200,
+          // colors: ['#28a745', '#ffc107'],
+          pieHole: 0.5,
+          title: 'Premium Vs Free Accounts',
+          titleTextStyle: {
+            fontName: '<global-font-name>',
+            fontSize: 12,
+            bold: true
+          }
+        }
+        var chart = new GoogleCharts.api.visualization.PieChart(el)
         GoogleCharts.api.visualization.events.addListener(chart, 'ready', myReadyHandler);
         chart.draw(data, options)
       }

@@ -36,10 +36,15 @@ class DashboardController extends Controller
   
   public function index()
   { 
+    $users = $this->users->allUsers()->count();
+    $android = $this->users->allUsers()->where('os_type', 0)->count();
+    $ios = $this->users->allUsers()->where('os_type', 1)->count();
     return view('charts_dashboard', [
-      'users' => $this->users->allUsers()->count(),
-      'android' => $this->users->allUsers()->where('os_type', 0)->count(),
-      'ios' => $this->users->allUsers()->where('os_type', 1)->count(),
+      'users' => $users,
+      'android' => $android,
+      'androidPercent' => (int)(round($android/$users * 100)),
+      'ios' => $ios,
+      'iosPercent' => (int)(round($ios/$users * 100)),
     ]);
   }
   
@@ -62,6 +67,37 @@ class DashboardController extends Controller
     ];
     
     return compact('accounts');
+  }
+  
+  public function users() 
+  {
+    $freeUsersByCountry = $this->users->freeUsersGroupedByCountry();
+    $premiumUsersByCountry = $this->users->premiumUsersGroupedByCountry(); 
+    
+    $userAccounts = [
+      'total' => $this->users->allUsers()->count(),
+      'free' => $this->users->freeUsers()->count(),
+      'premium' => $this->users->premiumUsers()->count(),
+      'countries' => [
+        'tanzania' => [
+          'free' => $freeUsersByCountry->where('country', '0')->value('count'),
+          'premium' => $premiumUsersByCountry->where('country', '0')->value('count'),
+          'total' => $this->users->allUsers()->where('country', '0')->count(),
+        ],
+        'kenya' => [
+          'free' => $freeUsersByCountry->where('country', '1')->value('count'),
+          'premium' => $premiumUsersByCountry->where('country', '1')->value('count'),
+          'total' => $this->users->allUsers()->where('country', '1')->count(),
+        ],
+        'uganda' => [
+          'free' => $freeUsersByCountry->where('country', '2')->value('count'),
+          'premium' => $premiumUsersByCountry->where('country', '2')->value('count'),
+          'total' => $this->users->allUsers()->where('country', '2')->count(),
+        ],
+      ],
+    ];
+    
+    return $userAccounts;
   }
   
   public function payments(Request $request)
