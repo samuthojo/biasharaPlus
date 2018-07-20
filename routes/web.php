@@ -94,5 +94,6 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->prefix('/api')->group(function () {
   Route::get('/accounts', 'DashboardController@accounts')->name('api.accounts');
+  Route::get('/users', 'DashboardController@users')->name('api.users');
   Route::get('/payments', 'DashboardController@payments')->name('api.payments');
 });

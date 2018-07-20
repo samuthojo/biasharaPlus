@@ -12,7 +12,8 @@
         "laravel/framework": "5.5.*",
         "laravel/passport": "^4.0",
         "laravel/tinker": "~1.0",
-        "laravelista/ekko": "^1.5"
+        "laravelista/ekko": "^1.5",
+        "league/fractal": "^0.17.0"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
