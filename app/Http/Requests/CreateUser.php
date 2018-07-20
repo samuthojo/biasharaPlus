@@ -35,7 +35,7 @@ class CreateUser extends FormRequest
             'country' => 'required',
             'device_id' => 'required',
             'current_level' => 'required',
-            'os_type' => 'nullable|boolean',
+            'os_type' => 'nullable|integer',
             'version' => 'nullable|string',
         ];
     }
