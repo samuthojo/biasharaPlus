@@ -49,9 +49,9 @@ export default {
         data.addColumn('string', 'Number')
         data.addColumn('string', 'Percent')
         data.addRows([
-          ['Free', $this.accounts.free.number + '', $this.accounts.free.percent + '%'], 
           ['Premium', $this.accounts.premium.number + '', $this.accounts.premium.percent + '%'],
-          ['Total', ($this.accounts.total) + '', '100%']
+          ['Free', $this.accounts.free.number + '', $this.accounts.free.percent + '%'], 
+          // ['Total', ($this.accounts.total) + '', '100%']
         ])
         var el = document.getElementById('accounts_div')
         var options = {}

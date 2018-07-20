@@ -9,21 +9,21 @@
     <div class="col-md-4">
       <div class="callout callout-info b-t-1 b-r-1 b-b-1">
         <span style="font-weight: bold;">Total Users</span><br>
-        <strong class="h4">9,123</strong>
+        <strong class="h4">{{ sprintf('%s', number_format($users)) }}</strong>
       </div>
     </div>
     
     <div class="col-md-4 mt-2 mt-md-0">
       <div class="callout callout-info b-t-1 b-r-1 b-b-1">
         <span style="font-weight: bold;">Android Users</span><br>
-        <strong class="h4">9,123</strong>
+        <strong class="h4">{{ sprintf('%s', number_format($android)) }}</strong>
       </div>
     </div>
     
     <div class="col-md-4 mt-2 mt-md-0">
       <div class="callout callout-info b-t-1 b-r-1 b-b-1">
         <span style="font-weight: bold;">iOS Users</span><br>
-        <strong class="h4">9,123</strong>
+        <strong class="h4">{{ sprintf('%s', number_format($ios)) }}</strong>
       </div>
     </div>
     
