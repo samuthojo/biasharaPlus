@@ -13,6 +13,8 @@ use App\Http\Requests\CheckSystemExistence;
 use App\Http\Requests\UpdateSubscription;
 use App\Http\Controllers\Notifications;
 use Illuminate\Validation\Rule;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Client;
 
 class Users extends Controller
 {
@@ -235,6 +237,8 @@ class Users extends Controller
             $message = $this->successMessage;
 
             $this->sendPushNotification($user);
+            
+            // $this->sendMessage($user->phone_number);
 
             return response()->json(compact('message', 'user'), 200);
         } catch (\Throwable $e) {
@@ -288,6 +292,8 @@ class Users extends Controller
             $message = $this->successMessage;
 
             $this->sendPushNotification($user);
+            
+            // $this->sendMessage($user->phone_number);
 
             return response()->json(compact('message', 'user'), 200);
         } catch (\Throwable $e) {
@@ -303,4 +309,23 @@ class Users extends Controller
         $notification = new Notifications();
         $notification->paymentConfirmed($user);
     }
+    
+    // private function sendMessage($phone_number)
+    // {
+    //   $client = new Client(); //GuzzleHttp\Client
+    //   
+    //   $url = 'https://ipfsms-notification.herokuapp.com/api/v1/dispatcher';
+    //   
+    //   $result = $client->post($url, [
+    //       [
+    //         'channel' => 'sms',
+    //         'send_to' => $phone_number,
+    //         'payload' => [
+    //           'text' => trans('messages.subscribed'),
+    //         ],
+    //       ],
+    //   ]);
+    //   
+    //   return $result;
+    // } 
 }

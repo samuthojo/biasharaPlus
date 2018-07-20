@@ -15,11 +15,12 @@
         <td>{{$loop->iteration}}</td>
         <td>{{$version->version_number}}</td>
         <td>{{($version->status) ? 'Current' : 'Old'}}</td>
+        <td>{{($version->critical) ? 'True' : 'False'}}</td>
         <td>
           <div class="btn-group">
             <button class="btn btn-warning" title="edit product"
               onclick="showEditVersionModal({{$version}})">
-              <span class="glyphicon glyphicon-pencil"></span>
+              <span class="fa fa-pencil"></span>
             </button>
           </div>
         </td>
@@ -61,11 +62,15 @@ function callMe() {
             messageTop: "The List Of Versions As Of {{date('d-m-Y')}}"
          }
      ],
-     iDisplayLength: 8,
+     iDisplayLength: 20,
      bLengthChange: false
    });
 
    $(":text").keydown(function() {
+     $(this).next().fadeOut(0);
+   });
+   
+   $(":radio").keydown(function() {
      $(this).next().fadeOut(0);
    });
 

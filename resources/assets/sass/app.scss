@@ -2,8 +2,15 @@
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
 
+//font-awesome
+@import "node_modules/font-awesome/scss/font-awesome";
+
 // Variables
-@import "variables";
+@import "variables2";
 
 // Bootstrap
 // @import "~bootstrap-sass/assets/stylesheets/bootstrap";
+@import '~bootstrap/scss/bootstrap';
+
+// CoreUI
+@import '~@coreui/coreui/scss/coreui';

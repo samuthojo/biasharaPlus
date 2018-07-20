@@ -4,10 +4,10 @@
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
         <div class="modal-header">
+          <h4 class="modal-title">Redeem</h4>
           <button class="close" @click="$emit('close')">
             &times;
           </button>
-          <h4 class="modal-title">Redeem</h4>
         </div>
           <div class="modal-body">
             <div class="container">
@@ -17,6 +17,17 @@
                 @submit.prevent="onRedeem"
                 @keydown="form.errors.clear($event.target.name)">
                 <div class="form-group">
+                  <label for="date_payed">Date Paid:</label>
+                  <input type="text" class="form-control"
+                    placeholder="e.g. 2018-06-06"
+                    name="date_payed" id="date_payed"
+                    v-model = "form.date_payed" readonly>
+                  <span
+                    v-show="form.errors.has('date_payed')"
+                    v-text="form.errors.get('date_payed')"
+                    class="text-danger"></span>
+                </div>
+                <div class="form-group">
                   <label for="sender">Sender:</label>
                   <input
                     type="text"
@@ -24,7 +35,7 @@
                     placeholder="sender"
                     id="sender"
                     name="sender"
-                    v-model = "form.sender">
+                    v-model = "form.sender" readonly>
                   <span
                     v-show="form.errors.has('sender')"
                     v-text="form.errors.get('sender')"
@@ -42,19 +53,10 @@
                     class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                  <label for="date_payed">Date Paid:</label>
-                  <input type="text" class="form-control"
-                    placeholder="e.g. 2018-06-06"
-                    name="date_payed" id="date_payed"
-                    v-model = "form.date_payed">
-                  <span
-                    v-show="form.errors.has('date_payed')"
-                    v-text="form.errors.get('date_payed')"
-                    class="text-danger"></span>
-                </div>
-                <div class="form-group">
                   <label for="operator_type">Operator Type:</label>
-                  <select id="operator_type" name="operator_type" style="width: 200px" v-model="form.operator_type"
+                  <select id="operator_type" name="operator_type" style="width: 200px" 
+                    v-model="form.operator_type" 
+                    @change="form.errors.clear('operator_type')"
                     class="form-control">
                     <option value="">Choose operator</option>
                     <option value="M-PESA">M-PESA</option>
@@ -69,7 +71,7 @@
                     class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                  <button class="btn btn-default"
+                  <button type="button" class="btn btn-default"
                     @click="$emit('close')">Cancel</button>
                   <button
                     type="submit"
@@ -132,7 +134,7 @@ export default {
   },
 
   created() {
-    this.id = this.id + this._uid
+    this.id = this.id + this._uid  
   },
 
   computed: {
@@ -147,6 +149,10 @@ export default {
   watch: {
     showModal: function(val) {
       if (val) {
+        this.form.date_payed = globals.getMySqlDate(this.payment.date_payed)
+        
+        this.form.sender = this.payment.sender
+        
         $("#" + this.id).modal({
           backdrop: 'static',
           keyboard: false,

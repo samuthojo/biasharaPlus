@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
 @section('more')
   <link href="{{ asset('css/datepicker.css') }}" rel="stylesheet">
@@ -6,7 +6,8 @@
   <script>
     $(document).ready( function() {
       $('[data-toggle="datepicker"]').datepicker({
-          format: 'yyyy-mm-dd'
+          format: 'yyyy-mm-dd',
+          autoHide: true
       });
     });
   </script>

@@ -21,17 +21,17 @@
         <td id="{{'product_cc_' . $product->id}}">{{$product->cc}}</td>
         <td>
           <div class="btn-group">
-            <a class="btn btn-default" title="view prices"
+            <a class="btn btn-dark" title="view prices"
               href="{{url('/products/' . $product->id . '/prices')}}">
-              <span class="glyphicon glyphicon-eye-open"></span>
+              <span class="fa fa-eye"></span>
             </a>
             <button class="btn btn-warning" title="edit product"
               onclick="showEditProductModal({{$product}})">
-              <span class="glyphicon glyphicon-pencil"></span>
+              <span class="fa fa-pencil"></span>
             </button>
             <button class="btn btn-danger" title="delete product"
               onclick="showProductDeleteModal({{$product->id}})">
-              <span class="glyphicon glyphicon-trash"></span>
+              <span class="fa fa-trash"></span>
             </button>
           </div>
         </td>

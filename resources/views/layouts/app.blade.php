@@ -30,9 +30,9 @@
     src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
 
   <!-- Latest compiled JavaScript -->
-  <script
+  {{--<script
     src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
-  </script>
+  </script>--}}
 
   <script src="{{asset('js/main.js')}}"></script>
 

@@ -61,6 +61,10 @@ function showAddVersionErrors(errors) {
     $("#features_error").text(errors.features);
     $("#features_error").fadeIn(0);
   }
+  if(errors.critical != null) {
+    $("#critical_error").text(errors.critical);
+    $("#critical_error").fadeIn(0);
+  }
 }
 
 function showEditVersionErrors(errors) {
@@ -72,6 +76,10 @@ function showEditVersionErrors(errors) {
     $("#edit_features_error").text(errors.features);
     $("#edit_features_error").fadeIn(0);
   }
+  if(errors.critical != null) {
+    $("#edit_critical_error").text(errors.critical);
+    $("#edit_critical_error").fadeIn(0);
+  }
 }
 
 function showEditVersionModal(version) {
@@ -80,7 +88,14 @@ function showEditVersionModal(version) {
   $("#edit_version_number").val(version.version_number);
 
   $("#edit_features").val(version.features);
-
+  
+  if(version.critical == true) {
+    $("#edit_critical_true").prop('checked', true);
+  }
+  else {
+    $("#edit_critical_false").prop('checked', true);
+  }
+  
   version_id = version.id;
 }
 

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
 @section('more')
   @include('header')
@@ -47,17 +47,17 @@
           <td id="{{'category_' . $category->id}}">{{$category->name}}</td>
           <td>
             <div class="btn-group" title="edit category">
-              <a class="btn btn-default" title="view products"
+              <a class="btn btn-dark" title="view products"
                href="{{url('/categories/' . $category->id . '/products')}}">
-                <span class="glyphicon glyphicon-eye-open"></span>
+                <span class="fa fa-eye"></span>
               </a>
               <button class="btn btn-warning"
                 onclick="showEditCategoryModal({{$category->id}})">
-                <span class="glyphicon glyphicon-pencil"></span>
+                <span class="fa fa-pencil"></span>
               </button>
               <button class="btn btn-danger" title="delete category"
                 onclick="showDeleteConfirmationModal({{$category->id}})">
-                <span class="glyphicon glyphicon-trash"></span>
+                <span class="fa fa-trash"></span>
               </button>
             </div>
           </td>

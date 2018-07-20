@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
 @section('more')
   @include('header')
@@ -15,16 +15,23 @@
 </div>
 @endif
 @include('alerts.success-alert')
+  <div class="mb-2">
+    <a class="btn btn-success" title="back"
+      href="{{'../'}}"
+      style="cursor: pointer;">
+      <i class="fa fa-arrow-left" style="font-size: 18px;"></i>
+    </a>
+  </div>
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 style="font-weight: bold;" class="panel-title pull-left">
         {{$product->name}} Prices (CC: {{sprintf('%s', number_format($product->cc, 3))}}):
       </h3>
-      <a class="btn btn-success pull-right" title="back"
+      {{--<a class="btn btn-success pull-right" title="back"
         href="{{'../'}}"
         style="cursor: pointer;">
         <i class="fa fa-arrow-left" style="font-size: 18px;"></i>
-      </a>
+      </a>--}}
       <!-- <span class="pull-right text-success" title="add price-list"
         onclick="showModal('add_price_modal')"
         style="cursor: pointer;">
@@ -65,7 +72,7 @@
                   <div class="btn-group">
                     <button class="btn btn-warning" title="update price"
                       onclick="showEditPriceModal({{$price}})">
-                      <span class="glyphicon glyphicon-pencil"></span>
+                      <span class="fa fa-pencil"></span>
                     </button>
                   </div>
                 </td>

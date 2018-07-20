@@ -9,10 +9,16 @@ window._ = require('lodash')
 try {
   window.$ = window.jQuery = require('jquery')
 
-  // require('bootstrap-sass')
+  require('bootstrap')
 } catch (e) {}
 
+window.Popper = require('popper.js').default
+
+window.CoreUI = require('@coreui/coreui')
+
 window.Vue = require('vue')
+
+window.globals = require('./utilities/GlobalFunctions.js').default
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

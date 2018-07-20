@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
 @section('more')
   @include('header')
@@ -12,6 +12,17 @@
       background: url('../../../images/details_close.png') no-repeat center;
     }
   </style>
+@endsection
+
+@section('breadcrumb')
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ route('categories.index') }}">Categories</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Products</li>
+  </ol>
+</nav>
 @endsection
 
 @section('content')
@@ -37,7 +48,11 @@
     <h3 style="font-weight: bold;" class="panel-title pull-left">
       {{$category->name}} Products:
     </h3>
-    <div class="btn-group pull-right">
+    <span onclick="showModal('add_category_product_modal')" class="pull-right"
+     title="add product">
+      <i class="fa fa-plus-circle fa-2x text-success" style="cursor: pointer;"></i>
+    </span>
+    {{--<div class="btn-group pull-right">
       <a class="btn btn-success" href="{{url('/categories')}}"
         title="back">
         <i class="fa fa-arrow-left"
@@ -49,12 +64,7 @@
         <i class="fa fa-plus-circle"
           style="font-size: 16px;"></i>
       </button>
-    </div>
-    <!-- <span onclick="showModal('add_product_modal')"
-      title="add product" style="cursor: pointer;"
-      class="pull-right text-success">
-      <i class="fa fa-plus-circle fa-2x"></i>
-    </span> -->
+    </div>--}}
     <div class="clearfix"></div>
   </div>
 
@@ -81,17 +91,17 @@
               <td>{{sprintf('%s', number_format($product->cc, 3))}}</td>
               <td>
                 <div class="btn-group">
-                  <a class="btn btn-default" title="view prices"
+                  <a class="btn btn-dark" title="view prices"
                     href="{{url('/categories/' . $category->id . '/products/' . $product->id . '/prices')}}">
-                    <span class="glyphicon glyphicon-eye-open"></span>
+                    <span class="fa fa-eye"></span>
                   </a>
                   <button class="btn btn-warning" title="edit product"
                     onclick="showEditProductsModal({{$product}})">
-                    <span class="glyphicon glyphicon-pencil"></span>
+                    <span class="fa fa-pencil"></span>
                   </button>
                   <button class="btn btn-danger" title="delete product"
                     onclick="showProductsDeleteModal({{$product}})">
-                    <span class="glyphicon glyphicon-trash"></span>
+                    <span class="fa fa-trash"></span>
                   </button>
                 </div>
               </td>
