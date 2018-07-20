@@ -18,6 +18,11 @@
     <link rel="stylesheet" href="/css/app.css">
     
     <link rel="stylesheet" href="/css/biasharaplus.css">
+    
+    <script type="text/javascript">
+      window.base_url = '{{ asset('') }}'
+      window.images_base_url = '{{ asset('uploads/products') }}'
+    </script>
 
     <script src="/js/app.js"></script>
     
