@@ -40,28 +40,39 @@ export default {
   methods: {
     draw() {
       var $this = this
-
-      GoogleCharts.load(drawCountriesChart)
-            
-      function drawCountriesChart() {
-        var data = GoogleCharts.api.visualization.arrayToDataTable([
-            ['Country', 'Users'],
-            ['Tanzania', $this.users.tanzania],
-            ['Kenya', $this.users.kenya],
-            ['Uganda', $this.users.uganda],
+      
+      GoogleCharts.load(drawAccountsChart, 'table')
+                  
+      function drawAccountsChart() {
+        var data = new GoogleCharts.api.visualization.DataTable()
+        data.addColumn('string', 'Country')
+        data.addColumn('string', 'Premium')
+        data.addColumn('string', 'Free')
+        // data.addColumn('string', 'Total')
+        var countries = $this.users.countries
+        data.addRows([
+          [
+            'Tanzania', 
+            countries.tanzania.premium + '', 
+            countries.tanzania.free + '',
+            // countries.tanzania.total + ''
+          ], 
+          [
+            'Kenya', 
+            countries.kenya.premium + '', 
+            countries.kenya.free + '',
+            // countries.kenya.total + ''
+          ],
+          [
+            'Uganda', 
+            countries.uganda.premium + '', 
+            countries.uganda.free + '',
+            // countries.uganda.total + ''
+          ], 
         ])
         var el = document.getElementById('countries_div')
-        var options = {
-          height: 200,
-          // colors: ['#28a745', '#ffc107'],
-          title: 'Users Per Country',
-          titleTextStyle: {
-            fontName: '<global-font-name>',
-            fontSize: 12,
-            bold: true
-          }
-        }
-        var chart = new GoogleCharts.api.visualization.PieChart(el)
+        var options = {}
+        var chart = new GoogleCharts.api.visualization.Table(el)
         GoogleCharts.api.visualization.events.addListener(chart, 'ready', myReadyHandler);
         chart.draw(data, options)
       }

@@ -35,35 +35,18 @@
   
   <div class="row mb-2">
     
-    <div class="col-md-4">
+    <div class="col-lg-4">
       
       <accounts-chart/>
       
     </div>
     
-    <div class="col-md-4 mt-2 mt-md-0">
-      
-      <countries-chart/>
-      
-    </div>
-    
-    <div class="col-md-4 mt-2 mt-md-0">
-      
-      <!-- <mobile-money-chart/> -->
-      
-    </div>
-    
-    
-  </div>
-  
-  <div class="row mb-2">
-    
-    <div class="col-12 mt-2 mt-lg-0">
+    <div class="col-lg-8 mt-2 mt-lg-0">
       
       <payment-adaption-chart/>
-      
-    </div>
 
+    </div>
+        
   </div>
 
   <div class="row mb-2">

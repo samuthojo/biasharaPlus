@@ -60,8 +60,8 @@ export default {
         // ])
         var el = document.getElementById('accounts_div')
         var options = {
-          height: 200,
-          // colors: ['#28a745', '#ffc107'],
+          height: 400,
+          chartArea: {left:30, width:'100%'},
           pieHole: 0.5,
           title: 'Premium Vs Free Accounts',
           titleTextStyle: {
