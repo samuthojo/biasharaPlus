@@ -78,7 +78,8 @@ class DashboardController extends Controller
                        ->whereYear('date_payed', Date("Y"))
                        ->where('amount', '>', 0)
                        ->select(DB::raw($query))
-                       ->groupBy('date_payed')->get();
+                       ->groupBy('date_payed')
+                       ->oldest('date_payed')->get();
     return $payments;
   }
 }
