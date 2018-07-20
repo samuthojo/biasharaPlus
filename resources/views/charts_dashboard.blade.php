@@ -4,7 +4,32 @@
 
 <div id="our_charts">
   
-  <div class="row">
+  <div class="row mb-2">
+    
+    <div class="col-md-4">
+      <div class="callout callout-info b-t-1 b-r-1 b-b-1">
+        <span style="font-weight: bold;">Total Users</span><br>
+        <strong class="h4">9,123</strong>
+      </div>
+    </div>
+    
+    <div class="col-md-4 mt-2 mt-md-0">
+      <div class="callout callout-info b-t-1 b-r-1 b-b-1">
+        <span style="font-weight: bold;">Android Users</span><br>
+        <strong class="h4">9,123</strong>
+      </div>
+    </div>
+    
+    <div class="col-md-4 mt-2 mt-md-0">
+      <div class="callout callout-info b-t-1 b-r-1 b-b-1">
+        <span style="font-weight: bold;">iOS Users</span><br>
+        <strong class="h4">9,123</strong>
+      </div>
+    </div>
+    
+  </div>
+  
+  <div class="row mb-2">
     
     <div class="col-lg-4">
       
@@ -20,7 +45,7 @@
     
   </div>
 
-  <div class="row">
+  <div class="row mb-2">
     
     <div class="col-md-4">
       
@@ -34,7 +59,7 @@
       
     </div>
     
-    <div class="colmd-4">
+    <div class="col-md-4">
       
       <!-- <countries-chart/> -->
       
