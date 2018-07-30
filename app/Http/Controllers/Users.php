@@ -238,7 +238,8 @@ class Users extends Controller
 
             $this->sendPushNotification($user);
             
-            // $this->sendMessage($user->phone_number);
+            $this->sendMessage($user->phone_number, $user->business_id,
+                               $user->subscription_end_date);
 
             return response()->json(compact('message', 'user'), 200);
         } catch (\Throwable $e) {
@@ -293,7 +294,8 @@ class Users extends Controller
 
             $this->sendPushNotification($user);
             
-            // $this->sendMessage($user->phone_number);
+            $this->sendMessage($user->phone_number, $user->business_id,
+                               $user->subscription_end_date);
 
             return response()->json(compact('message', 'user'), 200);
         } catch (\Throwable $e) {
@@ -310,22 +312,43 @@ class Users extends Controller
         $notification->paymentConfirmed($user);
     }
     
-    // private function sendMessage($phone_number)
-    // {
-    //   $client = new Client(); //GuzzleHttp\Client
-    //   
-    //   $url = 'https://ipfsms-notification.herokuapp.com/api/v1/dispatcher';
-    //   
-    //   $result = $client->post($url, [
-    //       [
-    //         'channel' => 'sms',
-    //         'send_to' => $phone_number,
-    //         'payload' => [
-    //           'text' => trans('messages.subscribed'),
-    //         ],
-    //       ],
-    //   ]);
-    //   
-    //   return $result;
-    // } 
+    public function sendMessage($phone_number, $business_id, $end_date)
+    {
+      // $phone_number = $request->phone_number;
+      // $business_id = $request->business_id;
+      // $end_date = $request->end_date;
+      
+      $client = new Client(); //GuzzleHttp\Client
+      
+      $url = 'https://ipfsms-notification.herokuapp.com/api/v1/dispatcher';
+      
+      $phoneNumber = $this->getPhoneNumber($phone_number, $business_id);
+      
+      $result = $client->post($url, [
+        'json' => [
+            [
+              'channel' => 'sms',
+              'send_to' => $phoneNumber,
+              'payload' => [
+                'text' => 'Asante kwa malipo, akaunti yako ya Biashara Plus' .
+                          ' ipo premium hadi tarehe ' . $end_date . "\n" .
+                          'Kwa swali au maoni wasiliana nasi kwa:' . "\n" .
+                          'Email:support@biasharaplus.com' . "\n" .
+                          'WhatsApp: +255712288231' . "\n" .
+                          'Enjoy using Biashara Plus App.',
+              ],
+            ],
+          ],
+      ]);
+      
+      return $result;
+    } 
+    
+    private function getPhoneNumber($phone_number, $business_id) {
+      $length = strlen($phone_number);
+      if(substr($phone_number, 0, 1) === '0') {
+        return substr($business_id, 0, 3) . substr($phone_number, 1, $length - 1);
+      }
+      return $phone_number;
+    }
 }
