@@ -89,6 +89,12 @@ class Users extends Controller
 
     public function sendUserDetails(CreateUser $request)
     {
+        $client = new Client();
+        $client->post(
+          'http://46.101.93.56/api/v2/send_user_details',
+          array('body' => $request->all())
+        );
+        
         $user = null;
 
         DB::beginTransaction();
@@ -135,11 +141,11 @@ class Users extends Controller
     }
 
     public function updateSubscription(UpdateSubscription $request, $user = null)
-    {
+    {        
         $conditions = [
-        ['reference_no', '=', $request->reference_no],
-        ['user_id', '=', 0]
-      ];
+          ['reference_no', '=', $request->reference_no],
+          ['user_id', '=', 0]
+        ];
 
         try {
             $payment = null;
