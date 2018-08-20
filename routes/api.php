@@ -22,7 +22,7 @@ Route::middleware('auth:api')->prefix('v2')->group( function() {
   Route::get('retail/{country}', 'Retail@retail');
   Route::get('wholesale/{country}', 'WholeSale');
   Route::get('categories', 'ApiCategories@categories');
-  Route::get('pay_bill_numbers', 'ApiPayBillNumbers@payBillNumbers');
+  // Route::get('pay_bill_numbers', 'ApiPayBillNumbers@payBillNumbers');
   Route::get('price_list', 'PriceLists@priceList');
   Route::post('feed_back', 'Feedbacks@store');
   Route::get('account_detail', 'Users@accountDetail');
