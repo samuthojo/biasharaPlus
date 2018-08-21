@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.9
--- Dumped by pg_dump version 10.4 (Ubuntu 10.4-2.pgdg14.04+1)
+-- Dumped from database version 10.5 (Ubuntu 10.5-1.pgdg16.04+1)
+-- Dumped by pg_dump version 10.5 (Ubuntu 10.5-1.pgdg18.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -16,7 +16,781 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Data for Name: bundles; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: bundles; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.bundles (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    price bigint NOT NULL,
+    duration_in_months integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.bundles OWNER TO postgres;
+
+--
+-- Name: bundles_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.bundles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.bundles_id_seq OWNER TO postgres;
+
+--
+-- Name: bundles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.bundles_id_seq OWNED BY public.bundles.id;
+
+
+--
+-- Name: categories; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.categories (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.categories OWNER TO postgres;
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.categories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.categories_id_seq OWNER TO postgres;
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
+
+
+--
+-- Name: countries; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.countries (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    short_form character varying(255) NOT NULL,
+    identification_number integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.countries OWNER TO postgres;
+
+--
+-- Name: countries_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.countries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.countries_id_seq OWNER TO postgres;
+
+--
+-- Name: countries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.countries_id_seq OWNED BY public.countries.id;
+
+
+--
+-- Name: feedback; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.feedback (
+    id integer NOT NULL,
+    email character varying(255) NOT NULL,
+    subject character varying(255) NOT NULL,
+    feedback text NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.feedback OWNER TO postgres;
+
+--
+-- Name: feedback_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.feedback_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.feedback_id_seq OWNER TO postgres;
+
+--
+-- Name: feedback_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.feedback_id_seq OWNED BY public.feedback.id;
+
+
+--
+-- Name: migrations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.migrations (
+    id integer NOT NULL,
+    migration character varying(255) NOT NULL,
+    batch integer NOT NULL
+);
+
+
+ALTER TABLE public.migrations OWNER TO postgres;
+
+--
+-- Name: migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.migrations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.migrations_id_seq OWNER TO postgres;
+
+--
+-- Name: migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.migrations_id_seq OWNED BY public.migrations.id;
+
+
+--
+-- Name: oauth_access_tokens; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.oauth_access_tokens (
+    id character varying(100) NOT NULL,
+    user_id integer,
+    client_id integer NOT NULL,
+    name character varying(255),
+    scopes text,
+    revoked boolean NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    expires_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.oauth_access_tokens OWNER TO postgres;
+
+--
+-- Name: oauth_auth_codes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.oauth_auth_codes (
+    id character varying(100) NOT NULL,
+    user_id integer NOT NULL,
+    client_id integer NOT NULL,
+    scopes text,
+    revoked boolean NOT NULL,
+    expires_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.oauth_auth_codes OWNER TO postgres;
+
+--
+-- Name: oauth_clients; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.oauth_clients (
+    id integer NOT NULL,
+    user_id integer,
+    name character varying(255) NOT NULL,
+    secret character varying(100) NOT NULL,
+    redirect text NOT NULL,
+    personal_access_client boolean NOT NULL,
+    password_client boolean NOT NULL,
+    revoked boolean NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.oauth_clients OWNER TO postgres;
+
+--
+-- Name: oauth_clients_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.oauth_clients_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.oauth_clients_id_seq OWNER TO postgres;
+
+--
+-- Name: oauth_clients_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.oauth_clients_id_seq OWNED BY public.oauth_clients.id;
+
+
+--
+-- Name: oauth_personal_access_clients; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.oauth_personal_access_clients (
+    id integer NOT NULL,
+    client_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.oauth_personal_access_clients OWNER TO postgres;
+
+--
+-- Name: oauth_personal_access_clients_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.oauth_personal_access_clients_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.oauth_personal_access_clients_id_seq OWNER TO postgres;
+
+--
+-- Name: oauth_personal_access_clients_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.oauth_personal_access_clients_id_seq OWNED BY public.oauth_personal_access_clients.id;
+
+
+--
+-- Name: oauth_refresh_tokens; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.oauth_refresh_tokens (
+    id character varying(100) NOT NULL,
+    access_token_id character varying(100) NOT NULL,
+    revoked boolean NOT NULL,
+    expires_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.oauth_refresh_tokens OWNER TO postgres;
+
+--
+-- Name: password_resets; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.password_resets (
+    email character varying(255) NOT NULL,
+    token character varying(255) NOT NULL,
+    created_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.password_resets OWNER TO postgres;
+
+--
+-- Name: pay_bill_numbers; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.pay_bill_numbers (
+    id integer NOT NULL,
+    service_provider character varying(255) NOT NULL,
+    phone_number character varying(255) NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.pay_bill_numbers OWNER TO postgres;
+
+--
+-- Name: pay_bill_numbers_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.pay_bill_numbers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.pay_bill_numbers_id_seq OWNER TO postgres;
+
+--
+-- Name: pay_bill_numbers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.pay_bill_numbers_id_seq OWNED BY public.pay_bill_numbers.id;
+
+
+--
+-- Name: payments; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.payments (
+    id integer NOT NULL,
+    user_id integer DEFAULT 0 NOT NULL,
+    sender character varying(255) NOT NULL,
+    amount bigint,
+    date_payed date,
+    operator_type character varying(255),
+    reference_no character varying(255) NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone,
+    total_to_date bigint NOT NULL
+);
+
+
+ALTER TABLE public.payments OWNER TO postgres;
+
+--
+-- Name: payments_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.payments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.payments_id_seq OWNER TO postgres;
+
+--
+-- Name: payments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.payments_id_seq OWNED BY public.payments.id;
+
+
+--
+-- Name: price_lists; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.price_lists (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    effective_date character varying(255) NOT NULL,
+    color character varying(255) NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.price_lists OWNER TO postgres;
+
+--
+-- Name: price_lists_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.price_lists_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.price_lists_id_seq OWNER TO postgres;
+
+--
+-- Name: price_lists_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.price_lists_id_seq OWNED BY public.price_lists.id;
+
+
+--
+-- Name: prices; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.prices (
+    id integer NOT NULL,
+    product_id integer NOT NULL,
+    price_list_id integer NOT NULL,
+    price bigint DEFAULT '0'::bigint NOT NULL,
+    tanzania bigint DEFAULT '0'::bigint NOT NULL,
+    kenya bigint DEFAULT '0'::bigint NOT NULL,
+    uganda bigint DEFAULT '0'::bigint NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.prices OWNER TO postgres;
+
+--
+-- Name: prices_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.prices_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.prices_id_seq OWNER TO postgres;
+
+--
+-- Name: prices_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.prices_id_seq OWNED BY public.prices.id;
+
+
+--
+-- Name: products; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.products (
+    id integer NOT NULL,
+    category_id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    code character varying(255) NOT NULL,
+    cc double precision NOT NULL,
+    image character varying(255),
+    description text,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.products OWNER TO postgres;
+
+--
+-- Name: products_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.products_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.products_id_seq OWNER TO postgres;
+
+--
+-- Name: products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
+
+
+--
+-- Name: user_devices; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.user_devices (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    device_id text NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.user_devices OWNER TO postgres;
+
+--
+-- Name: user_devices_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.user_devices_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_devices_id_seq OWNER TO postgres;
+
+--
+-- Name: user_devices_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.user_devices_id_seq OWNED BY public.user_devices.id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    business_id character varying(255),
+    name character varying(255),
+    username character varying(255) NOT NULL,
+    email character varying(255),
+    phone_number character varying(255),
+    password character varying(255),
+    subscription character varying(255) DEFAULT 'free'::character varying,
+    subscription_start_date character varying(255),
+    subscription_end_date character varying(255),
+    total_cc double precision,
+    country character varying(255),
+    image_url character varying(255),
+    remember_token character varying(100),
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone,
+    is_admin boolean DEFAULT false NOT NULL,
+    is_system boolean DEFAULT false NOT NULL,
+    current_level character varying(255) DEFAULT 'NOVUS'::character varying NOT NULL,
+    version character varying(255),
+    os_type integer
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO postgres;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: versions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.versions (
+    id integer NOT NULL,
+    version_number character varying(255) NOT NULL,
+    status boolean,
+    features text NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone,
+    critical boolean,
+    os_type integer
+);
+
+
+ALTER TABLE public.versions OWNER TO postgres;
+
+--
+-- Name: versions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.versions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.versions_id_seq OWNER TO postgres;
+
+--
+-- Name: versions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.versions_id_seq OWNED BY public.versions.id;
+
+
+--
+-- Name: bundles id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.bundles ALTER COLUMN id SET DEFAULT nextval('public.bundles_id_seq'::regclass);
+
+
+--
+-- Name: categories id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.categories_id_seq'::regclass);
+
+
+--
+-- Name: countries id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.countries ALTER COLUMN id SET DEFAULT nextval('public.countries_id_seq'::regclass);
+
+
+--
+-- Name: feedback id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.feedback ALTER COLUMN id SET DEFAULT nextval('public.feedback_id_seq'::regclass);
+
+
+--
+-- Name: migrations id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.migrations ALTER COLUMN id SET DEFAULT nextval('public.migrations_id_seq'::regclass);
+
+
+--
+-- Name: oauth_clients id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.oauth_clients ALTER COLUMN id SET DEFAULT nextval('public.oauth_clients_id_seq'::regclass);
+
+
+--
+-- Name: oauth_personal_access_clients id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.oauth_personal_access_clients ALTER COLUMN id SET DEFAULT nextval('public.oauth_personal_access_clients_id_seq'::regclass);
+
+
+--
+-- Name: pay_bill_numbers id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pay_bill_numbers ALTER COLUMN id SET DEFAULT nextval('public.pay_bill_numbers_id_seq'::regclass);
+
+
+--
+-- Name: payments id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.payments ALTER COLUMN id SET DEFAULT nextval('public.payments_id_seq'::regclass);
+
+
+--
+-- Name: price_lists id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.price_lists ALTER COLUMN id SET DEFAULT nextval('public.price_lists_id_seq'::regclass);
+
+
+--
+-- Name: prices id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.prices ALTER COLUMN id SET DEFAULT nextval('public.prices_id_seq'::regclass);
+
+
+--
+-- Name: products id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.products_id_seq'::regclass);
+
+
+--
+-- Name: user_devices id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_devices ALTER COLUMN id SET DEFAULT nextval('public.user_devices_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Name: versions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.versions ALTER COLUMN id SET DEFAULT nextval('public.versions_id_seq'::regclass);
+
+
+--
+-- Data for Name: bundles; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.bundles (id, name, price, duration_in_months, created_at, updated_at, deleted_at) FROM stdin;
@@ -27,7 +801,7 @@ COPY public.bundles (id, name, price, duration_in_months, created_at, updated_at
 
 
 --
--- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.categories (id, name, created_at, updated_at, deleted_at) FROM stdin;
@@ -45,7 +819,7 @@ COPY public.categories (id, name, created_at, updated_at, deleted_at) FROM stdin
 
 
 --
--- Data for Name: countries; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: countries; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.countries (id, name, short_form, identification_number, created_at, updated_at, deleted_at) FROM stdin;
@@ -56,7 +830,7 @@ COPY public.countries (id, name, short_form, identification_number, created_at, 
 
 
 --
--- Data for Name: feedback; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: feedback; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.feedback (id, email, subject, feedback, created_at, updated_at, deleted_at) FROM stdin;
@@ -258,11 +1032,103 @@ COPY public.feedback (id, email, subject, feedback, created_at, updated_at, dele
 227	azmina.aamir@gmail.com	How was your experience to checkout product	Good Experience	2018-07-09 08:56:32	2018-07-09 08:56:32	\N
 228	ydolemagatchel@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-09 10:14:03	2018-07-09 10:14:03	\N
 229	ydolemagatchel@gmail.com	How was your experience to checkout product	Good Experience	2018-07-09 10:14:53	2018-07-09 10:14:53	\N
+230	crine2603@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-10 18:48:50	2018-07-10 18:48:50	\N
+231	maryanakayus@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-11 09:15:07	2018-07-11 09:15:07	\N
+232	josemwai4@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-11 10:19:10	2018-07-11 10:19:10	\N
+233	abdulltiky@gmail.com	Wrong Product Price	I have been using Biashara Apps on Android before using IOS and its the best tools ever for the growth of the business. It has easy up the way we plan and make our order so fast.	2018-07-11 18:50:53	2018-07-11 18:50:53	\N
+234	allenmassam3@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-12 06:29:28	2018-07-12 06:29:28	\N
+235	immaculatakilasa93@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-12 18:02:29	2018-07-12 18:02:29	\N
+236	rohini.chudasama@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-13 07:04:21	2018-07-13 07:04:21	\N
+237	masigaticharles@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-13 09:47:25	2018-07-13 09:47:25	\N
+238	allenmassam3@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-14 10:50:00	2018-07-14 10:50:00	\N
+239	fbiedi4@gmail.com	How was your experience on adding products to cart	Good Experience I am really still enjoying how this app works\nIt has saved my time	2018-07-14 15:18:39	2018-07-14 15:18:39	\N
+240	fbiedi4@gmail.com	How was your experience to checkout product	Good Experience	2018-07-14 15:24:35	2018-07-14 15:24:35	\N
+241	ekmunyagi@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-15 13:35:05	2018-07-15 13:35:05	\N
+242	philemonmngoma@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-16 06:23:35	2018-07-16 06:23:35	\N
+243	annopius92@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-16 09:37:15	2018-07-16 09:37:15	\N
+244	johnjoelsuwi@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-17 07:47:25	2018-07-17 07:47:25	\N
+245	stephen.lukindo@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-17 08:35:25	2018-07-17 08:35:25	\N
+246	ummymohamed9@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-17 15:12:59	2018-07-17 15:12:59	\N
+247	maggiemachilu11@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-18 06:53:30	2018-07-18 06:53:30	\N
+248	palokutrivis@gmail.com	How was your experience to checkout product	Good Experience	2018-07-18 12:06:46	2018-07-18 12:06:46	\N
+249	joemwatowine@gmail.com	How was your experience to checkout product	Good Experience	2018-07-18 20:44:09	2018-07-18 20:44:09	\N
+250	richthedon91@gmail.com	Wrong Product Price	I want one year for use before update the program	2018-07-19 01:10:11	2018-07-19 01:10:11	\N
+251	silemgf@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-19 09:00:56	2018-07-19 09:00:56	\N
+252	rugayanakabarua@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-19 10:25:51	2018-07-19 10:25:51	\N
+253	ekmunyagi@gmail.com	How was your experience to checkout product	Good Experience	2018-07-19 10:40:13	2018-07-19 10:40:13	\N
+254	donnydonna.dc@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-19 12:49:32	2018-07-19 12:49:32	\N
+255	georgeadolph10@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-19 13:29:00	2018-07-19 13:29:00	\N
+256	husseinmajid72@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-19 14:04:42	2018-07-19 14:04:42	\N
+257	deocrespelagia@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-20 15:18:59	2018-07-20 15:18:59	\N
+258	geremychriss@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-20 16:28:17	2018-07-20 16:28:17	\N
+259	mariamkombo2010@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-20 20:56:41	2018-07-20 20:56:41	\N
+260	philemonmngoma@gmail.com	How was your experience to checkout product	Good Experience	2018-07-21 08:59:50	2018-07-21 08:59:50	\N
+261	glaidesj@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-21 19:25:19	2018-07-21 19:25:19	\N
+262	sarahandrew04@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-23 08:52:28	2018-07-23 08:52:28	\N
+263	najirachambiri2014@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-23 11:03:20	2018-07-23 11:03:20	\N
+264	esthermella@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-23 15:27:52	2018-07-23 15:27:52	\N
+265	najirachambiri2014@gmail.com	How was your experience to checkout product	Good Experience	2018-07-24 12:06:07	2018-07-24 12:06:07	\N
+266	fagasonamos76@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-24 14:01:24	2018-07-24 14:01:24	\N
+267	lizzytibasima@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-27 13:28:43	2018-07-27 13:28:43	\N
+268	lizzytibasima@gmail.com	How was your experience to checkout product	Good Experience	2018-07-27 13:35:49	2018-07-27 13:35:49	\N
+269	ebkisanga@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-28 12:34:24	2018-07-28 12:34:24	\N
+270	maryanakayus@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-30 12:10:56	2018-07-30 12:10:56	\N
+271	theonestmalele02@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-30 12:37:12	2018-07-30 12:37:12	\N
+272	bindya.kishor@gmail.com	How was your experience on adding products to cart	Good Experience	2018-07-31 09:53:14	2018-07-31 09:53:14	\N
+273	rohini.chudasama@gmail.com	How was your experience to checkout product	Good Experience	2018-08-01 09:38:32	2018-08-01 09:38:32	\N
+274	ianpeterh@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-01 14:26:51	2018-08-01 14:26:51	\N
+275	ianpeterh@gmail.com	How was your experience to checkout product	Good Experience nice	2018-08-01 14:27:14	2018-08-01 14:27:14	\N
+276	mmmuhoho@gmail.com	How was your experience on adding products to cart	Good Experience nice	2018-08-01 15:44:42	2018-08-01 15:44:42	\N
+277	mgayafransisco@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-01 17:52:07	2018-08-01 17:52:07	\N
+278	mgayafransisco@gmail.com	How was your experience to checkout product	Good Experience	2018-08-01 18:14:12	2018-08-01 18:14:12	\N
+279	glorymoshy@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-02 05:39:41	2018-08-02 05:39:41	\N
+280	adilikayuni91@gmail.com	How was your experience on adding products to cart	Good Experience 10	2018-08-02 07:32:20	2018-08-02 07:32:20	\N
+281	marianmulwa@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-02 13:26:27	2018-08-02 13:26:27	\N
+282	marianmulwa@gmail.com	How was your experience to checkout product	Good Experience	2018-08-02 13:28:27	2018-08-02 13:28:27	\N
+283	magypally86@gmail.com	How was your experience on adding products to cart	Good Experience no	2018-08-02 21:35:48	2018-08-02 21:35:48	\N
+284	terryfocus15@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-03 08:07:11	2018-08-03 08:07:11	\N
+285	nemilakipeter@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-03 08:42:10	2018-08-03 08:42:10	\N
+286	khushele@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-03 10:55:36	2018-08-03 10:55:36	\N
+287	esthermella@gmail.com	How was your experience to checkout product	Good Experience	2018-08-03 11:37:58	2018-08-03 11:37:58	\N
+288	mputae84@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-03 13:12:27	2018-08-03 13:12:27	\N
+289	marianmulwa@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-03 13:23:10	2018-08-03 13:23:10	\N
+290	marianmulwa@gmail.com	How was your experience to checkout product	Good Experience	2018-08-03 13:40:25	2018-08-03 13:40:25	\N
+291	lawrencemargareth40@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-04 12:02:03	2018-08-04 12:02:03	\N
+292	nepha.jm@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-06 07:54:52	2018-08-06 07:54:52	\N
+293	neymaclement@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-06 09:22:49	2018-08-06 09:22:49	\N
+294	salomenduta62@gmail.com	How was your experience on adding products to cart	Good Experience good	2018-08-06 14:53:34	2018-08-06 14:53:34	\N
+295	nassorabdulla1989@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-06 16:34:50	2018-08-06 16:34:50	\N
+296	siggyjoe87@gmail.com	Problem	Please	2018-08-06 18:30:00	2018-08-06 18:30:00	\N
+297	kazymatecompany@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-09 10:06:14	2018-08-09 10:06:14	\N
+298	angela.kagaruki@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-09 11:57:16	2018-08-09 11:57:16	\N
+299	angela.kagaruki@gmail.com	How was your experience to checkout product	Good Experience	2018-08-09 11:58:23	2018-08-09 11:58:23	\N
+300	cmgeyekwa@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-09 12:26:22	2018-08-09 12:26:22	\N
+301	simfukweregina@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-09 15:21:04	2018-08-09 15:21:04	\N
+302	twitikebertha@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-12 12:11:39	2018-08-12 12:11:39	\N
+303	manasemasinza@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-12 14:58:51	2018-08-12 14:58:51	\N
+304	cmgeyekwa@gmail.com	How was your experience to checkout product	Good Experience	2018-08-12 17:22:45	2018-08-12 17:22:45	\N
+305	alvinsolomon23@gmail.com	How was your experience on adding products to cart	Good Experience good	2018-08-13 07:58:11	2018-08-13 07:58:11	\N
+306	khushele@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-13 14:08:14	2018-08-13 14:08:14	\N
+307	mwikali49@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-14 09:00:46	2018-08-14 09:00:46	\N
+308	eliminasiyame@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-14 10:41:48	2018-08-14 10:41:48	\N
+309	mariamkombo2010@gmail.com	How was your experience to checkout product	Good Experience	2018-08-14 12:21:41	2018-08-14 12:21:41	\N
+310	salomenduta62@gmail.com	How was your experience on adding products to cart	Bad Experience price not matching	2018-08-14 13:14:13	2018-08-14 13:14:13	\N
+311	jayden2014.bp@gmail.com	How was your experience on adding products to cart	Good Experience ok	2018-08-14 21:40:57	2018-08-14 21:40:57	\N
+312	frednjoroge2017@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-15 14:45:25	2018-08-15 14:45:25	\N
+313	frednjoroge2017@gmail.com	How was your experience to checkout product	Good Experience	2018-08-15 14:45:44	2018-08-15 14:45:44	\N
+314	mwamkinga1993@gmail.com	How was your experience on adding products to cart	Good Experience Good	2018-08-15 18:07:40	2018-08-15 18:07:40	\N
+315	fasha9018@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-16 10:49:17	2018-08-16 10:49:17	\N
+316	maryanakayus@gmail.com	How was your experience to checkout product	Good Experience	2018-08-17 10:45:19	2018-08-17 10:45:19	\N
+317	thiyojacob@gmail.com	How was your experience on adding products to cart	Good Experience great	2018-08-19 08:06:58	2018-08-19 08:06:58	\N
+318	thiyojacob@gmail.com	How was your experience to checkout product	Good Experience	2018-08-19 08:09:26	2018-08-19 08:09:26	\N
+319	fatmajuned1@gmail.com	Bei ya bidhaa sio sahihi	update bidhaa zilizoingia infinite lipgloss eye shadow havionekan apa	2018-08-20 12:46:59	2018-08-20 12:46:59	\N
+320	fatmajuned1@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-20 12:54:05	2018-08-20 12:54:05	\N
+321	suzansiame9@gmail.com	How was your experience on adding products to cart	Good Experience	2018-08-20 14:06:03	2018-08-20 14:06:03	\N
 \.
 
 
 --
--- Data for Name: migrations; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: migrations; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.migrations (id, migration, batch) FROM stdin;
@@ -321,7 +1187,7 @@ COPY public.migrations (id, migration, batch) FROM stdin;
 
 
 --
--- Data for Name: oauth_access_tokens; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: oauth_access_tokens; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.oauth_access_tokens (id, user_id, client_id, name, scopes, revoked, created_at, updated_at, expires_at) FROM stdin;
@@ -2275,11 +3141,297 @@ d2a33347f2b4d66b54c996c26b1c42ead91349b30a2092c5c60fdac831a11b0a99f76fa344382954
 083a3b2b09c7d311803e08134144eca8caa821fa9614a11cdf0f23e9e678a02371a0b1dd7ad25224	1206	1	ydolemagatchel@gmail.com	[]	f	2018-07-09 10:12:14	2018-07-09 10:12:14	2019-07-09 10:12:14
 1d657d9a9ba1a52b5bf36363a2744125a13119d263945f84281a879b24ac1303a72c47e5ddfc57bf	405	1	yuwssuf13@gmail.com	[]	f	2018-07-09 10:39:40	2018-07-09 10:39:40	2019-07-09 10:39:40
 721664f491d24c20c637a9a42d33305f5799c0b66ad25cd4e1cd1aa9869742decdf99a79b075821a	1036	1	allenmassam3@gmail.com	[]	f	2018-07-09 12:05:10	2018-07-09 12:05:10	2019-07-09 12:05:10
+393e8abebc1df6bbe7c0619a19e08fc4a15994743d486a8ba1fb77a334045b47afd04c2154734627	1204	1	peacejoshua3@gmail.com	[]	f	2018-07-09 16:07:45	2018-07-09 16:07:45	2019-07-09 16:07:45
+0fe56e39bf8efa32d3de04c37a9300c218b01f02244a58e34179b209ce9b92354bffb74f81310e4f	87	1	mgayafransisco@gmail.com	[]	f	2018-07-09 16:55:00	2018-07-09 16:55:00	2019-07-09 16:55:00
+14d37815d4c82a15ea889e4b77ebf09b419a878db420346338cbd0fef2c88b6208013bef470446ea	80	1	godluckswai50@gmail.com	[]	f	2018-07-09 19:34:58	2018-07-09 19:34:58	2019-07-09 19:34:58
+6de6eabd1836e481283127e4f891f5f0e9395b4cf507cc443e07fa8fddd0cda35edd58fe78d0d358	1207	1	japhetcobs@gmail.com	[]	f	2018-07-10 04:56:46	2018-07-10 04:56:46	2019-07-10 04:56:46
+8c743fe389d3a5a63f3ac7da1a99dc4e57bd707356d56e6616c16bc7928e0a19a68eeac1931b152d	1208	1	safaasaid68@gmail.com	[]	f	2018-07-10 11:03:38	2018-07-10 11:03:38	2019-07-10 11:03:38
+15930a2e75945f04f18f8bd1db2b5d8d9e2a1105d261a468b4c46d3358de0440d6b837dce38ae8b0	381	1	jamesanitha569@gmail.com	[]	f	2018-07-10 11:26:44	2018-07-10 11:26:44	2019-07-10 11:26:44
+82fc69198a38372f5d778aec0ee1b04e3c38be362c4812283fd7f887e3851c9e6ed1cb130326ec35	223	1	josemwai4@gmail.com	[]	f	2018-07-10 11:41:19	2018-07-10 11:41:19	2019-07-10 11:41:19
+7d0ce7bb5c93881944b393c9e9fb9c43d9147a1594c0cfead603680ee1b116a1db57ff9ef470edc5	223	1	josemwai4@gmail.com	[]	f	2018-07-10 11:56:04	2018-07-10 11:56:04	2019-07-10 11:56:04
+338cfc66566dddfa2d871297dbcba6e75af325e722a09c1e522b1ed6bd7de2b01bef19c98fd30efd	1209	1	crine2603@gmail.com	[]	f	2018-07-10 18:47:04	2018-07-10 18:47:04	2019-07-10 18:47:04
+ab2ef51e921864657400abb39b37601c578a3a49a357c30ae242c4759b1c100ce8169a0448eb743e	413	1	wivinanicholaus1993@gmail.com	[]	f	2018-07-10 18:56:40	2018-07-10 18:56:40	2019-07-10 18:56:40
+1a29316966591f48561806ccaa05ae4deb7fb999e7b26ccd3c6dea2febe5a0925a5b472b0e751021	223	1	josemwai4@gmail.com	[]	f	2018-07-11 08:41:48	2018-07-11 08:41:48	2019-07-11 08:41:48
+8bcf523ce09382dbebdac2385b3c6df8d92ce3a2bf644b0456dfc732919dcf96d07f776608d3d398	356	1	aminasaid87@gmail.com	[]	f	2018-07-11 08:51:04	2018-07-11 08:51:04	2019-07-11 08:51:04
+610d479f27bdc7ed9b6b91629d26d5603be96ed80d85934cf3f38ea11e1897b219ff66f167775968	1210	1	kaitanmgimba@gmail.com	[]	f	2018-07-11 13:23:27	2018-07-11 13:23:27	2019-07-11 13:23:27
+c8f453f4c76de69ef06dac5edb78d68f663b6f4251dc0b5b0b7f64b673a79e4796b39cfea640b4b5	1211	1	duncanmosioma123@gmail.com	[]	f	2018-07-11 14:17:00	2018-07-11 14:17:00	2019-07-11 14:17:00
+0f642fcc65a758a08be7d45df79898e3c19bb23aae27e865b2363a2b3d04f03faa56bc92ef61bdc4	603	1	thomaskibasa@gmail.com	[]	f	2018-07-11 14:19:46	2018-07-11 14:19:46	2019-07-11 14:19:46
+c50bb805208cd0268f5baa86ac7ad1c210502938f08040bd1a485c9c96acab2d9a630125d9633e5d	452	1	rohini.chudasama@gmail.com	[]	f	2018-07-11 16:24:55	2018-07-11 16:24:55	2019-07-11 16:24:55
+638333c16cda69f7de5ceee5336a4fa669c0acbe042dd8dbe61ce8993a46a5c7575ef42d6b1555d3	1212	1	wilharda92@gmail.com	[]	f	2018-07-11 18:02:47	2018-07-11 18:02:47	2019-07-11 18:02:47
+731e5235132d84dc0ebb8d640155362830b488e7990de327c594ee63a6716f93943acedc0456461b	1213	1	johannesmathias1@gmail.com	[]	f	2018-07-11 18:51:11	2018-07-11 18:51:11	2019-07-11 18:51:11
+a66497d93a15bc40aba233075b59d3f18f1c6ae22b42f53309a6c54bb17d0ca66bd0f4b49f03ae77	1071	1	azmina.aamir@gmail.com	[]	f	2018-07-12 02:38:55	2018-07-12 02:38:55	2019-07-12 02:38:55
+50d9941eb7e034dac989d03bc17b0e621c820981ea133aed40fba73c79baca05c1e49290aba8ea5c	1036	1	allenmassam3@gmail.com	[]	f	2018-07-12 04:11:32	2018-07-12 04:11:32	2019-07-12 04:11:32
+993eb452fb4b9c50ad36a14786812f69c54880bfbf11342144145d065547b5dbe83132749efd18cb	1036	1	allenmassam3@gmail.com	[]	f	2018-07-12 04:11:53	2018-07-12 04:11:53	2019-07-12 04:11:53
+d0eb7a4ef11ac8880ee1b08ddcefae8b68c143c9f40aefba855e1e53fafaa3d7626a69ea8b61c479	1214	1	ianpeterh@gmail.com	[]	f	2018-07-12 09:23:24	2018-07-12 09:23:24	2019-07-12 09:23:24
+bf98af03eb78e052b45b6e81900fdb8ab3354c12010c5b8367f1f6552e861eebcabe9dde271bc331	143	1	maryanakayus@gmail.com	[]	f	2018-07-12 10:01:07	2018-07-12 10:01:07	2019-07-12 10:01:07
+24be758293589df72e6776e623b655bcf0a2b9a3c1d151d0d02701ac58e81419f65ba49759e58bef	56	1	soze.kazee@gmail.com	[]	f	2018-07-12 13:41:59	2018-07-12 13:41:59	2019-07-12 13:41:59
+8cd0ebd81affd2af8cf34ad947a895dcf2b777512b53b64e7938e04fe768429bb58cd0f5edf11116	1215	1	seswahappyness@gmail.com	[]	f	2018-07-12 13:42:22	2018-07-12 13:42:22	2019-07-12 13:42:22
+c1e3abdcabf796fb80d9a1e72c13f21a0691ec910990d020460f069a84e874e27448f5db2f2d252d	1216	1	anonta565@gmail.com	[]	f	2018-07-12 14:40:48	2018-07-12 14:40:48	2019-07-12 14:40:48
+5b41d687fd74e5c71869870523bb17cb66345c63c685f05a3f7a5f55f41263d0dcb976c889d691a7	1217	1	lesindamgasto177uk@gmail.com	[]	f	2018-07-12 15:19:28	2018-07-12 15:19:28	2019-07-12 15:19:28
+ecebd70291467002b881afbefa941a89b493f4b81872693e2cfb303954a6ebb4439a7d20bc73b20e	204	1	immaculatakilasa93@gmail.com	[]	f	2018-07-12 15:32:07	2018-07-12 15:32:07	2019-07-12 15:32:07
+a3d45d9de18831c5404d6fbd1b49a38ac36505ab63240a9928c05e21ac763a5735d94494e304a284	413	1	wivinanicholaus1993@gmail.com	[]	f	2018-07-12 17:33:06	2018-07-12 17:33:06	2019-07-12 17:33:06
+6a4416d9d1c77f6e19c134d9fb22350650a34d60a6e099e81b3e1e747fe00c15568ed31a98aa9257	413	1	wivinanicholaus1993@gmail.com	[]	f	2018-07-12 18:13:50	2018-07-12 18:13:50	2019-07-12 18:13:50
+7f348a7020d06b86151873a72daa124b7f15c50620f4c01cda0ef2ada3a229f41438344d9c930a59	415	1	ommyshirco@gmail.com	[]	f	2018-07-12 21:27:34	2018-07-12 21:27:34	2019-07-12 21:27:34
+3006bb904887495fd2235e6521b910b3cac16b4c24b389261f7dc6eece7d3cc351e02c1eadbc9033	9	1	geremychriss@gmail.com	[]	f	2018-07-12 22:20:39	2018-07-12 22:20:39	2019-07-12 22:20:39
+032bb3d879ccad901618ec36e338e709046315a361cd957733dd693d7d27000a6e3b123bd319cb76	9	1	geremychriss@gmail.com	[]	f	2018-07-12 22:21:07	2018-07-12 22:21:07	2019-07-12 22:21:07
+35a55fb8cdac01d25c1cc95ad3900d787883358fd500a56584f4b2440ae8af3fae84149ab631d6bd	146	1	annabarnabas1@gmail.com	[]	f	2018-07-13 07:55:01	2018-07-13 07:55:01	2019-07-13 07:55:01
+962b16da2f726a2ade658429dd14c1b97412998569676f24cd9ab81d4bcf0e3102f1686167c91774	1218	1	masigaticharles@gmail.com	[]	f	2018-07-13 08:53:17	2018-07-13 08:53:17	2019-07-13 08:53:17
+09dee0201193226767995e46980534aadb0984519d72522669701870c2c7f8cc2d2a7995ba3496ab	386	1	mariamkombo2010@gmail.com	[]	f	2018-07-13 09:37:37	2018-07-13 09:37:37	2019-07-13 09:37:37
+292c781984b3c8d48916337865b1bad874c75e97ae3973e991284993c3fe90fad93aea4e76fd52e2	205	1	nathanaelmchomvu@gmail.com	[]	f	2018-07-13 11:40:21	2018-07-13 11:40:21	2019-07-13 11:40:21
+bd13196d8514df16710a6d454ef7693a9185089d56c19df11a92447eb3ac7c6adda247fd3db3179f	9	1	geremychriss@gmail.com	[]	f	2018-07-13 11:42:44	2018-07-13 11:42:44	2019-07-13 11:42:44
+236e623f8b672c2c7e7310116dc765bf8dcb3f4dd78db34fa48f19bd4118806d7d55ec8cb2c07143	415	1	ommyshirco@gmail.com	[]	f	2018-07-13 16:42:04	2018-07-13 16:42:04	2019-07-13 16:42:04
+82ecbd6e3211cbf3fb49c954d73fb4739443c245036a7f6df806285515fe734b3a607ecdb6c14621	114	1	fbiedi4@gmail.com	[]	f	2018-07-14 09:55:34	2018-07-14 09:55:34	2019-07-14 09:55:34
+5f140c9e7bc72b58523b9de577b04a4a06723656aa1ef8c0b16ea32d6a81e6b7271795d814a07b32	1036	1	allenmassam3@gmail.com	[]	f	2018-07-14 10:14:20	2018-07-14 10:14:20	2019-07-14 10:14:20
+7a8064da22097eafee636e9063901993dee1cba6cfd18ea1022f4552d7cb609972a27f2fb70752d2	218	1	annopius92@gmail.com	[]	f	2018-07-14 10:28:35	2018-07-14 10:28:35	2019-07-14 10:28:35
+8e8caff6ba60f5e1dce2e756c604bf4de174f5986ea6a057c24c44ea53105623f0fe00c7ba2cce14	11	1	ekmunyagi@gmail.com	[]	f	2018-07-14 11:46:42	2018-07-14 11:46:42	2019-07-14 11:46:42
+fa20d7cfc546f2f0b00618bdb23aedfa48cfb9f1430e9abe72b66f134b8a242e86bbaa1230fdb4c3	180	1	mwanaimaa@gmail.com	[]	f	2018-07-14 12:53:40	2018-07-14 12:53:40	2019-07-14 12:53:40
+20f72d518bb5afe4e4a205defaa9ffab0b17508f074f897714df361110bb29c3ebe3064fb9df099a	1219	1	fpraksed@gmail.com	[]	f	2018-07-14 14:51:58	2018-07-14 14:51:58	2019-07-14 14:51:58
+0e202df2a89c65292e29ae8cb1225fd648c77a71da432224d6536a281645523d528934d91b3c1e5d	403	1	mungomaale@gmail.com	[]	f	2018-07-15 16:48:22	2018-07-15 16:48:22	2019-07-15 16:48:22
+1b6f378279cb461ab32670e84b693d66d9d978b4831fe8bb1388a9ebb3db35d6f75e858bef45bf87	935	1	simumbasimon@gmail.com	[]	f	2018-07-15 19:17:06	2018-07-15 19:17:06	2019-07-15 19:17:06
+798730432cda13a4a5b59135d44e1d9026e38346d2415a9efb0139d6426cbdc455803153ea9a236d	412	1	husseinmajid72@gmail.com	[]	f	2018-07-16 04:46:52	2018-07-16 04:46:52	2019-07-16 04:46:52
+3573588b4152b6559e187c1bd38b9e2fa5c47cb177674a684a2ae98f7ba1a547ac1b6cf74a266d1e	1149	1	johnchami27@gmail.com	[]	f	2018-07-16 07:37:55	2018-07-16 07:37:55	2019-07-16 07:37:55
+5be36c31cdf6054556aeb1ce63e09dc575bb429a64db5121e15c9f8c6eb42da42f7caa5b87566ee6	1220	1	durriyahmustafa.h@gmail.com	[]	f	2018-07-16 07:55:02	2018-07-16 07:55:02	2019-07-16 07:55:02
+e64b34b9f0b5a6e653e49d4834bec67f8fbd68834b50f5443a2184b90fcd348b4f72b826822b73e2	1036	1	allenmassam3@gmail.com	[]	f	2018-07-16 10:50:33	2018-07-16 10:50:33	2019-07-16 10:50:33
+877be25d9fa6964f886a3cb921b8d34707283a234e6162b36c2bd292f8bf39e51f1743f6dd7f6b3c	917	1	thelistener34@gmail.com	[]	f	2018-07-16 14:25:14	2018-07-16 14:25:14	2019-07-16 14:25:14
+c79daf7bdb61d7f5651dffabeb437536dc836270c4fb7705eeebaa8d394311b3c9537d803103b47c	41	1	mshanashaban8@gmail.com	[]	f	2018-07-16 19:39:48	2018-07-16 19:39:48	2019-07-16 19:39:48
+e0ebab4d4d20b2b433cec87608fa150bd6a389a56a871c00ccca6493b6dd29641ffca646dc34e578	718	1	mateti56@gmail.com	[]	f	2018-07-16 20:41:04	2018-07-16 20:41:04	2019-07-16 20:41:04
+53fd06a580fe5bc20b35544de7214b4b63723a862a6ba47aa030391f74aec8afb55035556f23ea7a	718	1	mateti56@gmail.com	[]	f	2018-07-16 20:47:27	2018-07-16 20:47:27	2019-07-16 20:47:27
+8e829d927dbb451c3dc9102da21de9d684c1bd1702071cde75618777e70ef0e135f618cb344ac966	927	1	fonsia2012@gmail.com	[]	f	2018-07-17 03:14:08	2018-07-17 03:14:08	2019-07-17 03:14:08
+d06dc7c7694997e261e9f9e149f5336a2d08285db1b14bfbcaa0afb1bb9803c8d350cf4e5a35ef28	1221	1	emmanuel.mwasomola2015@gmail.com	[]	f	2018-07-17 06:42:29	2018-07-17 06:42:29	2019-07-17 06:42:29
+24fcb7e4bf4e0ace052e863f2218eff4fb18ede8e27b453a2c4487ca89d8fe44d3da3b72e5410cd0	181	1	johnjoelsuwi@gmail.com	[]	f	2018-07-17 07:04:20	2018-07-17 07:04:20	2019-07-17 07:04:20
+136cb412c3d3afe57ab09937ec4b5119f61c17adca840dbcd291696e6b8ebeb9949673cb4d19bcbf	1222	1	stephen.lukindo@gmail.com	[]	f	2018-07-17 08:32:25	2018-07-17 08:32:25	2019-07-17 08:32:25
+dc5d19ce8c0cbe358917e65acb538926bc5f1c0d82e683ab22211f779f7546f7e6d3b78c087af51f	311	1	cormorant.chintan@gmail.com	[]	f	2018-07-17 09:19:30	2018-07-17 09:19:30	2019-07-17 09:19:30
+b51ebd486cc8ab920a4d26420f4f3274989a9b2a5a5b43064c5b481105792b24d14c04cc958d31a8	1139	1	jacksonntamallah93@gmail.com	[]	f	2018-07-17 10:12:21	2018-07-17 10:12:21	2019-07-17 10:12:21
+58a90525f578350ecaf36119c4e5e949c9fe5a1b318094a16f1c0f2d57d859f59ec8137d0d0d8ff5	767	1	maggiemachilu11@gmail.com	[]	f	2018-07-17 10:20:00	2018-07-17 10:20:00	2019-07-17 10:20:00
+21820435c144aa690f86723ee33c51e7f4b789a662d29bfd28dcc7f0af574c30b56c029bc3d0532b	1223	1	sariahesther@gmail.com	[]	f	2018-07-17 10:48:59	2018-07-17 10:48:59	2019-07-17 10:48:59
+736034f6fc71522a2a41a108eff6d697cb94f2af6d126ed8a530be529001f6a1865326f892cc086f	1224	1	haileynimrod@gmail.com	[]	f	2018-07-17 11:07:46	2018-07-17 11:07:46	2019-07-17 11:07:46
+a01dadfae7f70276cd4c610638a669513b358f2e0e6af8108f9167e2875ca181ebfc919234f8cc1a	1225	1	regnaldgodwin@gmail.com	[]	f	2018-07-17 13:48:41	2018-07-17 13:48:41	2019-07-17 13:48:41
+70c51f88006d42ee567fb5a80f4a990bca70636fc299b59f805876dfe661627bd60c1aa1c16d5dc8	1226	1	ummymohamed9@gmail.com	[]	f	2018-07-17 15:11:33	2018-07-17 15:11:33	2019-07-17 15:11:33
+951066f288e01ab2a46dad16f204597c277ff4790398e47ae93f987c2077cb9b6beec24f52970174	1227	1	rugayanakabarua@gmail.com	[]	f	2018-07-17 15:35:07	2018-07-17 15:35:07	2019-07-17 15:35:07
+1593719780ddbfdef3942724361fdc57413aab7a77b474b252836317cefab2b1011f8e5b65245ed2	1155	1	nemilakipeter@gmail.com	[]	f	2018-07-18 05:46:23	2018-07-18 05:46:23	2019-07-18 05:46:23
+1f00c0ab931e0b831d5410cad2663b647c683639a2dc6a44855f465c3f66327bcb226bc9070085c6	1228	1	dvdchege38@gmail.com	[]	f	2018-07-18 07:36:48	2018-07-18 07:36:48	2019-07-18 07:36:48
+d3bc43a2908382d67746b162ef53836209b1a5ceb257aa10ffb1bbb9a674dbe90753e2eb7f1b9b46	1229	1	sarahandrew04@gmail.com	[]	f	2018-07-18 10:02:07	2018-07-18 10:02:07	2019-07-18 10:02:07
+a86cb24bc9d115cd2fcc9df52be523e0b6e3d4633e138e93b8c24b415aab8bf382e19f976a5fb71d	893	1	amanaalli92@gmail.com	[]	f	2018-07-18 10:09:06	2018-07-18 10:09:06	2019-07-18 10:09:06
+c476d71881f075c33636555b9f06cf3db933bb94376126ac962153a07f136f5db96f44f737ff1708	498	1	monicatairo89@gmail.com	[]	f	2018-07-18 11:10:02	2018-07-18 11:10:02	2019-07-18 11:10:02
+54873a9ce348b86a56af3b3e1aa0a077fd4955af7c3c393464115c16ccfdc2c900b3c538bf8d0c91	9	1	geremychriss@gmail.com	[]	f	2018-07-18 19:00:48	2018-07-18 19:00:48	2019-07-18 19:00:48
+13ce9441dcc465e29383500a15fe7f48cbf17f15834b2d7f9f93e8e73228822d586455003fb2476b	198	1	mwajumalwaba28@gmail.com	[]	f	2018-07-18 23:54:49	2018-07-18 23:54:49	2019-07-18 23:54:49
+cfff53000a6a551784ea86770dd4820361580a8e29495a380c5260f8e9fc8e53aecf5e7abf77e3a2	198	1	mwajumalwaba28@gmail.com	[]	f	2018-07-18 23:55:20	2018-07-18 23:55:20	2019-07-18 23:55:20
+bff9505fbf19f955fe5e0e2d7550708020e75b4fa413f0dedac0c9ac108ac02e8f0c80ded7ec2348	1205	1	sophimuss.sm@gmail.com	[]	f	2018-07-19 03:45:30	2018-07-19 03:45:30	2019-07-19 03:45:30
+4314d2bb5594e69c4b9f82a0001ac1bd476b52b1270391bffba48c333a47fd22dc30cbd41a8d9caf	789	1	najirachambiri2014@gmail.com	[]	f	2018-07-19 08:37:46	2018-07-19 08:37:46	2019-07-19 08:37:46
+335eb728af4ac50d6cb46f0cae701fb8249598d66af20ba3a38ae235261758a0afd49f80c881c4f7	834	1	gitongamercy2@gmail.com	[]	f	2018-07-19 09:27:55	2018-07-19 09:27:55	2019-07-19 09:27:55
+398aa82c92d26347aea1e00cf3b4b4936b7272dfc2cfe963fd7c343dc700e7984144d53e88108747	178	1	donnydonna.dc@gmail.com	[]	f	2018-07-19 09:31:47	2018-07-19 09:31:47	2019-07-19 09:31:47
+363093becffceba56e12b8e7c27e1cb7ccfe0b1c1f02d69f190952f0e5863f737a830e13ff388b3e	1230	1	mkulutress@gmail.com	[]	f	2018-07-19 12:50:49	2018-07-19 12:50:49	2019-07-19 12:50:49
+38cc8a1f84be6083b5af630e6e54b7816aa6fe7cbd09ff84088e93ce71c930605f3038c74dea63de	1231	1	georgeadolph10@gmail.com	[]	f	2018-07-19 13:25:38	2018-07-19 13:25:38	2019-07-19 13:25:38
+bdd37f72389707cba62656e63ff85a4e3e8c372232203a6c02eb894b760215cd951f0c6ffcdb1bca	901	1	2012dfkayumbe@gmail.com	[]	f	2018-07-19 16:40:13	2018-07-19 16:40:13	2019-07-19 16:40:13
+455efcd520ce3de3ddb53f68e564edb92c4342427d32ada4b027042afd3fc18277523251efef8e38	1232	1	latifaabdallah222@gmail.com	[]	f	2018-07-20 08:07:27	2018-07-20 08:07:27	2019-07-20 08:07:27
+62859f8818e2a6ff7ce4cec5a3f0f06ec5b67e021ce9f004d6d5bae47793afccd742e1cf29b11d6e	644	1	wazirihenr60@gmail.com	[]	f	2018-07-20 08:48:16	2018-07-20 08:48:16	2019-07-20 08:48:16
+1953e6d4cb37c1a9b14017674a725a8943fd38a1084227c893f77db0c9a2cd1af867fee049429510	1233	1	deocrespelagia@gmail.com	[]	f	2018-07-20 15:15:06	2018-07-20 15:15:06	2019-07-20 15:15:06
+cf194d1e85b1e36b25ed3e80353881b488507c38c36ef6f86443e535a93a1d061d53fa1a19161a2a	648	1	rubothafinihas@gmail.com	[]	f	2018-07-20 15:27:14	2018-07-20 15:27:14	2019-07-20 15:27:14
+5582d17479a9936bb50c3e36720b8c548f870dde3576c09de28a784a2ba6e4c2ce36c4f517e82486	42	1	meyankod@gmail.com	[]	f	2018-07-20 15:52:22	2018-07-20 15:52:22	2019-07-20 15:52:22
+3067694ab6c38799013d975501356dfac340b07be75e2c478e031f0b068e43ea4911be0b6fdda670	1234	1	hassanhayuu1995@gmail.com	[]	f	2018-07-20 16:18:17	2018-07-20 16:18:17	2019-07-20 16:18:17
+bc7995d43eb04912760ae677ccf6362930a7a6b71350d8707ff267e7f66dcbb70a09c7395ff0db3e	851	1	alferiotarimo200@gmail.com	[]	f	2018-07-20 18:03:40	2018-07-20 18:03:40	2019-07-20 18:03:40
+ee133a91ba35f498eb002e1a8e72953a52866faade6ce1ca71d4c548fc7f1b7b4b293c34bf41b204	1235	1	mundy.sichalwe@gmail.com	[]	f	2018-07-20 18:05:11	2018-07-20 18:05:11	2019-07-20 18:05:11
+007492eaa62737b72bc708d5670fa830a7e5b6f56b7dbc994581247b2b01af57fb7176102208fd3f	408	1	anitasimchimba32@gmail.com	[]	f	2018-07-20 18:38:25	2018-07-20 18:38:25	2019-07-20 18:38:25
+acfd4610f854c699cfa07524f514f7cb95e72b95052d036eca1a96119c28c25d28e911f359fec74d	1236	1	sakinamjjamali@gmail.com	[]	f	2018-07-20 19:59:07	2018-07-20 19:59:07	2019-07-20 19:59:07
+27f3edf23cb21246b694e16be5897393ae790c3adcdd1d14824587b5b1a8ae3699cca9f0725e9b13	1237	1	rweyemamujoyce70@gmail.com	[]	f	2018-07-21 05:33:54	2018-07-21 05:33:54	2019-07-21 05:33:54
+7cce45907ae8e35e59c59584fba29c7bebb6438cd1a6997cd9039d224217272adf7eb70bfaf4a088	275	1	marymwifunyi80@gmail.com	[]	f	2018-07-21 06:59:41	2018-07-21 06:59:41	2019-07-21 06:59:41
+4cb682290c94d30413eb43f01bc7c1ac5d3b8e62b80e4c3e45c56c714e9bd2fe325d00147ab20177	851	1	alferiotarimo200@gmail.com	[]	f	2018-07-21 07:57:15	2018-07-21 07:57:15	2019-07-21 07:57:15
+820da52dae33e7184adf4760bbf8b1792bfc7e8c5b879da31ac96d17f35619d17f0d959ecf2dbdf6	851	1	alferiotarimo200@gmail.com	[]	f	2018-07-21 08:14:28	2018-07-21 08:14:28	2019-07-21 08:14:28
+db5b2ca9e4c5c985b90f7ba2cadcf514ebf32d8fd29221875b82faf14ffaaa54c11e2c0ad107d703	9	1	geremychriss@gmail.com	[]	f	2018-07-21 09:33:11	2018-07-21 09:33:11	2019-07-21 09:33:11
+a87048d723f8b3cf202a4aa23101ddca9986523f68da50d94539a0704870df77d1a9090ec7baa619	488	1	graceminja@gmail.com	[]	f	2018-07-21 09:48:01	2018-07-21 09:48:01	2019-07-21 09:48:01
+71a53d4f7653524d7ee3e021fd9ab8777b6766d5515cb260b6f911668129e80780f2e68c0f39be47	1154	1	lucasmwilwa@gmail.com	[]	f	2018-07-21 12:04:02	2018-07-21 12:04:02	2019-07-21 12:04:02
+325ea8f8b599ee6ead6b2b123bf2be4677ba100e77f2cf82cc7629b0663064e600049446bdd36597	651	1	kemmyassey@gmail.com	[]	f	2018-07-21 12:23:01	2018-07-21 12:23:01	2019-07-21 12:23:01
+c0a207a57d68efc5a50df1d14fcf5f498cfb622355a86fa8aedf8c48aadf0e6949330007bb39fde3	1154	1	lucasmwilwa@gmail.com	[]	f	2018-07-21 12:32:53	2018-07-21 12:32:53	2019-07-21 12:32:53
+0e693d4bfbf1b25d63bdc4dd8616edb068d7c2b3e6dd8c86089e322335743e7905aae20a173fbbf7	30	1	nyakatostela@gmail.com	[]	f	2018-07-21 16:30:52	2018-07-21 16:30:52	2019-07-21 16:30:52
+f95f1654a2da68c27d7b4bf9f179e99d2431df3afd8efe7b370e1a323af1f3cbeca9a39767ac17ce	1238	1	wendrineobeid02@gmail.com	[]	f	2018-07-21 17:27:11	2018-07-21 17:27:11	2019-07-21 17:27:11
+fb463112c70a59ae0f57dd44381b056f37249af3747cc54dabc25f40d497b8e4f217bc5e996369e4	958	1	gminja22@gmail.com	[]	f	2018-07-21 18:55:47	2018-07-21 18:55:47	2019-07-21 18:55:47
+f404879ee42168b355dd234fe269b58b2ca2598fb0f1bd64d64bc81dc320ba6629612ba2b26cd28d	1239	1	glaidesj@gmail.com	[]	f	2018-07-21 19:23:42	2018-07-21 19:23:42	2019-07-21 19:23:42
+22e94994a7db07e6324e07aac8b564a2a209448cc8255cfe7b9770951c278fab044badc24a4fe7d4	851	1	alferiotarimo200@gmail.com	[]	f	2018-07-22 08:12:29	2018-07-22 08:12:29	2019-07-22 08:12:29
+9cdbd15b3ced88c67f70f7b00d0ced7b1a1423e7a89d24b59d28540cd7383c3cb477eab2b15b1c24	851	1	alferiotarimo200@gmail.com	[]	f	2018-07-22 08:35:01	2018-07-22 08:35:01	2019-07-22 08:35:01
+0f0ed54cc64b9dd8706e0ba57ef528920a26bf00aac5f15577485ad2c73adee1351b05f801a3531e	1240	1	azya.mkasha@gmail.com	[]	f	2018-07-23 04:27:46	2018-07-23 04:27:46	2019-07-23 04:27:46
+1eddf1fa4fff249504569bddca28391fe929c20c4ea0f06781a29c72fd7cf77cf5802ee2448eebde	1241	1	danieltroyo2018@gmail.com	[]	f	2018-07-23 05:39:10	2018-07-23 05:39:10	2019-07-23 05:39:10
+785f3f5fcdf28023fc2edcdccce59b366ca91a41a9ee60a98100a2e19540353b62c280746e173007	523	1	itebacarolyne@gmail.com	[]	f	2018-07-23 07:22:11	2018-07-23 07:22:11	2019-07-23 07:22:11
+05aae22b03c34a2cfdf851f5a4ad1321b2ad7d44f3bf5a07c4ab7d134c904eb757662386da4c00b1	585	1	nmtui4@gmail.com	[]	f	2018-07-23 08:49:32	2018-07-23 08:49:32	2019-07-23 08:49:32
+8ce0815a2e3e45c0bfdab9359d3adcd0df13505fb65f42880623b30ed27a81fd954c0a695a232dd1	851	1	alferiotarimo200@gmail.com	[]	f	2018-07-23 12:40:49	2018-07-23 12:40:49	2019-07-23 12:40:49
+7a7f6d766a1ebba62fd30064712d6b997e7897b6b9cb67ae4f23908ea975c6c92e37bcd37e3e2b6e	851	1	alferiotarimo200@gmail.com	[]	f	2018-07-23 13:05:30	2018-07-23 13:05:30	2019-07-23 13:05:30
+4786c2573f4499d75f8fcb10c02933b0f8c034dada60f23c216831a94bed70f6b64365c073276f4c	850	1	habeshman4@gmail.com	[]	f	2018-07-23 13:45:58	2018-07-23 13:45:58	2019-07-23 13:45:58
+96907a6bc6ebbb7fef54bab2bc2943a2a72c8c9f662fea019218a7e0e9e425bffb73021c0b362dc4	1242	1	esthermella@gmail.com	[]	f	2018-07-23 15:23:30	2018-07-23 15:23:30	2019-07-23 15:23:30
+759bd0742848239a1dfc6f4655fcd9b7eea699052bde739a9c9417553ed702ef02cdf3701a9dadeb	949	1	carolswai@gmail.com	[]	f	2018-07-23 16:39:09	2018-07-23 16:39:09	2019-07-23 16:39:09
+a3031c1bc85effe268207496f90c5e14295c33eff8b3594b5b89bcc46fbdb05122615d7245f9d572	1043	1	deborahjulius31@gmail.com	[]	f	2018-07-23 18:56:19	2018-07-23 18:56:19	2019-07-23 18:56:19
+4325eb384c8099993861b9b3f48859016469ac8c612b288ba3affe9b1d13350bcf6706363aefe824	325	1	jacksmbise@gmail.com	[]	f	2018-07-23 21:34:53	2018-07-23 21:34:53	2019-07-23 21:34:53
+7b6630a8d280aebc34dc95b09f40545443bc3da6bc4b16c097fe5e51155699aab48ae3375cb6dbd7	102	1	msami.gp20@gmail.com	[]	f	2018-07-23 21:45:16	2018-07-23 21:45:16	2019-07-23 21:45:16
+78920cb8eae97f908e336bdbea630e1538781f72c61e836d1c65a28c14be74f724a31be8bee7d6e9	544	1	janemlay762@gmail.com	[]	f	2018-07-24 02:44:06	2018-07-24 02:44:06	2019-07-24 02:44:06
+bf210786c1867c16d110a9f36659f53b402c603a312d390d0982c83889051c20403e78e674413e65	1243	1	bshigellla@gmail.com	[]	f	2018-07-24 04:18:18	2018-07-24 04:18:18	2019-07-24 04:18:18
+285a9703cdf4a7e5c0b0aed2572bb83031bf8f1a24c24a9b5ec7c3a2e65fa4f0796ccd4b2aeeb2c9	235	1	akidaj7@gmail.com	[]	f	2018-07-24 10:19:46	2018-07-24 10:19:46	2019-07-24 10:19:46
+0ebe1368ba7e98c8f59a0a0ce13f9c040580d9a7a7eebd13d7e6ec0bae418aec4390abef66bd6784	235	1	akidaj7@gmail.com	[]	f	2018-07-24 10:19:56	2018-07-24 10:19:56	2019-07-24 10:19:56
+03bc01b8626057860016d1bcf4b5c06cc5f33c0a54ba0ec3668302e07a026846d80bb9ece86e1760	1244	1	jumamsogoti@gmail.com	[]	f	2018-07-24 11:38:02	2018-07-24 11:38:02	2019-07-24 11:38:02
+379b0728f04ba24ae8e00e34f8ddd2f3dcce44577554162011fc3f33a365150205c1fb1d4e6cadbf	1245	1	fagasonamos76@gmail.com	[]	f	2018-07-24 13:59:08	2018-07-24 13:59:08	2019-07-24 13:59:08
+cca31a2696d23ed158b70437a0d78a94cc30f32901277337541ccd2e75f593d16b692d29b57dad87	1246	1	martonsemuguruka@gmail.com	[]	f	2018-07-24 14:52:44	2018-07-24 14:52:44	2019-07-24 14:52:44
+31f1a064fb83b9e77ff4f07b54d57b30049acdb0b6ecca5d2c3514f55daa12372213f8d73952f489	180	1	mwanaimaa@gmail.com	[]	f	2018-07-24 17:54:31	2018-07-24 17:54:31	2019-07-24 17:54:31
+eccf2b1e8ac0f500f2fb10c3096480f882453690363dfb481c1b7f603f905260bcc343a200c834b8	99	1	emmycollection28@gmail.com	[]	f	2018-07-24 18:48:07	2018-07-24 18:48:07	2019-07-24 18:48:07
+d0a4d319b543cc9f4a7bb3ac33bae6d670bf90087f97c7dd2450451b72e70a8b3fbfcffb0774998c	1133	1	noelmaarufu@gmail.com	[]	f	2018-07-24 20:03:19	2018-07-24 20:03:19	2019-07-24 20:03:19
+1c4ce3340687384afbe0cb569d6bafc0a0df17d0840f3e5d9f72ca198199846cff9ba52ae600af6f	1247	1	mremahappiness@gmail.com	[]	f	2018-07-25 03:47:12	2018-07-25 03:47:12	2019-07-25 03:47:12
+d77f8debffff05461d13fb20735d539e783f3dbceb8bfc5613a92d597a3e678403681ca026c9c581	1248	1	mwanamubar1@gmail.com	[]	f	2018-07-25 06:16:54	2018-07-25 06:16:54	2019-07-25 06:16:54
+7e0e49b08115a22f7d7d6e9ce976a8907d73d29d7d0121347156aea5f55f823fe63756e0e0ab47b5	528	1	barnabapendo7@gmail.com	[]	f	2018-07-25 07:11:49	2018-07-25 07:11:49	2019-07-25 07:11:49
+b498b69a94e48c52ba21c1c4709a6806870900654a9c1e324019990f0cd2c43a5311058648ee0953	528	1	barnabapendo7@gmail.com	[]	f	2018-07-25 07:29:46	2018-07-25 07:29:46	2019-07-25 07:29:46
+f7f29ea0b6fa458832e21e518c1a115e581b631ec690a8f414ff08d0dadeb18216c838819f3f1ec3	318	1	yusjac1@gmail.com	[]	f	2018-07-25 10:17:49	2018-07-25 10:17:49	2019-07-25 10:17:49
+d9841113d2c8f6122006872666b8b87555f487789dbfae827967cc0133c2d3eb977fb3db0d21f563	777	1	dorothealaiser@gmail.com	[]	f	2018-07-25 12:28:15	2018-07-25 12:28:15	2019-07-25 12:28:15
+427abfb356d4b47bda81df94f1e6ed0dc2434fe1723fd01ca49354f1ac2320eef6d311840c1b1bea	1092	1	hajilimka@gmail.com	[]	f	2018-07-25 14:57:49	2018-07-25 14:57:49	2019-07-25 14:57:49
+30def2ca207763616be04297617c0e82cc0fdcc9d250ad8b1d97ad8303ad38f0c0f58d3ac761c4a8	522	1	hamedawadh60@gmail.com	[]	f	2018-07-25 21:04:28	2018-07-25 21:04:28	2019-07-25 21:04:28
+4ae02e6ce9f7598e61fab6e3c9cc0c6a527c8010e4b549cf73913164994d250ccc3cd876af242f71	36	1	poweralexander246@gmail.com	[]	f	2018-07-26 06:09:21	2018-07-26 06:09:21	2019-07-26 06:09:21
+c66ae2344167f9a5ba63b4d5fae18eb14d3cfef28c9c62726721cb473e63db72c86635a6b7f70de1	1249	1	matembajessy@gmail.com	[]	f	2018-07-26 08:03:30	2018-07-26 08:03:30	2019-07-26 08:03:30
+2bcb9c16b7b976eefe73886595d01f0f078a23bc1ba4e166d659de58b8f02fef562e3ef62430a7fa	1250	1	nureyhussein81@gmail.com	[]	f	2018-07-26 08:30:15	2018-07-26 08:30:15	2019-07-26 08:30:15
+68b98261ed00ad8366b65efb373b5344786424a6a090d31f123681937ac131464e7986b7466f4d5d	1251	1	emmanue72mmbando@gmail.com	[]	f	2018-07-26 09:43:08	2018-07-26 09:43:08	2019-07-26 09:43:08
+7dc99b6ac9bcf1c3c6a353635bc38fe055a01d339c7e00e893a87c3b67312c415c73991a76c8a03b	1252	1	tancytyancy@gmail.com	[]	f	2018-07-26 09:47:04	2018-07-26 09:47:04	2019-07-26 09:47:04
+ac75bd7e434f383abed05db4fa229595159e4221df0bbbea38e7cc8cfa23fa442a26f7eff50b0f76	156	1	mputae84@gmail.com	[]	f	2018-07-26 11:21:01	2018-07-26 11:21:01	2019-07-26 11:21:01
+eeb3a97c361b539a4c12c8dd21bc1ae742102b8ebcb753d89216112fd38c183e81f7cdc26f50aae8	1253	1	florenceelius77@gmail.com	[]	f	2018-07-26 11:28:37	2018-07-26 11:28:37	2019-07-26 11:28:37
+47b2e5ffe72ebbbba611e9f622b70a6ee7faf311e42af7bdf641b42718d80a41f45e89f53d829970	1205	1	sophimuss.sm@gmail.com	[]	f	2018-07-26 14:18:41	2018-07-26 14:18:41	2019-07-26 14:18:41
+fbcad2f2ad4c5b4d1ae7c3c2bfec9c8e1aaaee3580131132faa26cfa837bce6511dd55969b731def	1165	1	a.kaboko686@gmail.com	[]	f	2018-07-26 14:58:42	2018-07-26 14:58:42	2019-07-26 14:58:42
+505be56d1feef0e008abf272b6e2a360ae240e500e61735e4fb6c39751a50cb97afc6e21e7cefafa	1254	1	samwelabeid38@gmail.com	[]	f	2018-07-26 18:09:28	2018-07-26 18:09:28	2019-07-26 18:09:28
+39ee4568195f9ee1a788a41c3667f75aa81dd252b95487917adfe49d02d63dfe43facda5e73d331f	1255	1	organikanozo@gmail.com	[]	f	2018-07-27 05:25:58	2018-07-27 05:25:58	2019-07-27 05:25:58
+8822fd667c8122e997d0d9b861474e9bcd6e9d76054eb95fbc3f4b69184cbe368217216213787dee	1256	1	blasioanicia@gmail.com	[]	f	2018-07-27 06:26:06	2018-07-27 06:26:06	2019-07-27 06:26:06
+4d45549ec3f6414d5538013c65d3d65d6bd4e594d4ec3b9d32b4185cb0af58f4247e1bbfe7f4ef95	856	1	miryamkissawike@gmail.com	[]	f	2018-07-27 11:04:24	2018-07-27 11:04:24	2019-07-27 11:04:24
+6c87a2dbe265d388ffddc703eb187b1094d43d4ff43d7cb49c13bf102c71fd12478aa3b231b0e060	1257	1	marianmulwa@gmail.com	[]	f	2018-07-27 11:04:45	2018-07-27 11:04:45	2019-07-27 11:04:45
+619ca6d05e720975f030a1b14c70b36ce381f77343afc627974af713528f42a6c246fc25c00b1604	99	1	emmycollection28@gmail.com	[]	f	2018-07-27 12:15:29	2018-07-27 12:15:29	2019-07-27 12:15:29
+f94ea5b2cb3223e1b1f7018d0ded08b7f4623bcf1abab31b9e954ae572306cc25b55613de56affb1	1258	1	lizzytibasima@gmail.com	[]	f	2018-07-27 13:27:35	2018-07-27 13:27:35	2019-07-27 13:27:35
+c3135b9fcbc5e80be9d6ce6308aeed08e9d63bdac10e1a2b006c8c02338ad4c0baa7c86b10e2d4a3	911	1	mwatimassego@gmail.com	[]	f	2018-07-27 14:20:04	2018-07-27 14:20:04	2019-07-27 14:20:04
+d3356fda6d0cc9f15de7f4c8d7d632ca28b9d01d0bb99352007a356bf502022fab5fcc30103ecbac	1016	1	rachel.exaud62@gmail.com	[]	f	2018-07-27 18:54:51	2018-07-27 18:54:51	2019-07-27 18:54:51
+1fb2f8987e1134d8aa4f34deb31a6ebc78a11093caa6f3070a03d31fbe611a5465e544eba30b87dc	1133	1	noelmaarufu@gmail.com	[]	f	2018-07-28 07:13:07	2018-07-28 07:13:07	2019-07-28 07:13:07
+c8ef4e01d8af955c42e53842f3cfff0b75ea67189a15493d76ef4eeb893ac5dc98e6a0443641a427	443	1	samueldev7@gmail.com	[]	f	2018-07-28 07:53:53	2018-07-28 07:53:53	2019-07-28 07:53:53
+09eb6b69d181ebab37dd9b5028afb48b58b51917af7d25fbda77ca6e522dbb685746e92fdde486e4	261	1	cmgeyekwa@gmail.com	[]	f	2018-07-28 09:32:01	2018-07-28 09:32:01	2019-07-28 09:32:01
+f004eb7c23866e80493ebcdb064036d29249b07301923e7601f4f9b35931fc3bb377c4104842f769	1259	1	ebkisanga@gmail.com	[]	f	2018-07-28 11:20:56	2018-07-28 11:20:56	2019-07-28 11:20:56
+ffdfbfd41f1757f9c194d709ff4a0ce941c29ec821a1869f1b802c74fcc5f79a52c434bc6fd26cae	1260	1	gidomutembei@gmail.com	[]	f	2018-07-28 13:42:31	2018-07-28 13:42:31	2019-07-28 13:42:31
+e1a1a1426e021661e2a3dc608207bc9e8729900656566ebc79fc5cdcc07678646deea86a87f5f2d0	917	1	thelistener34@gmail.com	[]	f	2018-07-28 13:49:43	2018-07-28 13:49:43	2019-07-28 13:49:43
+c8ea0fa5f32f67db0d0598c3a3402803355eee82741ef18920633f8a8a6562d4f0e847c9eb4b7041	421	1	kimbedoreen3@gmail.com	[]	f	2018-07-28 19:11:42	2018-07-28 19:11:42	2019-07-28 19:11:42
+2c5f14e9683108a089496efd4ad905011fad17fcf46d666448842d787e189e33da6da0ada628b7ab	1261	1	gabikavishe05@gmail.com	[]	f	2018-07-30 11:18:02	2018-07-30 11:18:02	2019-07-30 11:18:02
+f3141917fbdb6afc2c6ffaeb5b6830781d43e05e470e7a1713387ce58def683651dd7515ce07fd75	158	1	rose.kissimbo.rk@gmail.com	[]	f	2018-07-30 11:28:12	2018-07-30 11:28:12	2019-07-30 11:28:12
+535df1e6f24ab0598df1308f1cf2fc13a3eeb88c23d019521327f18885ae332dffdc66ce91c6aa28	341	1	veronicakayus123@gmail.com	[]	f	2018-07-30 12:05:06	2018-07-30 12:05:06	2019-07-30 12:05:06
+3ac99783695f91e5a9a88d42cda993611e24ced8ae849ce9359e0e22c0eb6dd6e177454c1bb88fef	1262	1	theonestmalele02@gmail.com	[]	f	2018-07-30 12:34:06	2018-07-30 12:34:06	2019-07-30 12:34:06
+4aa3b6e2e4218ed5d40c0687898441cc95c2cd1cf94d155711f1fa20e440937240b9af01066a376b	1263	1	oscaralphonce19@gmail.com	[]	f	2018-07-30 17:18:48	2018-07-30 17:18:48	2019-07-30 17:18:48
+33af996007649245a18f9de8db47fdfbe0b1d030bec5a6500b2ba7853094fe93bc10fb1684bd3e82	1264	1	abdulla69hamad@gmail.com	[]	f	2018-07-30 18:52:35	2018-07-30 18:52:35	2019-07-30 18:52:35
+c4dde4484d1c14c66e04513743ee49eef12e2305247d69b8c0fd78bf6e2837db0ff67d921ad5062c	180	1	mwanaimaa@gmail.com	[]	f	2018-07-30 19:25:30	2018-07-30 19:25:30	2019-07-30 19:25:30
+0c68b49abddf0c784542eaa6db661061ed30833507acaea841ab6d756b66adbc9afd4c7e216b45a6	796	1	kamalaedso@gmail.com	[]	f	2018-07-31 10:00:28	2018-07-31 10:00:28	2019-07-31 10:00:28
+3425f2517741ccfdc0a671acf7fd0d4544fb5ac1b99edf6e39d1a9753d406ab8100f7709fd763cd5	911	1	mwatimassego@gmail.com	[]	f	2018-07-31 14:24:39	2018-07-31 14:24:39	2019-07-31 14:24:39
+5d527b452a2e42675ee1c2629fa340ef8327fc32cc0adff60d978be89e03140f7e9f7247ee6c9f18	1265	1	maryamabdalla665@gmail.com	[]	f	2018-07-31 14:42:32	2018-07-31 14:42:32	2019-07-31 14:42:32
+b1cdc502e20dc6686aa8e30f22841a2b3cb804325768f9e1fca1a4f2073c3a8edcabb6beccb40c68	437	1	adilikayuni91@gmail.com	[]	f	2018-07-31 16:58:52	2018-07-31 16:58:52	2019-07-31 16:58:52
+98ca18843ee23868b1a31fcec166f99510e81805d99b1c7443bf050175ab0d231b56c0ac99c402d8	1266	1	doricedavid20@gmail.com	[]	f	2018-08-01 08:59:21	2018-08-01 08:59:21	2019-08-01 08:59:21
+a2f85416e26b9c22a62ce007080c11558632244410df90e19504dcb706596935fa2158f1b80ed7ea	497	1	dullefw2011@gmail.com	[]	f	2018-08-01 11:10:33	2018-08-01 11:10:33	2019-08-01 11:10:33
+93eefb5b14d0f090ab32582fc38d6116613930077ba3f94e948df47be86721afa0d8a78aacf77479	1267	1	mmmuhoho@gmail.com	[]	f	2018-08-01 15:43:10	2018-08-01 15:43:10	2019-08-01 15:43:10
+29f3f413712bf3314d55f637c25a86278fbdd9ba8b97e1d53e6e3c04491c92ecdff6e4941b18ee8d	87	1	mgayafransisco@gmail.com	[]	f	2018-08-01 15:45:03	2018-08-01 15:45:03	2019-08-01 15:45:03
+503885e96f396bf4cca7f13b57f144ada5b36154ed3f1c5ef5c0bf252b257dcc1b4264134b756e35	858	1	promise54.gs@gmail.com	[]	f	2018-08-01 15:53:09	2018-08-01 15:53:09	2019-08-01 15:53:09
+5de56d95682e11734bcda87a6b5633c1b63a8ebce8a1aac9f70108741a238bfa2656ef8c6d14b825	836	1	glorymoshy@gmail.com	[]	f	2018-08-02 05:38:46	2018-08-02 05:38:46	2019-08-02 05:38:46
+fd6842732a43fbad455a2384affdf0d0ac65268bebd1863d224a55bbd829a211b9d26cd28bf8ea49	1268	1	talysiahkhoiy9@gmail.com	[]	f	2018-08-02 06:36:57	2018-08-02 06:36:57	2019-08-02 06:36:57
+8119a5f833adf50df45819e8f98ebb3dabc156bf59333f4b317cfe384af14a78177bef772803afa4	935	1	simumbasimon@gmail.com	[]	f	2018-08-02 07:41:15	2018-08-02 07:41:15	2019-08-02 07:41:15
+aadbb9e253f1ddd41d178e997bf3f8610c13b5cac8dfa7e43dfb68f2875a5873e1a45fc0686f9dc5	973	1	yangibonakatole@gmail.com	[]	f	2018-08-02 08:24:49	2018-08-02 08:24:49	2019-08-02 08:24:49
+ac88d39f107d789910f5897c09e053a1333e6e6bdc3a087f13576be97cb3afdee8f4ca225a17d6c5	973	1	yangibonakatole@gmail.com	[]	f	2018-08-02 08:49:16	2018-08-02 08:49:16	2019-08-02 08:49:16
+afa4d29496ebd3735b12c67483f036271349691b6b9cf410c472889322b27fc11d0ffaa6331f18a8	293	1	williamsylvia@gmail.com	[]	f	2018-08-02 08:53:50	2018-08-02 08:53:50	2019-08-02 08:53:50
+844fdb46decb83214f1427a58cdd9849bf0cc6c90c695ef5022473357efd2d0ad44278863ee71473	973	1	yangibonakatole@gmail.com	[]	f	2018-08-02 09:23:05	2018-08-02 09:23:05	2019-08-02 09:23:05
+96bfe11372c5f6eb062d4ca864d368474ba9f6e45c661aff173cad21c0e589ce088b0ac3dabc81de	850	1	habeshman4@gmail.com	[]	f	2018-08-02 10:15:02	2018-08-02 10:15:02	2019-08-02 10:15:02
+557cb638dc7eeb17ecefbc4e5453d8bd71f1df3c19cbcad5797ffc6994972f3c9a66cf83d4d06e88	973	1	yangibonakatole@gmail.com	[]	f	2018-08-02 10:21:35	2018-08-02 10:21:35	2019-08-02 10:21:35
+c8f7b2f7f448db4860a0432611e6cf51f80cb03d18c6a73d87912c6426ffe0ac9dc069823a6d81a9	973	1	yangibonakatole@gmail.com	[]	f	2018-08-02 12:09:47	2018-08-02 12:09:47	2019-08-02 12:09:47
+570782c7fe43192325ac453675da68d1b34eb815bee439c03046c6dde05fcefce539f96af6107bd9	1257	1	marianmulwa@gmail.com	[]	f	2018-08-02 13:25:50	2018-08-02 13:25:50	2019-08-02 13:25:50
+d4ac1c17e79a66ce12ed25403d10cda2ea0818dd81dfcba88f2742208dd0b793e10f9283bf6309ae	917	1	thelistener34@gmail.com	[]	f	2018-08-02 15:01:46	2018-08-02 15:01:46	2019-08-02 15:01:46
+f91b4190b8e854a782ff6974c024be13206c19c754f5a4d4528793a87a0c245cdd94b50862c28ac1	591	1	godlistenestomih744@gmail.com	[]	f	2018-08-02 15:17:15	2018-08-02 15:17:15	2019-08-02 15:17:15
+40ca3ff20f8affec68bb2e76a5110a090f3c37726b8d017c0191782449882a48c7db4df9564efc32	1269	1	rehema8mbunda@gmail.com	[]	f	2018-08-02 17:25:50	2018-08-02 17:25:50	2019-08-02 17:25:50
+a8af781ee5ac301e283cbe27b6ef10ff9a88d7e1f8254a415b70899ca6bf5c641ed0192e0fcd6a68	1270	1	magypally86@gmail.com	[]	f	2018-08-02 21:29:49	2018-08-02 21:29:49	2019-08-02 21:29:49
+fff9c9fd0ca1f1560c43b17296ee0548dcfb1571b8227de842e4b38f59219bdd22433346060632e3	366	1	beckymafia.ej@gmail.com	[]	f	2018-08-02 21:43:44	2018-08-02 21:43:44	2019-08-02 21:43:44
+5e289584981959b29da485c2daa1cf4cf5b489513592bc22ff806c21c5cb8fce3b9574a8ce998661	1155	1	nemilakipeter@gmail.com	[]	f	2018-08-03 03:16:10	2018-08-03 03:16:10	2019-08-03 03:16:10
+51768a6028791edf4aa1f2d5c206da6905df8f0683eeee13b035bb9e90883c76b1e901ef02674e02	1271	1	ludgeriusv@gmail.com	[]	f	2018-08-03 04:27:07	2018-08-03 04:27:07	2019-08-03 04:27:07
+ef521fedd75eaf5961e311c272866357300a41c6e9bd546a3f9e52777aca52121ebd45223a412587	1272	1	neynmbro@gmail.com	[]	f	2018-08-03 07:05:24	2018-08-03 07:05:24	2019-08-03 07:05:24
+4a2af7a38d733eab1545b651005ebd9d7bd91c32a376e8d89293ad11e7cf5c45549aa9e48afe4abc	1273	1	terryfocus15@gmail.com	[]	f	2018-08-03 08:05:53	2018-08-03 08:05:53	2019-08-03 08:05:53
+c38965917bbe85950b4897626577cb228cf95b95db6d4e6efd95326300d5b7ac6c0cf185e1cfdcbf	1257	1	marianmulwa@gmail.com	[]	f	2018-08-03 13:21:47	2018-08-03 13:21:47	2019-08-03 13:21:47
+e186744ab40b1ad19925c547bdab5de433937b4d41fbc05ab0d9bd4cc5eb5ee07c89e26e19c288a8	1274	1	neymanjau8@gmail.com	[]	f	2018-08-03 13:29:32	2018-08-03 13:29:32	2019-08-03 13:29:32
+e5519f1597643cb510dac3e40584985abd8d6e57a306a80c3257a11a555944edba166c1af6a294d7	1275	1	tinnajmrisho@gmail.com	[]	f	2018-08-03 13:38:02	2018-08-03 13:38:02	2019-08-03 13:38:02
+e1afaf6ab277931ad56e6a48c6e80890268a93783c3cf41183368d69ceccd0e0202a90a22318c330	495	1	deodath1990@gmail.com	[]	f	2018-08-03 14:26:01	2018-08-03 14:26:01	2019-08-03 14:26:01
+33998044828387b4cddf367f0067848c12c0578fa27930ff00e77addb16fb84fccd7308c916e215e	326	1	vmunyasa@gmail.com	[]	f	2018-08-04 06:06:28	2018-08-04 06:06:28	2019-08-04 06:06:28
+18cdb8939ccaac1a343fb0249bdc760c9f53ff32b02ff6d3665b874e44834eacb189531b953d52b1	326	1	vmunyasa@gmail.com	[]	f	2018-08-04 06:10:53	2018-08-04 06:10:53	2019-08-04 06:10:53
+a5974b4dc3de6e588d5952656f566ce55aa4dcf4b2990d2f5b89a16dd699606652eb914704a492ce	1276	1	lawrencemargareth40@gmail.com	[]	f	2018-08-04 12:00:48	2018-08-04 12:00:48	2019-08-04 12:00:48
+7f794fea14354a5876ef5fdec79ade60348135605fa5d0d6877945028541453b1d472a312a5b859e	1277	1	mwikali49@gmail.com	[]	f	2018-08-05 04:56:05	2018-08-05 04:56:05	2019-08-05 04:56:05
+46b885b37e6a88cbf16b6ed32267d69eda2b1d3d8f2db14fd4ac05503aab0b23f93b3e52fe2f6581	1278	1	khamisabdallah2210@gmail.com	[]	f	2018-08-05 07:28:59	2018-08-05 07:28:59	2019-08-05 07:28:59
+4bb470685d853539014c2c12f5f4192a281ed9a7c3b594adb8c6e0d8d8ed716bf911a4096661d21e	1279	1	salmafbo89@gmail.com	[]	f	2018-08-06 00:58:20	2018-08-06 00:58:20	2019-08-06 00:58:20
+ac8c4fb47d0e9cc6f19d6523410ef4f262d02c25f23c7c958b443ae08076ff867881e9ed634f25d9	235	1	akidaj7@gmail.com	[]	f	2018-08-06 07:09:44	2018-08-06 07:09:44	2019-08-06 07:09:44
+3e2c5d9744ed6faaebf9acd0a6628c2c7171120c0fb93c9c5c49863142036f3fe065935323762468	1115	1	nepha.jm@gmail.com	[]	f	2018-08-06 07:54:24	2018-08-06 07:54:24	2019-08-06 07:54:24
+663188e92a84fb75a36f0accec8c251e09830e18d43249fd635debe4fae2ace6e9e23c7f7a38d0a0	529	1	neymaclement@gmail.com	[]	f	2018-08-06 08:43:01	2018-08-06 08:43:01	2019-08-06 08:43:01
+9285deacb8b93d80aa5a18c01a2ae6f283884d510d3fa8fce025a628a292e58b91109e4f7d3092b1	99	1	emmycollection28@gmail.com	[]	f	2018-08-06 10:14:39	2018-08-06 10:14:39	2019-08-06 10:14:39
+20b06f2b5d604c2b9e2a849e48bfaec57c91943a088f2c49b0c16aa869d34a1dabbf842afb44431f	1280	1	yohanaeditha42@gmail.com	[]	f	2018-08-06 10:19:59	2018-08-06 10:19:59	2019-08-06 10:19:59
+1720e3ed6810e97df77dc22678b1084f7d2471b071bf7b46465e37ace80e700c441aae4b1fdf5540	1281	1	nassorabdulla1989@gmail.com	[]	f	2018-08-06 10:54:24	2018-08-06 10:54:24	2019-08-06 10:54:24
+1195b28412dccc7e2a6f5c4293a8e9e21b8b2e0c3cabdabac64acf082016c0a15fa212c32d3ed5be	299	1	exupernjau@gmail.com	[]	f	2018-08-06 11:30:34	2018-08-06 11:30:34	2019-08-06 11:30:34
+fcbfe22f9c396fba4aa0881d057773855741a70e30b7bd7c0ff9acd048eab4b639a7adeaf4e84211	299	1	exupernjau@gmail.com	[]	f	2018-08-06 11:30:35	2018-08-06 11:30:35	2019-08-06 11:30:35
+cdb84660e20bff357940de3b786895746d211af21b5744a2e7820cfa22651c63562e56a505612ad0	1194	1	gmakuka@gmail.com	[]	f	2018-08-06 11:59:55	2018-08-06 11:59:55	2019-08-06 11:59:55
+c72d2478d7a64b11f4f32c2456ba762dc2f55d5473d915819ce611769fe005fdbb1c083f9f6ab7e3	1282	1	irene.masha12@gmail.com	[]	f	2018-08-06 12:26:48	2018-08-06 12:26:48	2019-08-06 12:26:48
+e740dd8def47d3d8fd6cb498f0aa6c50e587d4f13b3fea9e70bab5b858abf6beb330a94a47a09718	48	1	georgehaggy@gmail.com	[]	f	2018-08-06 15:02:12	2018-08-06 15:02:12	2019-08-06 15:02:12
+d68a288dfc038f5a830f3e5b044abb91d07809f352f88550e69421ed54857ee6e78c0ffaf1c8ebcb	1125	1	daudi.philipo@gmail.com	[]	f	2018-08-06 15:38:22	2018-08-06 15:38:22	2019-08-06 15:38:22
+582adc9560ea96c1eabeafa0762ff16b35d9a31741825ae04f43f3bf793ed7aede1fb4aafb84aab9	1283	1	mussahemed23@gmail.com	[]	f	2018-08-06 16:31:58	2018-08-06 16:31:58	2019-08-06 16:31:58
+763faad62d356f3ed9ba235de3a3eecce5650b91a214e7b093d07bbe58ce6424b8a496db4c340df1	1125	1	daudi.philipo@gmail.com	[]	f	2018-08-06 16:55:42	2018-08-06 16:55:42	2019-08-06 16:55:42
+2c96a65dc0a8c585a4c76604580d12a3b04448f00b0e944fb736f3e81f91cbe4341314105caf8f22	504	1	sylvestergodyfrey1027@gmail.com	[]	f	2018-08-06 18:16:46	2018-08-06 18:16:46	2019-08-06 18:16:46
+3006e65aac5402280efe97ddc889e89c184ef7ab6fcb5772f9efa3f7e2e2a4e67042be9f1b43e626	127	1	salomenduta62@gmail.com	[]	f	2018-08-07 04:03:46	2018-08-07 04:03:46	2019-08-07 04:03:46
+d7eac62f50ef639e3b4a032e751f69d8e3b586975f3e73d5f41d8483accc3cf1cdda47bab8aafd94	187	1	winniejeremiah@gmail.com	[]	f	2018-08-07 07:49:37	2018-08-07 07:49:37	2019-08-07 07:49:37
+47c41e2c7eec48080d2cfa54e90b0cefdae1fd74eae2398246ddbce32fc75836dcbe4c4740ea1184	1284	1	mhinaevelyne0895@gmail.com	[]	f	2018-08-07 08:24:27	2018-08-07 08:24:27	2019-08-07 08:24:27
+6a02ccbe56989c585a5a5e41fa67441413acba49c95e7ac53cb53272777582e4ec3b8b572849bf16	235	1	akidaj7@gmail.com	[]	f	2018-08-07 08:37:37	2018-08-07 08:37:37	2019-08-07 08:37:37
+16e02c98ae5994149f1b2a641ae364c43b264087cb8d607463629c2fea2b4284f6229e8f4a347dfb	489	1	exupervitalisnjau@gmail.com	[]	f	2018-08-07 14:37:18	2018-08-07 14:37:18	2019-08-07 14:37:18
+5d717dc80fca7983a3d2f90adbb4525b84f9570618df2024ffd856fb7c7393661c4a6d54a43fc856	917	1	thelistener34@gmail.com	[]	f	2018-08-07 16:47:40	2018-08-07 16:47:40	2019-08-07 16:47:40
+3cea8111f3efe42164fcc2f3a40b4a899a39825ba0e71c1b44a4caf8fe7a91c412d88490999be357	342	1	kaiyolosaimon@gmail.com	[]	f	2018-08-08 04:50:40	2018-08-08 04:50:40	2019-08-08 04:50:40
+a4b8e1fcebc302841348ffcf2eba6dd7c5881c53dbab5e0b634906a65ef9a6359398df9907a70e46	1133	1	noelmaarufu@gmail.com	[]	f	2018-08-08 04:56:59	2018-08-08 04:56:59	2019-08-08 04:56:59
+a08b187de64b27b9a95624ae407ecbad51b25e5f9b06f76efef603e5f10eb1c07aa6ef59acb504a4	1085	1	kweka12@gmail.com	[]	f	2018-08-08 08:00:18	2018-08-08 08:00:18	2019-08-08 08:00:18
+1f788188d84b9f5d01de89f9fb2729f1198ec36235659205bb3762349d9fe3351c471e2f6476b6fc	1285	1	vascomwakigala@gmail.com	[]	f	2018-08-08 08:09:51	2018-08-08 08:09:51	2019-08-08 08:09:51
+fcb375a48677e245a539d7f3f3917b87bc2f79cb2788780e40036ef9289eb50fa1cf0969262a798b	588	1	helfridg@gmail.com	[]	f	2018-08-08 09:18:00	2018-08-08 09:18:00	2019-08-08 09:18:00
+624674fb98f5f10535d60fe19390509e4af22a2fc703a1d549659f79a74c9ee3e542dbeaeb90efc8	1126	1	ikissima1@gmail.com	[]	f	2018-08-08 16:13:14	2018-08-08 16:13:14	2019-08-08 16:13:14
+d6d51e21ce91ad60aacd5a680f04683cd5370cc47d85843f947c630d08e25e0c29599ebf6ef5b03f	1286	1	huzaimamohd@gmail.com	[]	f	2018-08-08 16:37:16	2018-08-08 16:37:16	2019-08-08 16:37:16
+e3265cc336f935fcec907124219205a004b2300808fec30ab075a6d9f2f5b2b1677bd6922f37f1ce	411	1	fgwimo@gmail.com	[]	f	2018-08-09 07:26:59	2018-08-09 07:26:59	2019-08-09 07:26:59
+97ad6b74b9fbc668763218c4fe670ce1ba52d91f27e7695a7419c993f638d0b4869035a55cfaab66	1264	1	abdulla69hamad@gmail.com	[]	f	2018-08-09 08:32:11	2018-08-09 08:32:11	2019-08-09 08:32:11
+7b4142648c3490c7f3ff1910a80c82e13cf82285181d5f33d22336c3d8dbd3a6342e43aedd45a01e	1287	1	kazymatecompany@gmail.com	[]	f	2018-08-09 10:02:54	2018-08-09 10:02:54	2019-08-09 10:02:54
+245dbad84b0ecf5c5bc0d54803fe40af12c7f44ddd46f9710601530d6d6c142bf4d2cd76b8858ab7	398	1	mwamba765@gmail.com	[]	f	2018-08-09 11:52:57	2018-08-09 11:52:57	2019-08-09 11:52:57
+adee21b8d26b38e45bb204799560c3d72a13474670c7bf751c18c7900c977ceba253f9acff31efe4	1288	1	angela.kagaruki@gmail.com	[]	f	2018-08-09 11:55:45	2018-08-09 11:55:45	2019-08-09 11:55:45
+48477bd394c789ce931348362d4788487aee02ff66751237e5c8d1c8798489d0466e2e6506b7d5d3	1289	1	mouldyalsalty@gmail.com	[]	f	2018-08-09 14:45:04	2018-08-09 14:45:04	2019-08-09 14:45:04
+176bf1f1f04652492249763ed84db939058d72c27b7a69f8a2d15e73ffa2aeb653b4061c766f65ff	1290	1	simfukweregina@gmail.com	[]	f	2018-08-09 15:20:11	2018-08-09 15:20:11	2019-08-09 15:20:11
+0a707c06b88cae89fdf646d7eae8835b1dc86e484e1662b970c6eb01f369498352288675b8bdfc7e	687	1	jayden2014.bp@gmail.com	[]	f	2018-08-09 16:41:10	2018-08-09 16:41:10	2019-08-09 16:41:10
+56bb30b1ec2d9c126f71de06d7d501b1572cc9d3cba62fa853cf4a8623bf2e01d3ad1658db1d6ada	818	1	pendonaftali@gmail.com	[]	f	2018-08-09 17:59:52	2018-08-09 17:59:52	2019-08-09 17:59:52
+6f7ecce7f44352e1276308197d9afd10fe38a8176f25458a0b37ff4e8fff264989a5680bc0140043	385	1	mlelijames0@gmail.com	[]	f	2018-08-09 19:34:29	2018-08-09 19:34:29	2019-08-09 19:34:29
+a2cfde67730dd4d7c58632887bc6c44609ffa247a9f32ce11bd24ec0d9769487510c64d1b8e412c4	1291	1	bisharanah@gmail.com	[]	f	2018-08-09 19:50:36	2018-08-09 19:50:36	2019-08-09 19:50:36
+46ef411e4e49e33b26a6e17687989d8bf2901e2c96b471933c3397b1552e51e9f91f3cf972d0b553	287	1	istiqama13@gmail.com	[]	f	2018-08-10 06:33:20	2018-08-10 06:33:20	2019-08-10 06:33:20
+fffe2743fdd0a69d098a1bdc6ea7c0ceaa9e0ff2e435a99077acd5b715a58717cf86ea7f94b0d17e	85	1	enock.lazaro@gmail.com	[]	f	2018-08-10 07:56:35	2018-08-10 07:56:35	2019-08-10 07:56:35
+5c16e2ecb59c5b1fb276f2eae2d92425cf040ec752445146795c6c29064158ff6d82f35982352be8	783	1	mwamkinga1993@gmail.com	[]	f	2018-08-10 14:42:39	2018-08-10 14:42:39	2019-08-10 14:42:39
+242a440ba847dcc1fc6601d6eda95abeebb7cf95213cfc91f07ed6a4617b7273584e3d2d2d7826c8	1205	1	sophimuss.sm@gmail.com	[]	f	2018-08-11 09:31:49	2018-08-11 09:31:49	2019-08-11 09:31:49
+41ff116976eb8262d72933174d953aff7d8891d47c9a2f7399980ada737ca33f346febbec5251076	1292	1	hschotimbao@gmail.com	[]	f	2018-08-11 09:55:10	2018-08-11 09:55:10	2019-08-11 09:55:10
+4bbc7dff83e48af0b310e10a2f8905cce1fddf886659c2d3c4978518723ed825cb9029fcaeda8c75	1293	1	dottoaugustino@gmail.com	[]	f	2018-08-11 10:26:00	2018-08-11 10:26:00	2019-08-11 10:26:00
+06d897983181bec94eb58b054f9cb4aa335ad0d568a558366100ecf09605360df0c7a002764b2173	352	1	onkyangel@yahoo.com	[]	f	2018-08-12 10:52:34	2018-08-12 10:52:34	2019-08-12 10:52:34
+049d185f9cc52ad7eb119baf31e989a20ac4e168398bd3c4f7f8d90951efb60c7ed286cb92b0e728	19	1	manasemasinza@gmail.com	[]	f	2018-08-12 14:23:58	2018-08-12 14:23:58	2019-08-12 14:23:58
+c5e1ab0fd898d1de5bb7420e632defcd80b52bd59e5c808328956ab79312e9e54fa4a91a4793447d	1294	1	bitakarac@gmail.com	[]	f	2018-08-13 04:41:39	2018-08-13 04:41:39	2019-08-13 04:41:39
+8c4fef5082e00b6c615113d6542fbaa2847410b8d3a2fee18ec77077d30d0e37c4fadeb2d323da55	1295	1	alvinsolomon23@gmail.com	[]	f	2018-08-13 07:56:51	2018-08-13 07:56:51	2019-08-13 07:56:51
+97c581e4131a8b2670a8d04e64dc829da393418414e7367255fc0030037a27920661d90a7b678a91	1047	1	masigaticharles@gmail.com	[]	f	2018-08-13 08:52:44	2018-08-13 08:52:44	2019-08-13 08:52:44
+bb5100ead9c2863270e7c6d4c8de678d74ac896fac509975f81ceeea770b187c6494a47b672ea91e	1296	1	diradeusdedit17@gmail.com	[]	f	2018-08-13 09:49:10	2018-08-13 09:49:10	2019-08-13 09:49:10
+8859f1bb11b10bbe67ea7b45a3cce92276442d30192bf5685d5e6302af1706aaf242e21e056b3267	21	1	khushele@gmail.com	[]	f	2018-08-13 14:07:46	2018-08-13 14:07:46	2019-08-13 14:07:46
+08efbd22d8692186c98c0ee83670f96794970c35df731de0ff9bfa6be8f4c8d204439af48633d544	1297	1	minkatours@gmail.com	[]	f	2018-08-13 17:33:57	2018-08-13 17:33:57	2019-08-13 17:33:57
+971462d1f3c43ff61972fe04002b5507913b88e32c91d70d7d44e4802ceab5c59f872e0c01aca760	1298	1	gatimseti@gmail.com	[]	f	2018-08-14 06:31:47	2018-08-14 06:31:47	2019-08-14 06:31:47
+c1f5ec698a96e6ce82585fa4e7dc17e27862206acb66177752f9acf95fcb057f1919d9400496128f	1299	1	eliminasiyame@gmail.com	[]	f	2018-08-14 10:40:41	2018-08-14 10:40:41	2019-08-14 10:40:41
+c7b34d306d24aae7b4c3ec5448d409038a0f1e9bfa7325c8fedc2e6499560e4d7ae07fafa7907297	973	1	yangibonakatole@gmail.com	[]	f	2018-08-15 04:03:01	2018-08-15 04:03:01	2019-08-15 04:03:01
+3f0ef326dda1043eeab29df3b18b1d7985967d0fc3e69651f98142f075220ef790ba07b13fd55cf1	1300	1	kmakoye@gmail.com	[]	f	2018-08-15 07:22:17	2018-08-15 07:22:17	2019-08-15 07:22:17
+738dc0baf7f6bf414e4b1794c78d600b2cff99c45e23a834dcc506e8f7b3626a510cb0a297e5621f	1301	1	raelalusa@gmail.com	[]	f	2018-08-15 09:30:58	2018-08-15 09:30:58	2019-08-15 09:30:58
+d23930ccfd55d8e5830705e88ff33693d803f410292bd93eb9984e6ae1178130eb81d6d3685d6f3a	724	1	rkazauradoc@gmail.com	[]	f	2018-08-15 10:36:25	2018-08-15 10:36:25	2019-08-15 10:36:25
+8f66f40a3440c84becc4e51a6f42c701200404371f010e05005d4c4119600322b3ece34eedfc952a	1302	1	maidahayola19@gmail.com	[]	f	2018-08-15 18:19:08	2018-08-15 18:19:08	2019-08-15 18:19:08
+68676126d8c400c9a11fca6d7feadf6edb52e5d1cadd9119e1a6ca4c3c0ad7946ddb7d19817516cf	1303	1	unibrainer@gmail.com	[]	f	2018-08-16 09:29:25	2018-08-16 09:29:25	2019-08-16 09:29:25
+f0e5880219b765f4f77cef1d4a6ccc88506354c45fe73b359b716b21c530f51f104e0a6f19bd1264	1304	1	josephsogoseye.05@gmail.com	[]	f	2018-08-16 10:37:30	2018-08-16 10:37:30	2019-08-16 10:37:30
+46a2fa6d6e6b5c8d318db39f52592b6ee04f7a535582d0032e3d40b14e8fe8178dd474094fbbff03	1305	1	fasha9018@gmail.com	[]	f	2018-08-16 10:47:13	2018-08-16 10:47:13	2019-08-16 10:47:13
+372b206aa0ccf6b6c446601e557ea47d89fc427e0f8a850e8882ec429e533e23db5f1451aa1dc388	520	1	magdalenakingu@gmail.com	[]	f	2018-08-17 06:51:28	2018-08-17 06:51:28	2019-08-17 06:51:28
+d35bc9481b9f1ecc59b2a4f102b505f4ea89547cdad6f1a1328e97f77cf6a211a9fff9a9af764751	425	1	marianamichael13@gmail.com	[]	f	2018-08-17 08:24:40	2018-08-17 08:24:40	2019-08-17 08:24:40
+f143dae8f7a1fafa95dd10a67cab48a0068ba191b2aeb64e8599fefbf75dee315d12bf3c12116c1b	1306	1	maryamhamad07@gmail.com	[]	f	2018-08-17 09:38:31	2018-08-17 09:38:31	2019-08-17 09:38:31
+45ef611b7e35929427569da5ffac0c2fd86bd1bd4497457ea3384cd73fa0fe37c2589ef2247dbdb5	821	1	jonahgikaru@gmail.com	[]	f	2018-08-17 18:54:51	2018-08-17 18:54:51	2019-08-17 18:54:51
+9319a5e213883a3512c60c6512a8c45e58f6a47ac835bd6dd2fd3dc1e1613da73a82c912d59bc26f	1307	1	mwendekilonzo88@gmail.com	[]	f	2018-08-18 10:01:11	2018-08-18 10:01:11	2019-08-18 10:01:11
+028bda4602be08dae25c01c3cb1996ffb5ab927ca35bfee5eb38fb9ecf6cee99729b46ccf9f0241a	1308	1	chichimazroui@gmail.com	[]	f	2018-08-18 13:38:13	2018-08-18 13:38:13	2019-08-18 13:38:13
+7dddae670a94abf0e9aded54c3b6c6b156f7ae5749d96810758c1b5249bb2f257b38fb329f381402	54	1	jodras.esdras@gmail.com	[]	f	2018-08-18 17:55:49	2018-08-18 17:55:49	2019-08-18 17:55:49
+34367c01ca84f49baa7b5ae60f652563478415c0fe5991f4759ff06b59e291de0e2260a41c38f48d	958	1	gminja22@gmail.com	[]	f	2018-08-18 21:52:05	2018-08-18 21:52:05	2019-08-18 21:52:05
+1e9e48376b15375c18fb0910ef3c0f11408f948761048d49b5c887738678dd09bd0815bce7757b84	1309	1	suzansiame9@gmail.com	[]	f	2018-08-19 06:43:10	2018-08-19 06:43:10	2019-08-19 06:43:10
+6a65e3cead7fb506ef6c02c305c2039465265b75782e78e2ca520cdf835cec1e98c6843ddb0602d1	431	1	thiyojacob@gmail.com	[]	f	2018-08-19 07:50:12	2018-08-19 07:50:12	2019-08-19 07:50:12
+034d852117dc9a4812e9d07f0559542ae9b818ce89242a13b3b751c459ffe0d16d965bb993d48a0a	1012	1	eddymagesa@gmail.com	[]	f	2018-08-19 13:07:15	2018-08-19 13:07:15	2019-08-19 13:07:15
+a3c9cd74d9d37929944dbda27c1005d681d88623cd6416c8f0029912681cc5dbf057de6aa39f95fd	309	1	scolakafu@gmail.com	[]	f	2018-08-20 04:41:00	2018-08-20 04:41:00	2019-08-20 04:41:00
+7cdceedbf014d6ad61af4e16738a4708bedb36e840fed66ccd4cced3f6ba13bba465fa9f4936e537	738	1	marthaluena62@gmail.com	[]	f	2018-08-20 10:47:49	2018-08-20 10:47:49	2019-08-20 10:47:49
+de8627c3c87e1dd71e1a7c7d86ad640503bacbf5988c8d2de8270699d28dbdce7338c41b3302c4c6	1310	1	fatmajuned1@gmail.com	[]	f	2018-08-20 12:45:39	2018-08-20 12:45:39	2019-08-20 12:45:39
+bf46a0901f3057bfdfae4c7ba152a041d0225dbfdc497414f14e20076853ed86c918a9a729982921	1311	1	echasste@gmail.com	[]	f	2018-08-21 11:38:19	2018-08-21 11:38:19	2019-08-21 11:38:19
 \.
 
 
 --
--- Data for Name: oauth_auth_codes; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: oauth_auth_codes; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.oauth_auth_codes (id, user_id, client_id, scopes, revoked, expires_at) FROM stdin;
@@ -2287,7 +3439,7 @@ COPY public.oauth_auth_codes (id, user_id, client_id, scopes, revoked, expires_a
 
 
 --
--- Data for Name: oauth_clients; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: oauth_clients; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.oauth_clients (id, user_id, name, secret, redirect, personal_access_client, password_client, revoked, created_at, updated_at) FROM stdin;
@@ -2297,7 +3449,7 @@ COPY public.oauth_clients (id, user_id, name, secret, redirect, personal_access_
 
 
 --
--- Data for Name: oauth_personal_access_clients; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: oauth_personal_access_clients; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.oauth_personal_access_clients (id, client_id, created_at, updated_at) FROM stdin;
@@ -2306,7 +3458,7 @@ COPY public.oauth_personal_access_clients (id, client_id, created_at, updated_at
 
 
 --
--- Data for Name: oauth_refresh_tokens; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: oauth_refresh_tokens; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.oauth_refresh_tokens (id, access_token_id, revoked, expires_at) FROM stdin;
@@ -2314,7 +3466,7 @@ COPY public.oauth_refresh_tokens (id, access_token_id, revoked, expires_at) FROM
 
 
 --
--- Data for Name: password_resets; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: password_resets; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.password_resets (email, token, created_at) FROM stdin;
@@ -2322,7 +3474,7 @@ COPY public.password_resets (email, token, created_at) FROM stdin;
 
 
 --
--- Data for Name: pay_bill_numbers; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: pay_bill_numbers; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.pay_bill_numbers (id, service_provider, phone_number, created_at, updated_at, deleted_at) FROM stdin;
@@ -2330,7 +3482,7 @@ COPY public.pay_bill_numbers (id, service_provider, phone_number, created_at, up
 
 
 --
--- Data for Name: payments; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: payments; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.payments (id, user_id, sender, amount, date_payed, operator_type, reference_no, created_at, updated_at, deleted_at, total_to_date) FROM stdin;
@@ -2389,6 +3541,12 @@ COPY public.payments (id, user_id, sender, amount, date_payed, operator_type, re
 171	1185	653383249	1000	2018-07-04	TIGO-PESA	12001200120012001200	2018-07-03 21:38:56	2018-07-03 21:45:38	\N	0
 172	758	766456365	5000	2018-07-04	M-PESA	5G481HQHV4M	2018-07-04 11:12:59	2018-07-04 11:14:39	\N	0
 173	840	719024181	1000	2018-07-04	M-PESA	5G421HQMIEY	2018-07-04 11:59:19	2018-07-04 11:59:19	\N	0
+249	939	0715466622	1000	2018-07-24	TIGO-PESA	59357371869	2018-07-24 11:10:43	2018-07-24 11:11:51	\N	0
+251	270	0656756464	1000	2018-07-24	TIGO-PESA	50142391603	2018-07-24 17:55:51	2018-07-25 05:34:12	\N	0
+252	1156	0656939210	1000	2018-07-24	TIGO-PESA	50142662013	2018-07-24 20:12:34	2018-07-25 05:42:33	\N	0
+253	544	0657461124	1000	2018-07-25	TIGO-PESA	19350964614	2018-07-25 05:46:22	2018-07-25 14:34:48	\N	0
+255	1144	0713422952	5000	2018-07-25	M-PESA	5GP91JGYRF7	2018-07-25 12:27:52	2018-07-25 14:40:42	\N	0
+256	308	0754774580	5000	2018-07-25	M-PESA	5GP71JI8D3F	2018-07-25 17:35:27	2018-07-26 05:45:23	\N	0
 77	218	716789967	1000	2018-06-10	TIGO-PESA	212804693801	2018-06-10 13:13:01	2018-06-10 13:13:01	\N	0
 78	541	689505251	10000	2018-06-10	TIGO-PESA	167614075261	2018-06-10 13:20:01	2018-06-10 13:20:01	\N	0
 79	314	762420922	1000	2018-06-11	M-PESA	5FB41FN9R5Y	2018-06-11 10:20:48	2018-06-11 10:20:48	\N	0
@@ -2452,6 +3610,7 @@ COPY public.payments (id, user_id, sender, amount, date_payed, operator_type, re
 168	98	712980006	10000	2018-07-01	TIGO-PESA	61246963380	2018-07-01 14:44:39	2018-07-01 14:44:39	\N	0
 169	277	652546464	1000	2018-07-03	TIGO-PESA	70956473677	2018-07-03 08:01:24	2018-07-03 08:01:24	\N	0
 170	690	788366511	5000	2018-07-03	AIRTEL MONEY	PP180703.1659.C25022.	2018-07-03 14:00:39	2018-07-03 16:07:12	\N	0
+246	102	0764899798	5000	2018-07-23	M-PESA	5GO41JCCLNG	2018-07-23 21:57:22	2018-07-24 04:26:38	\N	0
 175	1004	754771122	1000	2018-07-04	M-PESA	5G491HQS5Q1	2018-07-04 12:49:09	2018-07-04 13:13:29	\N	0
 177	1085	712763697	10000	2018-07-05	TIGO-PESA	80133012608.	2018-07-05 08:45:01	2018-07-05 08:46:57	\N	0
 178	174	713885574	5000	2018-07-05	TIGO-PESA	81349130935	2018-07-05 16:56:58	2018-07-05 17:03:47	\N	0
@@ -2464,11 +3623,138 @@ COPY public.payments (id, user_id, sender, amount, date_payed, operator_type, re
 185	173	676911668	1000	2018-07-09	TIGO-PESA	8684019782609	2018-07-09 07:07:22	2018-07-09 07:10:05	\N	0
 186	919	713418475	1000	2018-07-09	TIGO-PESA	21360244945	2018-07-09 07:28:41	2018-07-09 07:40:06	\N	0
 187	54	768943334	1000	2018-09-07	M-PESA	5G961I6C5QI	2018-07-09 13:30:35	2018-07-09 14:29:50	\N	0
+188	1106	767188777	10000	2018-07-10	VOUCHER	VOCHER-NO-2002	2018-07-10 05:45:36	2018-07-10 05:47:31	\N	0
+189	74	677021329	5000	2018-07-10	TIGO-PESA	50158032748	2018-07-10 08:14:20	2018-07-10 08:22:00	\N	0
+190	219	652460700	5000	2018-07-10	TIGO-PESA	90978429347	2018-07-10 11:28:16	2018-07-10 11:28:16	\N	0
+191	423	785431589	1000	2018-06-18	TIGO-PESA	99316815854	2018-07-10 14:40:35	2018-07-10 14:40:35	\N	0
+192	423	785431589	1000	2018-07-10	TIGO-PESA	993168158548	2018-07-10 14:48:49	2018-07-10 14:48:49	\N	0
+193	162	762805651	1000	2018-07-11	M-PESA	5GB51IB2QG1	2018-07-11 07:02:01	2018-07-11 07:02:01	\N	0
+194	1115	762805651	1000	2018-07-11	M-PESA	5GB51IB2QG13	2018-07-11 07:10:39	2018-07-11 07:10:39	\N	0
+196	143	715040742	1000	2018-07-11	TIGO-PESA	80971943812	2018-07-11 08:12:15	2018-07-11 08:13:35	\N	0
+205	1117	659447042	1000	2018-07-13	TIGO-PESA	30167602228	2018-07-13 10:56:53	2018-07-13 11:45:58	\N	0
+195	1118	766852167	1000	2018-07-11	TIGO-PESA	5gb21ibai50	2018-07-11 08:09:30	2018-07-11 08:20:26	\N	0
+197	356	658123759	1000	2018-07-11	TIGO-PESA	26857508571	2018-07-11 09:02:30	2018-07-11 09:19:22	\N	0
+198	314	762420922	5000	2018-07-11	M-PESA	5GB31IBU413	2018-07-11 11:07:44	2018-07-11 11:07:44	\N	0
+199	123	755683132	1000	2018-07-11	M-PESA	5GB41IBZI3I	2018-07-11 12:00:48	2018-07-11 12:00:48	\N	0
+206	114	0715018329	5000	2018-07-14	TIGO-PESA	91375065845	2018-07-14 11:29:50	2018-07-14 11:49:13	\N	0
+200	746	767851747	1000	2018-07-11	M-PESA	5GB01ICW42	2018-07-11 13:10:12	2018-07-11 13:32:09	\N	0
+201	1118	766852167	1000	2018-07-11	TIGO-PESA	5gb21ibai51	2018-07-12 10:50:52	2018-07-12 10:50:52	\N	0
+203	1075	772868618	1000	2018-07-12	TIGO-PESA	51379064040	2018-07-12 11:28:35	2018-07-12 11:28:35	\N	0
+204	204	785275487	1000	2018-07-12	M-PESA	5GC21IFKG0M	2018-07-12 15:47:21	2018-07-12 16:23:32	\N	0
+202	1089	776773434	1000	2018-07-12	TIGO-PESA	0652443216	2018-07-12 11:15:45	2018-07-12 16:27:53	\N	0
+207	218	0716789967	1000	2018-07-16	TIGO-PESA	11390197060	2018-07-16 07:27:34	2018-07-16 07:28:31	\N	0
+208	1009	0766064176	1000	2018-07-16	M-PESA	5GG71IPO0A9	2018-07-16 08:02:45	2018-07-16 08:04:09	\N	0
+209	1071	785313786	1000	2018-07-16	AIRTEL MONEY	PP180714.0104.A26047	2018-07-16 14:36:43	2018-07-16 14:36:43	\N	0
+210	32	0713562436	1000	2018-07-16	M-PESA	40128089393	2018-07-16 17:50:39	2018-07-16 17:50:39	\N	0
+211	718	0687354357	5000	2018-07-16	TIGO-PESA	3138692635	2018-07-16 20:57:13	2018-07-16 20:59:32	\N	0
+214	181	0625641461	1000	2018-07-17	M-PESA	5GH31ISJMSR	2018-07-17 07:38:04	2018-07-17 07:38:04	\N	0
+216	1060	0659979398	1000	2018-07-17	TIGO-PESA	89336826144	2018-07-17 09:25:01	2018-07-17 09:36:33	\N	0
+217	1139	0753332206	1000	2018-07-17	M-PESA	5GH21ISZQBI	2018-07-17 09:40:32	2018-07-17 09:40:32	\N	0
+218	1123	0753330730	1000	2018-07-17	M-PESA	5GH11ISRV0V	2018-07-17 09:41:25	2018-07-17 09:41:25	\N	0
+219	767	0752210774	10000	2018-07-17	M-PESA	5GH11IT5B89	2018-07-17 10:25:11	2018-07-17 10:26:51	\N	0
+221	1179	0622999998	5000	2018-07-17	TIGO-PESA	30120953643	2018-07-17 12:47:09	2018-07-17 12:50:11	\N	0
+220	1223	0682553333	1000	2018-07-17	TIGO-PESA	81384886675	2018-07-17 10:55:36	2018-07-17 13:04:49	\N	0
+223	1134	0762890129	5000	2018-07-18	M-PESA	5G131IV8NB1	2018-07-18 03:48:09	2018-07-18 04:18:12	\N	0
+222	249	0255754992	1000	2018-07-17	TIGO-PESA	50991193107.	2018-07-17 20:54:14	2018-07-18 04:22:40	\N	0
+227	893	0773897527	1000	2018-07-18	M-PESA	70172504468	2018-07-18 10:39:59	2018-07-18 11:02:26	\N	0
+225	249	0255754992	1000	2018-07-18	TIGO-PESA	Kumbukumbu no.: 50991193107.	2018-07-18 06:06:42	2018-07-18 11:18:38	\N	0
+228	452	0712727204	5000	2018-07-18	TIGO-PESA	20123294313	2018-07-18 14:41:31	2018-07-18 14:41:31	\N	0
+229	498	0716534033	1000	2018-07-18	TIGO-PESA	89330313404	2018-07-18 16:38:07	2018-07-18 16:42:22	\N	0
+230	335	719259797	1000	2018-07-19	TIGO-PESA	40994358392	2018-07-19 04:42:37	2018-07-19 04:42:37	\N	0
+233	488	0755456635	5000	2018-07-19	M-PESA	5g1iyaabq	2018-07-19 05:52:56	2018-07-19 06:28:34	\N	0
+234	1110	0656989113	1000	2018-07-18	M-PESA	5GI51IXJ0LN	2018-07-19 06:39:49	2018-07-19 06:39:49	\N	0
+232	133	0762913628	1000	2018-07-19	M-PESA	5GJ11IY6BER	2018-07-19 05:02:05	2018-07-19 11:59:03	\N	0
+235	412	0712149445	1000	2018-07-19	TIGO-PESA	76882492936	2018-07-19 13:49:58	2018-07-19 14:03:20	\N	0
+236	408	0715442239	1000	2018-07-21	VOUCHER	VOUCHER21072018	2018-07-21 05:20:23	2018-07-21 05:20:23	\N	0
+237	177	0715560363	5000	2018-07-21	TIGO-PESA	10131679423	2018-07-21 10:54:59	2018-07-21 11:41:57	\N	0
+238	30	0752222900	1000	2018-07-21	TIGO-PESA	80902621672	2018-07-21 16:46:17	2018-07-21 19:00:50	\N	0
+239	789	0767443109	10000	2018-07-23	TIGO-PESA	60916482282	2018-07-23 06:12:43	2018-07-23 06:13:11	\N	0
+240	835	0719454277	5000	2018-07-23	TIGO-PESA	10196753508	2018-07-23 06:30:18	2018-07-23 06:31:44	\N	0
+241	523	0713816087	1000	2018-07-23	M-PESA	5GN71J9WXCB	2018-07-23 07:36:01	2018-07-23 07:52:22	\N	0
+243	850	0758907148	1000	2018-07-23	TIGO-PESA	90918957057	2018-07-23 13:51:59	2018-07-23 14:05:12	\N	0
+244	949	0713223253	1000	2018-07-23	M-PESA	5gno1jbtac8	2018-07-23 17:04:16	2018-07-23 18:44:31	\N	0
+245	1043	0769317690	\N	2018-07-23	\N	0769317690	2018-07-23 18:59:22	2018-07-23 18:59:22	\N	0
+250	148	0674418259	1000	2018-07-24	TIGO-PESA	66896194566	2018-07-24 11:45:50	2018-07-24 11:45:50	\N	0
+257	1251	0656456172	1000	2018-07-26	TIGO-PESA	40927150427	2018-07-26 09:48:36	2018-07-26 09:49:33	\N	0
+258	156	0767962720	1000	2018-07-26	TIGO-PESA	49364284039	2018-07-26 11:31:49	2018-07-26 11:57:10	\N	0
+259	1253	0742026629	1000	2018-07-26	M-PESA	5GQ01JK4D26	2018-07-26 12:01:02	2018-07-26 12:01:02	\N	0
+260	450	0757722054	1000	2018-07-26	M-PESA	5GQ61JKLCOO	2018-07-26 14:13:52	2018-07-26 14:13:52	\N	0
+261	70	0757286837	1000	2018-07-27	TIGO-PESA	16805743831	2018-07-26 21:06:57	2018-07-26 21:06:57	\N	0
+262	187	0672952458	5000	2018-07-27	TIGO-PESA	36805173381	2018-07-27 06:43:46	2018-07-27 06:49:18	\N	0
+270	1194	0763223388	5000	2018-07-29	TIGO-PESA	89373393224	2018-07-30 10:25:29	2018-07-30 10:25:29	\N	0
+264	856	0763070434	1000	2018-07-27	M-PESA	5GR41JN7DPG	2018-07-27 11:16:19	2018-07-27 11:19:41	\N	0
+265	1167	0755303686	5000	2018-07-24	TIGO-PESA	19357105674	2018-07-27 12:10:30	2018-07-27 12:10:30	\N	0
+268	1016	0752529237	1000	2018-07-27	M-PESA	5GR81JOTY1U	2018-07-27 19:56:17	2018-07-27 19:56:18	\N	0
+271	629	0656722567	5000	2018-07-30	TIGO-PESA	31324748445	2018-07-30 10:30:43	2018-07-30 10:30:43	\N	0
+272	1172	0765828888	1000	2018-07-30	M-PESA	5GU71JW7107	2018-07-30 10:45:56	2018-07-30 10:48:34	\N	0
+273	369	0717125389	1000	2018-07-30	TIGO-PESA	99377595559	2018-07-30 11:35:20	2018-07-30 11:35:20	\N	0
+274	1090	0768471767	1000	2018-07-30	M-PESA	5GU71JWHQWP	2018-07-30 12:29:42	2018-07-30 12:29:42	\N	0
+275	81	0716896389	1000	2018-07-30	AIRTEL MONEY	PP180730.1552.B17848.	2018-07-30 12:57:37	2018-07-30 18:58:59	\N	0
+276	180	0752454888	10000	2018-07-30	M-PESA	5GU51JY1XB1	2018-07-30 19:30:12	2018-07-30 19:31:37	\N	0
+277	95	0653660669	1000	2018-07-31	TIGO-PESA	41337207760	2018-07-31 05:23:37	2018-07-31 05:24:13	\N	0
+279	178	0682003737	1000	2018-07-31	M-PESA	5GV41JZ8VIM	2018-07-31 10:40:18	2018-07-31 10:57:03	\N	0
+280	1163	0768550170	1000	2018-07-31	M-PESA	5GV81JZBZ52	2018-07-31 10:57:30	2018-07-31 10:57:54	\N	0
+281	1149	0715351827	1000	2018-07-31	TIGO-PESA	70932689462	2018-07-31 10:59:38	2018-07-31 10:59:38	\N	0
+283	1192	0717222361	10000	2018-08-01	TIGO-PESA	96822056296	2018-08-01 08:10:52	2018-08-01 08:11:46	\N	0
+284	497	0754819531	1000	2018-08-01	M-PESA	5H191K2ZRCH	2018-08-01 12:06:55	2018-08-01 12:06:55	\N	0
+285	87	0759628323	1000	2018-08-01	M-PESA	167774114	2018-08-01 15:50:44	2018-08-01 17:46:07	\N	0
+287	437	0752372308	1000	2018-08-02	M-PESA	5H291K5jG67	2018-08-02 07:29:41	2018-08-02 07:30:03	\N	0
+286	80	0787960066	1000	2018-08-01	AIRTEL MONEY	PP180801.2115.A86322	2018-08-01 18:19:13	2018-08-02 07:46:49	\N	0
+288	935	0755359191	5000	2018-08-02	TIGO-PESA	60171944013	2018-08-02 07:48:10	2018-08-02 07:50:26	\N	0
+289	1157	0773530442	1000	2018-08-02	TIGO-PESA	30941246997	2018-08-02 09:50:17	2018-08-02 09:51:06	\N	0
+290	1184	0712380112	1000	2018-08-02	TIGO-PESA	80943344012	2018-08-02 19:33:27	2018-08-02 19:39:12	\N	0
+291	1155	0765080687	5000	2018-08-03	M-PESA	5H351K88GMP	2018-08-03 03:20:53	2018-08-03 08:12:59	\N	0
+292	1151	0712713006	10000	2018-08-03	M-PESA	5H361K8J7DS	2018-08-03 08:16:23	2018-08-03 08:16:23	\N	0
+293	518	0759310631	1000	2018-08-03	M-PESA	5H381K90ID2	2018-08-03 08:49:53	2018-08-03 14:21:15	\N	0
+294	529	0769611956	5000	2018-08-06	M-PESA	5H641KHU2VI	2018-08-06 08:51:45	2018-08-06 08:51:45	\N	0
+295	342	0758156781	1000	2018-08-08	M-PESA	5H801KN6VXQ	2018-08-08 05:08:21	2018-08-08 07:21:37	\N	0
+296	1285	0753190496	1000	2018-08-08	M-PESA	SH881KNRZ2U	2018-08-08 08:22:16	2018-08-08 12:04:48	\N	0
+297	901	0769761297	5000	2018-08-08	M-PESA	5H861K05YRA	2018-08-08 10:08:30	2018-08-08 12:05:58	\N	0
+298	173	0676911668	1000	2018-08-08	TIGO-PESA	9695328047108	2018-08-08 16:22:00	2018-08-08 16:32:10	\N	0
+300	261	0754243276	1000	2018-08-09	M-PESA	5H921KR0WLQ	2018-08-09 09:50:55	2018-08-09 10:18:52	\N	0
+301	398	714675769	1000	2018-08-09	TIGO-PESA	80200113173	2018-08-09 12:18:53	2018-08-09 12:18:53	\N	0
+302	845	657525564	1000	2018-08-09	TIGO-PESA	70201065203	2018-08-09 16:54:52	2018-08-09 16:54:52	\N	0
+303	495	0783253848	10000	2018-08-10	M-PESA	5HA61KTM8KG	2018-08-10 08:02:18	2018-08-10 08:17:05	\N	0
+304	85	0762363033	1000	2018-08-10	M-PESA	5HA31KUOGL5	2018-08-10 10:10:46	2018-08-10 10:12:09	\N	0
+307	1047	0769766997	1000	2018-08-10	M-PESA	5HA91KV4099	2018-08-10 16:03:35	2018-08-10 16:03:35	\N	0
+305	385	0654357059	1000	2018-08-10	TIGO-PESA	39410137209	2018-08-10 10:57:51	2018-08-11 09:39:30	\N	0
+309	357	0767238788	1000	2018-08-11	M-PESA	5HB41KXZ4MO	2018-08-11 15:53:35	2018-08-11 15:53:35	\N	0
+311	1177	0712288231	10000	2018-08-12	VOUCHER	VIP GRAY	2018-08-12 13:31:08	2018-08-12 13:31:08	\N	0
+312	19	0673273125	1000	2018-08-12	M-PESA	5HC41L0K7K0	2018-08-12 14:32:21	2018-08-12 14:57:15	\N	0
+310	720	0683168545	10000	2018-08-12	AIRTEL MONEY	PP180812.1141.B60379	2018-08-12 08:44:18	2018-08-12 15:03:22	\N	0
+313	1115	0762805651	1000	2018-08-12	M-PESA	5HC41L1JSUE	2018-08-12 20:16:48	2018-08-13 04:25:12	\N	0
+314	1130	0762249841	1000	2018-08-13	M-PESA	0767188777	2018-08-13 08:35:56	2018-08-13 08:45:32	\N	0
+315	1195	0713728080	10000	2018-08-13	VOUCHER	VIP BLANDINA	2018-08-13 13:37:16	2018-08-13 13:37:16	\N	0
+316	1118	0766852167	5000	2018-08-13	M-PESA	5HD21L354L2	2018-08-13 13:53:21	2018-08-13 13:53:21	\N	0
+317	1216	0755836896	1000	2018-08-13	M-PESA	5HD71L3BTKR	2018-08-13 14:23:43	2018-08-13 14:49:06	\N	0
+318	1088	0765441647	10000	2018-08-14	M-PESA	5HE91L5G1FP	2018-08-14 09:42:54	2018-08-14 09:42:54	\N	0
+319	1071	0785313786	1000	2018-08-14	TIGO-PESA	0785313786	2018-08-14 09:58:44	2018-08-14 09:58:44	\N	0
+320	443	0685423985	1000	2018-08-14	VOUCHER	Voucher-Samuel	2018-08-14 10:19:17	2018-08-14 10:19:17	\N	0
+321	687	0767211507	1000	2018-08-14	M-PESA	5HF51L7BWA3	2018-08-14 21:33:01	2018-08-14 21:34:28	\N	0
+322	32	0713562436	1000	2018-08-15	TIGO-PESA	50220991243	2018-08-15 08:30:17	2018-08-15 08:36:28	\N	0
+323	326	0677269388	1000	2018-08-15	TIGO-PESA	61495856200	2018-08-15 11:41:32	2018-08-15 12:14:48	\N	0
+324	1181	0714141111	1000	2018-08-15	TIGO-PESA	50271738098	2018-08-15 17:22:03	2018-08-15 17:22:03	\N	0
+325	893	0773897527	1000	2018-08-16	TIGO-PESA	39430702349	2018-08-16 13:30:15	2018-08-16 13:43:02	\N	0
+326	893	0773897527	1000	2018-08-16	TIGO-PESA	0773897527	2018-08-16 13:43:23	2018-08-16 13:43:23	\N	0
+328	1060	0659979398	5000	2018-08-16	TIGO-PESA	66970132871	2018-08-16 17:17:58	2018-08-16 17:23:35	\N	0
+329	1221	0654841771	1000	2018-08-16	M-PESA	5HG01LCQYLA	2018-08-16 17:20:43	2018-08-17 04:19:12	\N	0
+330	498	0716534033	1000	2018-08-17	TIGO-PESA	39443855999	2018-08-17 09:28:20	2018-08-17 09:32:33	\N	0
+332	412	712149445	1000	2018-08-17	TIGO-PESA	46982840276	2018-08-17 11:38:07	2018-08-17 11:38:07	\N	0
+333	386	0767211745	5000	2018-08-17	M-PESA	5HH41LFQ2O0	2018-08-17 17:02:10	2018-08-17 17:05:22	\N	0
+334	1139	0753332206	1000	2018-08-17	M-PESA	5HH71LFUUIH	2018-08-17 17:39:52	2018-08-17 17:39:52	\N	0
+335	133	0762913628	1000	2018-08-18	M-PESA	5HI81LGETZ2	2018-08-18 06:10:07	2018-08-18 06:10:07	\N	0
+336	431	0767029904	5000	2018-08-19	M-PESA	5HJ31LJT7IX	2018-08-19 07:58:04	2018-08-19 08:04:01	\N	0
+337	45	0753320009	1000	2018-08-19	M-PESA	5hj51llhsrp	2018-08-19 16:48:20	2018-08-19 17:24:07	\N	0
+338	1238	0765451635	\N	2018-08-20	\N	0765451635	2018-08-20 10:17:08	2018-08-20 10:17:08	\N	0
+341	738	0717602248	1000	2018-08-20	TIGO-PESA	59452088429	2018-08-20 10:55:49	2018-08-20 13:44:37	\N	0
+343	1233	0769977916	1000	2018-08-20	M-PESA	5HK81LNSY88	2018-08-20 14:30:19	2018-08-20 14:54:03	\N	0
+342	1309	0657005979	1000	2018-08-20	M-PESA	5HK71LNPF3J	2018-08-20 14:04:31	2018-08-20 14:55:09	\N	0
+340	1230	0689106761	1000	2018-08-20	M-PESA	5HK71LN2MHB	2018-08-20 10:25:52	2018-08-20 14:56:03	\N	0
 \.
 
 
 --
--- Data for Name: price_lists; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: price_lists; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.price_lists (id, name, effective_date, color, created_at, updated_at, deleted_at) FROM stdin;
@@ -2482,102 +3768,7 @@ COPY public.price_lists (id, name, effective_date, color, created_at, updated_at
 
 
 --
--- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
---
-
-COPY public.products (id, category_id, name, code, cc, image, description, created_at, updated_at, deleted_at) FROM stdin;
-893	3	FOREVER BEE HONEY	207	0.0700000000000000067	207.png	A great-tasting, all natural sweetener loaded with nature's goodness.\r\nThroughout the ages, honey has been recognized as a premium natural food a storehouse of energy that is easily digestible. This great-tasting, all natural sweetener is loaded with nature's goodness.	\N	2018-06-06 06:54:21	\N
-895	4	25TH EDITION FRAGRANCE MEN	209	0.176999999999999991	209.png	25TH Edition for Men is a fluid, aromatic fougre fragrance with a sensuous masculine blend of fruity, herbaceous and woody notes that are forever fresh and long lasting.\r\nThe topnote blends aromatic notes of crushed basil and Mediterranean lavender and evolves to reveal a masculine base of oakmoss, Mysore sandalwood, sensual musks, Virginian cedarwood, and tonka bean.	\N	2018-06-18 09:27:26	\N
-904	4	ALOE JOJOBA CONDITIONING RINSE	522	0.0709999999999999937	522b.png	Forever Living Products Aloe-Jojoba Conditioning Rinse enriched formula with Vitamin B Complex and Hydrolyzed Protein has extra moisturizing power to leave your hair soft, shiny and manageable.\nThe unique combination of stabilized Aloe Vera gel and jojoba, an agent to remove electrostatic charges, conditions the hair to give it a feeling of freshness and a look of silky elegance.	\N	2017-12-05 12:23:44	\N
-924	5	ALOE ACTIVATOR	343	0.0589999999999999969	343.png	Aloe Activator contains Stabilized Aloe Vera gel and Allantoin, an organic cell renewal agent. Aloe Activator is a superb moisturizing agent, containing enzymes, amino acids and polysaccharides.\nAloe Activator is incredibly versatile. Although regarded as a principal component of the Aloe Fleur de Jouvence regime, it is extremely effective for a number of other purposes, such as a skin cleanser and freshener.	\N	2017-12-05 12:22:53	\N
-1	5	A TOUCH OF FOREVER	1	2	1.png	Try and share your favorite products and build your business!\nTry some of our best selling and favorite products. Keep them for yourself or share them with others to build your business!	\N	2017-11-29 17:28:48	2017-11-29 17:28:48
-2	1	A TOUCH OF FOREVER	1	2	1.png	Try and share your favorite products and build your business!\nTry some of our best selling and favorite products. Keep them for yourself or share them with others to build your business!	\N	2017-12-05 12:31:13	\N
-884	1	MINI COMBO-NUTRITIONAL	75	1	75.png	A great introduction to the Forever Living line of products. Perfect to try or perfect to share!\nTry some of our best selling and favorite products. Keep them for yourself or share them with others to build your business!\nThis MIni Combo contains:\n* Aloe Vera Gel\n* Forever Lite - Vanilla\n* Forever Bee Pollen\n* Forever Bee Propolis\n* Forever Royal Jelly\n* Artic-Sea Super Omega 3\n* Absorbent-C\n* Fields of Green\n* Forever Lycium Plus\n* Forever Ginkgo Plus\n* Forever Kids	\N	2017-12-05 12:30:47	\N
-885	2	ALOE BITS N' PEACHES	77	0.100000000000000006	77.png	Forever Aloe Bits N Peaches is just a touch of natural peach flavor and peach concentrate.\nFor centuries, people all around the world have used Aloe Vera for its health benefits. The addition of peaches provides carotenoids valuable as antioxidants and a source of vitamin A.	\N	2017-12-05 12:28:41	\N
-888	2	FOREVER FREEDOM	196	0.145999999999999991	196.png	Forever Freedom has all the benefits of Aloe Vera Gel in a tasty, orange-flavored juice formula!\nWe've taken Glucosamine Sulfate and Chondroitin Sulfate - two naturally occurring elements that have been shown to help maintain healthy joint function and mobility - and married them with our stabilized Aloe Vera gel.	\N	2017-12-05 12:28:28	\N
-879	5	R3 FACTOR	69	0.129000000000000004	69.png	Help your skin RETAIN its natural moisture, RESTORE its resilience and RENEW its appearance with R3 Factor Skin Defense Creme.\nR3 Factor Skin Defense Creme is a rich combination of stabilized Aloe Vera gel, soluble collagen and alpha-hydroxy acids, fortified with vitamins A and E, each vital to healthy skin.	\N	2017-12-05 12:22:34	\N
-894	4	25TH EDITION FRAGRANCE WOMEN	208	0.176999999999999991	208.png	25TH Edition for Women is a fresh, white floral bouquet that blends sheer petals with warm, musky woods to create a soft and deep feminine character.\nThis unique bouquet begins with captivating floral notes of cactus flower and sparkling yellow freesia threaded with ivy leaves, for a lush green accent.	\N	2017-12-05 12:25:57	\N
-913	4	AVOCADO FACE & BODY SOAP	284	0.0269999999999999997	284.png	Made with 100% pure avocado butter, Avocado Face & Body Soap loves your skin, moisturizing as it cleans with the natural rejuvenating properties of this powerful fruit.\nAvocado offers relief for almost every skin type, gently cleansing oily skin with no irritation to keep pores clear and healthy. For dry, sensitive skin, it smooths quickly and penetrates to nourish and moisturize.	\N	2017-12-05 12:24:04	\N
-922	5	FIRMING FOUNDATION LOTION	340	0.0919999999999999984	340.png	Firming Foundation Lotion is a state-of-the-art skin care lotion specially formulated for use in our Aloe Fleur de Jouvence beauty regime. \nIdeal for daytime use to counteract the elements, it combines the science of dermatology with the art of cosmetology to produce an effective product that reduces the signs of aging by helping the skin to firm, retexture and tighten the pores, and to provide a foundation for makeup application.	\N	2017-12-05 12:22:21	\N
-934	1	VITAL 5 PACK	456	1	456.png	Take the guesswork out of advanced nutrition with Forever Vital 5 - our solution to daily, healthy nutrition in one simple pak.\r\nVital5 contains Aloe Vera Gel, Forever Daily, Forever Active Probiotic, Forever Arctic Sea and ARGI+. Together these products help to support the transportation of nutrients throughout our bodies to our cells and tissues.	\N	2018-06-11 10:47:33	\N
-873	6	ALOE LOTION (TUBE)	62	0.0580000000000000029	62.png	One of our signature products, Aloe Lotion is a wonderful, all-purpose, skin lotion with a high content of pure, stabilized aloe plus Jojoba Oil and Vitamin E to moisturize and soothe the skin.\nLight in scent but long on soothing dry, irritated skin, Aloe Lotion quickly restores your skin's delicate pH balance to keep it supple and soft.	\N	2017-12-05 12:18:33	\N
-917	4	ALOE SANITIZER	318	0.0170000000000000012	318.png	Forever Hand Sanitizer with Aloe & Honey is designed to kill 99.99% of germs. The skin-soothing stabilized aloe and hydrating honey soften and moisturize as it cleans.\nLet's face it if you're an active family, there's not much you can do about picking up a few germs. But you can get rid of them quick. Forever Hand Sanitizer a big peace of mind in a tiny bottle.	\N	2017-12-05 12:24:53	\N
-918	6	ALOE SUNSCREEN SPRAY-EU	319	0.0840000000000000052	319.png	Healthy summer skin has never been easier!Aloe Sunscreen Spray has SPF 30 and Aloe Vera to protect your skin from the aging and damaging effects of the sun.\nIf you and your family enjoy an active lifestyle, then that means you should always be prepared. Keeping everyone happy will keep you on your toes  so when you're prepared to be in the sun, there's no need to worry.	\N	2017-12-05 12:18:00	\N
-921	5	ALOE CLEANSER	339	0.0589999999999999969	339.png	Aloe Cleanser is prepared from hypo-allergenic ingredients to create a light, non-greasy, non-irritating lotion that is pH and moisture-balanced.\nAloe Cleanser is fast and thorough in removing makeup, dirt, and other invisible skin debris. Use it as the first step in preparing your skin for a full Aloe Facial, or simply in the daily, routine skin care program of our Aloe Restorative Beauty Regime.	\N	2017-12-05 12:22:06	\N
-902	5	ALOE SCRUB	238	0.0640000000000000013	238.png	With its unique combination of Stabilized Aloe Vera gel and solid micro-spheres made from pure Jojoba Oil, this effective skin cleanser is gentle enough for everyday use.\nForever Aloe Scrub gently scrubs away dead skin cells and debris that clog pores and dull the skin's appearance, to begin revealing radiant new, healthier skin.	\N	2017-12-05 12:21:55	\N
-901	5	FOREVER EPIBLANC	236	0.0800000000000000017	236.png	Forever Epiblanc's exclusive formula is specifically designed to brighten the complexion and even skin tone while helping to diminish the appearance of dark spots.\nForever Epiblanc is most effective when applied directly to blemishes or dark spots on the skin. Use of Forever Living's Aloe Sunscreen, in combination with Forever Epiblanc, is recommended during the daytime.	\N	2017-12-05 12:21:11	\N
-898	5	ALLURING EYES	233	0.0980000000000000038	233.png	Forever Alluring Eyes is a revitalizing under-eye cream, formulated using modern technology to reduce the appearance of wrinkles, fine lines and under-eye circles.\nForever Alluring Eyes is fortified with some of the finest ingredients to improve the suppleness and elasticity of the skin in the delicate and highly visible area around the eyes.	\N	2017-12-05 12:20:52	\N
-899	5	FOREVER MARINE MASK	234	0.0899999999999999967	234.png	Forever Marine Mask provides deep cleansing while balancing the skin's texture with natural sea minerals from sea kelp and algae, plus the super moisturizing and conditioning properties of Aloe Vera.\nA long day of work or a hard day at play may leave your skin looking and feeling dull and dry. Added moisture and deep cleansing is the obvious solution to restoring and replenishing your skin's softness and natural texture.	\N	2017-12-05 12:20:38	\N
-920	5	REHYDRATING TONER	338	0.0589999999999999969	338.png	Rehydrating Toner is a non-drying, alcohol-free formula that contains natural aloe vera and witch hazel, together with special skin moist-urizers and plant extracts, for toning the skin.\nRehydrating Toner is a gentle preparation used to remove the last traces of cleanser, makeup, impurities and dull, lifeless surface cells, thus providing good secondary cleansing and toning to tighten the pores.	\N	2017-12-05 12:20:13	\N
-874	6	ALOE MOISTURIZING LOTION(TUBE)	63	0.0580000000000000029	63.png	Aloe Moisturizing Lotion is excellent for face, hands and body, helping to counteract the effects of pollution and the environment.\nWeather, wind and pollution  day in, day out, they take their toll on your skin. Now you can fight back with our exquisite Aloe Moisturizing Lotion. This unique lotion has outstanding humectant and moisturizing properties.	\N	2017-12-05 12:19:35	\N
-864	6	ALOE FIRST SPRAY	40	0.0790000000000000008	40.png	This exclusive skin soothing formula is an excellent first step for soothing minor skin irritations.\nThe combination of aloe and herbs provide a naturally soothing, pH-balanced spray that is easy to apply to even sensitive skin. Aloe First is designed to soothe the skin after minor cuts, scrapes, burns, and sunburn.	\N	2017-12-05 12:19:18	\N
-875	6	ALOE HEAT LOTION (TUBE)	64	0.0580000000000000029	64.png	Aloe Heat Lotion is a pH-balanced, lubricating lotion designed for a soothing, relaxing massage. The deep penetrating power of Aloe Vera will help soothe your muscles after sports or hard workouts!\nAfter a long, active day, we all know the misery of tired, aching muscles. This rich emollient lotion contains deep heating agents to make it the ideal massage companion for tired muscles and dry skin.	\N	2017-12-05 12:19:03	\N
-909	7	ALOE REFRESHING TONER	279	0.128000000000000003	279.png	Sonya Aloe Refreshing Toner with white tea extract provides vital moisture to help keep your skin properly hydrated.\r\nThis alcohol-free toner is as refreshing as it is hydrating. Applied after cleansing with Sonya Aloe Purifying Cleanser, your skin will instantly absorb the nourishing properties of stabilized aloe vera gel, white tea extract, and cucumber.	\N	2018-06-18 09:29:38	\N
-910	7	ALOE BALANCING CREME	280	0.121999999999999997	280.png	Sonya Aloe Balancing Cream contains aloe plus revitalizing extracts and advanced moisturizers. These rich ingredients will help maintain proper moisture balance and appearance of your skin\r\nUsed with Sonya Aloe Nourishing Serum, your skin will feel soft, smooth, and hydrated like never before!	\N	2018-06-18 09:30:01	\N
-932	1	C9/ULTRA VANILA AMINOTEIN	475	0.465000000000000024	475.png	This effective, easy-to-follow cleansing program will give you the tools you need to start transforming your body today.\nThe Clean 9 Program can help you jumpstart your journey to a slimmer, healthier you. This effective, easy-to-follow cleansing program will give you the tools you need to start transforming your body today.	\N	2017-12-05 12:30:15	\N
-891	6	FOREVER ALOE MSM GEL	205	0.0929999999999999993	205.png	Aloe MSM Gel combines these two powerful ingredients with herbal extracts and other select ingredients for soothing relief anytime.\nWhen you're looking for soothing relief, reach for Aloe MSM Gel. MSM stands for Methyl Sulfonyl Methane, an organic sulfur found in almost all living organisms. In fact, sulfur is the third most abundant substance in our body.	\N	2017-12-05 12:17:47	\N
-889	6	FOREVER SUNSCREEN	199	0.0599999999999999978	199.png	Combining modern science with natural ingredients,this effective sunscreen helps to soothe,lubricate, moisturize and protect the skin against sun damage with SPF 30.\nWith an SPF of 30, Aloe Sunscreen blocks both UVA and UVB rays, while this silky, smooth lotion made with pure stabilized Aloe Vera Gel, rich moisturizers and humectants, maintains the skin's natural moisture balance.	\N	2017-12-05 12:17:31	\N
-931	8	FOREVER THERM	463	0.114000000000000004	463.png	Forever Therm is a powerful, supportive formula to help boost your energy levels and kick-start metabolism, helping you on your weight-loss journey.\nForever Therm is designed to help accelerate your weight loss efforts so you see results faster and achieve your ultimate desired shape and weight loss goals.	\N	2017-12-05 12:13:11	\N
-870	6	ALOE BODY TONER	56	0.109	56.png	Aloe Body Toner, a wonderfully warming and invigorating cream, is combined with the power of stabilized Aloe Vera Gel to shape and tone the skin.\nThis specially prepared cream, designed to beautify and firm the body, includes ingredients chosen to provide a rich warming and invigorating feeling.	\N	2017-12-05 12:16:59	\N
-869	6	ALOE BODY TONING KIT	55	0.329000000000000015	55.png	Indulge yourself with an at-home body wrap designed to help trim, tone and tighten, minimizing the appearance of cellulite.\nWe take pride in this excellent collection, so treat your body to what it deserves, and look your very best with Forever's Aloe Body Toning Kit.	\N	2017-12-05 12:16:39	\N
-916	7	SONYA ALOE DEEP MOISTURIZING CRM	311	0.133000000000000007	311.png	Sonya Aloe Deep Moisturizing Cream with Pine Bark Extract is a deep moisturizing cream that quenches your skin's thirst for moisture like never before!\nSonya Aloe Deep Moisturizing Cream helps maintain and deliver moisture deep within the outer layers of the skin to restore and preserve the skin's youthful glow.	\N	2017-12-05 12:15:33	\N
-911	7	ALOE NOURISHING SERUM	281	0.159000000000000002	281.png	Sonya Aloe Nourishing Serum with white tea extract preserves and replenishes your skin's moisture to help maintain its youthful appearance.\nSonya Aloe Nourishing Serum's lightweight formula is so smooth that it is effortless to apply. It makes a perfect base for Sonya Aloe Balancing Cream.	\N	2017-12-05 12:15:20	\N
-908	7	ALOE EXFLOLIATOR	278	0.096000000000000002	278.png	For those times when your skin needs extra exfoliation without the irritation associated with other harsh exfoliators, Sonya Aloe Deep-Cleansing Exfoliator is the perfect answer.\nThis deep-cleansing but gentle exfoliator with aloe and natural jojoba beads is the perfect combination to leave your skin feeling soft and smooth.	\N	2017-12-05 12:14:28	\N
-907	7	ALOE PURIFYING CLEANSER	277	0.128000000000000003	277.png	Sonya Aloe Purifying Cleanser will leave your face feeling wonderfully soft, fresh and clean each time you cleanse.\nThe first step in the Sonya Skin Care regime, this remarkable cleanser with aloe and fruit extracts is designed to gently remove makeup and debris without overdrying.	\N	2017-12-05 12:14:17	\N
-935	8	LITE ULTRA - 15 SERVING - VANILLA	470	0.121999999999999997	470.png	Forever Lite Ultra with Aminotein is the perfect addition to your healthy Forever Living lifestyle. Get on the path to effective and sustained weight management!\nTwo servings a day of Forever Lite Ultra, prepared with skim milk as directed, supply a full 100% of the Reference Daily Intake (RDI) for the vitamins and minerals shown in the Nutrition Facts section.	\N	2017-12-05 12:13:36	\N
-914	8	FOREVER LEAN	289	0.16700000000000001	289.png	Forever Lean provides two revolutionary ingredients that can help reduce the body's absorption of calories from fat and carbohydrates.\nTogether, the two revolutionary ingredients found in Forever Lean can help you succeed in your quest to reach your ideal weight by helping to block the absorption of some of the fat and carb calories you ingest.	\N	2017-12-05 12:13:23	\N
-905	2	FOREVER POMESTEEN POWER	262	0.096000000000000002	262.png	Get powerful antioxidants from Pomegranate, Mangosteen, and other exotic fruits with Forever Pomesteen Power!\r\nThere's no disputing the fact that antioxidants are extremely vital to our health. Forever Pomesteen Power has a proprietary blend of fruit juices and extracts, including Pomegranate, Pear, Mangosteen, Raspberry, Blackberry, Blueberry and Grape Seed.	\N	2018-06-11 10:48:28	\N
-872	6	ALOE VERA GELLY (TUBE)	61	0.0580000000000000029	61.png	Essentially identical to the aloe vera's inner leaf, our 100% stabilized aloe vera gel lubricates sensitive tissue safely. Specially prepared for topical application to moisturize, soothe and condition.\nAloe Vera Gelly is a thick, translucent gel containing humectants and moisturizers. Readily absorbed by the skin, it soothes without staining clothes. Aloe Vera Gelly also provides temporary relief from minor skin irritations.	\N	2017-12-05 12:18:15	\N
-887	10	FOREVER B12 PLUS	188	0.0619999999999999996	188.png	An excellent combination of essential nutrients.\nForever B12 Plus combines Vitamin B12 with Folic Acid utilizing a time-release formula to help support metabolic processes, cell division, DNA synthesis, red blood cell production and proper nerve function.	\N	2017-12-05 12:09:04	\N
-861	9	ALOE VETERINARY FORMULA	30	0.0800000000000000017	30.png	When a family member suffers minor skin irritations, we reach for Aloe First. Since we also treat our pets as part of the family, they too should experience the power of the Miracle Plant", Aloe Vera.\nAloe Veterinary Formula is made with stabilized Aloe Vera gel as its primary ingredient and is ideally suited for external skin problems. The nozzle-control spray makes application to any size or type of pet easy.	\N	2017-12-05 12:12:53	\N
-929	10	NEW ARCTIC SEA	376	0.119999999999999996	376.png	Not only more Omega-3's you get per serving, but also has significantly increased amounts of DHA per dose.\nNew and improved Forever Arctic Sea contains a proprietary blend that is exclusive to Forever Living and provides not only 33% more DHA per day, but creates the perfect balance of DHA and EPA for optimal health and wellness.	\N	2017-12-05 12:12:24	\N
-928	10	VITOLIZE FOR WOMEN	375	0.127000000000000002	375.png	Vitlize includes a proprietary blend of botanicals to support hormone balance and promote overall health and well-being.\nThe natural blend of antioxidant-rich fruits, herbs, vitamins and minerals in Vitlize Women's Vitality Supplement is specifically designed with a woman's needs in mind.	\N	2017-12-05 12:12:11	\N
-927	10	VITOLIZE FOR MEN	374	0.119999999999999996	374.png	Vitlize, combined with a healthy diet and exercise, offers a natural solution to support prostate health and men's vitality.\nThis unique, comprehensive formulation supplies a highly effective blend of potent herbs, vitamins, minerals, and antioxidants to help maintain normal urinary flow, promote healthy testicular function, and encourage optimal prostate health.	\N	2017-12-05 12:11:57	\N
-926	10	FOREVER IMMUBLEND	355	0.0929999999999999993	355.png	Forever ImmuBlend is designed to support immune system function by addressing all aspects of the immune system from its first line of defense to its last.\nThis exclusive formula addresses all aspects of immune system function, providing both foundational nutrients required for a healthy immune system and natural botanicals that work synergistically to support immune function.	\N	2017-12-05 12:11:40	\N
-868	10	A-BETA-CARE	54	0.116000000000000006	54.png	Forever A-Beta-CarE is an essential formula combining vitamins A and E, plus the antioxidant mineral Selenium.\nForever A-Beta-CarE's combination of nutrients, available all in one convenient product, is one of the most important complements to good health.	\N	2017-12-05 12:11:06	\N
-866	10	ABSORBENT-C	48	0.0690000000000000058	48.png	Forever Absorbent-C with Oat Bran is an outstanding nutritional supplement that combines two vital nutrients into one convenient product.\nSince humans are among the few animals that are unable to make their own vitamin C, we must therefore get it from our food, drinks, and supplements, such as Forever Absorbent-C.	\N	2017-12-05 12:10:48	\N
-930	10	FOREVER DAILY	439	0.0800000000000000017	439.png	Delivers a perfectly balanced blend of 55 nutrients, including essential vitamins and minerals.Forever Daily's unique formula is designed to nourish and protect our bodies by filling the nutrient gaps in our everyday diet and provide optimal health and vitality.	\N	2017-12-05 12:10:26	\N
-933	10	FOREVER ARGI+ STICK PACKS	504	0.302999999999999992	504.png	ARGI+ provides all the power of L-Arginine, plus pomegranate.\nL-Arginine is a potent amino acid that helps to support what scientists refer to as the Miracle Molecule - nitric oxide. L-Arginine is converted into nitric oxide in the body, to help support circulation.	\N	2017-12-05 12:09:58	\N
-906	10	FOREVER ACTIVE HA	264	0.13600000000000001	264.png	A unique form of low molecular weight hyaluronic acid, with moisturizing and lubricating properties.\nWith low molecular weight HA, plus the power of Ginger Oil and Turmeric, Forever Active HA is your key to becoming a well-oiled machine again!	\N	2017-12-05 12:09:45	\N
-892	10	FOREVER CALCIUM	206	0.0980000000000000038	206.png	Provides the clinically proven quantities of Calcium, Magnesium, Zinc, Manganese, Copper and the Vitamins C & D to help maintain proper bone structure and function.\nForever's new form of calcium, Di-Calcium malate, is most effective at promoting optimum bone building since it stays in the blood stream longer and does not interfere with the natural pH balance in the stomach.	\N	2017-12-05 12:08:32	\N
-3	1	FAST START COMBO	2	2	2.png	Get a jumpstart on your business with the Start Your Journey Combo Pak!\nStarting your own business can be difficult, but with the Start Your Journey Combo Pak, you will have all you need feel confident.\nThis combo contains:\n* 2 units of Aloe Vera Gel\n* 2 units of Aloe Vera Berry\n* 2 units of Aloe Propolis Creme\n* 2 units of Aloe Moisturising Lotion\n* 2 units of Heat Lotion\n* 2 units of Aloe Ever-Shield Deodorant\n* 2 units of Forever Bright Tootgel\n* 2 units of Aloe Lips\n* 2 units of Artic-Sea Super Omega 3\n* 2 units of Aloe Liquid Soap\n* 2 units of Aloe Vera Gelly\n* 2 units of Aloe Lotion\n* 1 unit of Bit 'n Peaches\n* 2 units of Forever Freedom\n* 1 unit of Aloe Jojoba Shampoo\n* 1 unit of Aloe Jojoba Conditioning Rinse\n* 1 Literature pack	\N	2017-12-05 12:31:02	\N
-867	6	ALOE PROPOLIS CREME	51	0.0800000000000000017	51.png	Excellent as a skin moisturizer and conditioner, Aloe Propolis Creme is a rich blend of stabilized Aloe Vera Gel and Bee Propolis, with other ingredients recognized for their contribution to healthy skin.\nWho but Forever Living Products could produce a moisturizer as unique as Aloe Propolis Creme? Combining our world leadership in Aloe Vera and beehive products, Aloe Propolis Creme is one of our most popular skin care products.	\N	2017-12-05 12:16:24	\N
-883	10	FOREVER GINKGO PLUS	73	0.121999999999999997	73.png	Ginkgo has been shown to increase circulation of blood to the brain, making it a remarkable brain tonic.\nForever Ginkgo Plus is a unique blend of four Chinese plants. Ginkgo Biloba leaf extract, its chief ingredient, is combined with the powerful Chinese herbs of Ganoderma from Reishi mushrooms, Schisandra berries and cured Fo-ti.	\N	2017-12-05 12:08:17	\N
-896	10	FOREVER MULTI-MACA	215	0.106999999999999998	215.png	Forever Multi-Maca combines legendary Peruvian Maca with other powerful herbs and select ingredients, to create one of the finest supplements of its kind!\nMaca has been highly revered for over 2,000 years in Peru. According to legend, the Incan warriors ate Maca for strength and endurance before going to battle. The Spanish Conquistadors called it the sex herb of the Incas.	\N	2017-12-05 12:07:51	\N
-878	10	FIELDS OF GREENS	68	0.0519999999999999976	68.png	A simple solution to convenience eating.Get the antioxidants you may be lacking. \nFields of Greens combines young barley grass, wheat grass, alfalfa and added cayenne pepper (to help maintain healthy circulation and digestion). We have also added honey to promote energy.	\N	2017-12-05 12:07:33	\N
-863	10	NATURE-MIN	37	0.0719999999999999946	37.png	Forever Nature-Min is an excellent way to ensure that your body is getting the minerals and trace minerals it needs to meet the demands of a healthy, balanced lifestyle.\nYour body can benefit from nutrients locked deep in an ancient seabed, because four percent of our body weight is comprised of these minerals. Since our bodies can't manufacture minerals, we have to obtain them from our food or supplementation.	\N	2017-12-05 12:07:15	\N
-865	10	GIN-CHIA TABLETS	47	0.0719999999999999946	47.png	Two ancient herbs: golden chia from the West and ginseng from the East, combine to make Forever Gin-Chia.Golden Chia, was used by southwest Native American Indians in the US at the turn of the century for its life-sustaining properties. Ginseng is a potent antioxidant.Together these two legendary herbs pack a powerful punch to help you get through the day.	\N	2017-12-05 12:06:57	\N
-876	10	GARLIC-TYME	65	0.0739999999999999963	65.png	Garlic and thyme, the two powerful antioxidants found in Forever Garlic-Thyme, combine to create a great tool in maintaining good health.\nGarlic and thyme, the two powerful antioxidants found in Forever Garlic-Thyme, combine to create a great tool in maintaining good health. When garlic is cut or crushed, enzymes react to produce a powerful immune-enhancing agent.	\N	2017-12-05 12:06:42	\N
-871	6	ALOE BODY CONDITIONING CREME	57	0.160000000000000003	57.png	Aloe Body Conditioning Creme is the ideal partner to Aloe Body Toner for keeping your body feeling smooth and supple.\nAloe Body Conditioning Creme is rich in European herbal extracts, emulsifiers and humectants. Effective as a massage cream, it can also be a spot rub for the entire hip and leg area, or for parts of the body which should not be wrapped.	\N	2017-12-05 12:17:15	\N
-881	8	FOREVER GARCINIA PLUS	71	0.121999999999999997	71.png	Forever Garcinia Plus is a revolutionary dietary supplement, containing ingredients that may aid in weight loss.\nGarcinia works by inhibiting the enzyme which converts these calories into fat. As a result, the body will burn existing fat stores, thus aiding in weight loss.	\N	2017-12-05 12:13:52	\N
-900	10	FOREVER VISION	235	0.105999999999999997	235.png	A dietary supplement with bilberry, lutein and zeaxanthin, plus super antioxidants and other nutrients to help support normal eyesight and improve circulation to the eyes.\nOur vision is a precious sense, and one that we should not take for granted. While we may supplement our diets with nutrients to enhance our overall well-being, we tend to overlook our eyesight as a necessary part of our health to maintain.	\N	2017-12-05 12:11:27	\N
-925	10	NEW FOREVER KIDS	354	0.0599999999999999978	354.png	Give your kids the nutrients they need each day with Forever Kids Chewable Multivitamins.\nFormulated without artificial colors or preservatives, the phytonutrient base is taken from such nutritious foods as carrots, beets, broccoli, spinach, blueberries, apples, cranberries, tomatoes and strawberries.	\N	2017-12-05 12:09:20	\N
-897	10	FOREVER ACTIVE PROBIOTIC	222	0.117999999999999994	222.png	With an exclusive, patented encapsulation technology that protects the probiotics then releases a unique combination of six beneficial strains of microbes.\nForever Active Probiotic is the only shelf-stable, 6-strain probiotic on the market today that requires no refrigeration. And what's great about Forever Active Probiotic is that it works in tandem with our patented Aloe Vera.	\N	2017-12-05 12:08:04	\N
-858	3	FOREVER BEE POLLEN	26	0.0599999999999999978	26.png	Research by scientists suggest that Bee Pollen provides energy and may enhance stamina.\nBee Pollen is readily digestible and easily absorbed. Pollen is the fertilizing dust found in flowers. Bees gather pollen from flowers and bring it back to their hives to use as a food source.	\N	2017-12-05 12:27:40	\N
-859	3	FOREVER BEE PROPOLIS	27	0.129000000000000004	27.png	Forever Bee Propolis' supports the body's natural defenses.\nWhen we think of bees, honey and pollen are usually the first things that come to mind. However, there's another powerful substance that bees play an integral role in, propolis.	\N	2017-12-05 12:27:27	\N
-855	6	ALOE BATH GELEE	14	0.0749999999999999972	14.png	Rich in pure, stabilized Aloe Vera gel and herbal extracts designed to relax and refresh the body.\r\nLet Aloe Bath Gele soothe away your cares. Used with our loofah mitt, Aloe Bath Gele helps remove dead skin cells to reveal smooth, clean skin, while its rich formulation permeates your skin to soothe away dryness.	\N	2018-06-08 17:17:07	\N
-862	3	ROYAL JELLY	36	0.130000000000000004	36.png	Royal Jelly can help support the immune system, increase energy and benefit the skin and hair.\nRoyal Jelly is a substance derived from the pharyngeal glands of the honey bee. This super food of the bees is specially blended with enzymes and fed to each bee destined to become a queen.	\N	2017-12-05 12:27:16	\N
-857	4	ALOE LIPS	22	0.0140000000000000003	22.png	Forever Aloe Lips' soothes, smoothes and moisturizes chapped and dry lips\nhe soothing properties of Aloe Vera are ideally suited to care for your lips. Aloe, jojoba and beeswax combine to create the finest all-season lip product on the market today.	\N	2017-12-05 12:25:21	\N
-860	4	FOREVER BRIGHT ALOE TOOTHGEL	28	0.0309999999999999998	28.png	Aloe Vera has long been treasured for its quality and versatility - including dental care. Your teeth will gleam with Forever Bright, one of the best toothgels on the market.\nFormulated for the entire family to use, Forever Bright contains only the highest quality ingredients. Natural peppermint and spearmint flavorings leave your mouth feeling fresh and clean.	\N	2017-12-05 12:25:06	\N
-856	2	ALOE VERA GEL	15	0.101999999999999993	15.png	Our Forever Aloe Vera Gel is as close to the real thing as you can get.\nA product of our patented aloe stabilization process, our gel is favored by those looking to maintain a healthy digestive system and a natural energy level.	\N	2017-12-05 12:28:58	\N
-882	10	FOREVER LYCIUM PLUS	72	0.121999999999999997	72.png	Forever Lycium Plus is a dietary supplement containing antioxidants, bioflavonoids and other beneficial phytonutrients.\nA fruit used in ancient China for centuries, lycium has been shown to enhance the complexion and help maintain energy and good vision.	\N	2017-12-05 12:09:33	\N
-880	4	GENTLEMAN'S PRIDE AFTER SHAVE	70	0.0599999999999999978	70.png	Pamper and soothe your skin with the moisture of Gentleman's Pride, an alcohol-free aftershave in a clean, masculine scent.\nAs a razor blade moves across your skin, it can cause nicks, scratches or razor burn, leaving your skin irritated and dry. Feel the icy exhilaration of this unique blend of lubricants and moisturizers combined with pure, stabilized Aloe Vera gel.	\N	2017-12-05 12:26:25	\N
-877	4	ALOE EVER-SHIELD DEODORANT	67	0.0290000000000000015	67.png	Aloe Ever-Shield Deodorant Stick provides effective, all-day protection against underarm odor and can be applied directly after showering or waxing without stinging.\nAloe Ever-Shield glides on smoothly, does not stain clothes, and maximizes the deodorant properties of aloe vera while eliminating ingredients that could be harmful	\N	2017-12-05 12:26:11	\N
-886	5	ALPHA E FACTOR	187	0.133000000000000007	187.png	Forever Alpha-E Factor moisturizes from within to deliver an ultimate smoothness to your skin for a younger-looking appearance.\nThis light, emollient fluid is fortified with Vitamins A, C and E, Borage Oil and Bisabolol. It is an antioxidant fluid designed to combat free radical damage, which causes 80% of our skin's damage.	\N	2018-04-04 06:04:54	\N
-890	2	ALOE BLOSSOM HERBAL TEA	200	0.0700000000000000067	200.png	A natural blend of leaves, herbs and spices for an outstanding flavor and rich aroma.\nRefreshing cinnamon, orange peel and cloves impart a warm, fruity flavor, along with allspice and ginger to soothe. Combined with aloe blossoms from our own plantations, this zero calorie tea is a great complement to your weight management program.	\N	2017-12-05 12:29:10	\N
-903	4	ALOE JOJOBA SHAMPOO 2016	521	0.0709999999999999937	521a.png	Your hair will be shiny, soft and manageable with this pH-balanced, pure Aloe formula.\nStabilized Aloe Vera gel benefits not only your hair, but your scalp as well. The gel's properties make it a natural alternative to other shampoos, while this gentle, concentrated formula makes it suitable for all hair types.	\N	2017-12-05 12:26:41	\N
-915	4	ALOE MPD*2	307	0.0990000000000000047	307.png	Introducing Forever Aloe MPD a liquid detergent that is highly effective and economical. Forever Aloe MPD is a multi-purpose, liquid concentrated detergent.\nThis safe, concentrated, liquid detergent is great for lifting grime, cutting through grease and removing stains without scratching or marking surfaces. It is versatile enough to do the job of many similar products on the market with a major cost savings.	\N	2017-12-05 12:24:19	\N
-919	2	FAB ENERGY DRINK	321	0.0189999999999999995	321.png	FAB is a quick, refreshing way to stay energized and alert all day long.\nFAB's boost is different from other energy drinks because it gives you both immediate and long-term energy. The immediate boost comes from guarana, while the long-term energy is powered by ADX7 technology.	\N	2017-12-05 12:29:34	\N
-923	5	NIGHT CREME	342	0.129000000000000004	342.png	Recondition your skin while you rest! The moisturizers in Recovering Night Creme give life to the look and feel of your skin.\nThe moisturizers in Recovering Night Creme give life to the look and feel of your skin. It is designed for night use to condition the skin while the body rests, helping to restore the Flower of Youth skin that is youthful in its appearance.	\N	2017-12-05 12:21:41	\N
-937	1	F15	528	0.585999999999999965	528.png	Choose your fitness level!\nWith beginner, intermediate and advanced levels, you can decide where your journey takes you.\nYour F15 includes:   \nAloe Vera Gel 2X 1 liter bottles\nForever Lite Ultra Shake 1 pouch Chocolate\nForever Therm 30 tablets\nForever Fiber 15 sticks\nForever Garcinia Plus 90 softgels	\N	2017-12-05 12:30:05	\N
-938	4	ALOE HAND SOAP	523	0.0619999999999999996	523.png	New and improved\nNew and improved, Aloe Hand Soap provides a soothing experience with each use.	\N	2017-12-05 12:25:41	\N
-912	7	SONYA SKIN CARE KIT	282	0.598999999999999977	282.png	The Sonya Skin Care Collection contains five fundamental elements for cleansing, moisturizing and maintaining overall skin condition and appearance.\nAloe Purifying Cleanser, Aloe Refreshing Toner, Aloe Nourishing Serum, Aloe Balancing Cream, and Aloe Deep-Cleansing Exfoliator work together to leave your skin looking fresh and radiant. Treat your skin to the luxury it deserves!	\N	2017-12-05 12:15:48	\N
-936	10	FOREVER CARDIO HEALTH	312	0.133000000000000007	312.png	A special formula designed to mix with our Forever Aloe Vera Gel to provide three important nutritional supports for cardiovascular health.\nForever CardioHealth supports healthy homocysteine levels, supplies co-enzyme Q10 to promote efficient metabolism, and provides heart-healthy antioxidants. Simply pour, stir and drink  it's that easy and your heart will thank you!	\N	2017-12-05 12:08:51	\N
-\.
-
-
---
--- Data for Name: prices; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: prices; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.prices (id, product_id, price_list_id, price, tanzania, kenya, uganda, created_at, updated_at, deleted_at) FROM stdin;
@@ -3101,1092 +4292,102 @@ COPY public.prices (id, product_id, price_list_id, price, tanzania, kenya, ugand
 
 
 --
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.users (id, business_id, name, username, email, phone_number, password, subscription, subscription_start_date, subscription_end_date, total_cc, country, image_url, remember_token, created_at, updated_at, deleted_at, is_admin, is_system, current_level, version, os_type) FROM stdin;
-1181	255000303611	\N	Godson Jeremiah	godsonjeremiah@gmail.com	0714141111	\N	free	29-06-2018	30-07-2018	0	0	https://lh5.googleusercontent.com/-DSECeOSN2a4/AAAAAAAAAAI/AAAAAAAAMuI/yV90uGTzPCI/photo.jpg	\N	2018-06-29 13:06:27	2018-06-29 13:06:27	\N	f	f	Manager	\N	\N
-29	\N	\N	William Ngininai	ngininai@gmail.com	0757356045	\N	free	02-12-2017	02-01-2018	12	0	https://lh5.googleusercontent.com/-qum2ImJnGko/AAAAAAAAAAI/AAAAAAAAACs/XiIroOPzjfk/photo.jpg	\N	2017-12-02 12:01:57	2017-12-02 12:01:57	\N	f	f	NOVUS	\N	\N
-26	\N	\N	Ester Minja	minjaester25@gmail.com	0762210098	\N	free	02-12-2017	02-01-2018	1	0	\N	\N	2017-12-02 09:56:45	2017-12-02 09:56:45	\N	f	f	NOVUS	\N	\N
-22	\N	\N	Lightness Salema	namjire@gmail.com	254000034165	\N	premium	02-12-2017	28-12-2018	2084	0	https://lh4.googleusercontent.com/-GdouzzyajHY/AAAAAAAAAAI/AAAAAAAAHGM/i4FJrYbEong/photo.jpg	\N	2017-12-02 09:09:45	2017-12-02 09:14:50	\N	f	f	NOVUS	\N	\N
-20	\N	\N	Laurencia Maheri	lauramaheri97@gmail.com	0752642660	\N	free	02-12-2017	02-01-2018	25	0	\N	\N	2017-12-02 08:52:52	2017-12-02 08:52:52	\N	f	f	NOVUS	\N	\N
-18	\N	\N	Dickson Samwel	dixonmsaky@gmail.com	0765578464	\N	free	02-12-2017	02-01-2018	56	0	https://lh3.googleusercontent.com/-uIiwLmZgYnE/AAAAAAAAAAI/AAAAAAAAAXk/sO5iQOhGpZE/photo.jpg	\N	2017-12-02 08:08:11	2017-12-02 08:08:11	\N	f	f	NOVUS	\N	\N
-17	\N	\N	emmanuela ngalu	ngalu.emmanuela@gmail.com	0713008154	\N	free	02-12-2017	02-01-2018	10	0	\N	\N	2017-12-02 07:50:17	2017-12-02 07:50:17	\N	f	f	NOVUS	\N	\N
-16	\N	\N	Denis Laizer	laizerdenis@gmail.com	0753183247	\N	free	02-12-2017	02-01-2018	4	0	\N	\N	2017-12-02 07:37:58	2017-12-02 07:37:58	\N	f	f	NOVUS	\N	\N
-15	\N	\N	amos mahugila	amosmahugila324@gmail.com	0684267909	\N	free	02-12-2017	02-01-2018	2	0	https://lh3.googleusercontent.com/-XWkpIfsdLEs/AAAAAAAAAAI/AAAAAAAAFvo/LIZQE7i7sf4/photo.jpg	\N	2017-12-02 07:17:39	2017-12-02 07:17:39	\N	f	f	NOVUS	\N	\N
-14	\N	\N	Joel Vankibona	joelvankibona@gmail.com	0715839704	\N	free	02-12-2017	02-01-2018	10	0	https://lh6.googleusercontent.com/-yNqlrsgdNC0/AAAAAAAAAAI/AAAAAAAAABU/Y9kojd4w8_Q/photo.jpg	\N	2017-12-02 07:10:48	2017-12-02 07:10:48	\N	f	f	NOVUS	\N	\N
-2	\N	\N	ipf_pay	\N	\N	$2y$10$uiQNtrTxUtyNRjZ1S1YGjeuOq5ueTDK3jSRCCWKFeHNwUD0181RNi	free	14-11-2017	\N	\N	\N	\N	\N	2017-11-29 12:35:07	2017-11-29 12:35:07	\N	t	t	NOVUS	\N	\N
-60	255000606215	\N	Nevala Kyando	nevalakyando6@gmail.com	0715312966	\N	premium	03-12-2017	29-06-2019	4	0	\N	\N	2017-12-03 14:11:51	2018-06-29 14:16:57	\N	f	f	Ass. Supervisor	\N	\N
-42	\N	\N	mey petro	meyankod@gmail.com	0757463994	\N	free	03-12-2017	03-01-2018	1	0	\N	\N	2017-12-03 02:16:37	2017-12-03 02:16:37	\N	f	f	NOVUS	\N	\N
-41	\N	\N	Shaban Mshana	mshanashaban8@gmail.com	0718215446	\N	free	03-12-2017	03-01-2018	1	0	\N	\N	2017-12-02 21:36:00	2017-12-02 21:36:00	\N	f	f	NOVUS	\N	\N
-90	\N	\N	kemmy christopher	kemmychris@gmail.com	0657675950	\N	free	07-12-2017	07-01-2018	2	0	\N	\N	2017-12-07 03:16:58	2017-12-07 03:16:58	\N	f	f	NOVUS	\N	\N
-86	\N	\N	zulekhamohamed2009@gmail.com myfeisal1	zmyfeisal@gmail.com	+255657147133	\N	free	06-12-2017	06-01-2018	1	0	\N	\N	2017-12-06 14:59:07	2017-12-06 14:59:07	\N	f	f	NOVUS	\N	\N
-11	255200023553	Edmund Munyagi	FELISTA JOHN MABWAI	ekmunyagi@gmail.com	0755518289	\N	premium	16-11-2017	07-05-2019	10	0	https://lh6.googleusercontent.com/-KOYuH_2SUxs/AAAAAAAAAAI/AAAAAAAAA0U/0poKG-N0iB8/photo.jpg	\N	\N	2018-07-09 12:04:29	\N	f	f	NOVUS	\N	\N
-178	255000477561	\N	Donatha Mnele	donnydonna.dc@gmail.com	0682003737	\N	premium	28-06-2018	28-07-2018	153	0	https://lh5.googleusercontent.com/-f30ATWjNZQQ/AAAAAAAAAAI/AAAAAAAAFKg/Cy-C_6svXUo/photo.jpg	\N	2017-12-17 08:54:35	2018-06-29 12:10:31	\N	f	f	Supervisor	\N	\N
-819	255000564236	\N	remmyrogasian@gmail.com	remmyrogasian@gmail.com	0756563151	\N	free	29-03-2018	29-04-2018	1	0	\N	\N	2018-03-29 11:28:34	2018-06-29 11:10:37	\N	f	f	Ass. Supervisor	\N	\N
-936	255200020421	\N	kimmy chudasama	chudasamakimmy@gmail.com	0655833388	\N	premium	29-06-2018	29-07-2018	1	0	https://lh3.googleusercontent.com/-tiV2uI1A6yg/AAAAAAAAAAI/AAAAAAAAABo/YsFd7skjdrs/photo.jpg	\N	2018-04-19 09:14:13	2018-06-29 04:16:54	\N	f	f	Ass. Supervisor	\N	\N
-143	255000573561	\N	therealmaryana Kayus	maryanakayus@gmail.com	0715040742	\N	free	12-12-2017	12-01-2018	4	0	\N	\N	2017-12-12 07:50:55	2018-06-28 18:57:37	\N	f	f	Ass. Supervisor	\N	\N
-439	255000428669	\N	Lusajo JM Jason	jasonlusajo98@gmail.com	0716160141	\N	premium	24-01-2018	19-02-2019	5	0	https://lh6.googleusercontent.com/-1vMhb3LqOKo/AAAAAAAAAAI/AAAAAAAAEpw/G_WSYp7-iak/photo.jpg	\N	2018-01-24 05:33:36	2018-06-28 09:13:52	\N	f	f	Supervisor	\N	\N
-1006	255000425832	\N	Nelson Bisanganwa	bisangangwa@gmail.com	0719056617	\N	premium	28-06-2018	28-07-2018	697	0	\N	\N	2018-05-03 21:12:04	2018-06-28 07:39:47	\N	f	f	Ass. Supervisor	\N	\N
-89	255000562427	\N	Aziza Rashid	azizarashid26@gmail.com	0718973955	\N	free	07-12-2017	07-01-2018	0	0	\N	\N	2017-12-06 22:24:31	2018-06-28 07:19:14	\N	f	f	Ass. Supervisor	\N	\N
-321	255000552840	\N	William Kiteleki	willykiteleki74@gmail.com	0717558273	\N	free	07-01-2018	07-02-2018	0	0	https://lh6.googleusercontent.com/-JQta4wByUaM/AAAAAAAAAAI/AAAAAAAAAYU/VxKFNleaRNY/photo.jpg	\N	2018-01-07 14:27:26	2018-06-27 07:19:04	\N	f	f	Ass. Supervisor	\N	\N
-79	255000466025	\N	Festo Boniface	festohb@gmail.com	0767119902	\N	free	06-12-2017	06-01-2018	0	0	https://lh6.googleusercontent.com/-01alx961-VU/AAAAAAAAAAI/AAAAAAAAAC4/rn0Ai8oiZ-g/photo.jpg	\N	2017-12-05 22:06:22	2018-06-27 03:39:04	\N	f	f	Ass. Manager	\N	\N
-405	255000615017	\N	Yussuf Ali	yuwssuf13@gmail.com	0655717101	\N	free	20-01-2018	20-02-2018	2	0	\N	\N	2018-01-20 04:04:38	2018-06-26 13:04:02	\N	f	f	Ass. Supervisor	\N	\N
-1162	255000540309	\N	Henry Stanley	henrystanley52@gmail.com	0659528560	\N	free	25-06-2018	26-07-2018	0	0	\N	\N	2018-06-25 17:14:17	2018-06-25 17:14:17	\N	f	f	Ass. Supervisor	\N	\N
-603	255000546345	\N	Thomas Kibasa	thomaskibasa@gmail.com	0764961561	\N	free	16-02-2018	19-03-2018	0	0	\N	\N	2018-02-16 11:12:38	2018-06-25 13:30:24	\N	f	f	Ass. Supervisor	\N	\N
-652	255000464440	\N	Jesca Phidelis	jescaphidelis77@gmail.com	0653537670	\N	premium	24-06-2018	23-08-2018	0	0	\N	\N	2018-02-27 01:34:09	2018-06-24 16:43:34	\N	f	f	Supervisor	\N	\N
-235	255000399140	\N	juma akida	akidaj7@gmail.com	0767199686	\N	free	24-12-2017	24-01-2018	2345	0	https://lh5.googleusercontent.com/-n-vi7ACX80w/AAAAAAAAAAI/AAAAAAAAK1E/rfFTBnB-Kp0/photo.jpg	\N	2017-12-24 19:31:56	2018-06-23 18:49:41	\N	f	f	Supervisor	\N	\N
-832	255200020466	\N	Weston Njeje	njejew@gmail.com	0765889263	\N	premium	21-06-2018	20-12-2018	2	0	\N	\N	2018-03-31 16:44:52	2018-06-22 04:28:56	\N	f	f	Ass. Supervisor	\N	\N
-704	255000425073	\N	Immaculata Nkya	immankya90@gmail.com	0754781895	\N	free	05-03-2018	05-04-2018	372	0	\N	\N	2018-03-05 18:19:27	2018-06-20 19:48:01	\N	f	f	Ass. Supervisor	\N	\N
-406	255000551772	\N	Christopher Sichila	christophersichila49@gmail.com	0766454364	\N	free	20-01-2018	20-02-2018	2	0	\N	\N	2018-01-20 04:50:54	2018-06-20 17:52:10	\N	f	f	Supervisor	\N	\N
-503	255000615442	\N	Shafigha TV	shaally39@gmail.com	0713602383	\N	premium	20-06-2018	20-07-2018	2	0	https://lh6.googleusercontent.com/-bwj3TMvN7gw/AAAAAAAAAAI/AAAAAAAAF50/yGGFMgpWri4/photo.jpg	\N	2018-02-02 21:26:13	2018-06-20 16:39:53	\N	f	f	Ass. Supervisor	\N	\N
-1060	255200021972	\N	Fidahussein okera	beenufidz@gmail.com	0659979398	\N	premium	18-06-2018	18-07-2018	1	0	\N	\N	2018-05-13 07:22:03	2018-06-18 18:38:01	\N	f	f	Novus	\N	\N
-107	255000468700	\N	Willfred Brayson	wmboweldptz@gmail.com	0716588819	\N	free	08-12-2017	08-01-2018	3	0	https://lh3.googleusercontent.com/-v4Vx4op9dX4/AAAAAAAAAAI/AAAAAAAAoGc/YylA_gbJxvo/photo.jpg	\N	2017-12-07 23:24:42	2018-06-18 14:28:06	\N	f	f	Ass. Supervisor	\N	\N
-156	255000529368	\N	Emmanuel Mputa	mputae84@gmail.com	0767962720	\N	free	14-12-2017	14-01-2018	34	0	https://lh4.googleusercontent.com/-SgsY9QutyQ0/AAAAAAAAAAI/AAAAAAAAB_0/tiInFUJhwEI/photo.jpg	\N	2017-12-14 05:43:43	2018-06-17 15:25:44	\N	f	f	Supervisor	\N	\N
-776	255000606157	\N	Mbegadates	mbega2030@gmail.com	0687961686	\N	free	20-03-2018	20-04-2018	2	0	\N	\N	2018-03-20 16:06:22	2018-06-17 06:31:27	\N	f	f	Ass. Supervisor	\N	\N
-1010	255000400380	\N	Joanita Cornellius	joanita.cornellius@gmail.com	0784111322	\N	premium	14-06-2018	13-12-2018	0	0	https://lh4.googleusercontent.com/-wwqUUe7tcR8/AAAAAAAAAAI/AAAAAAAAKBw/hG1zh8NI4YU/photo.jpg	\N	2018-05-04 10:11:16	2018-06-14 07:50:44	\N	f	f	Manager	\N	\N
-549	255000607066	\N	Steward Simfukwe	stewardsimfukwe1@gmail.com	0746641655	\N	free	12-02-2018	15-03-2018	3	0	\N	\N	2018-02-12 05:11:05	2018-06-14 04:29:40	\N	f	f	Ass. Supervisor	\N	\N
-1061	255000587866	\N	jaqueeen1	jaqueeen@gmail.com	0757627375	\N	free	13-05-2018	13-06-2018	4	0	https://lh6.googleusercontent.com/-GVAr-QAzK5g/AAAAAAAAAAI/AAAAAAAABks/9_up9UA0f1M/photo.jpg	\N	2018-05-13 17:18:55	2018-06-12 06:30:04	\N	f	f	Ass. Supervisor	\N	\N
-732	255000491252	\N	Maxmillian Richard	max.shetto@gmail.com	0763355631	\N	premium	07-06-2018	07-06-2019	1.2649999999999999	0	https://lh6.googleusercontent.com/-VXfUNC2ugGU/AAAAAAAAAAI/AAAAAAAAAFo/t-96vsNBNlM/photo.jpg	\N	2018-03-11 08:53:11	2018-06-06 20:23:05	\N	f	f	Supervisor	\N	\N
-554	255000603266	\N	Amour Khamis	jemsdamas@gmail.com	0773113262	\N	free	12-02-2018	15-03-2018	0	0	https://lh3.googleusercontent.com/-WciM1ZxvQ60/AAAAAAAAAAI/AAAAAAAAC8w/JdFPjQlmgaQ/photo.jpg	\N	2018-02-12 15:18:53	2018-06-06 13:28:30	\N	f	f	Ass. Supervisor	\N	\N
-1026	\N	\N	DOREEN LYIMO	dlyimotz@gmail.com	0753336527	\N	free	07-05-2018	07-06-2018	2	0	https://lh3.googleusercontent.com/-iT1a36-dVjY/AAAAAAAAAAI/AAAAAAAACe4/OMHPD3rpoNY/photo.jpg	\N	2018-05-07 10:19:07	2018-05-07 10:19:07	\N	f	f	NOVUS	\N	\N
-953	\N	\N	elizah shiro	shiroelizah@gmail.com	0722967840	\N	free	22-04-2018	23-05-2018	2	1	https://lh3.googleusercontent.com/-_YCHJkkXMrw/AAAAAAAAAAI/AAAAAAAAADA/8ga9f_gsFJM/photo.jpg	\N	2018-04-21 21:24:57	2018-04-21 21:24:57	\N	f	f	NOVUS	\N	\N
-443	255308764567	\N	samuel thomas	samueldev7@gmail.com	0685423985	\N	premium	04-06-2018	04-07-2018	80	1	https://lh5.googleusercontent.com/-QB9L_YMgUWM/AAAAAAAAAAI/AAAAAAAAABM/8j6a_FTGljA/photo.jpg	\N	2018-01-24 08:15:18	2018-07-02 13:06:02	\N	f	f	Supervisor	3.0.6	0
-277	255000541442	\N	philemon mngoma	philemonmngoma@gmail.com	0652546464	\N	premium	03-07-2018	02-08-2018	4	0	https://lh5.googleusercontent.com/-PgDt462Ugbk/AAAAAAAAAAI/AAAAAAAAAGQ/btePmEd3MbU/photo.jpg	\N	2018-01-01 19:41:26	2018-07-03 08:01:24	\N	f	f	Ass. Supervisor	\N	\N
-840	255200019414	\N	Hellen Massawe	hellenmassawe3@gmail.com	0719024181	\N	premium	04-07-2018	03-08-2018	5	0	\N	\N	2018-04-03 11:58:27	2018-07-04 11:59:19	\N	f	f	Ass. Supervisor	\N	\N
-452	255000564652	\N	ROHINI CHUDASAMA	rohini.chudasama@gmail.com	0712727204	\N	premium	19-06-2018	19-07-2018	4	1	https://lh6.googleusercontent.com/-4KwZWH9fy58/AAAAAAAAAAI/AAAAAAAAAD0/9lfDE6phvgs/photo.jpg	\N	2018-01-25 15:40:45	2018-07-05 12:37:49	\N	f	f	Ass. Manager	\N	\N
-905	\N	\N	mapinduzi hasani	mpndzhasani5@gmail.com	0752395527	\N	free	10-04-2018	11-05-2018	0	0	https://lh5.googleusercontent.com/-q0rlIUA8VzI/AAAAAAAAAAI/AAAAAAAAAOE/fBtOTSX3ctU/photo.jpg	\N	2018-04-10 09:04:43	2018-04-10 09:04:43	\N	f	f	NOVUS	\N	\N
-787	\N	\N	Leonidas Karumuna	karumunar@gmail.com	0756953356	\N	premium	22-03-2018	22-05-2018	0	0	https://lh5.googleusercontent.com/-gCLfJ2465FM/AAAAAAAAAAI/AAAAAAAAAMQ/xyr4zjb4fMc/photo.jpg	\N	2018-03-22 18:11:35	2018-04-05 08:26:20	\N	f	f	NOVUS	\N	\N
-824	\N	\N	Elnison Mugiira	elnisonmugiiragichuru@gmail.com	0705129055	\N	free	30-03-2018	30-04-2018	539	1	https://lh5.googleusercontent.com/-sub-H9zL3-o/AAAAAAAAAAI/AAAAAAAAABI/p0YHEf0iTr0/photo.jpg	\N	2018-03-30 10:42:09	2018-03-30 10:42:09	\N	f	f	NOVUS	\N	\N
-716	\N	\N	Mohamed Waziri	mohamedwaziri79@gmail.com	0715667670	\N	free	07-03-2018	07-04-2018	1919	0	https://lh5.googleusercontent.com/-PzVJspsY384/AAAAAAAAAAI/AAAAAAAAABE/nTMbzYIi1gE/photo.jpg	\N	2018-03-07 14:38:36	2018-03-07 14:38:36	\N	f	f	NOVUS	\N	\N
-645	\N	\N	Happyness James	habatrina@gmail.com	0712464880	\N	free	26-02-2018	29-03-2018	500	0	https://lh4.googleusercontent.com/-QaMVWYZZ6QI/AAAAAAAAAAI/AAAAAAAABjU/2_189CgQ76M/photo.jpg	\N	2018-02-25 22:36:09	2018-02-25 22:36:09	\N	f	f	NOVUS	\N	\N
-172	\N	\N	rhoda msuya	rhodamsuya47@gmail.com	0657673030	\N	free	16-12-2017	16-01-2018	79	0	\N	\N	2017-12-16 08:46:58	2017-12-16 08:46:58	\N	f	f	NOVUS	\N	\N
-171	\N	\N	Jim Kigola	jimkigola71@gmail.com	0786378060	\N	free	16-12-2017	16-01-2018	2	0	\N	\N	2017-12-16 04:19:00	2017-12-16 04:19:00	\N	f	f	NOVUS	\N	\N
-758	255000438920	\N	Amina Salim	ssamy222@gmail.com	0766456365	\N	premium	04-07-2018	02-01-2019	1	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABECKeMmOePxsT61QEiC3ZjYXJkX3Bob3RvKig1N2ZmZjNkZThjMTlkYTI4NmM1ZjJjNjBkMmJlMDQxNjljYmUzNDNlMAE3U2yIilide-hw4Oc2YNOkhP4mBg	\N	2018-03-17 06:22:11	2018-07-04 11:14:39	\N	f	f	Supervisor	\N	\N
-504	\N	\N	sylvester godyfrey	sylvestergodyfrey1027@gmail.com	+255625572552	\N	free	03-02-2018	06-03-2018	0	0	https://lh3.googleusercontent.com/-PP2_tuLElEU/AAAAAAAAAAI/AAAAAAAAAF8/1ZhDg_W_xGI/photo.jpg	\N	2018-02-03 05:45:13	2018-02-03 05:45:13	\N	f	f	NOVUS	\N	\N
-461	\N	\N	Samwel Bashaka	sam4bashaka@gmail.com	0767949119	\N	free	26-01-2018	26-02-2018	2	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABDCIu61ObN-_XxaCILdmNhcmRfcGhvdG8qKDllZjU1MGRiOTJkZTE1OGNkZWM5OWYwMDdiOWUxYjNkY2YzNThkNWEwAUAqbsgWdhXB80gMvs_S_EG90KRp	\N	2018-01-26 16:04:03	2018-01-26 16:04:03	\N	f	f	NOVUS	\N	\N
-384	\N	\N	Chihiyo Mariki	chihiyo.mariki@gmail.com	+255767227117	\N	free	17-01-2018	17-02-2018	2	0	https://lh3.googleusercontent.com/-lozik-DrMws/AAAAAAAAAAI/AAAAAAAAADQ/N9LC4MsYAso/photo.jpg	\N	2018-01-17 19:10:08	2018-01-17 19:10:08	\N	f	f	NOVUS	\N	\N
-379	\N	\N	Mohamed Ally Mohamed	mmohamedally77@gmail.com	0784216619	\N	free	17-01-2018	17-02-2018	888	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABECK3IgMm4g-uZogEiC3ZjYXJkX3Bob3RvKigxYmFjZWNjYzczYmNjNThiOWZiZTljYmI1MmJiMjEyYjA3OWQ4M2RkMAGo2bX43r53xe-W76OqgRbEdwNIuw	\N	2018-01-17 10:15:53	2018-01-17 10:15:53	\N	f	f	NOVUS	\N	\N
-305	\N	\N	Denis Magehema	denismagehema@gmail.com	0657888494	\N	free	05-01-2018	05-02-2018	2	0	https://lh6.googleusercontent.com/-KUqF_CPeiYs/AAAAAAAAAAI/AAAAAAAAA6A/zs3TZWpBMdQ/photo.jpg	\N	2018-01-05 12:20:19	2018-01-05 12:20:19	\N	f	f	NOVUS	\N	\N
-269	\N	\N	Jackson ADAGALA	adagalaj@gmail.com	0724256268	\N	free	31-12-2017	31-01-2018	2	1	https://lh4.googleusercontent.com/-9vitHjsdSp8/AAAAAAAAAAI/AAAAAAAAAIE/VB-S0h9ZRRg/photo.jpg	\N	2017-12-31 08:02:14	2017-12-31 08:02:14	\N	f	f	NOVUS	\N	\N
-217	\N	\N	martina john Mutenyo	mjmutenyo@gmail.com	0767436799	\N	free	21-12-2017	21-01-2018	0	0	https://lh4.googleusercontent.com/-nr7-fFhumVQ/AAAAAAAAAAI/AAAAAAAAAEE/Wnwr_3Qf6TQ/photo.jpg	\N	2017-12-21 08:05:38	2017-12-21 08:05:38	\N	f	f	NOVUS	\N	\N
-68	\N	\N	Hellen Stephen	suwilanjihellen@gmail.com	+255684245021	\N	premium	04-12-2017	03-02-2018	8673	0	https://lh6.googleusercontent.com/-GA7M-mr8G4E/AAAAAAAAAAI/AAAAAAAAAEE/vhPWNTuFmwA/photo.jpg	\N	2017-12-04 17:43:13	2017-12-20 18:01:48	\N	f	f	NOVUS	\N	\N
-131	\N	\N	Michael Richard	michaelrich2103@gmail.com	0656587881	\N	free	11-12-2017	11-01-2018	656587881	0	\N	\N	2017-12-11 07:03:15	2017-12-11 07:03:15	\N	f	f	NOVUS	\N	\N
-130	\N	\N	Zed Dickson	dicksonzed@gmail.com	0763518071	\N	free	11-12-2017	11-01-2018	0	0	https://lh3.googleusercontent.com/-dOWlU0w0NDQ/AAAAAAAAAAI/AAAAAAAABXA/gbY3IgCiafo/photo.jpg	\N	2017-12-11 06:12:29	2017-12-11 06:12:29	\N	f	f	NOVUS	\N	\N
-258	\N	\N	BARAKA NANYARO	barakanyaro@gmail.com	0759334015	\N	free	29-12-2017	29-01-2018	4	0	https://lh5.googleusercontent.com/-W4XEnZVZ3B0/AAAAAAAAAAI/AAAAAAAACW4/KoAk1u4VSqw/photo.jpg	\N	2017-12-29 11:20:15	2017-12-29 11:20:15	\N	f	f	NOVUS	\N	\N
-257	\N	\N	Mwanaidi Mbaraka	mwanamubarz@gmail.com	0744398149	\N	free	28-12-2017	28-01-2018	433	0	\N	\N	2017-12-28 15:16:04	2017-12-28 15:16:04	\N	f	f	NOVUS	\N	\N
-1182	255000621461	\N	Teodata Angelus	teodataangelus@gmail.com	0758225367	\N	premium	30-06-2018	30-08-2018	0	0	\N	\N	2018-06-30 03:45:30	2018-06-30 06:23:11	\N	f	f	Ass. Supervisor	\N	\N
-1199	255000574619	\N	Debora Kimambo	deborakimambo24@gmail.com	0713711211	\N	free	07-07-2018	07-08-2018	0	0	\N	\N	2018-07-07 16:29:12	2018-07-07 16:29:12	\N	f	f	Ass. Supervisor	\N	\N
-299	\N	\N	EXUPER VITALIS NJAU	exupernjau@gmail.com	0717292270	\N	free	04-01-2018	04-02-2018	25	0	https://lh3.googleusercontent.com/-wHFWDOnjpgs/AAAAAAAAAAI/AAAAAAAACx4/MyNicwpmzts/photo.jpg	\N	2018-01-04 10:04:58	2018-01-04 10:04:58	\N	f	f	NOVUS	\N	\N
-1183	255200019695	\N	Oforo Vivian	oforovivian600@gmail.com	0658639985	\N	free	30-06-2018	31-07-2018	0	0	\N	\N	2018-06-30 10:59:07	2018-06-30 10:59:07	\N	f	f	Ass. Supervisor	\N	\N
-1200	255200023319	\N	George Shirima	georgeshirima408@gmail.com	0759089902	\N	free	07-07-2018	07-08-2018	0	0	\N	\N	2018-07-07 19:12:42	2018-07-07 19:12:42	\N	f	f	Novus	\N	\N
-340	\N	\N	JOAKIM RUKEHA	joakimrukeha@gmail.com	0753111134	\N	free	09-01-2018	09-02-2018	0	0	\N	\N	2018-01-09 20:58:12	2018-01-09 20:58:12	\N	f	f	NOVUS	\N	\N
-339	\N	\N	NALINDWA MGWENA	nalindwam@gmail.com	0716165456	\N	free	09-01-2018	09-02-2018	102	1	https://lh4.googleusercontent.com/-ukNHZ0N7Vv4/AAAAAAAAAAI/AAAAAAAAABY/umLWW4OaV1c/photo.jpg	\N	2018-01-09 19:49:07	2018-01-09 19:49:07	\N	f	f	NOVUS	\N	\N
-1184	255000401624	\N	Isabellah Luhanga	isabellah.luhanga@gmail.com	0712380112	\N	free	30-06-2018	31-07-2018	0	0	\N	\N	2018-06-30 14:59:18	2018-06-30 14:59:18	\N	f	f	Manager	\N	\N
-1201	255200023214	\N	Salim Bakar	salimbkr602@gmail.com	0776496168	\N	free	08-07-2018	08-08-2018	0	0	https://lh6.googleusercontent.com/-cQkMHO3HNZo/AAAAAAAAAAI/AAAAAAAAACw/TjXtjsLUnz4/photo.jpg	\N	2018-07-08 09:07:32	2018-07-08 09:07:32	\N	f	f	Novus	\N	\N
-383	\N	\N	jackson ngambila	jacksonngambila89@gmail.com	0716557096	\N	free	17-01-2018	17-02-2018	716557096	0	\N	\N	2018-01-17 18:28:10	2018-01-17 18:28:10	\N	f	f	NOVUS	\N	\N
-382	\N	\N	mbwana Hamisi	mbwanah22@gmail.com	0712926365	\N	free	17-01-2018	17-02-2018	2	0	https://lh4.googleusercontent.com/-QbEfTTZUbHk/AAAAAAAAAAI/AAAAAAAAAFc/okspSF8bovc/photo.jpg	\N	2018-01-17 18:23:46	2018-01-17 18:23:46	\N	f	f	NOVUS	\N	\N
-1185	255200022602	\N	Ali Sheha	alisheha57@gmail.com	0653383249	\N	premium	02-07-2018	01-10-2018	0	0	\N	\N	2018-07-02 16:11:01	2018-07-03 21:45:38	\N	f	f	Ass. Supervisor	\N	\N
-1202	255000602943	\N	Emmanuel Archard	www.emmanuelarchard@gmail.com	0767135120	\N	free	08-07-2018	08-08-2018	0	0	\N	\N	2018-07-08 11:48:11	2018-07-08 11:48:11	\N	f	f	Novus	\N	\N
-430	\N	\N	Riziki Abdalla	rizikiabdalla@gmail.com	0674313517	\N	free	22-01-2018	22-02-2018	1	0	\N	\N	2018-01-22 14:04:37	2018-01-22 14:04:37	\N	f	f	NOVUS	\N	\N
-428	\N	\N	Agness Gabriel (Aggie Gabe)	agnesgabriel3@gmail.com	0654818439	\N	free	22-01-2018	22-02-2018	0	0	https://lh3.googleusercontent.com/-m-VppkcwFUA/AAAAAAAAAAI/AAAAAAAAD58/vpOx_Z5s3gc/photo.jpg	\N	2018-01-22 09:25:29	2018-01-22 09:25:29	\N	f	f	NOVUS	\N	\N
-1186	255000420647	\N	Bosco Mtani	boscomtani@gmail.com	0767977255	\N	free	02-07-2018	02-08-2018	0	0	https://lh5.googleusercontent.com/-iejJg17ntQ8/AAAAAAAAAAI/AAAAAAAAABU/dxLAT0xTT3I/photo.jpg	\N	2018-07-02 16:58:38	2018-07-02 16:58:38	\N	f	f	Ass. Supervisor	\N	\N
-1203	255000415465	\N	Abdul Kiyumbo	abdulkiyumbo8@gmail.com	0716190474	\N	free	08-07-2018	08-08-2018	0	0	\N	\N	2018-07-08 14:10:44	2018-07-08 14:10:44	\N	f	f	Novus	\N	\N
-468	\N	\N	Cyri Lasway	cyrilasway5@gmail.com	0655161092	\N	free	29-01-2018	01-03-2018	0	0	https://lh3.googleusercontent.com/-WJQjB1sOExQ/AAAAAAAAAAI/AAAAAAAARwo/QwNQA1WA2iE/photo.jpg	\N	2018-01-29 04:20:11	2018-01-29 04:20:11	\N	f	f	NOVUS	\N	\N
-1187	255200014267	\N	Zaujia Mohamedy	zaujiamohamedy@gmail.com	0672825917	\N	free	03-07-2018	03-08-2018	0	0	\N	\N	2018-07-02 21:49:08	2018-07-02 21:49:08	\N	f	f	Ass. Supervisor	\N	\N
-1204	255200023527	\N	Peace Joshua	peacejoshua3@gmail.com	0678945288	\N	free	08-07-2018	08-08-2018	0	0	https://lh3.googleusercontent.com/-MnnkciODIYM/AAAAAAAAAAI/AAAAAAAABOU/_cUonCeS5G0/photo.jpg	\N	2018-07-08 16:49:19	2018-07-08 16:49:19	\N	f	f	Novus	\N	\N
-523	\N	\N	Carolyne Iteba	itebacarolyne@gmail.com	0713816087	\N	free	06-02-2018	09-03-2018	0	0	\N	\N	2018-02-05 21:41:05	2018-02-05 21:41:05	\N	f	f	NOVUS	\N	\N
-522	\N	\N	Hamed Awadh	hamedawadh60@gmail.com	0784859963	\N	free	05-02-2018	08-03-2018	2	0	\N	\N	2018-02-05 20:59:54	2018-02-05 20:59:54	\N	f	f	NOVUS	\N	\N
-521	\N	\N	Sofia Ally	sofiabintally321@gmail.com	0679580353	\N	free	05-02-2018	08-03-2018	0	0	\N	\N	2018-02-05 16:44:36	2018-02-05 16:44:36	\N	f	f	NOVUS	\N	\N
-1188	255000525885	\N	emmanuelsarara7@gmail.com	emmanuelsarara7@gmail.com	0764339064	\N	premium	03-07-2018	02-09-2018	0	0	\N	\N	2018-07-03 02:25:30	2018-07-07 19:30:42	\N	f	f	Ass. Supervisor	\N	\N
-1205	255200011446	\N	Sophia Mussa	sophimuss.sm@gmail.com	0656845584	\N	free	09-07-2018	09-08-2018	0	0	\N	\N	2018-07-09 06:57:37	2018-07-09 06:57:37	\N	f	f	Ass. Supervisor	\N	\N
-587	\N	\N	Tunsume Simon	annastaziajeremiah05@gmail.com	0768761164	\N	free	14-02-2018	17-03-2018	0	0	\N	\N	2018-02-14 13:21:12	2018-02-14 13:21:12	\N	f	f	NOVUS	\N	\N
-586	\N	\N	Masmo Jree	masmojree@gmail.com	0656352425	\N	free	14-02-2018	17-03-2018	1954	0	https://lh5.googleusercontent.com/-FhLMIPmr9BA/AAAAAAAAAAI/AAAAAAAAAEg/toGUNMKV0fc/photo.jpg	\N	2018-02-14 12:53:31	2018-02-14 12:53:31	\N	f	f	NOVUS	\N	\N
-1206	254200023402	\N	Ydolem Agatchel	ydolemagatchel@gmail.com	0707014928	\N	free	09-07-2018	09-08-2018	0	1	https://lh4.googleusercontent.com/-swKMRVe9H1w/AAAAAAAAAAI/AAAAAAAAA1A/8rqHhO-JSug/photo.jpg	\N	2018-07-09 10:12:14	2018-07-09 10:12:14	\N	f	f	Novus	\N	\N
-1189	254000041704	\N	Enos Salema	realsuccess@flp.com	0713327777	\N	free	03-07-2018	02-08-2018	0	0	https://lh3.googleusercontent.com/-w3gST4nmWSk/AAAAAAAAAAI/AAAAAAAAACU/ofKMiByU--0/s200/photo.jpg	\N	2018-07-03 04:47:22	2018-07-09 11:12:29	\N	f	f	Man	1.0	1
-633	\N	\N	Willington Munyaga	munyaga69@gmail.com	0786763491	\N	free	22-02-2018	25-03-2018	1	0	\N	\N	2018-02-22 09:13:14	2018-02-22 09:13:14	\N	f	f	NOVUS	\N	\N
-632	\N	\N	Yethroy Jerome	yethroy.jerome@gmail.com	0753137339	\N	free	22-02-2018	25-03-2018	20000	0	https://lh5.googleusercontent.com/-5Ffpuv8OqPY/AAAAAAAAAAI/AAAAAAAAAnY/uswd4Qzhofs/photo.jpg	\N	2018-02-22 04:13:26	2018-02-22 04:13:26	\N	f	f	NOVUS	\N	\N
-1190	255000479222	\N	Kaminy Chudasama	kaminy.chudasama@gmail.com	0789399388	\N	free	03-07-2018	02-08-2018	0	1	https://lh6.googleusercontent.com/-aCktg28X8yE/AAAAAAAAAAI/AAAAAAAAAJA/inrJjawz3Wc/s200/photo.jpg	\N	2018-07-03 05:01:03	2018-07-09 11:33:31	\N	f	f	Man	1.0	1
-700	\N	\N	Karim Benzema	farsiatfaisar@gmail.com	0767464778	\N	free	05-03-2018	05-04-2018	11	0	\N	\N	2018-03-05 06:08:05	2018-03-05 06:08:05	\N	f	f	NOVUS	\N	\N
-699	\N	\N	Shakira Mfaume	shakiramfaume121@gmail.com	0782061593	\N	free	05-03-2018	05-04-2018	782061593	0	https://lh6.googleusercontent.com/-PVxsgC7UiBs/AAAAAAAAAAI/AAAAAAAAAAc/VwQURDl-rBs/photo.jpg	\N	2018-03-05 05:56:37	2018-03-05 05:56:37	\N	f	f	NOVUS	\N	\N
-1191	255000072182	\N	Vincent Bukuru	bukuruvincent@gmail.com	0754689571	\N	free	03-07-2018	02-08-2018	0	0	https://lh5.googleusercontent.com/-_38YOAbj0hE/AAAAAAAAAAI/AAAAAAAAAAA/AB6qoq0xQeK9byOdGTYEjTn0LxzBi-9SdQ/s200/photo.jpg	\N	2018-07-03 05:27:32	2018-07-03 05:27:32	\N	f	f	Man	1.0	1
-750	\N	\N	Elizabeth Bihemo	bihemoelizabeth@gmail.com	0654802346	\N	free	15-03-2018	15-04-2018	569	0	\N	\N	2018-03-15 11:48:31	2018-03-15 11:48:31	\N	f	f	NOVUS	\N	\N
-747	\N	\N	Josiah Otege	incomestrims@gmail.com	+255763986983	\N	free	14-03-2018	14-04-2018	4	0	\N	\N	2018-03-14 11:14:49	2018-03-14 11:14:49	\N	f	f	NOVUS	\N	\N
-1192	255000465027	\N	abdulghanim nassor	abdulltiky@gmail.com	0717222361	\N	free	03-07-2018	02-08-2018	0	0	https://lh4.googleusercontent.com/-lBcQENmAv_o/AAAAAAAAAAI/AAAAAAAAAAA/AB6qoq3yo-eThHK_CFWsNT8gvUZxcDo43g/s200/photo.jpg	\N	2018-07-03 07:45:38	2018-07-09 09:16:17	\N	f	f	Man	1.0	1
-792	\N	\N	Boniphace Yohana	boniphacey41@gmail.com	0753566566	\N	free	24-03-2018	24-04-2018	6666	0	\N	\N	2018-03-24 04:31:46	2018-03-24 04:31:46	\N	f	f	NOVUS	\N	\N
-790	\N	\N	Freddy Mtingala	freddymtingala@gmail.com	0756237913	\N	free	24-03-2018	24-04-2018	2	0	\N	\N	2018-03-24 03:53:39	2018-03-24 03:53:39	\N	f	f	NOVUS	\N	\N
-1193	255200023228	\N	ally bakari	allykifaranga@gmail.com	0676528008	\N	free	03-07-2018	03-08-2018	0	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABDCLDkucbnkq_KRyILdmNhcmRfcGhvdG8qKDA1YWQxNTdlOGYwZGE2MjlmMGIyYjE4OWUwNWIwYmRkZWM0NWYzNjcwAcq-koamvCcAuEtn6oppX_n4Mt-C	\N	2018-07-03 12:26:39	2018-07-03 12:26:39	\N	f	f	Ass. Supervisor	\N	\N
-831	\N	\N	Robinson Kisemei	fl.livingopportunity@gmail.com	+254727795223	\N	free	31-03-2018	01-05-2018	0	1	\N	\N	2018-03-31 10:17:54	2018-03-31 10:17:54	\N	f	f	NOVUS	\N	\N
-1194	255000570818	\N	Glory Makuka	gmakuka@gmail.com	0763223388	\N	free	03-07-2018	03-08-2018	0	0	https://lh6.googleusercontent.com/-8TBXAMDR9JE/AAAAAAAAAAI/AAAAAAAAA90/Qt3xkRhYYHM/photo.jpg	\N	2018-07-03 14:23:30	2018-07-03 14:23:30	\N	f	f	Ass. Supervisor	\N	\N
-906	\N	\N	Tedy Mushi	sooephie12@gmail.com	0658404446	\N	free	10-04-2018	11-05-2018	12	0	\N	\N	2018-04-10 14:08:55	2018-04-10 14:08:55	\N	f	f	NOVUS	\N	\N
-904	\N	\N	Janeth Lyimo	janethlyimo4@gmail.com	0676008132	\N	free	10-04-2018	11-05-2018	25	0	\N	\N	2018-04-10 06:57:02	2018-04-10 06:57:02	\N	f	f	NOVUS	\N	\N
-1195	255000048381	\N	Blandina Njau	njaublandina@gmail.com	0713728080	\N	free	03-07-2018	02-08-2018	0	0	https://lh6.googleusercontent.com/-Zcxe7rzn614/AAAAAAAAAAI/AAAAAAAAAAA/AB6qoq0Jo23B1WZAI56Hgu9X_neFXK2gcw/s200/photo.jpg	\N	2018-07-03 15:54:05	2018-07-03 15:54:05	\N	f	f	Man	1.0	1
-947	\N	\N	Sele The Don	thedonsele7@gmail.com	0719233970	\N	free	21-04-2018	22-05-2018	1993	1	\N	\N	2018-04-21 07:47:17	2018-04-21 07:47:17	\N	f	f	NOVUS	\N	\N
-946	\N	\N	rosemary andrea	rosemaryandrea14@gmail.com	0763919456	\N	free	20-04-2018	21-05-2018	255000555918	0	\N	\N	2018-04-20 17:46:30	2018-04-20 17:46:30	\N	f	f	NOVUS	\N	\N
-1196	255200021207	\N	Stephen Minja	stephenminja2017@gmail.com	0742173523	\N	free	04-07-2018	04-08-2018	0	0	\N	\N	2018-07-04 20:06:31	2018-07-04 20:06:31	\N	f	f	Ass. Supervisor	\N	\N
-1000	\N	\N	John Rmremi	johnrmremi01@gmail.com	0692472504	\N	free	02-05-2018	02-06-2018	4	0	\N	\N	2018-05-02 15:56:06	2018-05-02 15:56:06	\N	f	f	NOVUS	\N	\N
-989	\N	\N	Goodluck Shio	ghipoliti@gmail.com	0713481247	\N	free	29-04-2018	30-05-2018	2	0	\N	\N	2018-04-29 17:31:29	2018-04-29 17:31:29	\N	f	f	NOVUS	\N	\N
-988	\N	\N	Agatha Kitundu	akitundu09@gmail.com	0766019556	\N	free	29-04-2018	30-05-2018	0	0	\N	\N	2018-04-29 12:18:39	2018-04-29 12:18:39	\N	f	f	NOVUS	\N	\N
-1197	255000616492	\N	richthedon91@gmail.com	richthedon91@gmail.com	0719684424	\N	free	05-07-2018	05-08-2018	0	0	\N	\N	2018-07-05 13:29:01	2018-07-05 13:29:01	\N	f	f	Novus	\N	\N
-1031	\N	\N	Rebecca Mukama	mukamarebecca@gmail.com	0689092193	\N	free	08-05-2018	08-06-2018	0	0	\N	\N	2018-05-08 03:54:47	2018-05-08 03:54:47	\N	f	f	NOVUS	\N	\N
-1030	\N	\N	James Ntunduye	ntunduye@gmail.com	0754515475	\N	free	08-05-2018	08-06-2018	6	0	https://lh3.googleusercontent.com/-5c586EiwQZ0/AAAAAAAAAAI/AAAAAAAAB64/a7rLY0-0hiw/photo.jpg	\N	2018-05-07 21:17:02	2018-05-07 21:17:02	\N	f	f	NOVUS	\N	\N
-161	255000545346	\N	Neryl R. Sgr	nerylrsgr@gmail.com	0772459490	\N	premium	06-07-2018	05-08-2018	0	0	https://lh3.googleusercontent.com/-ACug_ZjqRuY/AAAAAAAAAAI/AAAAAAAAAdA/6KMEQxiU0uE/photo.jpg	\N	2017-12-14 14:54:26	2018-07-06 11:19:45	\N	f	f	Ass. Supervisor	\N	\N
-1077	\N	\N	Amina Manyama	aminamanyama1@gmail.com	0755417176	\N	free	17-05-2018	17-06-2018	1	0	\N	\N	2018-05-17 08:25:02	2018-05-17 08:25:02	\N	f	f	NOVUS	\N	\N
-1076	\N	\N	Patrick Komba	kombap01@gmail.com	0767600745	\N	free	16-05-2018	16-06-2018	15	0	\N	\N	2018-05-16 20:38:36	2018-05-16 20:38:36	\N	f	f	NOVUS	\N	\N
-1075	\N	\N	Sakhiya Mzale	sakhiyamzale1@gmail.com	0772868618	\N	free	16-05-2018	16-06-2018	444	0	\N	\N	2018-05-16 19:54:26	2018-05-16 19:54:26	\N	f	f	NOVUS	\N	\N
-1074	\N	\N	KAYOKA MOHAMED	kayokamohamed@gmail.com	0656990049	\N	free	16-05-2018	16-06-2018	10	0	https://lh4.googleusercontent.com/-j4-2fwG347Q/AAAAAAAAAAI/AAAAAAAAACs/ghcIxDo8u2k/photo.jpg	\N	2018-05-16 18:19:01	2018-05-16 18:19:01	\N	f	f	NOVUS	\N	\N
-1198	255000604703	\N	Costansia Kavishe	costanciakavishe@gmail.com	0655776425	\N	free	07-07-2018	07-08-2018	0	0	https://lh3.googleusercontent.com/--SDqT60CKOE/AAAAAAAAAAI/AAAAAAAAAEE/eockUoDC9zc/photo.jpg	\N	2018-07-07 07:08:33	2018-07-07 07:08:33	\N	f	f	Supervisor	\N	\N
-625	255200017151	\N	Frank Makusa	makusaandnatural@gmail.com	0621061685	\N	free	20-02-2018	23-03-2018	2	0	\N	\N	2018-02-20 19:53:57	2018-06-05 15:47:44	\N	f	f	Ass. Supervisor	\N	\N
-219	255000488632	\N	Bupe Mwakasala	bupe257@gmail.com	0652460700	\N	free	21-12-2017	21-01-2018	1	0	https://lh4.googleusercontent.com/-WxvjvvWrqzo/AAAAAAAAAAI/AAAAAAAAABs/lQQr64z1R6g/photo.jpg	\N	2017-12-21 13:47:30	2018-06-05 15:29:23	\N	f	f	Ass. Supervisor	\N	\N
-52	\N	\N	Emmanuel David	emanuelmtangi@gmail.com	0658739203	\N	free	03-12-2017	03-01-2018	100000	0	https://lh6.googleusercontent.com/-QLoAhrL1Lmc/AAAAAAAAAAI/AAAAAAAAARI/I_waOxBMOFw/photo.jpg	\N	2017-12-03 08:47:11	2017-12-03 08:47:11	\N	f	f	NOVUS	\N	\N
-51	\N	\N	Baraka Tumain Kaskas	bitubaraka@gmail.com	0656535943	\N	free	03-12-2017	03-01-2018	10	0	https://lh4.googleusercontent.com/-Gf9-cci19Fo/AAAAAAAAAAI/AAAAAAAAB04/A20tv54M4zw/photo.jpg	\N	2017-12-03 08:16:24	2017-12-03 08:16:24	\N	f	f	NOVUS	\N	\N
-53	\N	\N	Abrahman Sultan	abrahmansultan2233@gmail.com	0773238351	\N	free	03-12-2017	03-01-2018	2	0	\N	\N	2017-12-03 09:22:20	2017-12-03 09:22:20	\N	f	f	NOVUS	\N	\N
-1171	255200022726	\N	Gigi Maenda	gigimaenda@gmail.com	0714975504	\N	free	27-06-2018	28-07-2018	0	0	https://lh4.googleusercontent.com/-r5wMlTZhyGc/AAAAAAAAAAI/AAAAAAAAAKg/bsr50fFrH7Q/photo.jpg	\N	2018-06-27 11:06:48	2018-06-27 11:06:48	\N	f	f	Ass. Supervisor	\N	\N
-1170	255000597809	\N	rashid mwambange	chidymwamba@gmail.com	0759547275	\N	free	27-06-2018	28-07-2018	0	0	https://lh5.googleusercontent.com/-Jr85_h33Xdw/AAAAAAAAAAI/AAAAAAAAABo/N7H-n03YXdU/photo.jpg	\N	2018-06-27 10:35:37	2018-06-27 10:35:37	\N	f	f	Ass. Supervisor	\N	\N
-24	255000566049	\N	melkiad masha	melkiadmasha@gmail.com	0757435670	\N	free	02-12-2017	02-01-2018	0	0	https://lh3.googleusercontent.com/-s4MHBIAPg78/AAAAAAAAAAI/AAAAAAAAAMU/fkXgy2QyA4E/photo.jpg	\N	2017-12-02 09:44:37	2018-06-27 06:54:57	\N	f	f	Ass. Supervisor	\N	\N
-19	255000462410	\N	Manase Masinza	manasemasinza@gmail.com	0673273125	\N	premium	25-06-2018	25-07-2018	160	0	https://lh4.googleusercontent.com/-U3o24ygh1dU/AAAAAAAAAAI/AAAAAAAACx4/1Ee0uou-1c0/photo.jpg	\N	2017-12-02 08:24:08	2018-06-25 18:57:02	\N	f	f	Supervisor	\N	\N
-21	254000034165	\N	Khushe M. Hauli	khushele@gmail.com	0753333320	\N	premium	23-06-2018	23-06-2019	1	0	https://lh3.googleusercontent.com/-xkMYzY9d25Q/AAAAAAAAAAI/AAAAAAAAGnI/gKsIoeHQAtQ/photo.jpg	\N	2017-12-02 08:58:54	2018-06-23 10:30:47	\N	f	f	Manager	\N	\N
-28	255000445922	\N	Alinanuswe Ntondo	alinanuswe.abel@gmail.com	0718219500	\N	free	02-12-2017	02-01-2018	0	0	\N	\N	2017-12-02 11:15:24	2018-06-07 10:53:54	\N	f	f	Supervisor	\N	\N
-35	254200012253	\N	Lilian Mwangangi	mlilndunge@gmail.com	0723125395	\N	free	02-12-2017	02-01-2018	5	1	https://lh3.googleusercontent.com/-hIAlz4_D5zE/AAAAAAAAAAI/AAAAAAAAD30/dqeT4anOoZo/photo.jpg	\N	2017-12-02 15:24:29	2018-06-07 11:55:26	\N	f	f	Supervisor	\N	\N
-40	254000460059	\N	Josephine Gitiri	gitirijo@gmail.com	0720172923	\N	free	02-12-2017	02-01-2018	0	1	https://lh4.googleusercontent.com/-Dt9byb6Z9N0/AAAAAAAAAAI/AAAAAAAAAC0/1tTd51YVrwg/photo.jpg	\N	2017-12-02 20:09:19	2018-06-05 16:59:57	\N	f	f	Ass. Supervisor	\N	\N
-34	\N	\N	Pauline Kairuki	paulinekairuki@gmail.com	0753685085	\N	premium	29-01-2018	27-08-2018	0	0	\N	\N	2017-12-02 15:23:55	2018-03-28 07:12:00	\N	f	f	NOVUS	\N	\N
-50	\N	\N	Khamis Makange	khamismakange61@gmail.com	0718264129	\N	free	03-12-2017	03-01-2018	2	0	\N	\N	2017-12-03 07:40:00	2017-12-03 07:40:00	\N	f	f	NOVUS	\N	\N
-49	\N	\N	Kaie Mujaya	kaiecom26@gmail.com	0719700745	\N	free	03-12-2017	03-01-2018	2	0	https://lh5.googleusercontent.com/-bHHA4d_HRYg/AAAAAAAAAAI/AAAAAAAABno/OVphb8bAcdo/photo.jpg	\N	2017-12-03 07:06:22	2017-12-03 07:06:22	\N	f	f	NOVUS	\N	\N
-47	\N	\N	Make It Rain	maketrain1@gmail.com	0729029114	\N	free	03-12-2017	03-01-2018	5	1	\N	\N	2017-12-03 05:02:46	2017-12-03 05:02:46	\N	f	f	NOVUS	\N	\N
-46	\N	\N	Poliect Mwafrika	poliect.mwafrika@gmail.com	0762335999	\N	free	03-12-2017	03-01-2018	0	0	\N	\N	2017-12-03 04:56:08	2017-12-03 04:56:08	\N	f	f	NOVUS	\N	\N
-43	\N	\N	teddypius mateso	teddyma56@gmail.com	0757737973	\N	free	03-12-2017	03-01-2018	6	0	\N	\N	2017-12-03 03:04:13	2017-12-03 03:04:13	\N	f	f	NOVUS	\N	\N
-39	\N	\N	Omar Ali	omaralibbb04@gmail.com	0655525454	\N	free	02-12-2017	02-01-2018	2155	0	\N	\N	2017-12-02 19:40:02	2017-12-02 19:40:02	\N	f	f	NOVUS	\N	\N
-38	\N	\N	Wesley Waku	wesleywaku@gmail.com	+254718162219	\N	free	02-12-2017	02-01-2018	4	1	https://lh3.googleusercontent.com/-HDXBrv6MNqY/AAAAAAAAAAI/AAAAAAAAAPY/GbmoTK7geJs/photo.jpg	\N	2017-12-02 18:30:37	2017-12-02 18:30:37	\N	f	f	NOVUS	\N	\N
-37	\N	\N	Peragia Bikongoro	pbikongoro19@gmail.com	0757894569	\N	free	02-12-2017	02-01-2018	9000	0	\N	\N	2017-12-02 17:10:18	2017-12-02 17:10:18	\N	f	f	NOVUS	\N	\N
-36	\N	\N	Alexander Power	poweralexander246@gmail.com	0759197970	\N	free	02-12-2017	02-01-2018	0	0	\N	\N	2017-12-02 15:53:46	2017-12-02 15:53:46	\N	f	f	NOVUS	\N	\N
-33	\N	\N	David Anderson	da465649@gmail.com	+255717671643	\N	free	02-12-2017	02-01-2018	4	0	\N	\N	2017-12-02 15:15:29	2017-12-02 15:15:29	\N	f	f	NOVUS	\N	\N
-31	\N	\N	Martin Abuya	otienoabuya@gmail.com	0727271728	\N	free	02-12-2017	02-01-2018	0	1	https://lh5.googleusercontent.com/-zW5Hdy5-P-0/AAAAAAAAAAI/AAAAAAAAAY4/o687umew-D0/photo.jpg	\N	2017-12-02 15:13:04	2017-12-02 15:13:04	\N	f	f	NOVUS	\N	\N
-30	\N	\N	stela nyakato	nyakatostela@gmail.com	0752222900	\N	free	02-12-2017	02-01-2018	4	0	https://lh4.googleusercontent.com/-3pMRGwZQHuQ/AAAAAAAAAAI/AAAAAAAAABk/V_ryI4yfkKw/photo.jpg	\N	2017-12-02 14:19:57	2017-12-02 14:19:57	\N	f	f	NOVUS	\N	\N
-27	\N	\N	Pilly Mkomwa	mkomwapilly@gmail.com	0655366719	\N	free	02-12-2017	02-01-2018	10	0	\N	\N	2017-12-02 10:51:14	2017-12-02 10:51:14	\N	f	f	NOVUS	\N	\N
-25	\N	\N	Lawrab Abel	abel.lawrence2000@gmail.com	254723067008	\N	free	02-12-2017	02-01-2018	40	1	https://lh4.googleusercontent.com/-VMxgcarcbYM/AAAAAAAAAAI/AAAAAAAAAOY/iFYV4qrdHs4/photo.jpg	\N	2017-12-02 09:49:08	2017-12-02 09:49:08	\N	f	f	NOVUS	\N	\N
-23	\N	\N	Rodgers George	defleman7@gmail.com	0769280233	\N	free	02-12-2017	02-01-2018	0	0	https://lh6.googleusercontent.com/-OjnsHFxTRho/AAAAAAAAAAI/AAAAAAAAALY/UtTsU62gq4w/photo.jpg	\N	2017-12-02 09:42:20	2017-12-02 09:42:20	\N	f	f	NOVUS	\N	\N
-32	255000399646	\N	Neema Kiula	neemakiula@gmail.com	0713562436	\N	premium	13-06-2018	13-07-2018	1	0	https://lh6.googleusercontent.com/-_3Ug6W8bknE/AAAAAAAAAAI/AAAAAAAAAM4/QlNVmPD8dtY/photo.jpg	\N	2017-12-02 15:13:17	2018-07-09 08:55:40	\N	f	f	Ass. Manager	\N	\N
-54	255000563096	\N	Jodras Esdras	jodras.esdras@gmail.com	0768943334	\N	premium	07-09-2018	07-10-2018	0	0	\N	\N	2017-12-03 10:58:32	2018-07-09 14:29:50	\N	f	f	Ass. Supervisor	\N	\N
-67	255200016794	\N	Evagria Temo	evagriatemo@gmail.com	0715893029	\N	premium	28-06-2018	28-07-2018	0	0	\N	\N	2017-12-04 17:26:27	2018-06-28 16:55:23	\N	f	f	Novus	\N	\N
-81	255000424476	\N	Adelina Karugaba	adelinakarugaba77@gmail.com	0716896389	\N	premium	25-06-2018	25-07-2018	4	0	\N	\N	2017-12-06 05:47:48	2018-06-25 16:54:57	\N	f	f	Ass. Supervisor	\N	\N
-70	255000422419	\N	Lucy Lupenza	lucylupenza.ll@gmail.com	0757286837	\N	premium	23-06-2018	23-07-2018	8	0	\N	\N	2017-12-04 18:33:50	2018-06-23 15:53:59	\N	f	f	Supervisor	\N	\N
-44	255000572360	\N	Shaban Ally Bakari	shaabanbakari@gmail.com	0716486261	\N	free	03-12-2017	03-01-2018	2	0	\N	\N	2017-12-03 04:43:34	2018-06-13 17:17:26	\N	f	f	Ass. Supervisor	\N	\N
-62	254200014814	\N	Simon Tayo	simtayo@gmail.com	0723708508	\N	free	03-12-2017	03-01-2018	2	1	https://lh4.googleusercontent.com/-lWV0L8JWcNY/AAAAAAAAAAI/AAAAAAAAABI/VZvQjP0-MSo/photo.jpg	\N	2017-12-03 16:44:38	2018-06-12 08:30:48	\N	f	f	Ass. Supervisor	\N	\N
-45	255000406555	\N	WITNESZ SIGBJORN	witnesztz@gmail.com	0753320009	\N	premium	08-06-2018	08-07-2018	0	0	https://lh4.googleusercontent.com/-18f05axG0Ys/AAAAAAAAAAI/AAAAAAAAA_o/S_l8Jjt2WQo/photo.jpg	\N	2017-12-03 04:52:48	2018-06-09 20:28:33	\N	f	f	Manager	\N	\N
-74	255000489023	\N	Rachel Matee	rachelmatee17@gmail.com	0677021329	\N	premium	08-06-2018	08-07-2018	2	0	\N	\N	2017-12-05 08:44:50	2018-06-08 18:01:10	\N	f	f	Ass. Manager	\N	\N
-48	254000357206	\N	george haggi	georgehaggy@gmail.com	0789044043	\N	free	03-12-2017	03-01-2018	144	0	https://lh3.googleusercontent.com/-tu11U-aqSkE/AAAAAAAAAAI/AAAAAAAARAM/Uil0A3-EN3k/photo.jpg	\N	2017-12-03 06:36:01	2018-06-08 14:07:15	\N	f	f	Ass. Supervisor	\N	\N
-55	255000602452	\N	Yousuf Ummar	yousufummar649@gmail.com	0675117574	\N	free	03-12-2017	03-01-2018	0	0	\N	\N	2017-12-03 11:17:09	2018-06-06 07:12:37	\N	f	f	Novus	\N	\N
-65	\N	\N	Lengarivo Marti	lengarivo@gmail.com	0753336666	\N	premium	04-12-2017	03-01-2018	25	0	\N	\N	2017-12-04 13:55:57	2018-01-24 07:57:07	\N	f	f	NOVUS	\N	\N
-102	\N	\N	GodfreyMsami official	msami.gp20@gmail.com	0764899798	\N	free	07-12-2017	07-01-2018	6	0	https://lh4.googleusercontent.com/-_Emk3e2J_4U/AAAAAAAAAAI/AAAAAAAAADg/GZgS1gpcPSo/photo.jpg	\N	2017-12-07 17:18:43	2017-12-07 17:18:43	\N	f	f	NOVUS	\N	\N
-101	\N	\N	ANTHAR Sanchez	anthar0341@gmail.com	0772093013	\N	free	07-12-2017	07-01-2018	25	0	https://lh3.googleusercontent.com/--KaZp4UntW8/AAAAAAAAAAI/AAAAAAAAAbA/fZl0PRCY9HE/photo.jpg	\N	2017-12-07 16:54:39	2017-12-07 16:54:39	\N	f	f	NOVUS	\N	\N
-100	\N	\N	Edward Richard	noswize@gmail.com	+255784003737	\N	free	07-12-2017	07-01-2018	778	0	https://lh4.googleusercontent.com/-CjWDkdRz7iM/AAAAAAAAAAI/AAAAAAAAACQ/32EmhTIoK8c/photo.jpg	\N	2017-12-07 16:06:03	2017-12-07 16:06:03	\N	f	f	NOVUS	\N	\N
-99	\N	\N	Amina Princess	emmycollection28@gmail.com	+255772102886	\N	free	07-12-2017	07-01-2018	2	0	\N	\N	2017-12-07 13:24:58	2017-12-07 13:24:58	\N	f	f	NOVUS	\N	\N
-97	\N	\N	Richard Masalu	rimalusonfbo@gmail.com	0716405527	\N	free	07-12-2017	07-01-2018	0	0	https://lh4.googleusercontent.com/-QXJcx3RE0E4/AAAAAAAAAAI/AAAAAAAAGVA/ghUG01Zx4jU/photo.jpg	\N	2017-12-07 13:05:58	2017-12-07 13:05:58	\N	f	f	NOVUS	\N	\N
-96	\N	\N	Forever Business Owner Evelius.	johnevelius@gmail.com	+255767763959	\N	free	07-12-2017	07-01-2018	0	0	https://lh6.googleusercontent.com/-vjEZPhl7eDk/AAAAAAAAAAI/AAAAAAAAAFk/yCbRYQPDzdg/photo.jpg	\N	2017-12-07 12:14:30	2017-12-07 12:14:30	\N	f	f	NOVUS	\N	\N
-95	255000433664	\N	Alice Ngubwene	ngubwene@gmail.com	0653660669	\N	premium	01-07-2018	31-07-2018	1	0	https://lh3.googleusercontent.com/-xAzLTg0qtyc/AAAAAAAAAAI/AAAAAAAAE_c/6FbjayE017A/photo.jpg	\N	2017-12-07 12:11:53	2018-07-01 06:52:23	\N	f	f	Manager	\N	\N
-94	\N	\N	mariamu malakibungu	malakibungumariamu@gmail.com	0754091313	\N	free	07-12-2017	07-01-2018	1	0	\N	\N	2017-12-07 10:27:14	2017-12-07 10:27:14	\N	f	f	NOVUS	\N	\N
-93	\N	\N	julius bett	bettj200@gmail.com	0721316230	\N	free	07-12-2017	07-01-2018	1000	1	\N	\N	2017-12-07 09:07:32	2017-12-07 09:07:32	\N	f	f	NOVUS	\N	\N
-92	\N	\N	Ally ramadhani	allyramadhani04@gmail.com	0629132433	\N	free	07-12-2017	07-01-2018	25	0	https://lh6.googleusercontent.com/-hxuXC7gzniQ/AAAAAAAAAAI/AAAAAAAAAa4/20Hlz9K5Urg/photo.jpg	\N	2017-12-07 07:00:14	2017-12-07 07:00:14	\N	f	f	NOVUS	\N	\N
-91	\N	\N	Rhoda Bernard	rhodabernard27@gmail.com	0718947366	\N	free	07-12-2017	07-01-2018	1	0	\N	\N	2017-12-07 05:44:35	2017-12-07 05:44:35	\N	f	f	NOVUS	\N	\N
-85	\N	\N	ENOCK LAZARO	enock.lazaro@gmail.com	0762363033	\N	free	06-12-2017	06-01-2018	3	0	https://lh6.googleusercontent.com/-Pc2e0DH1dQs/AAAAAAAAAAI/AAAAAAAAAHg/qgk35lXZHBE/photo.jpg	\N	2017-12-06 10:27:19	2017-12-06 10:27:19	\N	f	f	NOVUS	\N	\N
-84	\N	\N	John Madeje	johnmadeje99@gmail.com	0757933264	\N	free	06-12-2017	06-01-2018	0	0	\N	\N	2017-12-06 06:50:50	2017-12-06 06:50:50	\N	f	f	NOVUS	\N	\N
-80	\N	\N	Godluck Swai	godluckswai50@gmail.com	+255787960066	\N	free	06-12-2017	06-01-2018	3	0	\N	\N	2017-12-06 05:23:02	2017-12-06 05:23:02	\N	f	f	NOVUS	\N	\N
-78	\N	\N	criss kimaryo	crisskimaryo@gmail.com	07454545	\N	free	05-12-2017	05-01-2018	1000000	0	https://lh3.googleusercontent.com/-SZWtE7aRG0k/AAAAAAAAAAI/AAAAAAAAE0w/dme1sCSoatg/photo.jpg	\N	2017-12-05 19:59:12	2017-12-05 19:59:12	\N	f	f	NOVUS	\N	\N
-77	\N	\N	Ammy Sylivestet	ammysylivester125@gmail.com	0764960133	\N	free	05-12-2017	05-01-2018	0	0	\N	\N	2017-12-05 13:44:20	2017-12-05 13:44:20	\N	f	f	NOVUS	\N	\N
-76	\N	\N	Fidelis Ngalikal	ngalikafl@gmail.com	0757158141	\N	free	05-12-2017	05-01-2018	0	0	https://lh5.googleusercontent.com/-Ldoux_XjlMg/AAAAAAAAAAI/AAAAAAAAABA/X8B84gnNZBI/photo.jpg	\N	2017-12-05 13:30:46	2017-12-05 13:30:46	\N	f	f	NOVUS	\N	\N
-75	\N	\N	Godlucky Massawe	godlucky80@gmail.com	0764960133	\N	free	05-12-2017	05-01-2018	0	0	\N	\N	2017-12-05 10:00:29	2017-12-05 10:00:29	\N	f	f	NOVUS	\N	\N
-73	\N	\N	Susie Sixtus	ssixtus.ss@gmail.com	+255656171626	\N	free	05-12-2017	05-01-2018	2	0	\N	\N	2017-12-05 06:47:57	2017-12-05 06:47:57	\N	f	f	NOVUS	\N	\N
-72	\N	\N	Saidi Khalfan	saidikhalfa895@gmail.com	0772339951	\N	free	05-12-2017	05-01-2018	0	0	\N	\N	2017-12-05 06:46:56	2017-12-05 06:46:56	\N	f	f	NOVUS	\N	\N
-71	\N	\N	Christopher Maboje	cmaboje7@gmail.com	0655247674	\N	free	04-12-2017	04-01-2018	22	0	https://lh3.googleusercontent.com/-sJBmv1HAh_A/AAAAAAAAAAI/AAAAAAAAAEQ/6Hlg9Xo6FRE/photo.jpg	\N	2017-12-04 20:09:30	2017-12-04 20:09:30	\N	f	f	NOVUS	\N	\N
-66	\N	\N	anna humphrey	humphreyanna75@gmail.com	0717358790	\N	free	04-12-2017	04-01-2018	0	0	\N	\N	2017-12-04 14:33:57	2017-12-04 14:33:57	\N	f	f	NOVUS	\N	\N
-64	\N	\N	Joseph Julius	josephjulius027@gmail.com	0752304044	\N	free	04-12-2017	04-01-2018	0	0	\N	\N	2017-12-04 13:48:43	2017-12-04 13:48:43	\N	f	f	NOVUS	\N	\N
-61	\N	\N	kareem kassim	kareemkassim2008@gmail.com	0713875790	\N	free	03-12-2017	03-01-2018	0	0	\N	\N	2017-12-03 15:17:40	2017-12-03 15:17:40	\N	f	f	NOVUS	\N	\N
-59	\N	\N	Fransisco Mlelwa	fransiscomlelwa2@gmail.com	0754850082	\N	free	03-12-2017	03-01-2018	5	0	\N	\N	2017-12-03 13:49:54	2017-12-03 13:49:54	\N	f	f	NOVUS	\N	\N
-58	\N	\N	ajili mrope	ajilimrope713@gmail.com	0787203010	\N	free	03-12-2017	03-01-2018	2	0	\N	\N	2017-12-03 13:14:17	2017-12-03 13:14:17	\N	f	f	NOVUS	\N	\N
-57	\N	\N	Joshua Pastory	pastory9@gmail.com	0714797103	\N	free	03-12-2017	03-01-2018	8	0	https://lh4.googleusercontent.com/-yGfNuQY9fxk/AAAAAAAAAAI/AAAAAAAAIEo/mR2XqjLQFEg/photo.jpg	\N	2017-12-03 11:55:47	2017-12-03 11:55:47	\N	f	f	NOVUS	\N	\N
-56	\N	\N	Gaudence Sirikwa	soze.kazee@gmail.com	787605123	\N	free	03-12-2017	03-01-2018	0	0	https://lh5.googleusercontent.com/-Wk4GyL2ymiY/AAAAAAAAAAI/AAAAAAAAAJQ/UzvOosmP5JU/photo.jpg	\N	2017-12-03 11:25:02	2017-12-03 11:25:02	\N	f	f	NOVUS	\N	\N
-123	255000458289	\N	Mary Ngalapa	ngalapamary0@gmail.com	0755683132	\N	free	09-12-2017	09-01-2018	32	0	\N	\N	2017-12-09 17:21:21	2018-06-19 09:33:14	\N	f	f	Ass. Supervisor	\N	\N
-114	255000606795	\N	Ferdinand M. Biedrawa	fbiedi4@gmail.com	0715018329	\N	free	08-12-2017	08-01-2018	4	0	\N	\N	2017-12-08 12:09:23	2018-06-09 08:59:10	\N	f	f	Manager	\N	\N
-87	\N	\N	Fransisko B Mgaya	mgayafransisco@gmail.com	0759628323	\N	premium	06-12-2017	05-01-2018	0	0	https://lh5.googleusercontent.com/-_A8LsVLFQ4o/AAAAAAAAAAI/AAAAAAAAT1k/gBX9C-ymG5k/photo.jpg	\N	2017-12-06 16:26:21	2018-01-24 07:59:31	\N	f	f	NOVUS	\N	\N
-158	\N	\N	Rosemary Kissimbo	rose.kissimbo.rk@gmail.com	0715335096	\N	free	14-12-2017	14-01-2018	0	0	https://lh4.googleusercontent.com/-BbNEYfrlXE4/AAAAAAAAAAI/AAAAAAAAZRU/mwNoq6kL5J8/photo.jpg	\N	2017-12-14 08:09:58	2017-12-14 08:09:58	\N	f	f	NOVUS	\N	\N
-157	\N	\N	Jane Philemon	janephilemon7@gmail.com	0758288387	\N	free	14-12-2017	14-01-2018	2	0	\N	\N	2017-12-14 06:37:39	2017-12-14 06:37:39	\N	f	f	NOVUS	\N	\N
-152	\N	\N	Alayna Salum	alaynasalum@gmail.com	0678381621	\N	free	13-12-2017	13-01-2018	2	0	\N	\N	2017-12-13 13:16:23	2017-12-13 13:16:23	\N	f	f	NOVUS	\N	\N
-151	\N	\N	Isakwisa Amulike	isakwisaamulike@gmail.com	0687142000	\N	free	13-12-2017	13-01-2018	8	0	\N	\N	2017-12-13 11:57:28	2017-12-13 11:57:28	\N	f	f	NOVUS	\N	\N
-150	\N	\N	Paul Kadallah	paulekadallah@gmail.com	0717907284	\N	free	13-12-2017	13-01-2018	1300000	0	\N	\N	2017-12-13 11:04:56	2017-12-13 11:04:56	\N	f	f	NOVUS	\N	\N
-147	\N	\N	Lily Kwezi	lilykwezi2@gmail.com	0715191565	\N	free	13-12-2017	13-01-2018	4	0	\N	\N	2017-12-13 04:26:13	2017-12-13 04:26:13	\N	f	f	NOVUS	\N	\N
-146	\N	\N	anna barnabas	annabarnabas1@gmail.com	0753171854	\N	free	12-12-2017	12-01-2018	22	0	https://lh3.googleusercontent.com/-lXNSKLHIJ3M/AAAAAAAAAAI/AAAAAAAAADI/33v5yzceWYA/photo.jpg	\N	2017-12-12 17:14:30	2017-12-12 17:14:30	\N	f	f	NOVUS	\N	\N
-144	\N	\N	Emil Temba	emiltembat@gmail.com	+255786160146	\N	free	12-12-2017	12-01-2018	2	0	\N	\N	2017-12-12 12:47:11	2017-12-12 12:47:11	\N	f	f	NOVUS	\N	\N
-142	\N	\N	OMASAM TRADERS LTD	omasamtraders75@gmail.com	+255712567043	\N	free	12-12-2017	12-01-2018	212	0	https://lh5.googleusercontent.com/-RCXKjwtOxyo/AAAAAAAAAAI/AAAAAAAAACk/R_k7KLCRc0w/photo.jpg	\N	2017-12-12 07:16:21	2017-12-12 07:16:21	\N	f	f	NOVUS	\N	\N
-141	\N	\N	Salum Khalfan	salumkhalfan09@gmail.com	0777157285	\N	free	12-12-2017	12-01-2018	0	0	https://lh6.googleusercontent.com/-Eic0YezT1UI/AAAAAAAAAAI/AAAAAAAAAB0/oheQ8dpIiRk/photo.jpg	\N	2017-12-12 02:41:32	2017-12-12 02:41:32	\N	f	f	NOVUS	\N	\N
-140	\N	\N	makenga thomas	www.thomasmakenga24@gmail.com	0622317802	\N	free	12-12-2017	12-01-2018	1234	0	\N	\N	2017-12-11 21:11:34	2017-12-11 21:11:34	\N	f	f	NOVUS	\N	\N
-139	\N	\N	Imelda Mallya	imeldamallya2@gmail.com	0753075772	\N	free	11-12-2017	11-01-2018	2	0	\N	\N	2017-12-11 20:09:22	2017-12-11 20:09:22	\N	f	f	NOVUS	\N	\N
-138	\N	\N	ruthbarnabas1997@gmail.com	ruthbarnabas1997@gmail.com	0656490154	\N	free	11-12-2017	11-01-2018	1997	0	\N	\N	2017-12-11 17:17:17	2017-12-11 17:17:17	\N	f	f	NOVUS	\N	\N
-137	\N	\N	Edina Cleophace	edinacleophace73@gmail.com	0652466013	\N	free	11-12-2017	11-01-2018	12	0	\N	\N	2017-12-11 14:35:54	2017-12-11 14:35:54	\N	f	f	NOVUS	\N	\N
-135	\N	\N	Grace Njuguna	gracenjuguna2351983@gmail.com	0722153161	\N	free	11-12-2017	11-01-2018	4	1	\N	\N	2017-12-11 11:48:38	2017-12-11 11:48:38	\N	f	f	NOVUS	\N	\N
-134	\N	\N	fadhili shelutimbwa	fshelutimbwa1966@gmail.com	0713823700	\N	free	11-12-2017	11-01-2018	250000	0	\N	\N	2017-12-11 09:25:57	2017-12-11 09:25:57	\N	f	f	NOVUS	\N	\N
-132	\N	\N	Mercy Munisi	mercysebamunisi@gmail.com	+255754855774	\N	free	11-12-2017	11-01-2018	7	0	\N	\N	2017-12-11 07:30:24	2017-12-11 07:30:24	\N	f	f	NOVUS	\N	\N
-129	\N	\N	Sylivester Daudi	silva2mwanzilwa@gmail.com	0762210756	\N	free	11-12-2017	11-01-2018	2	0	\N	\N	2017-12-11 00:34:18	2017-12-11 00:34:18	\N	f	f	NOVUS	\N	\N
-128	\N	\N	Gabriel mshana	gabrielmshana@gmail.com	+255756559541	\N	free	10-12-2017	10-01-2018	0	0	\N	\N	2017-12-10 19:24:26	2017-12-10 19:24:26	\N	f	f	NOVUS	\N	\N
-126	\N	\N	Elizabeth Juma	elizabethjuma736@gmail.com	0767545222	\N	free	10-12-2017	10-01-2018	1	0	\N	\N	2017-12-10 15:22:23	2017-12-10 15:22:23	\N	f	f	NOVUS	\N	\N
-125	\N	\N	meali Khamis	mshibsy@gmail.com	0786677400	\N	free	10-12-2017	10-01-2018	1	0	\N	\N	2017-12-10 05:00:43	2017-12-10 05:00:43	\N	f	f	NOVUS	\N	\N
-124	\N	\N	Roman Kazungu	romankazungu74@gmail.com	0722153161	\N	free	09-12-2017	09-01-2018	4	1	https://lh3.googleusercontent.com/-jsgYlvTKk38/AAAAAAAAAAI/AAAAAAAADtY/O-0nfSCERMA/photo.jpg	\N	2017-12-09 19:07:05	2017-12-09 19:07:05	\N	f	f	NOVUS	\N	\N
-122	\N	\N	Emmanuel Archard	www.emmanuelalchard@gmail.com	0767135120	\N	free	09-12-2017	09-01-2018	11	0	\N	\N	2017-12-09 17:04:05	2017-12-09 17:04:05	\N	f	f	NOVUS	\N	\N
-121	\N	\N	Caroline Sambai	caronesambai@gmail.com	0784709193	\N	free	09-12-2017	09-01-2018	5	0	\N	\N	2017-12-09 14:53:53	2017-12-09 14:53:53	\N	f	f	NOVUS	\N	\N
-120	\N	\N	Duncan Mosioma	duncanmos964@gmail.com	0658684841	\N	free	09-12-2017	09-01-2018	12	0	\N	\N	2017-12-09 13:35:46	2017-12-09 13:35:46	\N	f	f	NOVUS	\N	\N
-119	\N	\N	Chelsea tz1	fadhilmaulid23@gmail.com	0755992687	\N	free	09-12-2017	09-01-2018	4	0	https://lh3.googleusercontent.com/-j761Sg46ni8/AAAAAAAAAAI/AAAAAAAAHjM/9H6Ovvio2jM/photo.jpg	\N	2017-12-09 13:11:37	2017-12-09 13:11:37	\N	f	f	NOVUS	\N	\N
-115	\N	\N	ELISHA MALAMBUGI	elishamalambugi@gmail.com	+255765186998	\N	free	09-12-2017	09-01-2018	2	0	https://lh3.googleusercontent.com/-J9TvUAMVFkk/AAAAAAAAAAI/AAAAAAAAAR0/gy143LEOM84/photo.jpg	\N	2017-12-09 09:53:15	2017-12-09 09:53:15	\N	f	f	NOVUS	\N	\N
-113	\N	\N	Musa Lameck	musalameck7@gmail.com	+255764082924	\N	free	08-12-2017	08-01-2018	4	0	https://lh3.googleusercontent.com/-RhLhLUGFXSs/AAAAAAAAAAI/AAAAAAAAAG8/02s9saGAyYg/photo.jpg	\N	2017-12-08 11:03:20	2017-12-08 11:03:20	\N	f	f	NOVUS	\N	\N
-112	\N	\N	Adam Fritz	adamfritz6@gmail.com	0766161845	\N	free	08-12-2017	08-01-2018	787	0	\N	\N	2017-12-08 10:27:31	2017-12-08 10:27:31	\N	f	f	NOVUS	\N	\N
-111	\N	\N	Vumilia Siasa	siasavumilia@gmail.com	0753150530	\N	free	08-12-2017	08-01-2018	4	0	\N	\N	2017-12-08 09:17:57	2017-12-08 09:17:57	\N	f	f	NOVUS	\N	\N
-110	\N	\N	Fatma Abdulkadir	fatmaamohd83@gmail.com	0773823426	\N	free	08-12-2017	08-01-2018	1	0	\N	\N	2017-12-08 08:48:03	2017-12-08 08:48:03	\N	f	f	NOVUS	\N	\N
-109	\N	\N	May Munuo	msmunuo@gmail.com	0714616770	\N	free	08-12-2017	08-01-2018	800	0	https://lh3.googleusercontent.com/-qi7KW8GmLH4/AAAAAAAAAAI/AAAAAAAAAJ8/2U4ngM39zhM/photo.jpg	\N	2017-12-08 05:49:25	2017-12-08 05:49:25	\N	f	f	NOVUS	\N	\N
-108	\N	\N	Bariki Kaberege	kabaregebariki@gmail.com	0654065266	\N	free	08-12-2017	08-01-2018	9	0	https://lh5.googleusercontent.com/-R4oe-kIiSZg/AAAAAAAAAAI/AAAAAAAACSE/6hUxvw0uPns/photo.jpg	\N	2017-12-08 05:43:47	2017-12-08 05:43:47	\N	f	f	NOVUS	\N	\N
-106	\N	\N	Dominica Kimario	dominicakimario12@gmail.com	0767100883	\N	free	07-12-2017	07-01-2018	0	0	\N	\N	2017-12-07 20:16:41	2017-12-07 20:16:41	\N	f	f	NOVUS	\N	\N
-105	\N	\N	sumeet dogra	sdogra009@gmail.com	0713549549	\N	free	07-12-2017	07-01-2018	4	0	\N	\N	2017-12-07 19:15:03	2017-12-07 19:15:03	\N	f	f	NOVUS	\N	\N
-104	\N	\N	Godwin Mbwambo	mbwambogodwin717@gmail.com	0754561848	\N	free	07-12-2017	07-01-2018	2	0	\N	\N	2017-12-07 19:06:41	2017-12-07 19:06:41	\N	f	f	NOVUS	\N	\N
-103	\N	\N	Salum Msangi	msangisalum63@gmail.com	0710489066	\N	free	07-12-2017	07-01-2018	4	0	\N	\N	2017-12-07 18:14:53	2017-12-07 18:14:53	\N	f	f	NOVUS	\N	\N
-98	255200011643	\N	Faraja Msigwa	farajamsigwa3@gmail.com	0712980006	\N	premium	01-07-2018	01-07-2019	0	0	\N	\N	2017-12-07 13:13:38	2018-07-01 14:44:39	\N	f	f	Ass. Supervisor	\N	\N
-153	255200017272	\N	Joyce Lito	joycelipo@gmail.com	0677865254	\N	premium	07-04-2018	04-10-2018	2	0	\N	\N	2017-12-13 13:22:11	2018-06-27 18:23:33	\N	f	f	Ass. Supervisor	\N	\N
-88	255000618466	\N	Kinariki Son	kinarikison49@gmail.com	0753462068	\N	premium	06-12-2017	05-02-2018	5	0	\N	\N	2017-12-06 16:36:08	2018-06-21 09:22:11	\N	f	f	Novus	\N	\N
-149	255000469060	\N	Shadrack Mwelela	shadrackrabison@gmail.com	0764828337	\N	free	13-12-2017	13-01-2018	0	0	\N	\N	2017-12-13 08:13:21	2018-06-20 16:34:47	\N	f	f	Ass. Supervisor	\N	\N
-133	255000410137	\N	Haki Nuhu	haki23nuhu@gmail.com	0762913628	\N	premium	20-06-2018	20-07-2018	2	0	\N	\N	2017-12-11 08:30:41	2018-06-20 07:45:27	\N	f	f	Ass. Supervisor	\N	\N
-154	255000563537	\N	Verdiana Kamugisha	verdianak@gmail.com	0715645433	\N	premium	17-06-2018	17-07-2018	0	0	https://lh5.googleusercontent.com/-Aj0execITOQ/AAAAAAAAAAI/AAAAAAAAUnE/qqoCQ5QoKKQ/photo.jpg	\N	2017-12-13 19:30:24	2018-06-17 12:56:20	\N	f	f	Ass. Supervisor	\N	\N
-186	\N	\N	reila Kinega	reilakinega@gmail.com	0672532302	\N	premium	18-12-2017	17-01-2018	99	0	\N	\N	2017-12-18 08:45:15	2018-01-24 08:04:25	\N	f	f	NOVUS	\N	\N
-246	\N	\N	Jacquiline lyimo	lyimojacqui@gmail.com	0713115921	\N	free	27-12-2017	27-01-2018	0	0	\N	\N	2017-12-27 08:55:11	2017-12-27 08:55:11	\N	f	f	NOVUS	\N	\N
-207	\N	\N	shwari abdalah	shwariabdalah@gmail.com	0679575529	\N	free	19-12-2017	19-01-2018	1234	0	https://lh3.googleusercontent.com/-jPWRD1gbJC4/AAAAAAAAAAI/AAAAAAAAABE/PUFuz-NCRYk/photo.jpg	\N	2017-12-19 16:49:22	2017-12-19 16:49:22	\N	f	f	NOVUS	\N	\N
-206	\N	\N	Edna Siima Majaliwa	ednasiima07@gmail.com	0717036246	\N	free	19-12-2017	19-01-2018	25	0	\N	\N	2017-12-19 14:17:10	2017-12-19 14:17:10	\N	f	f	NOVUS	\N	\N
-204	\N	\N	immaculata kilasa	immaculatakilasa93@gmail.com	0769277248	\N	free	19-12-2017	19-01-2018	0	0	https://lh4.googleusercontent.com/-sCRhrY1KZlo/AAAAAAAAAAI/AAAAAAAAAEA/KexjTAzpfQI/photo.jpg	\N	2017-12-19 11:18:50	2017-12-19 11:18:50	\N	f	f	NOVUS	\N	\N
-203	\N	\N	mohamed ameir	mr.mohameddy@gmail.com	0718025218	\N	free	19-12-2017	19-01-2018	2	0	\N	\N	2017-12-19 10:00:00	2017-12-19 10:00:00	\N	f	f	NOVUS	\N	\N
-202	\N	\N	hariet michael	harietmichael@gmail.com	0754074435	\N	free	19-12-2017	19-01-2018	2	0	\N	\N	2017-12-19 08:22:16	2017-12-19 08:22:16	\N	f	f	NOVUS	\N	\N
-200	\N	\N	Nicholas Mawanda	mawanda83@gmail.com	+256702864253	\N	free	19-12-2017	19-01-2018	0	0	\N	\N	2017-12-19 03:50:19	2017-12-19 03:50:19	\N	f	f	NOVUS	\N	\N
-199	\N	\N	Paul Bahame	pbahame@gmail.com	0715815826	\N	free	18-12-2017	18-01-2018	1	0	https://lh6.googleusercontent.com/-wuX5bLHV7R0/AAAAAAAAAAI/AAAAAAAAFBA/mZmCvBnV2vI/photo.jpg	\N	2017-12-18 19:36:18	2017-12-18 19:36:18	\N	f	f	NOVUS	\N	\N
-197	\N	\N	Patrick Peter Paul	patrpeter88@gmail.com	712339005	\N	free	18-12-2017	18-01-2018	10	0	\N	\N	2017-12-18 18:39:23	2017-12-18 18:39:23	\N	f	f	NOVUS	\N	\N
-195	\N	\N	Sanane Mapesa	sananemapesa@gmail.com	0672200328	\N	free	18-12-2017	18-01-2018	2	0	\N	\N	2017-12-18 15:21:45	2017-12-18 15:21:45	\N	f	f	NOVUS	\N	\N
-193	\N	\N	Kendi Josline	kendijos.kj@gmail.com	0701272311	\N	free	18-12-2017	18-01-2018	1	1	\N	\N	2017-12-18 14:21:46	2017-12-18 14:21:46	\N	f	f	NOVUS	\N	\N
-192	\N	\N	Tegemeo Samson	tegemeosamson2@gmail.com	0674299338	\N	free	18-12-2017	18-01-2018	5070	0	\N	\N	2017-12-18 13:54:01	2017-12-18 13:54:01	\N	f	f	NOVUS	\N	\N
-191	\N	\N	John Balele	jcbalele@gmail.com	0757948704	\N	free	18-12-2017	18-01-2018	3	0	https://lh4.googleusercontent.com/-wPbPn5_PT1E/AAAAAAAAAAI/AAAAAAAAAJ8/AMjRBP2JOHU/photo.jpg	\N	2017-12-18 13:29:26	2017-12-18 13:29:26	\N	f	f	NOVUS	\N	\N
-185	\N	\N	Jonas Godfrey	jonasgodfrey84@gmail.com	0674437778	\N	free	18-12-2017	18-01-2018	1	0	\N	\N	2017-12-18 06:58:22	2017-12-18 06:58:22	\N	f	f	NOVUS	\N	\N
-184	\N	\N	David Kessi	kessi.david@gmail.com	0754419149	\N	free	18-12-2017	18-01-2018	0	0	https://lh4.googleusercontent.com/-AudpR4iZeKU/AAAAAAAAAAI/AAAAAAAAAhE/eyCwfvJZKMM/photo.jpg	\N	2017-12-18 03:20:21	2017-12-18 03:20:21	\N	f	f	NOVUS	\N	\N
-182	\N	\N	Munira Makachaa	muniramakachaa@gmail.com	0779319210	\N	free	17-12-2017	17-01-2018	1	0	\N	\N	2017-12-17 15:46:19	2017-12-17 15:46:19	\N	f	f	NOVUS	\N	\N
-180	\N	\N	Bertha Ignas	mwanaimaa@gmail.com	0752454888	\N	free	17-12-2017	17-01-2018	1	0	\N	\N	2017-12-17 12:10:00	2017-12-17 12:10:00	\N	f	f	NOVUS	\N	\N
-179	\N	\N	Dr.Kabanga Adolph	adolphmpoyo@gmail.com	07529867777	\N	free	17-12-2017	17-01-2018	2	0	https://lh3.googleusercontent.com/-Xs2aLQ-KBCc/AAAAAAAAAAI/AAAAAAAAAAs/lBjkiXXsRAo/photo.jpg	\N	2017-12-17 10:07:03	2017-12-17 10:07:03	\N	f	f	NOVUS	\N	\N
-175	\N	\N	Mariam Minga	mariamminga56@gmail.com	0658166233	\N	free	16-12-2017	16-01-2018	4	0	\N	\N	2017-12-16 14:14:22	2017-12-16 14:14:22	\N	f	f	NOVUS	\N	\N
-170	\N	\N	Aziza Gelas	azizagelas7@gmail.com	0714475727	\N	free	16-12-2017	16-01-2018	123	0	\N	\N	2017-12-15 23:48:41	2017-12-15 23:48:41	\N	f	f	NOVUS	\N	\N
-169	\N	\N	John Mkulia	johnfmkulia@gmail.com	0679286829	\N	free	15-12-2017	15-01-2018	10000	0	https://lh6.googleusercontent.com/-R0aj7OCBspc/AAAAAAAAAAI/AAAAAAAAAHY/_hve_RUZq80/photo.jpg	\N	2017-12-15 11:11:21	2017-12-15 11:11:21	\N	f	f	NOVUS	\N	\N
-168	\N	\N	Khalphan Seiph	khalphan.ks@gmail.com	0712516719	\N	free	15-12-2017	15-01-2018	5	0	https://lh4.googleusercontent.com/-OgNSTKwNxMg/AAAAAAAAAAI/AAAAAAAAANg/DXglQCWGLa0/photo.jpg	\N	2017-12-15 10:53:32	2017-12-15 10:53:32	\N	f	f	NOVUS	\N	\N
-167	\N	\N	maalim yahya	yamalixx@gmail.com	0713941599	\N	free	15-12-2017	15-01-2018	100000	0	https://lh6.googleusercontent.com/-PkJMGykoQi0/AAAAAAAAAAI/AAAAAAAAAEc/Ay0Woz0FsVk/photo.jpg	\N	2017-12-15 08:07:08	2017-12-15 08:07:08	\N	f	f	NOVUS	\N	\N
-166	\N	\N	Elisha Kapilimka	elishjr@gmail.com	0712460522	\N	free	15-12-2017	15-01-2018	22	0	https://lh5.googleusercontent.com/-9BsrKaNQmzg/AAAAAAAAAAI/AAAAAAAAACQ/Ceh3Yryh370/photo.jpg	\N	2017-12-15 06:29:26	2017-12-15 06:29:26	\N	f	f	NOVUS	\N	\N
-165	\N	\N	Charles Kimolo	kimoloc4@gmail.com	0764620425	\N	free	15-12-2017	15-01-2018	105	0	\N	\N	2017-12-15 06:23:23	2017-12-15 06:23:23	\N	f	f	NOVUS	\N	\N
-164	\N	\N	Nicoline Musika	nicolinemusika@gmail.com	255754317088	\N	free	15-12-2017	15-01-2018	3	0	https://lh3.googleusercontent.com/-Qzer51im6N8/AAAAAAAAAAI/AAAAAAAAABA/eNDLmmXXvXg/photo.jpg	\N	2017-12-15 05:39:54	2017-12-15 05:39:54	\N	f	f	NOVUS	\N	\N
-163	\N	\N	Bin Mussa	binmussa0@gmail.com	0776252808	\N	free	15-12-2017	15-01-2018	5	0	\N	\N	2017-12-15 05:36:05	2017-12-15 05:36:05	\N	f	f	NOVUS	\N	\N
-162	\N	\N	nepha mulungu	fatmajuned1@gmail.com	0762805651	\N	free	14-12-2017	14-01-2018	2	0	https://lh4.googleusercontent.com/-3iN65uagJtg/AAAAAAAAAAI/AAAAAAAAAK8/qN8GzWx-tC0/photo.jpg	\N	2017-12-14 19:17:17	2017-12-14 19:17:17	\N	f	f	NOVUS	\N	\N
-174	255200010096	\N	Ashura Kihemba	ashurakihemba953@gmail.com	0713885574	\N	premium	05-07-2018	03-01-2019	8	0	\N	\N	2017-12-16 13:22:46	2018-07-05 17:03:47	\N	f	f	Ass. Supervisor	\N	\N
-160	\N	\N	Cassie Don	doncassie361@gmail.com	0714628905	\N	free	14-12-2017	14-01-2018	3	0	\N	\N	2017-12-14 13:33:06	2017-12-14 13:33:06	\N	f	f	NOVUS	\N	\N
-159	\N	\N	godfrey siriwa	siriwagodfrey1@gmail.com	0718164026	\N	free	14-12-2017	14-01-2018	0	0	https://lh4.googleusercontent.com/-eseUL5foyPQ/AAAAAAAAAAI/AAAAAAAAAAw/xQ-Y29O2GoE/photo.jpg	\N	2017-12-14 10:40:11	2017-12-14 10:40:11	\N	f	f	NOVUS	\N	\N
-181	255200004057	\N	John Suwi	johnjoelsuwi@gmail.com	0625641461	\N	free	17-12-2017	17-01-2018	4	0	\N	\N	2017-12-17 13:36:12	2018-07-06 07:31:02	\N	f	f	Ass. Supervisor	\N	\N
-209	255000312727	\N	Adolph Ndyeabura	canserado@gmail.com	0714628788	\N	premium	25-06-2018	25-06-2019	714628788	0	https://lh5.googleusercontent.com/-2UflzNAxK74/AAAAAAAAAAI/AAAAAAAADX4/G4rcqzG50Bo/photo.jpg	\N	2017-12-19 19:57:19	2018-06-25 12:56:45	\N	f	f	Manager	\N	\N
-177	255200016979	\N	veronice harvey	harveyveronice@gmail.com	0715560363	\N	premium	22-06-2018	22-07-2018	1	0	https://lh3.googleusercontent.com/-wCnYRPirEIA/AAAAAAAAAAI/AAAAAAAAADg/qZnx5vRDzxc/photo.jpg	\N	2017-12-17 04:23:41	2018-06-22 13:37:32	\N	f	f	Ass. Supervisor	\N	\N
-183	255000598629	\N	Francis Wambugu	franciswambugu590@gmail.com	0655327947	\N	free	17-12-2017	17-01-2018	63	0	\N	\N	2017-12-17 15:55:16	2018-06-17 17:53:30	\N	f	f	Ass. Supervisor	\N	\N
-244	254200013997	\N	Fred Njoroge	frednjoroge2017@gmail.com	0703943040	\N	free	27-12-2017	27-01-2018	27	1	\N	\N	2017-12-27 05:55:54	2018-07-04 04:56:33	\N	f	f	Supervisor	\N	\N
-205	255000429287	\N	Nathanael Mchomvu	nathanaelmchomvu@gmail.com	0755674496	\N	premium	09-06-2018	09-07-2018	0	0	\N	\N	2017-12-19 13:04:38	2018-06-09 08:40:01	\N	f	f	Ass. Manager	\N	\N
-176	255000565875	\N	GIBETH MLELWA	gibethmlelwa@gmail.com	0762235373	\N	free	16-12-2017	16-01-2018	57	0	https://lh6.googleusercontent.com/-e3GXbKSvmz8/AAAAAAAAAAI/AAAAAAAABgU/lj1TyOseGT4/photo.jpg	\N	2017-12-16 17:13:51	2018-06-07 09:36:35	\N	f	f	Supervisor	\N	\N
-201	255000426915	\N	saraphina damas	phinawellness@gmail.com	0785541440	\N	premium	01-07-2018	30-12-2018	1	0	\N	\N	2017-12-19 04:21:05	2018-07-01 13:46:42	\N	f	f	Supervisor	\N	\N
-208	255000410133	\N	Mark Mafikiri	mrkmafikiri@gmail.com	0713899680	\N	free	19-12-2017	19-01-2018	1	0	\N	\N	2017-12-19 18:33:53	2018-06-06 09:50:14	\N	f	f	Supervisor	\N	\N
-369	\N	\N	bindya kishor	bindya.kishor@gmail.com	0717125389	\N	free	16-01-2018	16-02-2018	0	0	\N	\N	2018-01-16 15:05:51	2018-01-16 15:05:51	\N	f	f	NOVUS	\N	\N
-245	\N	\N	clister dickson	clisterdickson@gmail.com	0719557017	\N	free	27-12-2017	27-01-2018	12	0	https://lh6.googleusercontent.com/-pYj8O5ixv1w/AAAAAAAAAAI/AAAAAAAAABk/8x0am65-f14/photo.jpg	\N	2017-12-27 07:07:56	2017-12-27 07:07:56	\N	f	f	NOVUS	\N	\N
-243	\N	\N	Hamissi Mussa	hamissim91@gmail.com	+255659331331	\N	free	27-12-2017	27-01-2018	250000	0	\N	\N	2017-12-26 21:37:57	2017-12-26 21:37:57	\N	f	f	NOVUS	\N	\N
-242	\N	\N	Willy Tite	titewilly6@gmail.com	0702907098	\N	free	26-12-2017	26-01-2018	7	1	\N	\N	2017-12-26 16:27:01	2017-12-26 16:27:01	\N	f	f	NOVUS	\N	\N
-241	\N	\N	Jema Rwihura	jemaclemence@gmail.com	0718975331	\N	free	26-12-2017	26-01-2018	135000	0	\N	\N	2017-12-26 16:01:20	2017-12-26 16:01:20	\N	f	f	NOVUS	\N	\N
-239	\N	\N	Andambike Samson	andambike@gmail.com	0674513851	\N	free	25-12-2017	25-01-2018	1234	0	https://lh3.googleusercontent.com/-FgEFS3R-NCk/AAAAAAAAAAI/AAAAAAAAEnc/rb5tI1nqB94/photo.jpg	\N	2017-12-25 13:44:25	2017-12-25 13:44:25	\N	f	f	NOVUS	\N	\N
-238	\N	\N	Bhoke Joseph	bhokemj@gmail.com	0759321755	\N	free	25-12-2017	25-01-2018	0	0	\N	\N	2017-12-25 08:54:56	2017-12-25 08:54:56	\N	f	f	NOVUS	\N	\N
-237	\N	\N	Said Mdee	saidmdee27@gmail.com	0766430585	\N	free	25-12-2017	25-01-2018	764	0	\N	\N	2017-12-25 04:19:13	2017-12-25 04:19:13	\N	f	f	NOVUS	\N	\N
-236	\N	\N	Gina Mchao	ginamchao@gmail.com	0767306866	\N	free	25-12-2017	25-01-2018	3	0	https://lh5.googleusercontent.com/-98HJ8xWS7qs/AAAAAAAAAAI/AAAAAAAAM7I/WLkvUteKrG8/photo.jpg	\N	2017-12-24 22:10:52	2017-12-24 22:10:52	\N	f	f	NOVUS	\N	\N
-234	\N	\N	Rose Choray	rosechoray50@gmail.com	0755177105	\N	free	24-12-2017	24-01-2018	0	0	\N	\N	2017-12-24 05:11:27	2017-12-24 05:11:27	\N	f	f	NOVUS	\N	\N
-233	\N	\N	mike fanuel (M.K)	mikefanuel17@gmail.com	0718612609	\N	free	23-12-2017	23-01-2018	4	0	https://lh6.googleusercontent.com/-OyPEQ5JqCT8/AAAAAAAAAAI/AAAAAAAA-F0/Zh1d4L0DaJ4/photo.jpg	\N	2017-12-23 20:18:08	2017-12-23 20:18:08	\N	f	f	NOVUS	\N	\N
-232	\N	\N	sabra abdullah	yasa9294@gmail.com	0655195907	\N	free	23-12-2017	23-01-2018	425	0	https://lh4.googleusercontent.com/-Nom99UDZ4pQ/AAAAAAAAAAI/AAAAAAAAADM/FAdCuuWNTwU/photo.jpg	\N	2017-12-23 11:09:56	2017-12-23 11:09:56	\N	f	f	NOVUS	\N	\N
-231	\N	\N	evans geryon	evansgeryon@gmail.com	0752134333	\N	free	23-12-2017	23-01-2018	0	0	\N	\N	2017-12-23 09:18:59	2017-12-23 09:18:59	\N	f	f	NOVUS	\N	\N
-230	255000472773	\N	Blesn Achim	blesn.achim45@gmail.com	0659608061	\N	premium	07-07-2018	07-07-2019	0	0	\N	\N	2017-12-23 06:08:36	2018-07-07 07:00:47	\N	f	f	Ass. Supervisor	\N	\N
-229	\N	\N	kajuna baltazary	baltazarykajuna@gmail.com	0653751261	\N	free	23-12-2017	23-01-2018	100000	0	https://lh4.googleusercontent.com/-qnfJYN9oj3I/AAAAAAAAAAI/AAAAAAAAADo/ZphAV11Hlco/photo.jpg	\N	2017-12-23 05:20:47	2017-12-23 05:20:47	\N	f	f	NOVUS	\N	\N
-228	\N	\N	Mwajuma Chota	mwajumachota9@gmail.com	0655746174	\N	free	22-12-2017	22-01-2018	5	0	\N	\N	2017-12-22 15:46:44	2017-12-22 15:46:44	\N	f	f	NOVUS	\N	\N
-227	\N	\N	edina makingi	makingi183@gmail.com	0757354566	\N	free	22-12-2017	22-01-2018	2	0	\N	\N	2017-12-22 14:15:47	2017-12-22 14:15:47	\N	f	f	NOVUS	\N	\N
-226	\N	\N	Thomas Mkwiji	tmkwiji@gmail.com	0658123678	\N	free	22-12-2017	22-01-2018	10	0	https://lh3.googleusercontent.com/-PbhUhq57cR0/AAAAAAAAAAI/AAAAAAAAFRk/0aHfVJTlu8Q/photo.jpg	\N	2017-12-22 12:10:02	2017-12-22 12:10:02	\N	f	f	NOVUS	\N	\N
-225	\N	\N	dorah kalinga	dorahkalinga@gmail.com	0755303686	\N	free	22-12-2017	22-01-2018	2	0	https://lh3.googleusercontent.com/-TmzNY51aRPY/AAAAAAAAAAI/AAAAAAAAAAw/dD-ctq8CUjk/photo.jpg	\N	2017-12-22 12:07:39	2017-12-22 12:07:39	\N	f	f	NOVUS	\N	\N
-223	\N	\N	jose mwai	josemwai4@gmail.com	0704618457	\N	free	22-12-2017	22-01-2018	10	1	https://lh4.googleusercontent.com/-UVwnvjnHORk/AAAAAAAAAAI/AAAAAAAAABI/qBTf1IZKpgE/photo.jpg	\N	2017-12-22 11:03:29	2017-12-22 11:03:29	\N	f	f	NOVUS	\N	\N
-222	\N	\N	James Nderitu	jemoforeverea@gmail.com	+254722597433	\N	free	22-12-2017	22-01-2018	0	1	\N	\N	2017-12-22 10:07:56	2017-12-22 10:07:56	\N	f	f	NOVUS	\N	\N
-221	\N	\N	itika mwasimanga	mwasimangaitika@gmail.com	+255755818206	\N	free	21-12-2017	21-01-2018	120	0	\N	\N	2017-12-21 16:08:53	2017-12-21 16:08:53	\N	f	f	NOVUS	\N	\N
-220	\N	\N	Munir Mohamed	munirmohamed243@gmail.com	0755043516	\N	free	21-12-2017	21-01-2018	1	0	\N	\N	2017-12-21 16:01:35	2017-12-21 16:01:35	\N	f	f	NOVUS	\N	\N
-215	\N	\N	Anne Otieno	annesse.otieno@gmail.com	0786908470	\N	free	20-12-2017	20-01-2018	0	0	\N	\N	2017-12-20 18:58:07	2017-12-20 18:58:07	\N	f	f	NOVUS	\N	\N
-214	\N	\N	Jane Seif	janeseif23@gmail.com	0789043108	\N	free	20-12-2017	20-01-2018	0	0	\N	\N	2017-12-20 18:51:11	2017-12-20 18:51:11	\N	f	f	NOVUS	\N	\N
-213	\N	\N	Sophia Sanga	sangasophia673@gmail.com	0754559980	\N	free	20-12-2017	20-01-2018	2	0	\N	\N	2017-12-20 16:13:55	2017-12-20 16:13:55	\N	f	f	NOVUS	\N	\N
-212	\N	\N	steven audax	stevenaudax@gmail.com	0752085869	\N	free	20-12-2017	20-01-2018	2	0	https://lh6.googleusercontent.com/-dxRmncucCaQ/AAAAAAAAAAI/AAAAAAAAAEU/SghfhkAI50Y/photo.jpg	\N	2017-12-20 12:23:38	2017-12-20 12:23:38	\N	f	f	NOVUS	\N	\N
-210	\N	\N	Jacob Peter	jacobezzra@gmail.com	+255718890104	\N	free	20-12-2017	20-01-2018	50000	0	https://lh6.googleusercontent.com/-QdU6TnvABxo/AAAAAAAAAAI/AAAAAAAAABI/FjYw5zIkyUI/photo.jpg	\N	2017-12-20 08:15:30	2017-12-20 08:15:30	\N	f	f	NOVUS	\N	\N
-196	255000445747	\N	Shina John	shinajohn1@gmail.com	0756337708	\N	premium	30-06-2018	30-06-2019	0	0	\N	\N	2017-12-18 16:20:09	2018-06-30 09:01:39	\N	f	f	Manager	\N	\N
-173	255000614702	\N	Didas Kidesu	didask20@gmail.com	0676911668	\N	premium	09-07-2018	08-08-2018	2	0	https://lh3.googleusercontent.com/-nLO7vz1pc-E/AAAAAAAAAAI/AAAAAAAAABc/-i0ceLWsk-M/photo.jpg	\N	2017-12-16 10:23:09	2018-07-09 07:10:05	\N	f	f	Novus	\N	\N
-249	255000572186	\N	Fortunate Mkiramweni	fmkiramweni@gmail.com	0255754992	\N	free	27-12-2017	27-01-2018	2	0	\N	\N	2017-12-27 10:47:25	2018-06-23 18:42:02	\N	f	f	Ass. Supervisor	\N	\N
-216	255000601684	\N	Andrew Kilasi	andykilasi@gmail.com	0754371077	\N	premium	13-06-2018	13-07-2018	0	0	https://lh3.googleusercontent.com/-pJIEld_-wd0/AAAAAAAAAAI/AAAAAAAAAyY/wKeDgoZO720/photo.jpg	\N	2017-12-20 21:20:18	2018-06-13 09:53:03	\N	f	f	Ass. Supervisor	\N	\N
-218	255000614266	\N	Anno pius	annopius92@gmail.com	0716789967	\N	premium	10-06-2018	10-07-2018	2	0	https://lh5.googleusercontent.com/-pPjxAPvGpyw/AAAAAAAAAAI/AAAAAAAAAAw/wEEuc0g48KQ/photo.jpg	\N	2017-12-21 11:45:00	2018-07-06 10:14:45	\N	f	f	Ass. Supervisor	\N	\N
-224	255000603300	\N	Beatrice Edward	beatriceedward93@gmail.com	0712890628	\N	free	22-12-2017	22-01-2018	2	0	\N	\N	2017-12-22 12:01:21	2018-06-09 09:44:24	\N	f	f	Ass. Supervisor	\N	\N
-683	\N	\N	shufat mohammed	mshufad@yahoo.com	+254701815969	\N	free	02-03-2018	02-04-2018	1	0	\N	\N	2018-03-02 17:01:39	2018-03-02 17:01:39	\N	f	f	NOVUS	\N	\N
-289	\N	\N	Glorie Benj	gloriebenj@gmail.com	+255782244662	\N	free	03-01-2018	03-02-2018	2	0	https://lh4.googleusercontent.com/-PN895wNv_W8/AAAAAAAAAAI/AAAAAAAAKyA/LefotUqijiA/photo.jpg	\N	2018-01-03 10:58:49	2018-01-03 10:58:49	\N	f	f	NOVUS	\N	\N
-288	\N	\N	Othman Sjumaa	othmansjumaa@gmail.com	0718667266	\N	free	03-01-2018	03-02-2018	2	0	https://lh4.googleusercontent.com/-8ni2WNl2NuE/AAAAAAAAAAI/AAAAAAAAAIU/ERnrAmxdBvE/photo.jpg	\N	2018-01-03 10:28:24	2018-01-03 10:28:24	\N	f	f	NOVUS	\N	\N
-287	\N	\N	Istiqama Shamis	istiqama13@gmail.com	0625998682	\N	free	03-01-2018	03-02-2018	0	0	\N	\N	2018-01-03 09:56:41	2018-01-03 09:56:41	\N	f	f	NOVUS	\N	\N
-286	\N	\N	Xavery mhagama	xmhagama@gmail.com	0674781507	\N	free	03-01-2018	03-02-2018	4637	0	https://lh4.googleusercontent.com/-KhDygOC3V-I/AAAAAAAAAAI/AAAAAAAAABE/Vev1p5jODcY/photo.jpg	\N	2018-01-03 07:36:58	2018-01-03 07:36:58	\N	f	f	NOVUS	\N	\N
-285	\N	\N	hillary lema	hillaryvlema@gmail.com	0713616109	\N	free	03-01-2018	03-02-2018	0	0	https://lh6.googleusercontent.com/-G_ZRNjDRby0/AAAAAAAAAAI/AAAAAAAAADk/oMPaweENefw/photo.jpg	\N	2018-01-03 06:39:32	2018-01-03 06:39:32	\N	f	f	NOVUS	\N	\N
-284	\N	\N	Masebo Emani	maseboemani@gmail.com	0713055662	\N	free	03-01-2018	03-02-2018	2	0	\N	\N	2018-01-03 06:17:03	2018-01-03 06:17:03	\N	f	f	NOVUS	\N	\N
-283	\N	\N	joseph njoroge	joseki41@gmail.com	0714143723	\N	free	03-01-2018	03-02-2018	0	1	\N	\N	2018-01-03 01:05:08	2018-01-03 01:05:08	\N	f	f	NOVUS	\N	\N
-282	\N	\N	Pendo John	pendojohn866@gmail.com	0745440062	\N	free	03-01-2018	03-02-2018	2	0	\N	\N	2018-01-02 21:42:57	2018-01-02 21:42:57	\N	f	f	NOVUS	\N	\N
-281	\N	\N	Francis Njogu	fnjogu2000@gmail.com	075288504	\N	free	02-01-2018	02-02-2018	2	0	\N	\N	2018-01-02 19:12:17	2018-01-02 19:12:17	\N	f	f	NOVUS	\N	\N
-280	\N	\N	Meckie Millz	meckiemillz@gmail.com	0719616156	\N	free	02-01-2018	02-02-2018	2	0	\N	\N	2018-01-02 09:49:01	2018-01-02 09:49:01	\N	f	f	NOVUS	\N	\N
-278	\N	\N	Happiness Kasebele	hkasebele@gmail.com	0656150591	\N	free	02-01-2018	02-02-2018	0	0	https://lh3.googleusercontent.com/-bjnq2Dys0xA/AAAAAAAAAAI/AAAAAAAAABg/qu2Le2oTpXc/photo.jpg	\N	2018-01-02 05:59:38	2018-01-02 05:59:38	\N	f	f	NOVUS	\N	\N
-276	\N	\N	Julius Sijaunga	juliussijaunga@gmail.com	0714207482	\N	free	01-01-2018	01-02-2018	2	0	\N	\N	2018-01-01 10:52:04	2018-01-01 10:52:04	\N	f	f	NOVUS	\N	\N
-275	\N	\N	Mary Mwifunyi	marymwifunyi80@gmail.com	0754908093	\N	free	01-01-2018	01-02-2018	12345	0	https://lh5.googleusercontent.com/-NT4pdMJ-I_g/AAAAAAAAAAI/AAAAAAAAAA0/M-EtxF3AsqM/photo.jpg	\N	2018-01-01 10:28:25	2018-01-01 10:28:25	\N	f	f	NOVUS	\N	\N
-274	\N	\N	mcha ally	allymcha87@gmail.com	0710804370	\N	free	01-01-2018	01-02-2018	12	0	https://lh6.googleusercontent.com/-ELov6VjkPwM/AAAAAAAAAAI/AAAAAAAAIz4/onSJZeBUiPY/photo.jpg	\N	2018-01-01 07:21:53	2018-01-01 07:21:53	\N	f	f	NOVUS	\N	\N
-273	\N	\N	Eunice Mrema	eunicemrema90@gmail.com	0764587337	\N	free	31-12-2017	31-01-2018	2	0	\N	\N	2017-12-31 20:51:30	2017-12-31 20:51:30	\N	f	f	NOVUS	\N	\N
-272	\N	\N	Johari Ktbrajabu	johariktbrajabu@gmail.com	0654724024	\N	free	31-12-2017	31-01-2018	0	0	\N	\N	2017-12-31 16:51:34	2017-12-31 16:51:34	\N	f	f	NOVUS	\N	\N
-271	\N	\N	Ismael Mwinyi	ismamwinyi@gmail.com	0713544144	\N	free	31-12-2017	31-01-2018	0	0	\N	\N	2017-12-31 16:38:15	2017-12-31 16:38:15	\N	f	f	NOVUS	\N	\N
-267	\N	\N	mathias majinge	majingemathias75@gmail.com	0678419669	\N	free	30-12-2017	30-01-2018	0	0	\N	\N	2017-12-30 15:40:34	2017-12-30 15:40:34	\N	f	f	NOVUS	\N	\N
-266	\N	\N	Mwanaidi Abdulla	abdullamh90@gmail.com	0675361654	\N	free	30-12-2017	30-01-2018	0	0	\N	\N	2017-12-30 14:21:00	2017-12-30 14:21:00	\N	f	f	NOVUS	\N	\N
-265	\N	\N	Jamila Machano	jamilamachano01@gmail.com	0772012776	\N	free	30-12-2017	30-01-2018	4	0	\N	\N	2017-12-30 10:58:28	2017-12-30 10:58:28	\N	f	f	NOVUS	\N	\N
-264	\N	\N	mashoo shoo	lilianishoo@gmail.com	0713317059	\N	free	30-12-2017	30-01-2018	2	0	https://lh4.googleusercontent.com/-g-IzYbCenJs/AAAAAAAAAAI/AAAAAAAAADs/qsapnNvhWRA/photo.jpg	\N	2017-12-30 10:42:44	2017-12-30 10:42:44	\N	f	f	NOVUS	\N	\N
-263	\N	\N	Aboubakar Shaibu	aboubakarshaibu864@gmail.com	0689723625	\N	free	30-12-2017	30-01-2018	1	0	\N	\N	2017-12-30 09:14:09	2017-12-30 09:14:09	\N	f	f	NOVUS	\N	\N
-262	\N	\N	Letinno Mantion (Willie)	maygerletino@gmail.com	0653455228	\N	free	30-12-2017	30-01-2018	0	0	https://lh5.googleusercontent.com/-9-iwqvYd3qQ/AAAAAAAAAAI/AAAAAAAAC5g/XQ0FNga6D9k/photo.jpg	\N	2017-12-30 07:43:37	2017-12-30 07:43:37	\N	f	f	NOVUS	\N	\N
-260	\N	\N	mrisho swagile	mswagile@gmail.com	+255654338955	\N	free	29-12-2017	29-01-2018	1655	0	https://lh6.googleusercontent.com/-TaxsKMKgf-M/AAAAAAAAAAI/AAAAAAAACIk/YGCN0dyXrIE/photo.jpg	\N	2017-12-29 16:37:03	2017-12-29 16:37:03	\N	f	f	NOVUS	\N	\N
-259	\N	\N	Polina Apolinary	polinaapolinary034@gmail.com	0767218326	\N	free	29-12-2017	29-01-2018	25	0	\N	\N	2017-12-29 15:02:58	2017-12-29 15:02:58	\N	f	f	NOVUS	\N	\N
-256	\N	\N	Christopher Lawrance	chrisskann@gmail.com	0715688507	\N	free	28-12-2017	28-01-2018	3	0	\N	\N	2017-12-28 09:58:08	2017-12-28 09:58:08	\N	f	f	NOVUS	\N	\N
-255	\N	\N	USWEGE MWAIPOPO	mwaipopouswege@gmail.com	0755916087	\N	free	28-12-2017	28-01-2018	11	0	https://lh3.googleusercontent.com/-5SImmSgdfdg/AAAAAAAAAAI/AAAAAAAAABo/wdtlraS8-8g/photo.jpg	\N	2017-12-28 08:30:11	2017-12-28 08:30:11	\N	f	f	NOVUS	\N	\N
-254	\N	\N	Godfrey Aminadab	godfreyaminadab@gmail.com	0716903902	\N	free	28-12-2017	28-01-2018	5055555	0	\N	\N	2017-12-28 07:11:58	2017-12-28 07:11:58	\N	f	f	NOVUS	\N	\N
-253	\N	\N	Dianarose Salama	kachikedianaroset@gmail.com	0689578743	\N	free	28-12-2017	28-01-2018	2	0	\N	\N	2017-12-27 21:04:16	2017-12-27 21:04:16	\N	f	f	NOVUS	\N	\N
-252	\N	\N	waziri yussuf	waziriyussuf13@gmail.com	+255784853900	\N	free	27-12-2017	27-01-2018	9	0	\N	\N	2017-12-27 18:47:37	2017-12-27 18:47:37	\N	f	f	NOVUS	\N	\N
-251	\N	\N	Susan Ninalwo	sfninalwo@gmail.com	0712351276	\N	free	27-12-2017	27-01-2018	0	0	\N	\N	2017-12-27 14:09:08	2017-12-27 14:09:08	\N	f	f	NOVUS	\N	\N
-250	\N	\N	Sheranly Khamis	sheranlykhamis@gmail.com	0773485132	\N	free	27-12-2017	27-01-2018	0	0	\N	\N	2017-12-27 13:40:10	2017-12-27 13:40:10	\N	f	f	NOVUS	\N	\N
-248	\N	\N	Beatrice Lekule	bettylekule@gmail.com	0755519454	\N	free	27-12-2017	27-01-2018	12	0	\N	\N	2017-12-27 09:42:06	2017-12-27 09:42:06	\N	f	f	NOVUS	\N	\N
-247	255000607287	\N	Baltazary Haule	haulebh@gmail.com	0768806808	\N	free	27-12-2017	27-01-2018	2	0	https://lh3.googleusercontent.com/-1nVbWTMFpg8/AAAAAAAAAAI/AAAAAAAAGTY/qC4Cnt5s5PI/photo.jpg	\N	2017-12-27 09:34:09	2018-06-30 05:06:03	\N	f	f	Ass. Supervisor	\N	\N
-295	255000590982	\N	Zainab Awadh	habibtyenam21@gmail.com	0676317838	\N	premium	28-06-2018	28-06-2019	4	0	\N	\N	2018-01-04 06:27:43	2018-06-28 02:34:05	\N	f	f	Supervisor	\N	\N
-268	254000065720	\N	Ayoub samwel	ayoubsamwel76@gmail.com	0759862580	\N	free	31-12-2017	31-01-2018	4	0	https://lh6.googleusercontent.com/-ojzzBmWPFuY/AAAAAAAAAAI/AAAAAAAAADk/BDIPNLEO1mg/photo.jpg	\N	2017-12-31 06:22:14	2018-06-06 06:26:48	\N	f	f	Manager	\N	\N
-334	\N	\N	Angel Luvuvu	aluvuvu@gmail.com	0712905444	\N	free	09-01-2018	09-02-2018	0	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABDCNug8dXOhdjPOCILdmNhcmRfcGhvdG8qKDQ4NmQwODQ0NjBhN2VjODNiYWJjZDU4YmYyNzAyOTFmYmE5OTM3YjMwAVDKt3r6RJR3SLI6clfYELNwRPLg	\N	2018-01-09 05:10:20	2018-01-09 05:10:20	\N	f	f	NOVUS	\N	\N
-333	\N	\N	Robert Nganga	rkamuyu@gmail.com	0726550338	\N	free	09-01-2018	09-02-2018	0	1	https://lh6.googleusercontent.com/-HIlAY2ViVsQ/AAAAAAAAAAI/AAAAAAAAABU/BtbYkWSWFXE/photo.jpg	\N	2018-01-08 21:49:58	2018-01-08 21:49:58	\N	f	f	NOVUS	\N	\N
-332	\N	\N	leila suleleila	leilangunyi5@gmail.com	0727612999	\N	free	08-01-2018	08-02-2018	749	1	\N	\N	2018-01-08 17:02:28	2018-01-08 17:02:28	\N	f	f	NOVUS	\N	\N
-331	\N	\N	Mathew Mwinuka	mathewmwinuka@gmail.com	0767063915	\N	free	08-01-2018	08-02-2018	0	0	https://lh3.googleusercontent.com/-p81B734OhhA/AAAAAAAAAAI/AAAAAAAAHf0/8qv9q4xiWXQ/photo.jpg	\N	2018-01-08 16:50:29	2018-01-08 16:50:29	\N	f	f	NOVUS	\N	\N
-330	\N	\N	iconlogo255@gmail.com	iconlogo255@gmail.com	0655049366	\N	free	08-01-2018	08-02-2018	655049366	0	\N	\N	2018-01-08 16:15:12	2018-01-08 16:15:12	\N	f	f	NOVUS	\N	\N
-329	\N	\N	Ignas Kapinga	ignaskapinga91@gmail.com	0762610907	\N	free	08-01-2018	08-02-2018	120	0	\N	\N	2018-01-08 12:56:22	2018-01-08 12:56:22	\N	f	f	NOVUS	\N	\N
-328	\N	\N	Aboutwalib Jumanne Saleh GUNDA	salehtwalib@gmail.com	+255784854545	\N	free	08-01-2018	08-02-2018	0	0	https://lh5.googleusercontent.com/-Bp56025itQY/AAAAAAAAAAI/AAAAAAAAcGA/IjhrY5I4f0g/photo.jpg	\N	2018-01-08 12:51:04	2018-01-08 12:51:04	\N	f	f	NOVUS	\N	\N
-327	\N	\N	Christopher Jandu	christopherjandu55@gmail.com	0786485891	\N	free	08-01-2018	08-02-2018	1920	0	https://lh6.googleusercontent.com/-Ib0u-HqEJpA/AAAAAAAAAAI/AAAAAAAADyM/KTvF7Sl0aVU/photo.jpg	\N	2018-01-08 11:14:47	2018-01-08 11:14:47	\N	f	f	NOVUS	\N	\N
-325	\N	\N	Jackson Mbise	jacksmbise@gmail.com	0766859635	\N	free	08-01-2018	08-02-2018	2	0	\N	\N	2018-01-08 09:52:27	2018-01-08 09:52:27	\N	f	f	NOVUS	\N	\N
-324	\N	\N	ntandu vallery	elivanta59@gmail.com	0783674990	\N	free	08-01-2018	08-02-2018	2	0	\N	\N	2018-01-08 07:52:55	2018-01-08 07:52:55	\N	f	f	NOVUS	\N	\N
-323	\N	\N	Solomon Somel	solomonsomel@gmail.com	0756708111	\N	free	08-01-2018	08-02-2018	1	0	\N	\N	2018-01-08 07:29:39	2018-01-08 07:29:39	\N	f	f	NOVUS	\N	\N
-322	\N	\N	omar nassor	omarnassor84@gmail.com	0712152529	\N	free	08-01-2018	08-02-2018	4	0	\N	\N	2018-01-08 06:50:22	2018-01-08 06:50:22	\N	f	f	NOVUS	\N	\N
-319	\N	\N	Evaristo Mtenda	evaristomtenda994@gmail.com	0754465515	\N	free	07-01-2018	07-02-2018	2	0	\N	\N	2018-01-07 12:18:45	2018-01-07 12:18:45	\N	f	f	NOVUS	\N	\N
-318	\N	\N	YUSUPH JACOB	yusjac1@gmail.com	+255624055216	\N	free	07-01-2018	07-02-2018	0	0	https://lh5.googleusercontent.com/-bu-jx1nN3jE/AAAAAAAAAAI/AAAAAAAAAD4/0h19SOoR2ps/photo.jpg	\N	2018-01-07 08:06:16	2018-01-07 08:06:16	\N	f	f	NOVUS	\N	\N
-317	\N	\N	Zena Joseph	zenajoseph866@gmail.com	+255744098714	\N	free	07-01-2018	07-02-2018	100	0	\N	\N	2018-01-06 22:05:32	2018-01-06 22:05:32	\N	f	f	NOVUS	\N	\N
-316	\N	\N	Chiestar Dullahvich	dullahvich@gmail.com	0712654828	\N	free	07-01-2018	07-02-2018	4	0	https://lh3.googleusercontent.com/-n24SbnRkXlM/AAAAAAAAAAI/AAAAAAAAApY/PvZxgxj-QCo/photo.jpg	\N	2018-01-06 22:05:18	2018-01-06 22:05:18	\N	f	f	NOVUS	\N	\N
-315	\N	\N	Rose Machibya	rosemachibya9@gmail.com	0653877147	\N	free	06-01-2018	06-02-2018	1	0	\N	\N	2018-01-06 19:58:56	2018-01-06 19:58:56	\N	f	f	NOVUS	\N	\N
-313	\N	\N	Josephat Alphoncy	j.alphoncy11@gmail.com	0762610907	\N	free	06-01-2018	06-02-2018	120	0	\N	\N	2018-01-06 12:08:35	2018-01-06 12:08:35	\N	f	f	NOVUS	\N	\N
-311	\N	\N	Chintan Kamania	cormorant.chintan@gmail.com	0783642609	\N	free	06-01-2018	06-02-2018	0	0	https://lh3.googleusercontent.com/-TSLhRaJitPU/AAAAAAAAAAI/AAAAAAAABPQ/TrLp1TGZDag/photo.jpg	\N	2018-01-06 08:55:08	2018-01-06 08:55:08	\N	f	f	NOVUS	\N	\N
-310	\N	\N	Alois mtega	mtegaalois@gmail.com	768625057	\N	free	06-01-2018	06-02-2018	0	0	\N	\N	2018-01-06 08:03:05	2018-01-06 08:03:05	\N	f	f	NOVUS	\N	\N
-309	\N	\N	scola kafu	scolakafu@gmail.com	+255686528216	\N	free	06-01-2018	06-02-2018	0	0	\N	\N	2018-01-06 05:39:05	2018-01-06 05:39:05	\N	f	f	NOVUS	\N	\N
-308	\N	\N	Grace Msoffe	gracemakenga@gmail.com	754774580	\N	free	06-01-2018	06-02-2018	200	0	https://lh6.googleusercontent.com/-dvqMqJDUos4/AAAAAAAAAAI/AAAAAAAAI6I/-5t7Lku7BJU/photo.jpg	\N	2018-01-06 03:54:25	2018-01-06 03:54:25	\N	f	f	NOVUS	\N	\N
-307	\N	\N	fatma fadhil	fatmafadhil67@gmail.com	+255772102886	\N	free	05-01-2018	05-02-2018	6	0	\N	\N	2018-01-05 20:42:24	2018-01-05 20:42:24	\N	f	f	NOVUS	\N	\N
-306	\N	\N	Sospeter Mgeta	sospetermgeta332@gmail.com	0621117697	\N	free	05-01-2018	05-02-2018	621117697	0	https://lh3.googleusercontent.com/-DxInsMjTScI/AAAAAAAAAAI/AAAAAAAAC78/U64KE3ORmSo/photo.jpg	\N	2018-01-05 17:57:31	2018-01-05 17:57:31	\N	f	f	NOVUS	\N	\N
-304	\N	\N	Veronica Kaaya	mamaxwell2017@gmail.com	0755440734	\N	free	05-01-2018	05-02-2018	0	0	\N	\N	2018-01-05 11:36:58	2018-01-05 11:36:58	\N	f	f	NOVUS	\N	\N
-303	\N	\N	Saida.A. Abubakar	saida78ally@gmail.com	0784595932	\N	free	04-01-2018	04-02-2018	2	0	\N	\N	2018-01-04 20:04:02	2018-01-04 20:04:02	\N	f	f	NOVUS	\N	\N
-302	\N	\N	FRANK SWAYA	swayafrank01@gmail.com	0744552098	\N	free	04-01-2018	04-02-2018	422	0	\N	\N	2018-01-04 14:19:47	2018-01-04 14:19:47	\N	f	f	NOVUS	\N	\N
-301	\N	\N	godliver mwamahonje	godyohanag@gmail.com	0755062648	\N	free	04-01-2018	04-02-2018	1	0	https://lh5.googleusercontent.com/-Ztp33OTakPk/AAAAAAAAAAI/AAAAAAAAABo/YLozsvKdwJY/photo.jpg	\N	2018-01-04 13:06:45	2018-01-04 13:06:45	\N	f	f	NOVUS	\N	\N
-300	\N	\N	Eddyerick Kiwele	eddyerick81@gmail.com	0754029718	\N	free	04-01-2018	04-02-2018	0	0	https://lh4.googleusercontent.com/-06lpUL4aTGk/AAAAAAAAAAI/AAAAAAAAAHU/dhylTyN8vGw/photo.jpg	\N	2018-01-04 11:49:35	2018-01-04 11:49:35	\N	f	f	NOVUS	\N	\N
-298	\N	\N	pascal kasele	kaselepascal@gmail.com	0754370805	\N	free	04-01-2018	04-02-2018	4	0	\N	\N	2018-01-04 08:55:43	2018-01-04 08:55:43	\N	f	f	NOVUS	\N	\N
-296	\N	\N	Enock Mosses	enockmosses797@gmail.com	0743450214	\N	free	04-01-2018	04-02-2018	1	0	\N	\N	2018-01-04 07:50:59	2018-01-04 07:50:59	\N	f	f	NOVUS	\N	\N
-294	\N	\N	SELELI JOHN	selelijohn2@gmail.com	0753730262	\N	free	04-01-2018	04-02-2018	0	0	\N	\N	2018-01-04 02:36:55	2018-01-04 02:36:55	\N	f	f	NOVUS	\N	\N
-293	\N	\N	William Sylvia	williamsylvia@gmail.com	0764715181	\N	free	03-01-2018	03-02-2018	0	0	https://lh4.googleusercontent.com/-F4NR3kqP7BU/AAAAAAAAAAI/AAAAAAAAB7Y/eFOGXHDdjnA/photo.jpg	\N	2018-01-03 18:33:12	2018-01-03 18:33:12	\N	f	f	NOVUS	\N	\N
-292	\N	\N	HAFSA ALIY	hafsaalnabhan@gmail.com	0655113374	\N	free	03-01-2018	03-02-2018	4	0	https://lh6.googleusercontent.com/-qhhdUc4eWvo/AAAAAAAAAAI/AAAAAAAAABI/rr8UWYDL96I/photo.jpg	\N	2018-01-03 14:56:32	2018-01-03 14:56:32	\N	f	f	NOVUS	\N	\N
-291	\N	\N	yussuph mayuwe	mayuwemadevu530@gmail.com	0675897923	\N	free	03-01-2018	03-02-2018	1234	0	\N	\N	2018-01-03 13:35:38	2018-01-03 13:35:38	\N	f	f	NOVUS	\N	\N
-290	\N	\N	khadija kassim	didachidi84@gmail.com	0773204585	\N	free	03-01-2018	03-02-2018	4	0	\N	\N	2018-01-03 11:48:21	2018-01-03 11:48:21	\N	f	f	NOVUS	\N	\N
-312	255200013740	\N	sia lazaro	sialazaro44@gmail.com	0715487974	\N	premium	19-06-2018	19-07-2018	2	0	\N	\N	2018-01-06 10:04:44	2018-06-19 12:23:42	\N	f	f	Ass. Supervisor	\N	\N
-336	255000413901	\N	Revocatus Ibrahim	revoibrahim92@gmail.com	0718897266	\N	premium	18-06-2018	18-06-2019	5	0	\N	\N	2018-01-09 09:01:29	2018-06-18 15:31:59	\N	f	f	Supervisor	\N	\N
-314	255000491240	\N	Theddy Kisoka	theddykisoka@gmail.com	0762420922	\N	premium	11-06-2018	11-07-2018	0	0	\N	\N	2018-01-06 15:17:55	2018-06-11 10:20:48	\N	f	f	Ass. Supervisor	\N	\N
-380	\N	\N	Evince Njau	esenjanjauu@gmail.com	0689225764	\N	free	17-01-2018	17-02-2018	1700000	0	\N	\N	2018-01-17 10:42:56	2018-01-17 10:42:56	\N	f	f	NOVUS	\N	\N
-378	\N	\N	Grace Mwangwa	gmwangwa@gmail.com	0787260348	\N	free	17-01-2018	17-02-2018	120	0	\N	\N	2018-01-17 09:19:44	2018-01-17 09:19:44	\N	f	f	NOVUS	\N	\N
-377	\N	\N	evelyn kiama	ekimkiama@gmail.com	0754333059	\N	free	17-01-2018	17-02-2018	1	0	https://lh4.googleusercontent.com/-pgwp2zDsVr4/AAAAAAAAAAI/AAAAAAAAAas/AnXZaEeaDGg/photo.jpg	\N	2018-01-17 07:59:37	2018-01-17 07:59:37	\N	f	f	NOVUS	\N	\N
-376	\N	\N	CHRISTINE MBONYA	mbonyachristine@gmail.com	0767178153	\N	free	17-01-2018	17-02-2018	0	0	https://lh3.googleusercontent.com/-3N-fuiQE2WE/AAAAAAAAAAI/AAAAAAAAABo/SpK_owopUMQ/photo.jpg	\N	2018-01-17 07:13:07	2018-01-17 07:13:07	\N	f	f	NOVUS	\N	\N
-375	\N	\N	Sam Pancho	sampancho70@gmail.com	0716455386	\N	free	17-01-2018	17-02-2018	10	0	https://lh3.googleusercontent.com/-5yKN-8SXJRw/AAAAAAAAAAI/AAAAAAAAAAw/UG_UrbTaQao/photo.jpg	\N	2018-01-17 07:05:47	2018-01-17 07:05:47	\N	f	f	NOVUS	\N	\N
-374	\N	\N	angel alphonce	angelalphonce26@gmail.com	0768665285	\N	free	17-01-2018	17-02-2018	768665285	0	\N	\N	2018-01-17 06:14:46	2018-01-17 06:14:46	\N	f	f	NOVUS	\N	\N
-373	\N	\N	nikolaus mgina	nikolausmginq@gmail.com	0756453357	\N	free	16-01-2018	16-02-2018	1994	0	\N	\N	2018-01-16 19:00:48	2018-01-16 19:00:48	\N	f	f	NOVUS	\N	\N
-361	255200017934	\N	Aminata Iddi	aminataiddi892@gmail.com	0777721026	\N	free	15-01-2018	15-02-2018	1	0	\N	\N	2018-01-15 09:06:34	2018-07-06 08:54:21	\N	f	f	Novus	\N	\N
-370	\N	\N	Hovokela Sanga	hovokelasng37@googlemail.com	0755180449	\N	free	16-01-2018	16-02-2018	8	0	https://lh6.googleusercontent.com/-N1EnwvhIw1o/AAAAAAAAAAI/AAAAAAAAAQ0/W2qaoRiMTsA/photo.jpg	\N	2018-01-16 16:29:32	2018-01-16 16:29:32	\N	f	f	NOVUS	\N	\N
-368	\N	\N	Misana Mutani	misanaalexmutani@gmail.com	0767638829	\N	free	16-01-2018	16-02-2018	2	0	https://lh4.googleusercontent.com/-XrbUnfrrwjs/AAAAAAAAAAI/AAAAAAAADNc/Y4DGhm5Pq6M/photo.jpg	\N	2018-01-16 12:26:32	2018-01-16 12:26:32	\N	f	f	NOVUS	\N	\N
-367	\N	\N	Elizabeth Joseph	josephelizabeth556@gmail.com	0768749904	\N	free	16-01-2018	16-02-2018	2	0	\N	\N	2018-01-16 07:47:07	2018-01-16 07:47:07	\N	f	f	NOVUS	\N	\N
-365	\N	\N	HELEN SARIA	helensariamwakipunda@gmail.com	0754200216	\N	free	15-01-2018	15-02-2018	0	0	https://lh6.googleusercontent.com/-3Bl94CXeHro/AAAAAAAAAAI/AAAAAAAAABM/3KpY5XfW3qY/photo.jpg	\N	2018-01-15 14:02:36	2018-01-15 14:02:36	\N	f	f	NOVUS	\N	\N
-364	\N	\N	Tabitha Kitundu	tabykitundu@gmail.com	0754858143	\N	free	15-01-2018	15-02-2018	2	0	\N	\N	2018-01-15 13:41:22	2018-01-15 13:41:22	\N	f	f	NOVUS	\N	\N
-363	\N	\N	Sara Siwale	siwalesara@gmail.com	0769817699	\N	free	15-01-2018	15-02-2018	2000	0	https://lh5.googleusercontent.com/-qDBVR-s0tzU/AAAAAAAAAAI/AAAAAAAACZE/YvNFNhoffdM/photo.jpg	\N	2018-01-15 11:41:00	2018-01-15 11:41:00	\N	f	f	NOVUS	\N	\N
-362	\N	\N	Monica Chilly	monicachilly1996@gmail.com	0714262911	\N	free	15-01-2018	15-02-2018	1	0	\N	\N	2018-01-15 09:38:21	2018-01-15 09:38:21	\N	f	f	NOVUS	\N	\N
-360	\N	\N	Frank Mwasalukwa	frankmwasab@gmail.com	0746117817	\N	free	15-01-2018	15-02-2018	4	0	\N	\N	2018-01-15 06:52:20	2018-01-15 06:52:20	\N	f	f	NOVUS	\N	\N
-359	\N	\N	Zahra Kitara	zahrakitara@gmail.com	0765888806	\N	free	15-01-2018	15-02-2018	2	0	https://lh6.googleusercontent.com/-X-35VuVe7vY/AAAAAAAAAAI/AAAAAAAAAHk/6iH9i9UvlP8/photo.jpg	\N	2018-01-14 23:46:45	2018-01-14 23:46:45	\N	f	f	NOVUS	\N	\N
-358	\N	\N	Mariam Agatha	maramagatha@gmail.com	0717140441	\N	free	14-01-2018	14-02-2018	0	0	\N	\N	2018-01-14 11:03:56	2018-01-14 11:03:56	\N	f	f	NOVUS	\N	\N
-372	255000565884	\N	Benny Mhagama	bennymhagama58@gmail.com	0712625193	\N	free	16-01-2018	16-02-2018	2	0	\N	\N	2018-01-16 18:58:36	2018-07-04 17:41:24	\N	f	f	Ass. Supervisor	\N	\N
-356	\N	\N	Amina Said	aminasaid87@gmail.com	+255658123759	\N	free	13-01-2018	13-02-2018	2	0	\N	\N	2018-01-13 14:33:28	2018-01-13 14:33:28	\N	f	f	NOVUS	\N	\N
-355	\N	\N	Gloria Nyiti	glorianyiti@gmail.com	0767661128	\N	free	13-01-2018	13-02-2018	0	0	\N	\N	2018-01-13 10:36:23	2018-01-13 10:36:23	\N	f	f	NOVUS	\N	\N
-354	\N	\N	Joyce Rweyemamu	rweyemamujoyce97@gmail.com	+255754728126	\N	free	13-01-2018	13-02-2018	255000468640	0	\N	\N	2018-01-13 10:15:21	2018-01-13 10:15:21	\N	f	f	NOVUS	\N	\N
-353	\N	\N	GASTOR GODIAN	kamugishagodian@gmail.com	0753656636	\N	free	13-01-2018	13-02-2018	2	0	https://lh6.googleusercontent.com/-27yBo2qqrws/AAAAAAAAAAI/AAAAAAAAABQ/L0h0Svy6DAE/photo.jpg	\N	2018-01-13 08:01:49	2018-01-13 08:01:49	\N	f	f	NOVUS	\N	\N
-352	\N	\N	onkyangel@yahoo.com	onkyangel@yahoo.com	0713396033	\N	free	12-01-2018	12-02-2018	0	0	\N	\N	2018-01-12 12:08:54	2018-01-12 12:08:54	\N	f	f	NOVUS	\N	\N
-351	\N	\N	NEEMA STEPHANO	neemastephano70@gmail.com	0687961686	\N	free	12-01-2018	12-02-2018	2	0	\N	\N	2018-01-12 09:13:03	2018-01-12 09:13:03	\N	f	f	NOVUS	\N	\N
-357	255000565784	\N	benny Mhagama	bennymhagama15@gmail.com	0767238788	\N	free	13-01-2018	13-02-2018	2	0	\N	\N	2018-01-13 18:03:17	2018-07-03 18:11:51	\N	f	f	Ass. Supervisor	\N	\N
-349	\N	\N	Desmon Simon	desmonvad@gmail.com	+255754025762	\N	free	12-01-2018	12-02-2018	0	0	\N	\N	2018-01-12 06:15:28	2018-01-12 06:15:28	\N	f	f	NOVUS	\N	\N
-348	\N	\N	Veronica adamson	veronicaadamson015@gmail.com	0758449501	\N	free	11-01-2018	11-02-2018	643	0	\N	\N	2018-01-11 18:45:43	2018-01-11 18:45:43	\N	f	f	NOVUS	\N	\N
-347	\N	\N	Magdalena itambu	magdalenaitambu120@gmail.com	0655028382	\N	free	11-01-2018	11-02-2018	5	0	\N	\N	2018-01-11 15:56:47	2018-01-11 15:56:47	\N	f	f	NOVUS	\N	\N
-345	\N	\N	Jacqueline Mwamkinga	atupelile89@gmail.com	0753117137	\N	free	11-01-2018	11-02-2018	0	0	\N	\N	2018-01-11 05:54:10	2018-01-11 05:54:10	\N	f	f	NOVUS	\N	\N
-344	\N	\N	Joyce Nzuna	joynzuna89@gmail.com	0769578685	\N	free	11-01-2018	11-02-2018	5	0	\N	\N	2018-01-11 02:59:57	2018-01-11 02:59:57	\N	f	f	NOVUS	\N	\N
-343	\N	\N	Rashidi Kitenge	rashidikitenge@gmail.com	0717976670	\N	free	10-01-2018	10-02-2018	9519	0	\N	\N	2018-01-10 20:13:32	2018-01-10 20:13:32	\N	f	f	NOVUS	\N	\N
-342	\N	\N	Lucy Kayolo	kaiyolosaimon@gmail.com	0758156781	\N	free	10-01-2018	10-02-2018	22	0	\N	\N	2018-01-10 17:09:19	2018-01-10 17:09:19	\N	f	f	NOVUS	\N	\N
-338	\N	\N	Godon Felix	godonfelix32@gmail.com	0766167793	\N	free	09-01-2018	09-02-2018	56	0	\N	\N	2018-01-09 12:59:49	2018-01-09 12:59:49	\N	f	f	NOVUS	\N	\N
-337	\N	\N	warda karama	warda.karama@gmail.com	255784539918	\N	free	09-01-2018	09-02-2018	0	0	https://lh3.googleusercontent.com/-qGO791lyqAQ/AAAAAAAAAAI/AAAAAAAAAXM/zt9XaUIjvC8/photo.jpg	\N	2018-01-09 09:08:10	2018-01-09 09:08:10	\N	f	f	NOVUS	\N	\N
-335	\N	\N	Amos Maziku	ajmaziku@gmail.com	0719259797	\N	free	09-01-2018	09-02-2018	1	0	https://lh3.googleusercontent.com/-Fdyg8w9mWng/AAAAAAAAAAI/AAAAAAAAACo/zz1zmEzPNtE/photo.jpg	\N	2018-01-09 05:18:34	2018-01-09 05:18:34	\N	f	f	NOVUS	\N	\N
-350	254200017082	\N	mary macharia	marynmacharia2018@gmail.com	0722699033	\N	free	12-01-2018	12-02-2018	8	1	\N	\N	2018-01-12 08:59:05	2018-06-30 04:47:29	\N	f	f	Supervisor	\N	\N
-397	255000105190	\N	Jonayce Kiminde	kjonayce@gmail.com	0753549224	\N	premium	19-06-2018	18-12-2018	2000	0	\N	\N	2018-01-19 03:51:45	2018-06-19 14:29:20	\N	f	f	Manager	\N	\N
-396	255000429016	\N	Akwinata Fabian	akwinatafabian@gmail.com	0756372474	\N	free	18-01-2018	18-02-2018	0	0	\N	\N	2018-01-18 20:14:23	2018-06-19 10:11:20	\N	f	f	Supervisor	\N	\N
-419	255000478321	\N	Anthony Simon	anthonysimon674@gmail.com	0716246577	\N	free	20-01-2018	20-02-2018	10	0	\N	\N	2018-01-20 16:32:38	2018-06-18 17:31:08	\N	f	f	Supervisor	\N	\N
-387	255000526062	\N	sulleyman omary	selemanomary@gmail.com	0655347353	\N	free	18-01-2018	18-02-2018	1	0	https://lh5.googleusercontent.com/-9M8b1YaoF34/AAAAAAAAAAI/AAAAAAAAIJQ/YxSn73fwCk8/photo.jpg	\N	2018-01-18 03:28:13	2018-06-14 04:26:47	\N	f	f	Ass. Supervisor	\N	\N
-371	582564	\N	Wilson Israel Michael	wilsonisraelmichael@gmail.com	0713343775	\N	premium	08-06-2018	03-06-2019	694	0	https://lh4.googleusercontent.com/-bQGu0bVuGY4/AAAAAAAAAAI/AAAAAAAAAXY/AEEQNsCOfZE/photo.jpg	\N	2018-01-16 16:59:17	2018-06-11 14:09:51	\N	f	f	Ass. Supervisor	\N	\N
-346	254000049774	\N	Lily Mtawali	lilianmtawali@gmail.com	0784493987	\N	free	11-01-2018	11-02-2018	0	0	\N	\N	2018-01-11 08:51:30	2018-06-05 16:22:37	\N	f	f	Manager	\N	\N
-407	\N	\N	Enatha Karumuna	enathak@gmail.com	0716131567	\N	premium	20-01-2018	19-08-2018	0	0	https://lh3.googleusercontent.com/-YLx11Qc_XFI/AAAAAAAAAAI/AAAAAAAAAA4/IPkYVPVURg4/photo.jpg	\N	2018-01-20 05:31:48	2018-01-24 08:02:12	\N	f	f	NOVUS	\N	\N
-386	\N	\N	Mariam Kombo	mariamkombo2010@gmail.com	+255767211745	\N	premium	18-01-2018	17-08-2018	0	0	\N	\N	2018-01-17 22:49:54	2018-01-24 07:55:12	\N	f	f	NOVUS	\N	\N
-431	\N	\N	Theopista Masenge	thiyojacob@gmail.com	0767029904	\N	free	23-01-2018	23-02-2018	0	0	https://lh5.googleusercontent.com/-zeRDDZ2PirA/AAAAAAAAAAI/AAAAAAAABkc/G-sQ8xuPYdE/photo.jpg	\N	2018-01-23 05:31:40	2018-01-23 05:31:40	\N	f	f	NOVUS	\N	\N
-426	\N	\N	mariam mahona	mariammahona1@gmail.com	+255714190589	\N	free	21-01-2018	21-02-2018	4	0	\N	\N	2018-01-21 19:54:43	2018-01-21 19:54:43	\N	f	f	NOVUS	\N	\N
-425	\N	\N	Mariana Michael	marianamichael13@gmail.com	+255715586648	\N	free	21-01-2018	21-02-2018	10	0	\N	\N	2018-01-21 18:00:23	2018-01-21 18:00:23	\N	f	f	NOVUS	\N	\N
-424	\N	\N	Fred Charles	cfred7035@gmail.com	0679070875	\N	free	21-01-2018	21-02-2018	679070875	0	\N	\N	2018-01-21 12:42:36	2018-01-21 12:42:36	\N	f	f	NOVUS	\N	\N
-423	\N	\N	Halima Ramadhan	halimaramadhan1988@gmail.com	0785431589	\N	free	21-01-2018	21-02-2018	0	0	\N	\N	2018-01-21 12:36:01	2018-01-21 12:36:01	\N	f	f	NOVUS	\N	\N
-422	\N	\N	William Pharles	pharleswilliam0@gmail.com	0754299939	\N	free	21-01-2018	21-02-2018	389	0	\N	\N	2018-01-21 10:14:35	2018-01-21 10:14:35	\N	f	f	NOVUS	\N	\N
-421	\N	\N	Doreen Kimbe	kimbedoreen3@gmail.com	0764812844	\N	free	20-01-2018	20-02-2018	4	0	https://lh5.googleusercontent.com/-td-Yw0XQNCM/AAAAAAAAAAI/AAAAAAAADCw/lMIxT-qXijw/photo.jpg	\N	2018-01-20 19:57:33	2018-01-20 19:57:33	\N	f	f	NOVUS	\N	\N
-420	\N	\N	Tumaini Akundael	tumainiakundael1@gmail.com	0756551991	\N	free	20-01-2018	20-02-2018	2	0	\N	\N	2018-01-20 16:55:25	2018-01-20 16:55:25	\N	f	f	NOVUS	\N	\N
-418	\N	\N	Careen Boniface	bonifacecareen@gmail.com	0712007912	\N	free	20-01-2018	20-02-2018	0	0	\N	\N	2018-01-20 15:09:49	2018-01-20 15:09:49	\N	f	f	NOVUS	\N	\N
-416	\N	\N	Lilian Mlay	lillianmlay715@gmail.com	0715862423	\N	free	20-01-2018	20-02-2018	4	0	\N	\N	2018-01-20 14:17:04	2018-01-20 14:17:04	\N	f	f	NOVUS	\N	\N
-415	\N	\N	Rassam Abdallah	ommyshirco@gmail.com	255774111819	\N	free	20-01-2018	20-02-2018	150	0	https://lh3.googleusercontent.com/-E0sbb7X_ios/AAAAAAAAAAI/AAAAAAAAI4Y/fGnr7fN5Elc/photo.jpg	\N	2018-01-20 14:08:58	2018-01-20 14:08:58	\N	f	f	NOVUS	\N	\N
-414	\N	\N	Crisencia Shedura	sheduracrisencia@gmail.com	0713995669	\N	free	20-01-2018	20-02-2018	1235	0	\N	\N	2018-01-20 10:57:43	2018-01-20 10:57:43	\N	f	f	NOVUS	\N	\N
-413	\N	\N	Wivina Nicholaus	wivinanicholaus1993@gmail.com	0655473143	\N	free	20-01-2018	20-02-2018	4	0	\N	\N	2018-01-20 10:43:01	2018-01-20 10:43:01	\N	f	f	NOVUS	\N	\N
-412	\N	\N	Hussein Majid	husseinmajid72@gmail.com	0712149445	\N	free	20-01-2018	20-02-2018	4	0	\N	\N	2018-01-20 10:31:35	2018-01-20 10:31:35	\N	f	f	NOVUS	\N	\N
-411	\N	\N	Fanuel Gwimo	fgwimo@gmail.com	+255766023377	\N	free	20-01-2018	20-02-2018	0	0	https://lh5.googleusercontent.com/-_5fUHMdMax4/AAAAAAAAAAI/AAAAAAAAABc/EXg7iCLL2mI/photo.jpg	\N	2018-01-20 09:50:30	2018-01-20 09:50:30	\N	f	f	NOVUS	\N	\N
-409	\N	\N	Kelly Weston	kellyweston22@gmail.com	0758543650	\N	free	20-01-2018	20-02-2018	2205	0	https://lh6.googleusercontent.com/-buDIN8xbqvY/AAAAAAAAAAI/AAAAAAAAAME/fUVYezh1w08/photo.jpg	\N	2018-01-20 08:06:18	2018-01-20 08:06:18	\N	f	f	NOVUS	\N	\N
-404	\N	\N	Akwinata Mahule	mamakjm@gmail.com	0756372474	\N	free	19-01-2018	19-02-2018	2	0	https://lh4.googleusercontent.com/-XijsHZqhM_w/AAAAAAAAAAI/AAAAAAAACO4/G7kplbU561A/photo.jpg	\N	2018-01-19 18:57:35	2018-01-19 18:57:35	\N	f	f	NOVUS	\N	\N
-403	\N	\N	mungo maale	mungomaale@gmail.com	0752898461	\N	free	19-01-2018	19-02-2018	3	0	\N	\N	2018-01-19 17:41:28	2018-01-19 17:41:28	\N	f	f	NOVUS	\N	\N
-402	\N	\N	Jafar Mtezo	jafarsaidmtezo@gmail.com	0784727502	\N	free	19-01-2018	19-02-2018	400899998	0	\N	\N	2018-01-19 17:15:20	2018-01-19 17:15:20	\N	f	f	NOVUS	\N	\N
-401	\N	\N	mbugua martin	mbuguamartin2030@gmail.com	0717003688	\N	free	19-01-2018	19-02-2018	1	1	https://lh3.googleusercontent.com/-GCOLlweaLhA/AAAAAAAAAAI/AAAAAAAAABg/OgS0QoaQrE0/photo.jpg	\N	2018-01-19 12:03:02	2018-01-19 12:03:02	\N	f	f	NOVUS	\N	\N
-400	\N	\N	Jacktan Baraka	jacktanbaraka1@gmail.com	0714066991	\N	free	19-01-2018	19-02-2018	467	0	\N	\N	2018-01-19 11:13:41	2018-01-19 11:13:41	\N	f	f	NOVUS	\N	\N
-399	\N	\N	Beatus Nyasebwa	bnyasebwa@gmail.com	0713493286	\N	free	19-01-2018	19-02-2018	0	0	\N	\N	2018-01-19 09:49:43	2018-01-19 09:49:43	\N	f	f	NOVUS	\N	\N
-398	\N	\N	Gilbert Mwamba	mwamba765@gmail.com	+255714675769	\N	free	19-01-2018	19-02-2018	4	0	\N	\N	2018-01-19 09:06:26	2018-01-19 09:06:26	\N	f	f	NOVUS	\N	\N
-395	\N	\N	Asha Fikiri Malanga	ashafikirimalanga@gmail.com	0787654386	\N	free	18-01-2018	18-02-2018	3	0	\N	\N	2018-01-18 18:27:09	2018-01-18 18:27:09	\N	f	f	NOVUS	\N	\N
-394	\N	\N	Bill Mathias	billq2nyi@gmail.com	0759826435	\N	free	18-01-2018	18-02-2018	1000000	0	\N	\N	2018-01-18 13:57:16	2018-01-18 13:57:16	\N	f	f	NOVUS	\N	\N
-392	\N	\N	dorcas nassary	dorcasnassary@gmail.com	0766077644	\N	free	18-01-2018	18-02-2018	2	0	\N	\N	2018-01-18 10:12:40	2018-01-18 10:12:40	\N	f	f	NOVUS	\N	\N
-391	\N	\N	Kibudia Mwaimu	mkibudia@gmail.com	0769359990	\N	free	18-01-2018	18-02-2018	1	0	https://lh5.googleusercontent.com/-PX--RM43oHY/AAAAAAAAAAI/AAAAAAAAAAo/js4DK7Wei-0/photo.jpg	\N	2018-01-18 08:54:00	2018-01-18 08:54:00	\N	f	f	NOVUS	\N	\N
-390	\N	\N	Sophia Msafiri	sophymsafiri17@gmail.com	0717552766	\N	free	18-01-2018	18-02-2018	0	0	\N	\N	2018-01-18 08:31:41	2018-01-18 08:31:41	\N	f	f	NOVUS	\N	\N
-389	\N	\N	Irene Dubi	iryn612@gmail.com	0769581319	\N	free	18-01-2018	18-02-2018	0	0	\N	\N	2018-01-18 06:51:12	2018-01-18 06:51:12	\N	f	f	NOVUS	\N	\N
-388	\N	\N	Frank Mwangoka	frankemwangoka88@gmail.com	0764510025	\N	free	18-01-2018	18-02-2018	2	0	\N	\N	2018-01-18 05:51:26	2018-01-18 05:51:26	\N	f	f	NOVUS	\N	\N
-385	\N	\N	James Mleli	mlelijames0@gmail.com	0654357059	\N	free	17-01-2018	17-02-2018	3	0	\N	\N	2018-01-17 19:29:23	2018-01-17 19:29:23	\N	f	f	NOVUS	\N	\N
-381	\N	\N	Anitha James	jamesanitha569@gmail.com	0762770734	\N	free	17-01-2018	17-02-2018	12	0	\N	\N	2018-01-17 12:52:41	2018-01-17 12:52:41	\N	f	f	NOVUS	\N	\N
-450	255000615490	\N	Amedeus Didas	amedeusdidas@gmail.com	0757722054	\N	premium	26-06-2018	26-07-2018	1	0	https://lh6.googleusercontent.com/-prTK1hwKR-g/AAAAAAAAAAI/AAAAAAAAAEI/TcCPz0O9aUQ/photo.jpg	\N	2018-01-25 10:24:52	2018-06-26 07:32:26	\N	f	f	Ass. Supervisor	\N	\N
-427	255000397327	\N	Baraka Mwansasu	barakamwansasu@gmail.com	0767211457	\N	premium	21-06-2018	20-12-2018	2	0	\N	\N	2018-01-21 22:47:10	2018-06-21 17:21:42	\N	f	f	Ass. Supervisor	\N	\N
-429	255000542545	\N	lucas mashemashe	lmashemashe@gmail.com	0764084956	\N	free	22-01-2018	22-02-2018	1	0	\N	\N	2018-01-22 12:51:16	2018-06-12 08:09:53	\N	f	f	Ass. Supervisor	\N	\N
-447	254200018262	\N	Franklin Rimui	frimui60@gmail.com	0702883504	\N	free	24-01-2018	24-02-2018	200	1	\N	\N	2018-01-24 15:08:03	2018-06-10 12:22:45	\N	f	f	Ass. Supervisor	\N	\N
-437	255000542409	\N	Adili Kayuni	adilikayuni91@gmail.com	0752372308	\N	free	23-01-2018	23-02-2018	12	0	\N	\N	2018-01-23 16:41:08	2018-06-07 06:56:51	\N	f	f	Ass. Supervisor	\N	\N
-449	255000464457	\N	Denis Steven	dskiula@gmail.com	0757112234	\N	free	25-01-2018	25-02-2018	2	0	\N	\N	2018-01-25 08:35:39	2018-06-06 08:39:11	\N	f	f	Ass. Supervisor	\N	\N
-660	\N	\N	Michael Mdope	mdopemichael@gmail.com	0755497206	\N	free	28-02-2018	31-03-2018	1	0	\N	\N	2018-02-28 11:52:51	2018-02-28 11:52:51	\N	f	f	NOVUS	\N	\N
-485	\N	\N	Flora Mwaijele	floramwaijele@gmail.com	0767296966	\N	free	30-01-2018	02-03-2018	3	0	\N	\N	2018-01-30 04:25:28	2018-01-30 04:25:28	\N	f	f	NOVUS	\N	\N
-484	\N	\N	Leticia Mpeka	mpekaleticia@gmail.com	0718778424	\N	free	30-01-2018	02-03-2018	0	0	https://lh5.googleusercontent.com/-BgWtPuJslFA/AAAAAAAAAAI/AAAAAAAAABk/Xvkv0nyQGuo/photo.jpg	\N	2018-01-30 01:38:47	2018-01-30 01:38:47	\N	f	f	NOVUS	\N	\N
-483	\N	\N	Nusura Asaa	nusuraasaa@gmail.com	0773787334	\N	free	29-01-2018	01-03-2018	2	0	\N	\N	2018-01-29 13:32:34	2018-01-29 13:32:34	\N	f	f	NOVUS	\N	\N
-482	\N	\N	Getrude Uisso	uissogetrude99@gmail.com	0768777702	\N	free	29-01-2018	01-03-2018	5	0	https://lh5.googleusercontent.com/-Y8HP0MTBnAk/AAAAAAAAAAI/AAAAAAAACnk/BA3gEbpgSAM/photo.jpg	\N	2018-01-29 12:42:26	2018-01-29 12:42:26	\N	f	f	NOVUS	\N	\N
-469	\N	\N	Diana Robert	dianarobert478@gmail.com	0714492946	\N	free	29-01-2018	01-03-2018	0	0	\N	\N	2018-01-29 08:09:12	2018-01-29 08:09:12	\N	f	f	NOVUS	\N	\N
-467	\N	\N	charles Chami	chalzchami@gmail.com	0784687318	\N	free	28-01-2018	28-02-2018	0	0	\N	\N	2018-01-28 18:39:57	2018-01-28 18:39:57	\N	f	f	NOVUS	\N	\N
-466	\N	\N	Eliza Joel	joeleliza89@gmail.com	0764798827	\N	free	28-01-2018	28-02-2018	4	0	\N	\N	2018-01-28 17:58:00	2018-01-28 17:58:00	\N	f	f	NOVUS	\N	\N
-465	\N	\N	Kuruthumu Silver	kuruthumusilver@gmail.com	0718412744	\N	free	28-01-2018	28-02-2018	3	0	\N	\N	2018-01-28 17:15:17	2018-01-28 17:15:17	\N	f	f	NOVUS	\N	\N
-464	\N	\N	Evarson Kimario	evarsonkimario@gmail.com	0627749401	\N	free	28-01-2018	28-02-2018	1000	0	\N	\N	2018-01-28 13:24:39	2018-01-28 13:24:39	\N	f	f	NOVUS	\N	\N
-463	\N	\N	Frida Allan	fridahallany123@gmail.com	0718893552	\N	free	28-01-2018	28-02-2018	0	0	https://lh3.googleusercontent.com/-UBxsFWW19Ww/AAAAAAAAAAI/AAAAAAAAAIQ/2kULp905fT8/photo.jpg	\N	2018-01-28 11:57:16	2018-01-28 11:57:16	\N	f	f	NOVUS	\N	\N
-462	\N	\N	Glory Matemu	gtemu75@gmail.com	0769816875	\N	free	26-01-2018	26-02-2018	2	0	\N	\N	2018-01-26 20:19:10	2018-01-26 20:19:10	\N	f	f	NOVUS	\N	\N
-459	\N	\N	Godwin Mruma	gmruma90@gmail.com	0675396433	\N	free	26-01-2018	26-02-2018	675396433	0	\N	\N	2018-01-26 15:44:47	2018-01-26 15:44:47	\N	f	f	NOVUS	\N	\N
-458	\N	\N	Enos Salema	enos.salema@gmail.com	0713327777	\N	free	26-01-2018	26-02-2018	4	0	\N	\N	2018-01-26 14:28:35	2018-01-26 14:28:35	\N	f	f	NOVUS	\N	\N
-457	\N	\N	Daniel Dansizo	danieldansizo@gmail.com	0655704758	\N	free	26-01-2018	26-02-2018	2	0	\N	\N	2018-01-26 10:54:59	2018-01-26 10:54:59	\N	f	f	NOVUS	\N	\N
-456	\N	\N	Chri Sumaye	chrisumaye@gmail.com	+757510853	\N	free	26-01-2018	26-02-2018	3	0	\N	\N	2018-01-26 10:48:56	2018-01-26 10:48:56	\N	f	f	NOVUS	\N	\N
-455	\N	\N	Sensei Dady Karate And KRAV MAGA classes Online	senseidady@gmail.com	0715202740	\N	free	26-01-2018	26-02-2018	2	0	https://lh4.googleusercontent.com/-sucPEqf3Ch4/AAAAAAAAAAI/AAAAAAAAACs/C2C3Obkdqus/photo.jpg	\N	2018-01-26 09:31:27	2018-01-26 09:31:27	\N	f	f	NOVUS	\N	\N
-454	\N	\N	Jane Msangi	jdmsangi@gmail.com	0622444924	\N	free	26-01-2018	26-02-2018	0	0	\N	\N	2018-01-26 09:27:29	2018-01-26 09:27:29	\N	f	f	NOVUS	\N	\N
-453	\N	\N	Makalanga Nshashi	nshashim2@gmail.com	0789654444	\N	free	25-01-2018	25-02-2018	10000	0	\N	\N	2018-01-25 20:22:21	2018-01-25 20:22:21	\N	f	f	NOVUS	\N	\N
-451	\N	\N	rachael mwendo	rakelmbinya@gmail.com	+255688925627	\N	free	25-01-2018	25-02-2018	2	0	https://lh5.googleusercontent.com/-hqgYlqn6ndY/AAAAAAAAAAI/AAAAAAAAABY/vKJyPghAyFg/photo.jpg	\N	2018-01-25 12:46:04	2018-01-25 12:46:04	\N	f	f	NOVUS	\N	\N
-448	\N	\N	jerry martin	jerrymartin561@gmail.com	0754399223	\N	free	24-01-2018	24-02-2018	626	0	https://lh3.googleusercontent.com/-sWo_RoXUJb8/AAAAAAAAAAI/AAAAAAAAABg/l3FFQHzQBG8/photo.jpg	\N	2018-01-24 18:40:07	2018-01-24 18:40:07	\N	f	f	NOVUS	\N	\N
-446	\N	\N	Sekela Mwaijuki	mwaijukisekela@gmail.com	0745087273	\N	free	24-01-2018	24-02-2018	4	0	\N	\N	2018-01-24 13:53:44	2018-01-24 13:53:44	\N	f	f	NOVUS	\N	\N
-445	\N	\N	Fatuma Makarani	fatuma.makarani89@gmail.com	0655771835	\N	free	24-01-2018	24-02-2018	1	0	\N	\N	2018-01-24 10:40:28	2018-01-24 10:40:28	\N	f	f	NOVUS	\N	\N
-444	\N	\N	Salmini Bakari Mbonde	muhemasalmini@gmail.com	0754313550	\N	free	24-01-2018	24-02-2018	1	0	https://lh5.googleusercontent.com/-iBQCApb-DHA/AAAAAAAAAAI/AAAAAAAAGyw/0z6pLEY6rEo/photo.jpg	\N	2018-01-24 08:48:44	2018-01-24 08:48:44	\N	f	f	NOVUS	\N	\N
-393	\N	\N	Mwinyi Robert	mwinyiroberts84@gmail.com	0754632680	\N	premium	18-01-2018	13-02-2019	2	0	\N	\N	2018-01-18 10:39:22	2018-01-24 08:00:35	\N	f	f	NOVUS	\N	\N
-442	\N	\N	Chris Kapinga	chriskapinga6@gmail.com	0754427514	\N	free	24-01-2018	24-02-2018	754427514	0	\N	\N	2018-01-24 07:56:08	2018-01-24 07:56:08	\N	f	f	NOVUS	\N	\N
-145	\N	\N	issa Ngoro	ngoromlandani@gmail.com	0718650863	\N	premium	12-12-2017	11-01-2018	0	0	\N	\N	2017-12-12 13:52:43	2018-01-24 07:52:20	\N	f	f	NOVUS	\N	\N
-438	\N	\N	Happy Kalinga	happykalinga43@gmail.com	0764476666	\N	free	24-01-2018	24-02-2018	2	0	https://lh6.googleusercontent.com/-rJB3zGkmXa8/AAAAAAAAAAI/AAAAAAAAADk/svOZGpFMZgY/photo.jpg	\N	2018-01-24 05:17:35	2018-01-24 05:17:35	\N	f	f	NOVUS	\N	\N
-436	\N	\N	Irene Greys	renygreys@gmail.com	0653684580	\N	free	23-01-2018	23-02-2018	1	0	\N	\N	2018-01-23 15:15:13	2018-01-23 15:15:13	\N	f	f	NOVUS	\N	\N
-435	\N	\N	Elinami Manka	elinamanka07@gmail.com	0787054046	\N	free	23-01-2018	23-02-2018	2	0	https://lh6.googleusercontent.com/-4pHZ8_fzbxI/AAAAAAAAAAI/AAAAAAAACJw/H5nbRHuDWxQ/photo.jpg	\N	2018-01-23 13:31:46	2018-01-23 13:31:46	\N	f	f	NOVUS	\N	\N
-434	\N	\N	Janeth Fratern	j9fratern@gmail.com	0713400632	\N	free	23-01-2018	23-02-2018	0	0	\N	\N	2018-01-23 10:31:45	2018-01-23 10:31:45	\N	f	f	NOVUS	\N	\N
-433	\N	\N	MAGRETH KIBAJA	magiekb@gmail.com	0762206297	\N	free	23-01-2018	23-02-2018	25	0	https://lh4.googleusercontent.com/-ZPqxkn7a-6s/AAAAAAAAAAI/AAAAAAAARzc/_dvlkaSPHIQ/photo.jpg	\N	2018-01-23 07:22:26	2018-01-23 07:22:26	\N	f	f	NOVUS	\N	\N
-432	\N	\N	isaeli swai	isaeliswai@gmail.com	0716825182	\N	free	23-01-2018	23-02-2018	2	0	\N	\N	2018-01-23 05:31:56	2018-01-23 05:31:56	\N	f	f	NOVUS	\N	\N
-488	255000454444	\N	grace minja	graceminja@gmail.com	0755456635	\N	premium	20-06-2018	20-07-2018	12	0	https://lh4.googleusercontent.com/-y0fqeXN2RdQ/AAAAAAAAAAI/AAAAAAAAAOc/iWWgHPppcKY/photo.jpg	\N	2018-01-30 12:44:22	2018-06-20 16:08:44	\N	f	f	Manager	\N	\N
-681	\N	\N	Zainabu Mdach	mdachzainabu@gmail.com	+255763434850	\N	free	02-03-2018	02-04-2018	2	0	\N	\N	2018-03-02 13:10:29	2018-03-02 13:10:29	\N	f	f	NOVUS	\N	\N
-531	\N	\N	Sadam Mjaka	smjaka9212@gmail.com	0718361500	\N	free	07-02-2018	10-03-2018	500	0	https://lh5.googleusercontent.com/-OBMy2XEGzhg/AAAAAAAAAAI/AAAAAAAAACM/DdqbwvC11u4/photo.jpg	\N	2018-02-07 16:16:35	2018-02-07 16:16:35	\N	f	f	NOVUS	\N	\N
-530	\N	\N	Husna Said	husnasaid412@gmail.com	0776773434	\N	free	07-02-2018	10-03-2018	4	0	\N	\N	2018-02-07 15:08:12	2018-02-07 15:08:12	\N	f	f	NOVUS	\N	\N
-529	\N	\N	neyma clement	neymaclement@gmail.com	0692145898	\N	free	07-02-2018	10-03-2018	2	0	\N	\N	2018-02-07 15:01:08	2018-02-07 15:01:08	\N	f	f	NOVUS	\N	\N
-528	\N	\N	PENDO BARNABA	barnabapendo7@gmail.com	0755634081	\N	free	07-02-2018	10-03-2018	0	0	https://lh6.googleusercontent.com/-wqhEp6mkTQ0/AAAAAAAAAAI/AAAAAAAAAB0/IQYC0LgSw2A/photo.jpg	\N	2018-02-07 05:31:43	2018-02-07 05:31:43	\N	f	f	NOVUS	\N	\N
-527	\N	\N	dorismahene@gmail.com	dorismahene@gmail.com	0711916523	\N	free	07-02-2018	10-03-2018	1	0	\N	\N	2018-02-06 22:32:19	2018-02-06 22:32:19	\N	f	f	NOVUS	\N	\N
-526	\N	\N	Rashid Saleh	rashidsaleh91@gmail.com	0717074123	\N	free	07-02-2018	10-03-2018	456	0	\N	\N	2018-02-06 21:39:18	2018-02-06 21:39:18	\N	f	f	NOVUS	\N	\N
-525	\N	\N	JOSEPHINE MOSHA	jmaureen25@gmail.com	0782351207	\N	free	06-02-2018	09-03-2018	0	0	\N	\N	2018-02-06 16:58:58	2018-02-06 16:58:58	\N	f	f	NOVUS	\N	\N
-524	\N	\N	Michael Anthony	mngomba565@gmail.com	0713936540	\N	free	06-02-2018	09-03-2018	2	0	\N	\N	2018-02-06 11:44:17	2018-02-06 11:44:17	\N	f	f	NOVUS	\N	\N
-520	\N	\N	magdalena kingu	magdalenakingu@gmail.com	0684693101	\N	free	05-02-2018	08-03-2018	0	0	https://lh5.googleusercontent.com/-WlAB1wShxbI/AAAAAAAAAAI/AAAAAAAAE54/9vVKU7nwo7A/photo.jpg	\N	2018-02-05 16:15:36	2018-02-05 16:15:36	\N	f	f	NOVUS	\N	\N
-519	\N	\N	Fathiya Masoud	fathiyamasoud62@gmail.com	0629741507	\N	free	05-02-2018	08-03-2018	5	0	\N	\N	2018-02-05 11:42:58	2018-02-05 11:42:58	\N	f	f	NOVUS	\N	\N
-518	\N	\N	Debora Frank	frankdebora84@gmail.com	0759310631	\N	free	05-02-2018	08-03-2018	0	0	\N	\N	2018-02-05 08:07:25	2018-02-05 08:07:25	\N	f	f	NOVUS	\N	\N
-517	\N	\N	Lazaro Abila	lazaroabila77@gmail.com	0682126964	\N	free	05-02-2018	08-03-2018	123	0	\N	\N	2018-02-05 07:50:29	2018-02-05 07:50:29	\N	f	f	NOVUS	\N	\N
-516	\N	\N	Juma Dyegula	dyegulajuma@gmail.com	+255764962800	\N	free	05-02-2018	08-03-2018	0	0	\N	\N	2018-02-04 21:53:14	2018-02-04 21:53:14	\N	f	f	NOVUS	\N	\N
-515	\N	\N	Mwema Khamis	mwemakhamis4@gmail.com	0777722287	\N	free	04-02-2018	07-03-2018	4	0	\N	\N	2018-02-04 13:41:22	2018-02-04 13:41:22	\N	f	f	NOVUS	\N	\N
-514	\N	\N	sarah mchaki	mchakisarah@gmail.com	0652334550	\N	free	04-02-2018	07-03-2018	1060	0	\N	\N	2018-02-03 21:17:58	2018-02-03 21:17:58	\N	f	f	NOVUS	\N	\N
-513	\N	\N	tony washington	mwashington009@gmail.com	0714902502	\N	free	03-02-2018	06-03-2018	0	0	https://lh3.googleusercontent.com/-a-BujGQjiAs/AAAAAAAAAAI/AAAAAAAAADU/RsNQ62JOF1c/photo.jpg	\N	2018-02-03 18:37:00	2018-02-03 18:37:00	\N	f	f	NOVUS	\N	\N
-511	\N	\N	Edwardy Kennedy	edwardykennedy@gmail.com	+255766431520	\N	free	03-02-2018	06-03-2018	2	0	https://lh5.googleusercontent.com/-Qew76qwc2HQ/AAAAAAAAAAI/AAAAAAAAABw/olFw2Fc_so8/photo.jpg	\N	2018-02-03 16:48:28	2018-02-03 16:48:28	\N	f	f	NOVUS	\N	\N
-510	\N	\N	Despina Mahenge	mahengedespina@gmail.com	0763955496	\N	free	03-02-2018	06-03-2018	4	0	\N	\N	2018-02-03 16:04:33	2018-02-03 16:04:33	\N	f	f	NOVUS	\N	\N
-509	\N	\N	Stella Ndonondo	stellandonondo@gmail.com	0718114739	\N	free	03-02-2018	06-03-2018	2	0	https://lh4.googleusercontent.com/-KFcHEyn6w-M/AAAAAAAAAAI/AAAAAAAAAAs/ngy-Hd4__kA/photo.jpg	\N	2018-02-03 15:50:14	2018-02-03 15:50:14	\N	f	f	NOVUS	\N	\N
-508	\N	\N	hussein mohamed	hm2032170@gmail.com	0711809929	\N	free	03-02-2018	06-03-2018	50	0	\N	\N	2018-02-03 15:32:54	2018-02-03 15:32:54	\N	f	f	NOVUS	\N	\N
-507	\N	\N	Sylvanus Gombanila	sylvanusgombanila@gmail.com	0765026349	\N	free	03-02-2018	06-03-2018	2	0	\N	\N	2018-02-03 10:40:38	2018-02-03 10:40:38	\N	f	f	NOVUS	\N	\N
-505	\N	\N	epetia tangila	epetiatangila@gmail.com	0768013968	\N	free	03-02-2018	06-03-2018	1	0	\N	\N	2018-02-03 07:15:27	2018-02-03 07:15:27	\N	f	f	NOVUS	\N	\N
-502	\N	\N	ally makota	allymakota14@gmail.com	0652406334	\N	free	02-02-2018	05-03-2018	0	0	https://lh4.googleusercontent.com/-QD75LjMauO8/AAAAAAAAAAI/AAAAAAAAACQ/uTh6hEQHJQA/photo.jpg	\N	2018-02-02 17:17:27	2018-02-02 17:17:27	\N	f	f	NOVUS	\N	\N
-501	\N	\N	Ally Hamisi	allykhamista@gmail.com	0785168159	\N	free	02-02-2018	05-03-2018	568	0	\N	\N	2018-02-02 14:20:50	2018-02-02 14:20:50	\N	f	f	NOVUS	\N	\N
-499	\N	\N	Hasewa Kwimba	hkwimba10@gmail.com	0766865115	\N	free	02-02-2018	05-03-2018	0	0	\N	\N	2018-02-02 10:09:40	2018-02-02 10:09:40	\N	f	f	NOVUS	\N	\N
-498	\N	\N	Monica Tairo	monicatairo89@gmail.com	0716534033	\N	free	02-02-2018	05-03-2018	4	0	\N	\N	2018-02-02 07:01:58	2018-02-02 07:01:58	\N	f	f	NOVUS	\N	\N
-497	\N	\N	Frankwell Dulle	dullefw2011@gmail.com	0754819531	\N	free	01-02-2018	04-03-2018	4	0	https://lh3.googleusercontent.com/-gZV3nDUnCjU/AAAAAAAAAAI/AAAAAAAAAWM/ndGRVfxKxzQ/photo.jpg	\N	2018-02-01 11:35:21	2018-02-01 11:35:21	\N	f	f	NOVUS	\N	\N
-496	\N	\N	Dan Charles	dannycharles008@gmail.com	0655500410	\N	free	01-02-2018	04-03-2018	4	0	https://lh6.googleusercontent.com/-u8A-sfoZZhM/AAAAAAAAAAI/AAAAAAAAACw/snjDZ-bLn0w/photo.jpg	\N	2018-02-01 08:36:37	2018-02-01 08:36:37	\N	f	f	NOVUS	\N	\N
-495	\N	\N	DEODATHA AGRICOLA	deodath1990@gmail.com	0783253848	\N	free	01-02-2018	04-03-2018	2	0	https://lh4.googleusercontent.com/-hkHD97RZUWA/AAAAAAAAAAI/AAAAAAAAAAw/Mc2waiIOisI/photo.jpg	\N	2018-02-01 05:30:55	2018-02-01 05:30:55	\N	f	f	NOVUS	\N	\N
-494	\N	\N	Laurence Lala	lala500030@gmail.com	0756612120	\N	free	01-02-2018	04-03-2018	1	0	\N	\N	2018-02-01 02:24:57	2018-02-01 02:24:57	\N	f	f	NOVUS	\N	\N
-493	\N	\N	Tress Mkulu	tressmkulu@gmail.com	0689106761	\N	free	31-01-2018	03-03-2018	0	0	\N	\N	2018-01-31 20:54:52	2018-01-31 20:54:52	\N	f	f	NOVUS	\N	\N
-492	\N	\N	Mubarak Aly	mubagx13@gmail.com	0777803537	\N	free	31-01-2018	03-03-2018	2	0	https://lh5.googleusercontent.com/-mt3WlPxsb84/AAAAAAAAAAI/AAAAAAAAABk/fGtVBpHkl2Y/photo.jpg	\N	2018-01-31 15:32:07	2018-01-31 15:32:07	\N	f	f	NOVUS	\N	\N
-491	\N	\N	Alex sulle	alexsulle152@gmail.com	0762280774	\N	free	30-01-2018	02-03-2018	762280774	0	\N	\N	2018-01-30 17:15:48	2018-01-30 17:15:48	\N	f	f	NOVUS	\N	\N
-490	\N	\N	frank mungure	frankmungure83@gmail.com	0655213757	\N	free	30-01-2018	02-03-2018	2	0	https://lh3.googleusercontent.com/-L5bobJ-be6w/AAAAAAAAAAI/AAAAAAAAAJs/32JXczSYZus/photo.jpg	\N	2018-01-30 15:31:35	2018-01-30 15:31:35	\N	f	f	NOVUS	\N	\N
-489	\N	\N	Exuper Vitalis Njau	exupervitalisnjau@gmail.com	0717292270	\N	free	30-01-2018	02-03-2018	25	0	https://lh4.googleusercontent.com/-zuiGdo6kFJs/AAAAAAAAAAI/AAAAAAAABkU/bomRup55o_E/photo.jpg	\N	2018-01-30 14:55:24	2018-01-30 14:55:24	\N	f	f	NOVUS	\N	\N
-487	\N	\N	ANTELMA LUTAMBI	antelmalutambi@gmail.com	255656493501	\N	free	30-01-2018	02-03-2018	2	0	\N	\N	2018-01-30 10:11:47	2018-01-30 10:11:47	\N	f	f	NOVUS	\N	\N
-486	\N	\N	Malimi Heri	malimimitis@gmail.com	0653195990	\N	free	30-01-2018	02-03-2018	1	0	https://lh3.googleusercontent.com/-MOzo0LDygng/AAAAAAAAAAI/AAAAAAAAAMo/aliCa5FqnPU/photo.jpg	\N	2018-01-30 08:17:20	2018-01-30 08:17:20	\N	f	f	NOVUS	\N	\N
-541	255000603596	\N	Nazvive Vivian	nazvivevivian@gmail.com	0689505251	\N	premium	10-06-2018	05-06-2019	1	0	\N	\N	2018-02-09 14:43:09	2018-06-10 13:20:01	\N	f	f	Ass. Supervisor	\N	\N
-662	\N	\N	Mgeta Joseph	josephmgeta1995@gmail.com	0754299939	\N	free	28-02-2018	31-03-2018	20	0	\N	\N	2018-02-28 15:12:21	2018-02-28 15:12:21	\N	f	f	NOVUS	\N	\N
-602	\N	\N	Lidia Nikolass	lidianikolass35@gmail.com	0718174402	\N	free	16-02-2018	19-03-2018	1	0	\N	\N	2018-02-16 09:49:30	2018-02-16 09:49:30	\N	f	f	NOVUS	\N	\N
-601	\N	\N	Julius Mwakajeba	jmwakajeba@gmail.com	0716810817	\N	free	16-02-2018	19-03-2018	10	0	\N	\N	2018-02-16 08:57:17	2018-02-16 08:57:17	\N	f	f	NOVUS	\N	\N
-600	\N	\N	Oneka John	onekajohn8@gmail.com	0753630304	\N	free	16-02-2018	19-03-2018	5	0	\N	\N	2018-02-16 06:51:23	2018-02-16 06:51:23	\N	f	f	NOVUS	\N	\N
-599	\N	\N	Diana Mwakitalu	dianamwakitalu17@gmail.com	0718933496	\N	free	15-02-2018	18-03-2018	2	0	\N	\N	2018-02-15 17:14:47	2018-02-15 17:14:47	\N	f	f	NOVUS	\N	\N
-598	\N	\N	Shukuru James	shukurujames81@gmail.com	0719259797	\N	free	15-02-2018	18-03-2018	1	0	\N	\N	2018-02-15 16:42:20	2018-02-15 16:42:20	\N	f	f	NOVUS	\N	\N
-597	\N	\N	Muhtasim Issa	muhtasimissa339@gmail.com	0786116922	\N	free	15-02-2018	18-03-2018	4	0	\N	\N	2018-02-15 16:27:04	2018-02-15 16:27:04	\N	f	f	NOVUS	\N	\N
-596	\N	\N	Silvya Maina	mainasilvya@gmail.com	+254702107833	\N	free	15-02-2018	18-03-2018	0	0	\N	\N	2018-02-15 16:24:45	2018-02-15 16:24:45	\N	f	f	NOVUS	\N	\N
-595	\N	\N	Joseph Gama	gamajoseph37@gmail.com	0763906049	\N	free	15-02-2018	18-03-2018	1	0	\N	\N	2018-02-15 15:49:44	2018-02-15 15:49:44	\N	f	f	NOVUS	\N	\N
-594	\N	\N	Pasko Ibrahim	paskoibrahim5@gmail.com	0745389294	\N	free	15-02-2018	18-03-2018	2	0	\N	\N	2018-02-15 14:34:36	2018-02-15 14:34:36	\N	f	f	NOVUS	\N	\N
-593	\N	\N	damas pecha	damaspecha@gmail.com	0764597227	\N	free	15-02-2018	18-03-2018	23	0	\N	\N	2018-02-15 14:26:51	2018-02-15 14:26:51	\N	f	f	NOVUS	\N	\N
-592	\N	\N	Tumain Ginus	tumainginus@gmail.com	0717692881	\N	free	15-02-2018	18-03-2018	0	0	\N	\N	2018-02-15 08:34:10	2018-02-15 08:34:10	\N	f	f	NOVUS	\N	\N
-590	\N	\N	Fatma Khamis	khamisf308@gmail.com	0773029801	\N	free	15-02-2018	18-03-2018	368	0	\N	\N	2018-02-15 08:14:18	2018-02-15 08:14:18	\N	f	f	NOVUS	\N	\N
-589	\N	\N	Baraka Eliah	barakaeliah8@gmail.com	0745087273	\N	free	15-02-2018	18-03-2018	4	0	\N	\N	2018-02-15 06:07:29	2018-02-15 06:07:29	\N	f	f	NOVUS	\N	\N
-588	\N	\N	Helfrid Gama	helfridg@gmail.com	0764116130	\N	free	15-02-2018	18-03-2018	2	0	\N	\N	2018-02-15 05:40:33	2018-02-15 05:40:33	\N	f	f	NOVUS	\N	\N
-585	\N	\N	Nancy Mtui	nmtui4@gmail.com	0755784085	\N	free	14-02-2018	17-03-2018	2	0	\N	\N	2018-02-14 12:13:53	2018-02-14 12:13:53	\N	f	f	NOVUS	\N	\N
-573	\N	\N	Rehema Sumari	rsumari90@gmail.com	0754498408	\N	free	14-02-2018	17-03-2018	2	0	\N	\N	2018-02-14 09:45:42	2018-02-14 09:45:42	\N	f	f	NOVUS	\N	\N
-572	\N	\N	Deogratias John	deogratiasjohn41@gmail.com	0764366668	\N	free	14-02-2018	17-03-2018	44	0	\N	\N	2018-02-14 06:40:05	2018-02-14 06:40:05	\N	f	f	NOVUS	\N	\N
-571	\N	\N	Rehema Amiri	rehemaamiri066@gmail.com	0714554515	\N	free	14-02-2018	17-03-2018	7	0	\N	\N	2018-02-13 21:17:07	2018-02-13 21:17:07	\N	f	f	NOVUS	\N	\N
-570	\N	\N	Wardy Ema	wardyema@gmail.com	0673982007	\N	free	13-02-2018	16-03-2018	4	0	\N	\N	2018-02-13 15:20:41	2018-02-13 15:20:41	\N	f	f	NOVUS	\N	\N
-567	\N	\N	Gad Lims	gadlims45@gmail.com	0701994765	\N	free	13-02-2018	16-03-2018	10000	1	\N	\N	2018-02-13 11:14:42	2018-02-13 11:14:42	\N	f	f	NOVUS	\N	\N
-566	\N	\N	Elias Mhema	eliasmhema34@gmail.com	0769318806	\N	free	13-02-2018	16-03-2018	5000000	0	\N	\N	2018-02-13 10:56:05	2018-02-13 10:56:05	\N	f	f	NOVUS	\N	\N
-555	\N	\N	Matokeo Dyabene	matokeodyabene28@gmail.com	0769353586	\N	free	13-02-2018	16-03-2018	2000	0	\N	\N	2018-02-12 23:18:56	2018-02-12 23:18:56	\N	f	f	NOVUS	\N	\N
-553	\N	\N	Irene Gideon	irenechinko@gmail.com	0766045980	\N	free	12-02-2018	15-03-2018	1	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABDCKTdwvPPlLieRyILdmNhcmRfcGhvdG8qKDQzZWVlMzZmOGJlYjlhMDdmMDRiY2Q0ZjJmNjExN2U0NjJhOTA2OTYwAavxIxAOJvw2FCc_IPdBIFnJ9rSh	\N	2018-02-12 13:13:34	2018-02-12 13:13:34	\N	f	f	NOVUS	\N	\N
-552	\N	\N	EDNA MOSHA	moshaedna76@gmail.com	0629865800	\N	free	12-02-2018	15-03-2018	2	0	\N	\N	2018-02-12 13:12:45	2018-02-12 13:12:45	\N	f	f	NOVUS	\N	\N
-551	\N	\N	shax ramson	shaxramson45@gmail.com	0719121208	\N	free	12-02-2018	15-03-2018	50000	0	\N	\N	2018-02-12 10:15:22	2018-02-12 10:15:22	\N	f	f	NOVUS	\N	\N
-550	\N	\N	Seif Kasonta	seifflpaloe@gmail.com	0712345975	\N	free	12-02-2018	15-03-2018	2	0	\N	\N	2018-02-12 07:28:06	2018-02-12 07:28:06	\N	f	f	NOVUS	\N	\N
-548	\N	\N	Alex Pius	dgn100summer@gmail.com	0765887767	\N	free	12-02-2018	15-03-2018	1	0	https://lh4.googleusercontent.com/-WIQx0SBVfy4/AAAAAAAAAAI/AAAAAAAAATE/cjUvA9s3EXY/photo.jpg	\N	2018-02-12 04:06:55	2018-02-12 04:06:55	\N	f	f	NOVUS	\N	\N
-547	\N	\N	john mrutu	jmrutu4@gmail.com	0652844581	\N	free	11-02-2018	14-03-2018	10	0	https://lh3.googleusercontent.com/-lssefOKhWHQ/AAAAAAAAAAI/AAAAAAAAAAw/7ZD4vvjJmgI/photo.jpg	\N	2018-02-11 09:14:45	2018-02-11 09:14:45	\N	f	f	NOVUS	\N	\N
-546	\N	\N	Hamisi Hassan	hamisihassan11@gmail.com	0716711174	\N	free	11-02-2018	14-03-2018	30	0	https://lh4.googleusercontent.com/-0M-novR2vco/AAAAAAAAAAI/AAAAAAAAD54/QHUOpXzQkUA/photo.jpg	\N	2018-02-11 05:55:11	2018-02-11 05:55:11	\N	f	f	NOVUS	\N	\N
-545	\N	\N	cma.seminars@gmail.com	cma.seminars@gmail.com	0754370805	\N	free	10-02-2018	13-03-2018	6	0	\N	\N	2018-02-10 05:37:23	2018-02-10 05:37:23	\N	f	f	NOVUS	\N	\N
-544	\N	\N	Jane Mlay	janemlay762@gmail.com	0657461124	\N	free	09-02-2018	12-03-2018	0	0	\N	\N	2018-02-09 15:41:27	2018-02-09 15:41:27	\N	f	f	NOVUS	\N	\N
-543	\N	\N	maymuna zubeir	maymunazubeir75@gmail.com	+255772317373	\N	free	09-02-2018	12-03-2018	2	0	https://lh6.googleusercontent.com/-EoUJMzMQSkY/AAAAAAAAAAI/AAAAAAAAABo/MbOUiRzvPoU/photo.jpg	\N	2018-02-09 14:58:13	2018-02-09 14:58:13	\N	f	f	NOVUS	\N	\N
-542	\N	\N	Stanislaus Dogani	stanislausdogani1978@gmail.com	0784533312	\N	free	09-02-2018	12-03-2018	10090001	0	\N	\N	2018-02-09 14:54:59	2018-02-09 14:54:59	\N	f	f	NOVUS	\N	\N
-539	\N	\N	Sigifrida Joseph	siggyjoe87@gmail.com	0717173804	\N	free	09-02-2018	12-03-2018	20	0	\N	\N	2018-02-09 13:29:58	2018-02-09 13:29:58	\N	f	f	NOVUS	\N	\N
-538	\N	\N	nusrat hanje	nhanje90@gmail.com	0719644323	\N	free	09-02-2018	12-03-2018	2	0	\N	\N	2018-02-09 12:52:13	2018-02-09 12:52:13	\N	f	f	NOVUS	\N	\N
-537	\N	\N	Aidan Nyamhanga	aidantheonas@gmail.com	0716166843	\N	free	08-02-2018	11-03-2018	800006	0	https://lh3.googleusercontent.com/-t7gaeUny8k4/AAAAAAAAAAI/AAAAAAAADRc/56cRi4QZx3o/photo.jpg	\N	2018-02-08 18:04:11	2018-02-08 18:04:11	\N	f	f	NOVUS	\N	\N
-536	\N	\N	Magge Ngowo	ngowomagge@gmail.com	0713625055	\N	free	08-02-2018	11-03-2018	1	0	\N	\N	2018-02-08 12:52:45	2018-02-08 12:52:45	\N	f	f	NOVUS	\N	\N
-535	\N	\N	yahya ubwa hassan	yahyaubwa@gmail.com	0773144776	\N	free	08-02-2018	11-03-2018	2	0	https://lh4.googleusercontent.com/-bEKu5jE-xuk/AAAAAAAAAAI/AAAAAAAAzsM/tOc1Ha__YM4/photo.jpg	\N	2018-02-08 12:48:19	2018-02-08 12:48:19	\N	f	f	NOVUS	\N	\N
-533	\N	\N	Alex Kinwiko	alexkinwiko15@gmail.com	0755874652	\N	free	07-02-2018	10-03-2018	10	0	\N	\N	2018-02-07 18:35:59	2018-02-07 18:35:59	\N	f	f	NOVUS	\N	\N
-532	\N	\N	Sudi Msuya	sudimsuya@gmail.com	0752525971	\N	free	07-02-2018	10-03-2018	0	0	https://lh4.googleusercontent.com/--O7QxRcJYKU/AAAAAAAAAAI/AAAAAAAAABU/JYBmIRi_ZHo/photo.jpg	\N	2018-02-07 17:55:58	2018-02-07 17:55:58	\N	f	f	NOVUS	\N	\N
-584	255000615318	\N	allyghanim5@gmail.com	allyghanim5@gmail.com	0655524043	\N	premium	09-07-2018	09-07-2019	321	0	\N	\N	2018-02-14 10:50:01	2018-07-09 06:49:44	\N	f	f	Ass. Supervisor	\N	\N
-610	255000029678	\N	victor majenge	victormajenge@gmail.com	0764509966	\N	premium	19-06-2018	19-07-2018	4	0	https://lh3.googleusercontent.com/-z0T65LHYFIA/AAAAAAAAAAI/AAAAAAAAAhM/EciSqqNUvhU/photo.jpg	\N	2018-02-17 10:55:24	2018-06-19 11:49:23	\N	f	f	Manager	\N	\N
-620	255000486655	\N	Tatu Omar	tatuomar27@gmail.com	0777877990	\N	free	19-02-2018	22-03-2018	1	0	\N	\N	2018-02-19 17:10:33	2018-06-07 10:59:35	\N	f	f	Manager	\N	\N
-591	255000607171	\N	Godlisten Estomih	godlistenestomih744@gmail.com	0758955029	\N	free	15-02-2018	18-03-2018	5	0	\N	\N	2018-02-15 08:18:46	2018-06-05 14:54:39	\N	f	f	Ass. Supervisor	\N	\N
-682	\N	\N	Salma Mohammed	salmakassam864@gmail.com	0719987878	\N	free	02-03-2018	02-04-2018	11	0	\N	\N	2018-03-02 16:31:41	2018-03-02 16:31:41	\N	f	f	NOVUS	\N	\N
-659	\N	\N	John wilson	sombawilson@gmail.com	0675348750	\N	free	28-02-2018	31-03-2018	1	0	\N	\N	2018-02-28 09:05:49	2018-02-28 09:05:49	\N	f	f	NOVUS	\N	\N
-658	\N	\N	Eveline Joel	evelinejoeleve@gmail.com	0743281711	\N	free	28-02-2018	31-03-2018	0	0	\N	\N	2018-02-28 08:15:06	2018-02-28 08:15:06	\N	f	f	NOVUS	\N	\N
-653	\N	\N	Joseph Changeka	josephchangeka6@gmail.com	0767502622	\N	free	27-02-2018	30-03-2018	767502622	0	\N	\N	2018-02-27 19:37:08	2018-02-27 19:37:08	\N	f	f	NOVUS	\N	\N
-650	\N	\N	Joseph Josee	josephjosee6@gmail.com	0766477878	\N	free	26-02-2018	29-03-2018	33	0	https://lh5.googleusercontent.com/-5BksDXhRCMo/AAAAAAAAAAI/AAAAAAAAAM0/6k_ihgqyoXI/photo.jpg	\N	2018-02-26 10:46:57	2018-02-26 10:46:57	\N	f	f	NOVUS	\N	\N
-649	\N	\N	Judith Panya	judith.panya@gmail.com	0757682816	\N	free	26-02-2018	29-03-2018	0	0	\N	\N	2018-02-26 10:18:57	2018-02-26 10:18:57	\N	f	f	NOVUS	\N	\N
-648	\N	\N	Rubotha Finihas	rubothafinihas@gmail.com	0752327313	\N	free	26-02-2018	29-03-2018	0	0	\N	\N	2018-02-26 05:45:35	2018-02-26 05:45:35	\N	f	f	NOVUS	\N	\N
-647	\N	\N	Finias Kasulu	finiaskasulu@gmail.com	0752327313	\N	free	26-02-2018	29-03-2018	0	0	\N	\N	2018-02-26 05:39:38	2018-02-26 05:39:38	\N	f	f	NOVUS	\N	\N
-646	\N	\N	Tuma Cholo	tumacholo72@gmail.com	0774678805	\N	free	26-02-2018	29-03-2018	10000	0	\N	\N	2018-02-26 05:09:17	2018-02-26 05:09:17	\N	f	f	NOVUS	\N	\N
-644	\N	\N	wazirihenr60@gmail.com	wazirihenr60@gmail.com	0759113934	\N	free	24-02-2018	27-03-2018	0	0	\N	\N	2018-02-24 14:16:36	2018-02-24 14:16:36	\N	f	f	NOVUS	\N	\N
-643	\N	\N	Saumu Ramadhan	ramadhansaumu21@gmail.com	0773103846	\N	free	24-02-2018	27-03-2018	100	0	\N	\N	2018-02-24 06:25:19	2018-02-24 06:25:19	\N	f	f	NOVUS	\N	\N
-642	\N	\N	Vivian Oforo	vivianoforo@gmail.com	0658639985	\N	free	23-02-2018	26-03-2018	1	0	\N	\N	2018-02-23 18:32:58	2018-02-23 18:32:58	\N	f	f	NOVUS	\N	\N
-640	\N	\N	YESAYA HEZRON	yesayahezron2@gmail.com	0768844593	\N	free	23-02-2018	26-03-2018	1234	1	https://lh4.googleusercontent.com/-6kMoJK2XzKw/AAAAAAAAAAI/AAAAAAAABv4/CzpJiueDCaI/photo.jpg	\N	2018-02-23 10:37:48	2018-02-23 10:37:48	\N	f	f	NOVUS	\N	\N
-639	\N	\N	Naomi mwanjali	naomimwanjali000@gmail.com	0719378282	\N	free	23-02-2018	26-03-2018	7890	0	\N	\N	2018-02-23 09:27:58	2018-02-23 09:27:58	\N	f	f	NOVUS	\N	\N
-637	\N	\N	Edward Mwema	edwardmwema250@gmail.com	0758657030	\N	free	23-02-2018	26-03-2018	758657030	0	https://lh5.googleusercontent.com/-yWD_5ixlWFQ/AAAAAAAAAAI/AAAAAAAAABg/p3I5EMwLp9k/photo.jpg	\N	2018-02-22 21:59:04	2018-02-22 21:59:04	\N	f	f	NOVUS	\N	\N
-636	\N	\N	godg kimaro	godg.kimaro@gmail.com	0782991990	\N	free	22-02-2018	25-03-2018	0	0	\N	\N	2018-02-22 14:53:06	2018-02-22 14:53:06	\N	f	f	NOVUS	\N	\N
-634	\N	\N	Grace Sikaona	grasasikaona1@gmail.com	0713472247	\N	free	22-02-2018	25-03-2018	2	0	\N	\N	2018-02-22 09:53:59	2018-02-22 09:53:59	\N	f	f	NOVUS	\N	\N
-631	\N	\N	Jackson Johnson	jax862@gmail.com	+255764178040	\N	free	21-02-2018	24-03-2018	100	0	\N	\N	2018-02-21 18:19:44	2018-02-21 18:19:44	\N	f	f	NOVUS	\N	\N
-630	\N	\N	Lilian Paul	lilyanpaul1991@gmail.com	0768530983	\N	free	21-02-2018	24-03-2018	0	0	\N	\N	2018-02-21 18:02:38	2018-02-21 18:02:38	\N	f	f	NOVUS	\N	\N
-628	\N	\N	cannan mzito	mzitocn1346@gmail.com	0765166242	\N	free	21-02-2018	24-03-2018	100000	0	\N	\N	2018-02-21 08:08:22	2018-02-21 08:08:22	\N	f	f	NOVUS	\N	\N
-626	\N	\N	Faustine Mlanzi	www.mlanzione@gmail.com	0687866453	\N	free	20-02-2018	23-03-2018	1000000	0	\N	\N	2018-02-20 20:17:14	2018-02-20 20:17:14	\N	f	f	NOVUS	\N	\N
-624	\N	\N	subira juma 12345678	subirajuma26@gmail.com	0657065878	\N	free	20-02-2018	23-03-2018	2	0	\N	\N	2018-02-20 11:06:10	2018-02-20 11:06:10	\N	f	f	NOVUS	\N	\N
-623	\N	\N	Naftal Kisinga	nafkisinga@gmail.com	0784955922	\N	free	20-02-2018	23-03-2018	0	0	\N	\N	2018-02-20 10:17:12	2018-02-20 10:17:12	\N	f	f	NOVUS	\N	\N
-617	\N	\N	lymomary9@gmail.com	lymomary9@gmail.com	0753534393	\N	premium	19-02-2018	21-04-2018	4	0	\N	\N	2018-02-19 11:17:31	2018-02-20 07:10:50	\N	f	f	NOVUS	\N	\N
-622	\N	\N	Humsiya Yasini	humsiya.yasini@gmail.com	0656025577	\N	free	20-02-2018	23-03-2018	2	0	\N	\N	2018-02-20 03:54:10	2018-02-20 03:54:10	\N	f	f	NOVUS	\N	\N
-621	\N	\N	Mohamed Nuraly	mohamednuraly5@gmail.com	0657373825	\N	free	19-02-2018	22-03-2018	5325	0	\N	\N	2018-02-19 19:49:17	2018-02-19 19:49:17	\N	f	f	NOVUS	\N	\N
-619	\N	\N	doris mahene	dmahene95@gmail.com	0711916523	\N	free	19-02-2018	22-03-2018	1	0	\N	\N	2018-02-19 16:36:02	2018-02-19 16:36:02	\N	f	f	NOVUS	\N	\N
-618	\N	\N	Rhyechricious Kim	rhyechricious012@gmail.com	0756930603	\N	free	19-02-2018	22-03-2018	0	0	\N	\N	2018-02-19 12:19:12	2018-02-19 12:19:12	\N	f	f	NOVUS	\N	\N
-616	\N	\N	Felista Machange	felistamachange@gmail.com	0713282039	\N	free	19-02-2018	22-03-2018	8	0	\N	\N	2018-02-19 08:51:38	2018-02-19 08:51:38	\N	f	f	NOVUS	\N	\N
-614	\N	\N	zaninkha semuguruka	zannysemu@gmail.com	0715033204	\N	free	19-02-2018	22-03-2018	2	0	\N	\N	2018-02-19 07:57:11	2018-02-19 07:57:11	\N	f	f	NOVUS	\N	\N
-613	\N	\N	Kephas Opiyo	kephas2020@gmail.com	+255625907989	\N	free	19-02-2018	22-03-2018	1955	0	https://lh4.googleusercontent.com/-XLTYe6wtUlc/AAAAAAAAAAI/AAAAAAAABQ8/kpdgk-PWlcE/photo.jpg	\N	2018-02-19 04:00:28	2018-02-19 04:00:28	\N	f	f	NOVUS	\N	\N
-612	\N	\N	Merick Zala	zalamerick@gmail.com	0620294160	\N	free	18-02-2018	21-03-2018	0	0	\N	\N	2018-02-18 18:46:05	2018-02-18 18:46:05	\N	f	f	NOVUS	\N	\N
-611	\N	\N	NurDin Yussuph	nurdinyussuph@gmail.com	0765100319	\N	free	18-02-2018	21-03-2018	0	0	https://lh3.googleusercontent.com/-OvWeZ3ZOwi4/AAAAAAAAAAI/AAAAAAAAOfE/5pdi6cu6N34/photo.jpg	\N	2018-02-18 10:16:18	2018-02-18 10:16:18	\N	f	f	NOVUS	\N	\N
-609	\N	\N	teddy matasha	teddymatasha@gmail.com	0655443205	\N	free	17-02-2018	20-03-2018	15	0	\N	\N	2018-02-17 10:22:15	2018-02-17 10:22:15	\N	f	f	NOVUS	\N	\N
-608	\N	\N	Evarest Kivaria	evarest1995@gmail.com	+255657464054	\N	free	17-02-2018	20-03-2018	2	0	\N	\N	2018-02-17 08:09:04	2018-02-17 08:09:04	\N	f	f	NOVUS	\N	\N
-607	\N	\N	Dj4s J4	bileaverble@gmail.com	0755252682	\N	free	17-02-2018	20-03-2018	200	0	\N	\N	2018-02-17 04:57:07	2018-02-17 04:57:07	\N	f	f	NOVUS	\N	\N
-606	\N	\N	Fahad Said	fahadalismailiy@gmail.com	0655488358	\N	free	16-02-2018	19-03-2018	419	0	\N	\N	2018-02-16 18:19:16	2018-02-16 18:19:16	\N	f	f	NOVUS	\N	\N
-605	\N	\N	Phina Shao	phinershao.ps@gmail.com	0755183830	\N	free	16-02-2018	19-03-2018	2	0	\N	\N	2018-02-16 16:24:32	2018-02-16 16:24:32	\N	f	f	NOVUS	\N	\N
-604	\N	\N	Baraka Donard	barakadonard.bd@gmail.com	0765266510	\N	free	16-02-2018	19-03-2018	123986	0	https://lh6.googleusercontent.com/-4lEyvfK0xDo/AAAAAAAAAAI/AAAAAAAAADE/Kf4hMzlsIBs/photo.jpg	\N	2018-02-16 14:02:07	2018-02-16 14:02:07	\N	f	f	NOVUS	\N	\N
-615	255000477660	\N	Delvina Augustine-Mfanga	dasmfanga@gmail.com	0767298172	\N	free	19-02-2018	22-03-2018	0	0	https://lh5.googleusercontent.com/-rJO2g8YRZcU/AAAAAAAAAAI/AAAAAAAAANI/eA-Pni8GetA/photo.jpg	\N	2018-02-19 08:16:15	2018-07-06 06:56:29	\N	f	f	Supervisor	\N	\N
-261	255000602341	\N	Christian Mgeyekwa	cmgeyekwa@gmail.com	0754243276	\N	premium	08-06-2018	08-07-2018	2	0	https://lh6.googleusercontent.com/-99EMrL2uSLE/AAAAAAAAAAI/AAAAAAAAAlE/8JtUJCPaSRA/photo.jpg	\N	2017-12-30 07:36:20	2018-06-08 11:01:08	\N	f	f	Ass. Supervisor	\N	\N
-728	\N	\N	kili Apps	creativeprinting360@gmail.com	0754500541	\N	free	10-03-2018	10-04-2018	1	0	https://lh6.googleusercontent.com/-Gt9rXwE09Zg/AAAAAAAAAAI/AAAAAAAAAFg/UnjIugrH-ZQ/photo.jpg	\N	2018-03-10 07:42:07	2018-03-10 07:42:07	\N	f	f	NOVUS	\N	\N
-727	\N	\N	May Lusasi	may615605@gmail.com	0673657357	\N	free	10-03-2018	10-04-2018	2	0	\N	\N	2018-03-09 21:38:42	2018-03-09 21:38:42	\N	f	f	NOVUS	\N	\N
-726	\N	\N	phidelisjesca64@gmail.com	phidelisjesca64@gmail.com	0766727773	\N	free	09-03-2018	09-04-2018	0	0	\N	\N	2018-03-09 14:22:22	2018-03-09 14:22:22	\N	f	f	NOVUS	\N	\N
-725	\N	\N	Jinal Gudhka	jinalgudhka83@gmail.com	0682240283	\N	free	09-03-2018	09-04-2018	2	0	\N	\N	2018-03-09 13:21:44	2018-03-09 13:21:44	\N	f	f	NOVUS	\N	\N
-724	\N	\N	Remigius isdory kazaura	rkazauradoc@gmail.com	0713147899	\N	free	09-03-2018	09-04-2018	11	0	\N	\N	2018-03-09 10:47:54	2018-03-09 10:47:54	\N	f	f	NOVUS	\N	\N
-723	\N	\N	Grace Mlawa (Gee)	lifarda1@gmail.com	+255719868702	\N	free	09-03-2018	09-04-2018	0	0	https://lh6.googleusercontent.com/-9Yze6w3ng_U/AAAAAAAAAAI/AAAAAAAAJVY/fnNcwN3ukF4/photo.jpg	\N	2018-03-09 10:16:46	2018-03-09 10:16:46	\N	f	f	NOVUS	\N	\N
-722	\N	\N	petermuthaura5@gmail.com	petermuthaura5@gmail.com	0705556459	\N	free	09-03-2018	09-04-2018	2	1	\N	\N	2018-03-09 06:24:35	2018-03-09 06:24:35	\N	f	f	NOVUS	\N	\N
-721	\N	\N	Furaha Mganda	mgandafuraha@gmail.com	0783562825	\N	free	08-03-2018	08-04-2018	0	0	\N	\N	2018-03-08 18:29:07	2018-03-08 18:29:07	\N	f	f	NOVUS	\N	\N
-719	\N	\N	JASMINE ABDALLAH	jazzabdallah@gmail.com	0717926099	\N	free	08-03-2018	08-04-2018	556	0	\N	\N	2018-03-08 04:28:26	2018-03-08 04:28:26	\N	f	f	NOVUS	\N	\N
-718	\N	\N	Nancy Samson	mateti56@gmail.com	0687354357	\N	free	07-03-2018	07-04-2018	1	0	https://lh6.googleusercontent.com/-NQO0rCuIkug/AAAAAAAAAAI/AAAAAAAAKEk/FXZ094OeIKQ/photo.jpg	\N	2018-03-07 19:50:13	2018-03-07 19:50:13	\N	f	f	NOVUS	\N	\N
-715	\N	\N	Mawazo Joge	jogemawazo@gmail.com	0719957706	\N	free	07-03-2018	07-04-2018	1234	0	\N	\N	2018-03-07 12:28:51	2018-03-07 12:28:51	\N	f	f	NOVUS	\N	\N
-714	\N	\N	Doroth Mwakyusa	mwakyusad18@gmail.com	0789576511	\N	free	07-03-2018	07-04-2018	2	0	\N	\N	2018-03-07 11:31:01	2018-03-07 11:31:01	\N	f	f	NOVUS	\N	\N
-713	\N	\N	Isaya Mbawala	isayambawala559@gmail.com	0767429697	\N	free	07-03-2018	07-04-2018	2	0	\N	\N	2018-03-07 07:40:26	2018-03-07 07:40:26	\N	f	f	NOVUS	\N	\N
-712	\N	\N	nyillwatts@gmail.com	nyillwatts@gmail.com	0716225025	\N	free	07-03-2018	07-04-2018	1	0	\N	\N	2018-03-07 06:38:54	2018-03-07 06:38:54	\N	f	f	NOVUS	\N	\N
-651	255000506350	\N	Aida Nasrath	kemmyassey@gmail.com	0659086608	\N	premium	10-06-2018	10-07-2018	0	0	https://lh4.googleusercontent.com/-yQW5NbdYufM/AAAAAAAAAAI/AAAAAAAAADw/36MAqpB5DwU/photo.jpg	\N	2018-02-26 21:12:16	2018-07-01 14:29:17	\N	f	f	Ass. Supervisor	\N	\N
-710	\N	\N	Jacqueline Raphael	jacquearaphael@gmail.com	0716704904	\N	free	06-03-2018	06-04-2018	2	0	https://lh6.googleusercontent.com/-Z1IE_HdUYUU/AAAAAAAAAAI/AAAAAAAAAGs/xmWgHnvW11A/photo.jpg	\N	2018-03-06 15:36:37	2018-03-06 15:36:37	\N	f	f	NOVUS	\N	\N
-708	\N	\N	Dereck Naftali	derecknaftali@gmail.com	655127965	\N	free	06-03-2018	06-04-2018	5	0	\N	\N	2018-03-06 08:06:07	2018-03-06 08:06:07	\N	f	f	NOVUS	\N	\N
-707	\N	\N	kelvin kirimi	kelvinkirimi1@gmail.com	0712500686	\N	free	06-03-2018	06-04-2018	0	1	https://lh4.googleusercontent.com/-VuU-vkPQK8U/AAAAAAAAAAI/AAAAAAAAABg/Fb7Vr-wwHYY/photo.jpg	\N	2018-03-06 07:26:41	2018-03-06 07:26:41	\N	f	f	NOVUS	\N	\N
-705	\N	\N	donasian frank	donasianfrank6@gmail.com	0769019112	\N	free	06-03-2018	06-04-2018	2	0	\N	\N	2018-03-06 04:35:13	2018-03-06 04:35:13	\N	f	f	NOVUS	\N	\N
-703	\N	\N	Paldina Raymond	paldinashafuri@gmail.com	0654783187	\N	free	05-03-2018	05-04-2018	2	0	\N	\N	2018-03-05 12:50:03	2018-03-05 12:50:03	\N	f	f	NOVUS	\N	\N
-702	\N	\N	Rose William	www.rosewilliam82@gmail.com	0717798235	\N	free	05-03-2018	05-04-2018	3	0	\N	\N	2018-03-05 11:47:43	2018-03-05 11:47:43	\N	f	f	NOVUS	\N	\N
-701	\N	\N	Julius Mussa	juliusmussa907@gmail.com	0757575704	\N	free	05-03-2018	05-04-2018	100512885455	0	\N	\N	2018-03-05 11:29:24	2018-03-05 11:29:24	\N	f	f	NOVUS	\N	\N
-698	\N	\N	Darius Elias	dariusdvd@gmail.com	769587068	\N	free	05-03-2018	05-04-2018	0	0	https://lh4.googleusercontent.com/-29jiEJRm1PA/AAAAAAAAAAI/AAAAAAAAABo/UXq29xbSQLg/photo.jpg	\N	2018-03-05 05:07:49	2018-03-05 05:07:49	\N	f	f	NOVUS	\N	\N
-694	\N	\N	zaujia mroki	zaujiamroki@gmail.com	0672825917	\N	free	04-03-2018	04-04-2018	0	0	\N	\N	2018-03-04 19:46:58	2018-03-04 19:46:58	\N	f	f	NOVUS	\N	\N
-693	\N	\N	sonah0992@gmail.com	sonah0992@gmail.com	0689714956	\N	free	04-03-2018	04-04-2018	250000	0	\N	\N	2018-03-04 17:52:25	2018-03-04 17:52:25	\N	f	f	NOVUS	\N	\N
-691	\N	\N	Josephine Minja	josephineminja1@gmail.com	0754296813	\N	free	03-03-2018	03-04-2018	3690	0	\N	\N	2018-03-03 17:05:40	2018-03-03 17:05:40	\N	f	f	NOVUS	\N	\N
-690	255000442219	\N	Andrea Muhozya	andre.muhozya@gmail.com	0788366511	\N	premium	03-07-2018	01-01-2019	3	0	https://lh3.googleusercontent.com/-oIwKc_9aA6c/AAAAAAAAAAI/AAAAAAAAiQo/Hc4KJW5bokc/photo.jpg	\N	2018-03-03 15:45:50	2018-07-03 16:07:13	\N	f	f	Supervisor	\N	\N
-689	\N	\N	Ahmed Abdu	ahmedamourabdu@gmail.com	077333383	\N	free	03-03-2018	03-04-2018	1	0	\N	\N	2018-03-03 07:58:39	2018-03-03 07:58:39	\N	f	f	NOVUS	\N	\N
-686	\N	\N	edward john lupasa	tughelepo@gmail.com	+255658318484	\N	free	03-03-2018	03-04-2018	5000000	0	https://lh6.googleusercontent.com/-8KZhcCyDRQY/AAAAAAAAAAI/AAAAAAAAH0o/bmV8n9pU21I/photo.jpg	\N	2018-03-03 03:04:48	2018-03-03 03:04:48	\N	f	f	NOVUS	\N	\N
-685	\N	\N	Abdulsamad Said	swabdulsaghir@gmail.com	0652837606	\N	free	03-03-2018	03-04-2018	568	0	https://lh3.googleusercontent.com/-adPHPsWnpS4/AAAAAAAAAAI/AAAAAAAAADI/Dk5G5_IlSAQ/photo.jpg	\N	2018-03-02 22:32:58	2018-03-02 22:32:58	\N	f	f	NOVUS	\N	\N
-684	\N	\N	Teddy Maurice	teddymaurice111@gmail.com	0762590338	\N	free	02-03-2018	02-04-2018	4	0	\N	\N	2018-03-02 18:55:42	2018-03-02 18:55:42	\N	f	f	NOVUS	\N	\N
-676	\N	\N	Juliana Lawrence	nakietem202@gmail.com	0757123999	\N	free	02-03-2018	02-04-2018	1584	0	\N	\N	2018-03-02 05:08:38	2018-03-02 05:08:38	\N	f	f	NOVUS	\N	\N
-675	\N	\N	Stella Steven	stellasteven849@gmail.com	0713888851	\N	free	02-03-2018	02-04-2018	1	0	\N	\N	2018-03-01 22:15:45	2018-03-01 22:15:45	\N	f	f	NOVUS	\N	\N
-669	\N	\N	Sophie Augustine	augustinesophie20@gmail.com	0713555508	\N	free	01-03-2018	01-04-2018	0	0	\N	\N	2018-03-01 15:25:18	2018-03-01 15:25:18	\N	f	f	NOVUS	\N	\N
-665	\N	\N	Frank Makubi	frank1makubi@gmail.com	0786225429	\N	free	01-03-2018	01-04-2018	0	0	\N	\N	2018-03-01 13:12:10	2018-03-01 13:12:10	\N	f	f	NOVUS	\N	\N
-664	\N	\N	Raphia Kimaro	raphiakimaro@gmail.com	0753174107	\N	free	01-03-2018	01-04-2018	25	0	https://lh3.googleusercontent.com/-fymwbR2bVBo/AAAAAAAAAAI/AAAAAAAAAA4/JBoTbZd8GIY/photo.jpg	\N	2018-03-01 12:18:02	2018-03-01 12:18:02	\N	f	f	NOVUS	\N	\N
-663	\N	\N	Dativa Herman	dativaherman@gmail.com	0656351553	\N	free	28-02-2018	31-03-2018	0	0	\N	\N	2018-02-28 19:45:55	2018-02-28 19:45:55	\N	f	f	NOVUS	\N	\N
-711	255200019266	\N	Lilian Omune	lilianomune@gmail.com	0652856708	\N	free	06-03-2018	06-04-2018	3	0	\N	\N	2018-03-06 16:19:22	2018-06-30 11:04:53	\N	f	f	Ass. Supervisor	\N	\N
-688	254200011769	\N	emmanuel bota	emmanuelbota20@gmail.com	0724299718	\N	free	03-03-2018	03-04-2018	0	1	https://lh5.googleusercontent.com/-RiulBGYM3ag/AAAAAAAAAAI/AAAAAAAAAgo/t0LwTEDeo7c/photo.jpg	\N	2018-03-03 05:30:11	2018-07-03 19:31:17	\N	f	f	Supervisor	\N	\N
-738	255200018672	\N	Martha Luena	marthaluena62@gmail.com	0717602248	\N	free	12-03-2018	12-04-2018	4	0	\N	\N	2018-03-12 14:20:14	2018-06-07 07:39:39	\N	f	f	Ass. Supervisor	\N	\N
-709	255000584504	\N	Faraja Sanga I	farajasang@gmail.com	0762010334	\N	free	06-03-2018	06-04-2018	120	0	\N	\N	2018-03-06 12:16:46	2018-06-06 17:41:20	\N	f	f	Ass. Supervisor	\N	\N
-735	255000591798	\N	JULIUS SOHONEKI	juliussohonek@gmail.com	0767478247	\N	free	11-03-2018	11-04-2018	4	0	\N	\N	2018-03-11 18:25:13	2018-06-06 07:29:44	\N	f	f	Novus	\N	\N
-740	255200018724	\N	Twitike Bertha	twitikebertha@gmail.com	0755649317	\N	premium	12-03-2018	07-04-2019	201	0	\N	\N	2018-03-12 15:51:05	2018-06-05 15:16:25	\N	f	f	Ass. Supervisor	\N	\N
-770	\N	\N	Anna Simon	isackanna39@gmail.com	0766363964	\N	premium	19-03-2018	19-05-2018	472	0	https://lh6.googleusercontent.com/-KggFzwcegms/AAAAAAAAAAI/AAAAAAAAACU/TDlPdGZBF4g/photo.jpg	\N	2018-03-19 12:44:16	2018-03-25 14:49:31	\N	f	f	NOVUS	\N	\N
-778	\N	\N	Zakaria Rulangaranga	zakariarulangaranga@gmail.com	0787269067	\N	free	21-03-2018	21-04-2018	0	0	\N	\N	2018-03-21 10:03:34	2018-03-21 10:03:34	\N	f	f	NOVUS	\N	\N
-777	\N	\N	Dorothea Laiser	dorothealaiser@gmail.com	0713944226	\N	free	21-03-2018	21-04-2018	120	0	\N	\N	2018-03-21 06:32:13	2018-03-21 06:32:13	\N	f	f	NOVUS	\N	\N
-775	\N	\N	ally Hamisi	allyseleman02@gmail.com	0654904821	\N	free	20-03-2018	20-04-2018	3	0	https://lh6.googleusercontent.com/-0D6qbbpGOgM/AAAAAAAAAAI/AAAAAAAAABY/xhesZ8XbHOU/photo.jpg	\N	2018-03-20 08:21:05	2018-03-20 08:21:05	\N	f	f	NOVUS	\N	\N
-774	\N	\N	Naomi Chege	naomichege68@gmail.com	0701508616	\N	free	20-03-2018	20-04-2018	2	1	\N	\N	2018-03-20 08:02:25	2018-03-20 08:02:25	\N	f	f	NOVUS	\N	\N
-773	\N	\N	Gloria Boniface	glorygepf@gmail.com	0767529542	\N	free	20-03-2018	20-04-2018	0	0	\N	\N	2018-03-20 06:07:19	2018-03-20 06:07:19	\N	f	f	NOVUS	\N	\N
-772	\N	\N	Shija Jilala	shijajilala8@gmail.com	0756922949	\N	free	20-03-2018	20-04-2018	3	0	\N	\N	2018-03-20 05:12:30	2018-03-20 05:12:30	\N	f	f	NOVUS	\N	\N
-771	\N	\N	ROSEMARY KATABALO	rosemarykatabalo@gmail.com	0655027402	\N	free	19-03-2018	19-04-2018	35	0	\N	\N	2018-03-19 18:49:20	2018-03-19 18:49:20	\N	f	f	NOVUS	\N	\N
-767	\N	\N	Maggie Machilu	maggiemachilu11@gmail.com	0784414283	\N	free	19-03-2018	19-04-2018	1	0	\N	\N	2018-03-19 08:32:09	2018-03-19 08:32:09	\N	f	f	NOVUS	\N	\N
-766	\N	\N	Method Mwashambwa	methodmwashambwa38@gmail.com	0755474137	\N	free	19-03-2018	19-04-2018	755474137	0	\N	\N	2018-03-19 07:27:49	2018-03-19 07:27:49	\N	f	f	NOVUS	\N	\N
-765	\N	\N	Claudia Silayo	claudia201046@gmail.com	0766852167	\N	free	19-03-2018	19-04-2018	250	0	https://lh6.googleusercontent.com/-__8T93ooaqI/AAAAAAAAAAI/AAAAAAAAABI/PYr5J-pKafI/photo.jpg	\N	2018-03-19 04:06:27	2018-03-19 04:06:27	\N	f	f	NOVUS	\N	\N
-764	\N	\N	Matelefu Sales	matelefusales@gmail.com	0628177770	\N	free	18-03-2018	18-04-2018	10	0	\N	\N	2018-03-18 18:38:25	2018-03-18 18:38:25	\N	f	f	NOVUS	\N	\N
-763	\N	\N	Matilda Minde	matildaminde5@gmail.com	0685534478	\N	free	18-03-2018	18-04-2018	4	0	\N	\N	2018-03-18 18:12:16	2018-03-18 18:12:16	\N	f	f	NOVUS	\N	\N
-762	\N	\N	Zahra Said Majili	majilizahra11@gmail.com	255785100409	\N	free	18-03-2018	18-04-2018	1	0	\N	\N	2018-03-18 10:57:18	2018-03-18 10:57:18	\N	f	f	NOVUS	\N	\N
-761	\N	\N	Neema Lulomba	neemalivingstone89@gmail.com	0755254734	\N	free	18-03-2018	18-04-2018	5	0	\N	\N	2018-03-18 06:07:28	2018-03-18 06:07:28	\N	f	f	NOVUS	\N	\N
-759	\N	\N	Meck Ngongi	meckngongi86@gmail.com	0769034170	\N	free	17-03-2018	17-04-2018	4	0	\N	\N	2018-03-17 12:05:27	2018-03-17 12:05:27	\N	f	f	NOVUS	\N	\N
-757	\N	\N	Emiliana Aristides	emilianaaristides@gmail.com	0658853085	\N	free	16-03-2018	16-04-2018	0	0	\N	\N	2018-03-16 13:59:08	2018-03-16 13:59:08	\N	f	f	NOVUS	\N	\N
-756	\N	\N	janeth nimrod	janethnimrod28@gmail.com	0688121308	\N	free	16-03-2018	16-04-2018	0	0	\N	\N	2018-03-16 13:37:25	2018-03-16 13:37:25	\N	f	f	NOVUS	\N	\N
-755	\N	\N	Funga Mwabha	fungamwabhaa@gmail.com	0768565085	\N	free	16-03-2018	16-04-2018	2	0	\N	\N	2018-03-16 08:23:13	2018-03-16 08:23:13	\N	f	f	NOVUS	\N	\N
-753	\N	\N	Paul Penforde Jotham	paulpenfordjotham@gmail.com	0677730658	\N	free	16-03-2018	16-04-2018	1	0	https://lh3.googleusercontent.com/-LC9PC4igFd8/AAAAAAAAAAI/AAAAAAAAGFI/REX8S2ntHdE/photo.jpg	\N	2018-03-15 21:14:01	2018-03-15 21:14:01	\N	f	f	NOVUS	\N	\N
-752	\N	\N	greatness kimaro	greatnesskimaro@gmail.com	0767819159	\N	free	15-03-2018	15-04-2018	2	0	\N	\N	2018-03-15 18:15:28	2018-03-15 18:15:28	\N	f	f	NOVUS	\N	\N
-751	\N	\N	Nelson Ntabaye	ntabayenelson@gmail.com	0717647134	\N	free	15-03-2018	15-04-2018	0	0	\N	\N	2018-03-15 12:45:15	2018-03-15 12:45:15	\N	f	f	NOVUS	\N	\N
-749	\N	\N	REBECCA JOSEPH	beckyrebby96@gmail.com	0743044076	\N	free	15-03-2018	15-04-2018	1	0	https://lh5.googleusercontent.com/-XcWN0L_35w0/AAAAAAAAAAI/AAAAAAAAABI/sy9TQw2QcNE/photo.jpg	\N	2018-03-14 22:18:43	2018-03-14 22:18:43	\N	f	f	NOVUS	\N	\N
-748	\N	\N	Philip Joseph	phpjsp09@gmail.com	+255742164621	\N	free	14-03-2018	14-04-2018	10	0	https://lh5.googleusercontent.com/-UpNFnlAgnHY/AAAAAAAAAAI/AAAAAAAAB5I/w71551BGwFo/photo.jpg	\N	2018-03-14 19:27:05	2018-03-14 19:27:05	\N	f	f	NOVUS	\N	\N
-745	\N	\N	Ester Makela	makelaester@gmail.com	0755198838	\N	free	14-03-2018	14-04-2018	0	0	\N	\N	2018-03-14 05:56:32	2018-03-14 05:56:32	\N	f	f	NOVUS	\N	\N
-744	\N	\N	Zedmill Emlogo	zedmillemlogo95@gmail.com	0785058841	\N	free	13-03-2018	13-04-2018	2	0	https://lh5.googleusercontent.com/-CxuKiXNWpF8/AAAAAAAAAAI/AAAAAAAAAA8/LNl6nAwog8U/photo.jpg	\N	2018-03-13 15:41:26	2018-03-13 15:41:26	\N	f	f	NOVUS	\N	\N
-687	\N	\N	Bertha Peter	jayden2014.bp@gmail.com	+255767211507	\N	premium	03-03-2018	03-05-2018	0	0	\N	\N	2018-03-03 04:56:22	2018-03-13 13:48:01	\N	f	f	NOVUS	\N	\N
-743	\N	\N	As Lady Cute	ashasaidy200@gmail.com	0764933024	\N	free	13-03-2018	13-04-2018	2	0	https://lh5.googleusercontent.com/-msBDTt0DrWQ/AAAAAAAAAAI/AAAAAAAAABE/Oz47mej9XKY/photo.jpg	\N	2018-03-13 12:25:41	2018-03-13 12:25:41	\N	f	f	NOVUS	\N	\N
-742	\N	\N	Margaret Makenzi	momakenzi@gmail.com	0722347625	\N	free	13-03-2018	13-04-2018	200	1	\N	\N	2018-03-13 12:18:15	2018-03-13 12:18:15	\N	f	f	NOVUS	\N	\N
-741	\N	\N	Frank John	fj9397981@gmail.com	0675366965	\N	free	12-03-2018	12-04-2018	1997	0	\N	\N	2018-03-12 19:44:30	2018-03-12 19:44:30	\N	f	f	NOVUS	\N	\N
-739	\N	\N	robert gitonga	robatosh42@gmail.com	0711291223	\N	free	12-03-2018	12-04-2018	0	1	https://lh5.googleusercontent.com/-3q3WJOv7-kY/AAAAAAAAAAI/AAAAAAAAADA/_H-6SIABbXk/photo.jpg	\N	2018-03-12 15:06:29	2018-03-12 15:06:29	\N	f	f	NOVUS	\N	\N
-737	\N	\N	Mbuva Dissa	mbuvadissa95@gmail.com	0714647548	\N	free	12-03-2018	12-04-2018	5	0	\N	\N	2018-03-12 04:58:52	2018-03-12 04:58:52	\N	f	f	NOVUS	\N	\N
-736	\N	\N	Even Zumba	zumbaeven8@gmail.com	0711336052	\N	free	12-03-2018	12-04-2018	0	0	\N	\N	2018-03-12 01:02:12	2018-03-12 01:02:12	\N	f	f	NOVUS	\N	\N
-731	\N	\N	Naomi Zablon	naomizablon@gmail.com	0782574392	\N	free	11-03-2018	11-04-2018	0	0	https://lh5.googleusercontent.com/-DIlOMVPOsrk/AAAAAAAAAAI/AAAAAAAAG3s/5t7gbhXqSls/photo.jpg	\N	2018-03-11 05:42:06	2018-03-11 05:42:06	\N	f	f	NOVUS	\N	\N
-730	\N	\N	alice martin	alicemartin240@gmail.com	0757141122	\N	free	10-03-2018	10-04-2018	0	0	\N	\N	2018-03-10 14:11:42	2018-03-10 14:11:42	\N	f	f	NOVUS	\N	\N
-754	255200019877	\N	Paschal Mwaipungu	paschalmwaipungu26@gmail.com	0763122458	\N	free	16-03-2018	16-04-2018	1	0	https://lh4.googleusercontent.com/-sWWknir6mYw/AAAAAAAAAAI/AAAAAAAAAQU/SkDqj_H3ZPk/photo.jpg	\N	2018-03-16 08:21:44	2018-06-30 20:11:49	\N	f	f	Ass. Supervisor	\N	\N
-784	255000284832	\N	wende Pancho	sampancho79@gmail.com	0716455386	\N	free	22-03-2018	22-04-2018	5	0	\N	\N	2018-03-22 08:49:05	2018-06-12 07:19:08	\N	f	f	Supervisor	\N	\N
-850	255000527431	\N	HABESH MAN	habeshman4@gmail.com	0758907148	\N	premium	08-06-2018	08-07-2018	4	0	\N	\N	2018-04-05 14:56:34	2018-06-08 09:46:17	\N	f	f	Ass. Supervisor	\N	\N
-823	\N	\N	mbuga isaya	lovehollo1945@gmail.com	0683190267	\N	free	29-03-2018	29-04-2018	0	0	\N	\N	2018-03-29 18:27:19	2018-03-29 18:27:19	\N	f	f	NOVUS	\N	\N
-822	\N	\N	Elizabeth Sinodya	elizabethsinodya87@gmail.com	0766021646	\N	free	29-03-2018	29-04-2018	2	0	\N	\N	2018-03-29 15:42:45	2018-03-29 15:42:45	\N	f	f	NOVUS	\N	\N
-821	\N	\N	Jonah Gikaru	jonahgikaru@gmail.com	0724924700	\N	free	29-03-2018	29-04-2018	750	1	\N	\N	2018-03-29 15:26:36	2018-03-29 15:26:36	\N	f	f	NOVUS	\N	\N
-820	\N	\N	Baheart Kundya	kundyab@gmail.com	0764222758	\N	free	29-03-2018	29-04-2018	946	0	\N	\N	2018-03-29 13:05:00	2018-03-29 13:05:00	\N	f	f	NOVUS	\N	\N
-818	\N	\N	upendo naftali	pendonaftali@gmail.com	0765735930	\N	free	29-03-2018	29-04-2018	25	0	\N	\N	2018-03-29 09:51:44	2018-03-29 09:51:44	\N	f	f	NOVUS	\N	\N
-817	\N	\N	MARIACONSOLATA WAPALILA	consowap@gmail.com	+255787376278	\N	free	29-03-2018	29-04-2018	1	0	\N	\N	2018-03-29 09:30:58	2018-03-29 09:30:58	\N	f	f	NOVUS	\N	\N
-816	\N	\N	Mkami Wambura	mkami873@gmail.com	0746146847	\N	free	29-03-2018	29-04-2018	0	0	\N	\N	2018-03-29 00:04:27	2018-03-29 00:04:27	\N	f	f	NOVUS	\N	\N
-815	\N	\N	jecy muthoni	muhiajecy@gmail.com	0721290057	\N	free	28-03-2018	28-04-2018	75	1	https://lh4.googleusercontent.com/-RBdcm6r948c/AAAAAAAAAAI/AAAAAAAAABM/-uyK4_p8MIg/photo.jpg	\N	2018-03-28 13:42:23	2018-03-28 13:42:23	\N	f	f	NOVUS	\N	\N
-814	\N	\N	Castor Mkabe	kombacastor06@gmail.com	+255757311154	\N	free	28-03-2018	28-04-2018	0	0	https://lh6.googleusercontent.com/-ncrYOCLF56A/AAAAAAAAAAI/AAAAAAAAHHU/xLPiKq53quk/photo.jpg	\N	2018-03-28 13:07:21	2018-03-28 13:07:21	\N	f	f	NOVUS	\N	\N
-813	\N	\N	Catherine Naboth, Ndelwa	cndelwa@gmail.com	0655981822	\N	free	28-03-2018	28-04-2018	0	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABECIP66sv-6arzwwEiC3ZjYXJkX3Bob3RvKigyZGQwZGE3ODZiMzVlMWExZjZiODU0OWExMjdkZDcwNDI4YTBmN2ZiMAHjeWbCIlBGHYS4T8hVHs8_5R7YeQ	\N	2018-03-28 12:20:09	2018-03-28 12:20:09	\N	f	f	NOVUS	\N	\N
-812	\N	\N	Iya Mohamedi	iyamohamedi02@gmail.com	0659869821	\N	free	28-03-2018	28-04-2018	4	0	\N	\N	2018-03-28 07:22:00	2018-03-28 07:22:00	\N	f	f	NOVUS	\N	\N
-808	\N	\N	Mohd Kiyumbo	mohdkiyumbo24@gmail.com	+255657698524	\N	free	28-03-2018	28-04-2018	2	0	\N	\N	2018-03-27 22:42:14	2018-03-27 22:42:14	\N	f	f	NOVUS	\N	\N
-807	\N	\N	Fortina Kahimba	fortinakahimba71@gmail.com	0752188678	\N	free	27-03-2018	27-04-2018	10	0	\N	\N	2018-03-27 18:39:37	2018-03-27 18:39:37	\N	f	f	NOVUS	\N	\N
-806	\N	\N	Salumu Rashidi	salumurashidi050@gmail.com	0785488057	\N	free	27-03-2018	27-04-2018	2	0	\N	\N	2018-03-27 15:04:28	2018-03-27 15:04:28	\N	f	f	NOVUS	\N	\N
-805	\N	\N	Rama Katuzo	ramakatuzo18@gmail.com	0713004865	\N	free	27-03-2018	27-04-2018	10	0	\N	\N	2018-03-27 12:56:10	2018-03-27 12:56:10	\N	f	f	NOVUS	\N	\N
-804	\N	\N	Neema Fungo	neemafungo423@gmail.com	0752349338	\N	free	27-03-2018	27-04-2018	1	0	\N	\N	2018-03-27 12:35:53	2018-03-27 12:35:53	\N	f	f	NOVUS	\N	\N
-802	\N	\N	Charloh Charplin	charlohcharplin@gmail.com	0743407797	\N	free	26-03-2018	26-04-2018	100	1	\N	\N	2018-03-26 20:16:15	2018-03-26 20:16:15	\N	f	f	NOVUS	\N	\N
-801	\N	\N	Maua Donat	mauadonat47@gmail.com	+255752883265	\N	free	26-03-2018	26-04-2018	1	0	\N	\N	2018-03-26 07:22:57	2018-03-26 07:22:57	\N	f	f	NOVUS	\N	\N
-800	\N	\N	Darius Rwambibi	drwambibi09@gmail.com	0766095094	\N	free	26-03-2018	26-04-2018	2	0	\N	\N	2018-03-26 06:54:33	2018-03-26 06:54:33	\N	f	f	NOVUS	\N	\N
-799	\N	\N	Zephaniah Apiyo	www.zephaniahapiyo@gmail.com	0765914274	\N	free	25-03-2018	25-04-2018	300000	0	\N	\N	2018-03-25 19:23:43	2018-03-25 19:23:43	\N	f	f	NOVUS	\N	\N
-798	\N	\N	Lillian Urassa	lillianurassa13@gmail.com	0713030363	\N	free	25-03-2018	25-04-2018	2	0	\N	\N	2018-03-25 18:33:08	2018-03-25 18:33:08	\N	f	f	NOVUS	\N	\N
-198	\N	\N	Mwajuma Lwaba	mwajumalwaba28@gmail.com	0718278278	\N	premium	15-03-2018	11-09-2018	62249	0	\N	\N	2017-12-18 19:18:42	2018-03-25 14:47:46	\N	f	f	NOVUS	\N	\N
-768	\N	\N	Malongo Eva	malongoeva@gmail.com	0622650083	\N	premium	19-03-2018	19-05-2018	4	0	https://lh4.googleusercontent.com/-R-uL--9-hJI/AAAAAAAAAAI/AAAAAAAAAhw/z1GX4BNW5cQ/photo.jpg	\N	2018-03-19 09:09:18	2018-03-25 14:47:29	\N	f	f	NOVUS	\N	\N
-797	\N	\N	Jafari Namtima	namtimajk123@gmail.com	0676029497	\N	premium	25-03-2018	22-10-2018	2	0	\N	\N	2018-03-25 14:26:35	2018-03-25 14:34:34	\N	f	f	NOVUS	\N	\N
-796	\N	\N	Edson Kamala	kamalaedso@gmail.com	0762814505	\N	free	25-03-2018	25-04-2018	25	0	https://lh3.googleusercontent.com/-WWmb4ETE5CY/AAAAAAAAAAI/AAAAAAAALAk/QhbF1L9DriE/photo.jpg	\N	2018-03-25 09:25:32	2018-03-25 09:25:32	\N	f	f	NOVUS	\N	\N
-795	\N	\N	Mohammed Wazir	mwazir95@gmail.com	0773321484	\N	free	24-03-2018	24-04-2018	2	0	\N	\N	2018-03-24 14:28:49	2018-03-24 14:28:49	\N	f	f	NOVUS	\N	\N
-794	\N	\N	Constancia Kavishe	constanciakavishe@gmail.com	0753776425	\N	free	24-03-2018	24-04-2018	1	0	\N	\N	2018-03-24 13:02:33	2018-03-24 13:02:33	\N	f	f	NOVUS	\N	\N
-793	\N	\N	Oscar Mwenda	oscarmwenda3@gmail.com	0768310571	\N	free	24-03-2018	24-04-2018	4	0	\N	\N	2018-03-24 08:21:05	2018-03-24 08:21:05	\N	f	f	NOVUS	\N	\N
-791	\N	\N	mvile Samuel	samuelmvile500@gmail.com	0752258480	\N	free	24-03-2018	24-04-2018	1665	0	https://lh4.googleusercontent.com/-0Jh25TQ_Jys/AAAAAAAAAAI/AAAAAAAAAAo/Nc5VVuDFrtw/photo.jpg	\N	2018-03-24 04:28:49	2018-03-24 04:28:49	\N	f	f	NOVUS	\N	\N
-789	\N	\N	Najira Chambiri	najirachambiri2014@gmail.com	0767443109	\N	free	23-03-2018	23-04-2018	799	0	https://lh5.googleusercontent.com/-16r9WXO4-HQ/AAAAAAAAAAI/AAAAAAAAQws/ly1CgQfRC7s/photo.jpg	\N	2018-03-23 10:11:13	2018-03-23 10:11:13	\N	f	f	NOVUS	\N	\N
-786	\N	\N	Omega Mrema	mremaomega12@gmail.com	0767576176	\N	free	22-03-2018	22-04-2018	2	0	\N	\N	2018-03-22 15:18:27	2018-03-22 15:18:27	\N	f	f	NOVUS	\N	\N
-785	\N	\N	Joseph Kwimba	josephkwimba08@gmail.com	0713592428	\N	free	22-03-2018	22-04-2018	1	0	\N	\N	2018-03-22 08:54:45	2018-03-22 08:54:45	\N	f	f	NOVUS	\N	\N
-783	255200014203	\N	Gasper Mwamkinga	mwamkinga1993@gmail.com	0657738330	\N	premium	30-06-2018	29-12-2018	3438	0	https://lh4.googleusercontent.com/-zj6O5Zm3gmg/AAAAAAAAAAI/AAAAAAAAAAc/V9YQDGYLz9Y/photo.jpg	\N	2018-03-22 08:47:45	2018-06-30 08:50:52	\N	f	f	Ass. Supervisor	\N	\N
-782	\N	\N	Zuhura Moustapha	zealouskaylaty@gmail.com	0718854518	\N	free	22-03-2018	22-04-2018	555	0	https://lh6.googleusercontent.com/-Uz2OSP8zQo8/AAAAAAAAAAI/AAAAAAAAAXE/1l4bjCJvsqc/photo.jpg	\N	2018-03-22 06:53:44	2018-03-22 06:53:44	\N	f	f	NOVUS	\N	\N
-781	\N	\N	Noel jrt	tobiasnjunwa@gmail.com	0653142263	\N	free	22-03-2018	22-04-2018	0	0	https://lh4.googleusercontent.com/-BTutYEUDQBE/AAAAAAAAAAI/AAAAAAAACdo/-vPEed0506E/photo.jpg	\N	2018-03-22 05:05:33	2018-03-22 05:05:33	\N	f	f	NOVUS	\N	\N
-780	\N	\N	Ackxa Herman	ackxaherman@gmail.com	0758312305	\N	free	21-03-2018	21-04-2018	255200019947	0	https://lh5.googleusercontent.com/-uPFVJRU8Lzg/AAAAAAAAAAI/AAAAAAAAAAo/SkLdrybBVNI/photo.jpg	\N	2018-03-21 18:58:02	2018-03-21 18:58:02	\N	f	f	NOVUS	\N	\N
-779	\N	\N	Noel Maarufu	maarufunoel@gmail.com	076951054*	\N	free	21-03-2018	21-04-2018	1	0	https://lh5.googleusercontent.com/-ssSgAk_5GSQ/AAAAAAAAAAI/AAAAAAAAAD8/BI5uXeL9m_g/photo.jpg	\N	2018-03-21 17:02:46	2018-03-21 17:02:46	\N	f	f	NOVUS	\N	\N
-788	255000463688	\N	Philipo Abihudi	pabihudi@gmail.com	0759595959	\N	free	23-03-2018	23-04-2018	0	0	https://lh4.googleusercontent.com/-K_bn4ufajgs/AAAAAAAAAAI/AAAAAAAAAEc/p0-IGgbPYgk/photo.jpg	\N	2018-03-23 05:47:38	2018-07-05 05:40:24	\N	f	f	Supervisor	\N	\N
-811	255000490534	\N	Ada Dangwa	adahpeterdangwa@gmail.com	0714560991	\N	premium	19-06-2018	19-07-2018	0	0	\N	\N	2018-03-28 06:55:03	2018-06-19 11:45:06	\N	f	f	Manager	\N	\N
-809	255000625256	\N	Wilfred Kipondya	wkipondya@gmail.com	0766687392	\N	free	28-03-2018	28-04-2018	0	0	\N	\N	2018-03-28 05:29:04	2018-06-11 04:19:23	\N	f	f	Ass. Supervisor	\N	\N
-803	255000306547	\N	Veronica Ndaki	verondaki@gmail.com	0715555540	\N	free	27-03-2018	27-04-2018	2	0	\N	\N	2018-03-27 09:53:10	2018-06-07 09:04:00	\N	f	f	Supervisor	\N	\N
-903	\N	\N	Yusufu Salumu	yusufusalumu9@gmail.com	0716427069	\N	free	09-04-2018	10-05-2018	1234	0	\N	\N	2018-04-09 20:42:14	2018-04-09 20:42:14	\N	f	f	NOVUS	\N	\N
-902	\N	\N	teshaelizabeth92@gmail.com	teshaelizabeth92@gmail.com	0716842193	\N	free	09-04-2018	10-05-2018	0	0	\N	\N	2018-04-09 19:39:37	2018-04-09 19:39:37	\N	f	f	NOVUS	\N	\N
-901	255000543566	\N	DESDELIUS KAYUMBE	2012dfkayumbe@gmail.com	0769761297	\N	premium	07-07-2018	06-08-2018	0	0	https://lh6.googleusercontent.com/-N-VEsD-PTt0/AAAAAAAAAAI/AAAAAAAAAMA/Novfq_CJwE0/photo.jpg	\N	2018-04-09 13:52:17	2018-07-07 09:25:20	\N	f	f	Ass. Supervisor	\N	\N
-900	\N	\N	Agnes Kuratha	anyesi2004@gmail.com	+255756218300	\N	free	09-04-2018	10-05-2018	4	0	https://lh3.googleusercontent.com/-ifR3Fl01Nm0/AAAAAAAAAAI/AAAAAAAAABQ/h3FppZCWz5I/photo.jpg	\N	2018-04-09 11:46:49	2018-04-09 11:46:49	\N	f	f	NOVUS	\N	\N
-899	\N	\N	Jacqueline Wilfred	tongaliz2737@gmail.com	0712482737	\N	free	08-04-2018	09-05-2018	34	0	\N	\N	2018-04-08 13:01:25	2018-04-08 13:01:25	\N	f	f	NOVUS	\N	\N
-897	\N	\N	Hosiana Mushi	hosywangu@gmail.com	0752612542	\N	free	07-04-2018	08-05-2018	1234	0	https://lh6.googleusercontent.com/-853_H-3oPvE/AAAAAAAAAAI/AAAAAAAABE8/WQQ2g3sktRg/photo.jpg	\N	2018-04-07 18:43:54	2018-04-07 18:43:54	\N	f	f	NOVUS	\N	\N
-895	\N	\N	Shaaban Munsinsa	shaabanmuns@gmail.com	0718610144	\N	free	07-04-2018	08-05-2018	4	0	\N	\N	2018-04-07 16:34:45	2018-04-07 16:34:45	\N	f	f	NOVUS	\N	\N
-894	\N	\N	Naelijwa Mndeme	mndemenaelijwa97@gmail.com	0786241820	\N	free	07-04-2018	08-05-2018	4	0	\N	\N	2018-04-07 15:09:56	2018-04-07 15:09:56	\N	f	f	NOVUS	\N	\N
-893	\N	\N	Amana Ali	amanaalli92@gmail.com	0773897527	\N	free	07-04-2018	08-05-2018	2	0	\N	\N	2018-04-07 05:35:28	2018-04-07 05:35:28	\N	f	f	NOVUS	\N	\N
-891	\N	\N	haika mero	haikamero@gmail.com	0755648294	\N	free	06-04-2018	07-05-2018	2	0	https://lh3.googleusercontent.com/-PPP_n5dB9XQ/AAAAAAAAAAI/AAAAAAAAAWY/Zl__lyPBwb0/photo.jpg	\N	2018-04-06 19:41:00	2018-04-06 19:41:00	\N	f	f	NOVUS	\N	\N
-858	\N	\N	Glory Sanga	promise54.gs@gmail.com	0766907760	\N	free	06-04-2018	07-05-2018	0	0	https://lh4.googleusercontent.com/-GZfI-DNpbKE/AAAAAAAAAAI/AAAAAAAACcQ/ECn3hzkGSGA/photo.jpg	\N	2018-04-06 16:06:14	2018-04-06 16:06:14	\N	f	f	NOVUS	\N	\N
-857	\N	\N	Grace Buyamba	buyambagrace@gmail.com	0754813872	\N	free	06-04-2018	07-05-2018	25	0	\N	\N	2018-04-06 13:16:21	2018-04-06 13:16:21	\N	f	f	NOVUS	\N	\N
-856	\N	\N	Miryam Kissawike	miryamkissawike@gmail.com	0763070434	\N	free	06-04-2018	07-05-2018	2	0	\N	\N	2018-04-06 12:36:44	2018-04-06 12:36:44	\N	f	f	NOVUS	\N	\N
-855	\N	\N	PRISCILLA ABRAHAM	priscillahabraham@gmail.com	0655428886	\N	free	06-04-2018	07-05-2018	1734	0	\N	\N	2018-04-06 12:29:57	2018-04-06 12:29:57	\N	f	f	NOVUS	\N	\N
-854	\N	\N	Chidy Boy	chidyboy372@gmail.com	0692405144	\N	free	06-04-2018	07-05-2018	12	0	https://lh6.googleusercontent.com/-SVecnLUHXzo/AAAAAAAAAAI/AAAAAAAAACo/kdbf_mc24zs/photo.jpg	\N	2018-04-06 09:10:03	2018-04-06 09:10:03	\N	f	f	NOVUS	\N	\N
-853	\N	\N	Mti Juma	mtijuma1@gmail.com	0657080296	\N	free	06-04-2018	07-05-2018	1	0	\N	\N	2018-04-06 09:01:39	2018-04-06 09:01:39	\N	f	f	NOVUS	\N	\N
-852	\N	\N	Sarha Rashid	sarharashid68@gmail.com	0689284852	\N	free	05-04-2018	06-05-2018	2	0	\N	\N	2018-04-05 17:42:27	2018-04-05 17:42:27	\N	f	f	NOVUS	\N	\N
-851	\N	\N	Alferio Tarimo	alferiotarimo200@gmail.com	0659129499	\N	free	05-04-2018	06-05-2018	12	0	\N	\N	2018-04-05 16:42:35	2018-04-05 16:42:35	\N	f	f	NOVUS	\N	\N
-849	\N	\N	MATHIAS MAHINGULE SAMWEL	matmahisa@gmail.com	0757953845	\N	free	05-04-2018	06-05-2018	2	0	\N	\N	2018-04-05 11:31:55	2018-04-05 11:31:55	\N	f	f	NOVUS	\N	\N
-848	\N	\N	Johnny Lyander	johnnylyander@gmail.com	0715726559	\N	free	05-04-2018	06-05-2018	2	0	\N	\N	2018-04-05 06:57:31	2018-04-05 06:57:31	\N	f	f	NOVUS	\N	\N
-847	\N	\N	Man Viruc	acramfabregas10@gmail.com	0714570139	\N	free	05-04-2018	06-05-2018	1010	0	\N	\N	2018-04-04 21:20:58	2018-04-04 21:20:58	\N	f	f	NOVUS	\N	\N
-846	\N	\N	Phina Mambile	phinamambile@gmail.com	0757281893	\N	free	04-04-2018	05-05-2018	5	0	https://lh6.googleusercontent.com/-exnrTkd5NXA/AAAAAAAAAAI/AAAAAAAAAAo/KXvooKj3bw4/photo.jpg	\N	2018-04-04 14:34:14	2018-04-04 14:34:14	\N	f	f	NOVUS	\N	\N
-845	\N	\N	Rose tairo	rosestevent@gmail.com	0784212364	\N	free	04-04-2018	05-05-2018	2	0	\N	\N	2018-04-04 14:10:12	2018-04-04 14:10:12	\N	f	f	NOVUS	\N	\N
-844	\N	\N	Warda Musa	musawarda52@gmail.com	0692461862	\N	free	04-04-2018	05-05-2018	1	0	\N	\N	2018-04-04 09:21:12	2018-04-04 09:21:12	\N	f	f	NOVUS	\N	\N
-843	\N	\N	Victoria Malisa	victoria.malisa2017@gmail.com	0766884190	\N	free	04-04-2018	05-05-2018	515	0	\N	\N	2018-04-04 06:27:52	2018-04-04 06:27:52	\N	f	f	NOVUS	\N	\N
-842	\N	\N	Parvina Kazahura	parvinakoku.pk@gmail.com	0684197240	\N	free	03-04-2018	04-05-2018	0	0	\N	\N	2018-04-03 20:21:07	2018-04-03 20:21:07	\N	f	f	NOVUS	\N	\N
-841	\N	\N	Lizzy Mash	lizzymash96@gmail.com	0723870306	\N	free	03-04-2018	04-05-2018	0	1	\N	\N	2018-04-03 18:51:12	2018-04-03 18:51:12	\N	f	f	NOVUS	\N	\N
-839	\N	\N	Iveta Njau	ivetanjau18@gmail.com	0674522400	\N	free	03-04-2018	04-05-2018	2	0	\N	\N	2018-04-03 11:45:46	2018-04-03 11:45:46	\N	f	f	NOVUS	\N	\N
-838	\N	\N	dickensi mlwafu	mlwafud@gmail.com	0752151185	\N	free	03-04-2018	04-05-2018	1	0	\N	\N	2018-04-03 06:44:06	2018-04-03 06:44:06	\N	f	f	NOVUS	\N	\N
-627	\N	\N	Aizack Sanga	aizack93@gmail.com	255767984333	\N	premium	30-03-2018	29-04-2018	969	0	\N	\N	2018-02-20 22:06:43	2018-04-03 05:06:08	\N	f	f	NOVUS	\N	\N
-837	\N	\N	Nema Salum	nemasalum39@gmail.com	0718110811	\N	free	02-04-2018	03-05-2018	1	0	\N	\N	2018-04-02 13:59:42	2018-04-02 13:59:42	\N	f	f	NOVUS	\N	\N
-834	\N	\N	Amour Gitonga	gitongamercy2@gmail.com	0705095874	\N	free	01-04-2018	02-05-2018	1	1	\N	\N	2018-04-01 09:08:38	2018-04-01 09:08:38	\N	f	f	NOVUS	\N	\N
-833	\N	\N	Samwel Mika	samwelmicka@gmail.com	07463522088	\N	free	01-04-2018	02-05-2018	553	0	\N	\N	2018-04-01 07:15:11	2018-04-01 07:15:11	\N	f	f	NOVUS	\N	\N
-830	\N	\N	Sarafina David	sarafinadavid67@gmail.com	0756961094	\N	free	31-03-2018	01-05-2018	2	0	\N	\N	2018-03-31 09:54:36	2018-03-31 09:54:36	\N	f	f	NOVUS	\N	\N
-829	\N	\N	Cyprian Mwasanga	mwasanga66cc@gmail.com	0767451976	\N	free	31-03-2018	01-05-2018	6	0	\N	\N	2018-03-31 09:13:22	2018-03-31 09:13:22	\N	f	f	NOVUS	\N	\N
-828	\N	\N	Abeida Nassor Mussa Mussa	abeidanassormussa@gmail.com	0777773754	\N	free	31-03-2018	01-05-2018	4	0	\N	\N	2018-03-31 05:16:34	2018-03-31 05:16:34	\N	f	f	NOVUS	\N	\N
-827	\N	\N	dennis hezron	hezdennis83@gmail.com	+255719841061	\N	free	31-03-2018	01-05-2018	0	0	\N	\N	2018-03-31 04:46:01	2018-03-31 04:46:01	\N	f	f	NOVUS	\N	\N
-826	\N	\N	Wanko Kapunda	wankokapunda1@gmail.com	0755836896	\N	free	30-03-2018	30-04-2018	220000	0	https://lh4.googleusercontent.com/-N3quajndl2E/AAAAAAAAAAI/AAAAAAAAAEg/yhwTDEFbNMo/photo.jpg	\N	2018-03-30 20:30:49	2018-03-30 20:30:49	\N	f	f	NOVUS	\N	\N
-825	\N	\N	Deogratius Alexanda Telesphory	deogratiusat95@gmail.com	0756472767	\N	free	30-03-2018	30-04-2018	1	0	https://lh5.googleusercontent.com/-caJy0c7Jigc/AAAAAAAAAAI/AAAAAAAAABY/LQ6pXDr5aPk/photo.jpg	\N	2018-03-30 12:14:47	2018-03-30 12:14:47	\N	f	f	NOVUS	\N	\N
-835	255200020027	\N	Bryan Peter	visualeffects309@gmail.com	0719454277	\N	premium	20-06-2018	20-07-2018	2	0	https://lh4.googleusercontent.com/-aTROZ46rkKw/AAAAAAAAAAI/AAAAAAAACWE/vmU3IJYu9ho/photo.jpg	\N	2018-04-02 10:02:34	2018-06-20 17:47:57	\N	f	f	Ass. Supervisor	\N	\N
-836	255200019992	\N	Glory Moshy	glorymoshy@gmail.com	0683261616	\N	premium	20-06-2018	19-12-2018	1	0	https://lh6.googleusercontent.com/-whUm9Y38g9M/AAAAAAAAAAI/AAAAAAAAABg/XciOsNozeyA/photo.jpg	\N	2018-04-02 13:39:26	2018-06-20 12:04:10	\N	f	f	Ass. Supervisor	\N	\N
-898	255000425778	\N	Sebu Panya	sebu.panya@gmail.com	0752079453	\N	premium	09-06-2018	04-06-2019	4	0	https://lh6.googleusercontent.com/-ps_LPZSLqx0/AAAAAAAAAAI/AAAAAAAACJ0/CoaoUxRutI8/photo.jpg	\N	2018-04-08 07:34:59	2018-06-09 08:38:02	\N	f	f	Supervisor	\N	\N
-892	255000584297	\N	Dorice Kimambo	doricekimambo1@gmail.com	0688218533	\N	free	07-04-2018	08-05-2018	12	0	\N	\N	2018-04-07 04:05:11	2018-06-09 08:07:32	\N	f	f	Ass. Supervisor	\N	\N
-941	255000559016	\N	Francis Kasenyenda	fkasenyenda0@gmail.com	0754367056	\N	free	19-04-2018	20-05-2018	4	0	https://lh4.googleusercontent.com/-cgUwC3EjFiQ/AAAAAAAAAAI/AAAAAAAAB3k/Dhy6m-aZoN0/photo.jpg	\N	2018-04-19 16:30:21	2018-06-08 19:06:06	\N	f	f	Ass. Supervisor	\N	\N
-945	\N	\N	Angel Mwandele	angelmwandele@gmail.com	0757806670	\N	free	20-04-2018	21-05-2018	527	0	\N	\N	2018-04-20 15:25:33	2018-04-20 15:25:33	\N	f	f	NOVUS	\N	\N
-944	\N	\N	Divya Joshi.Bhatt	divya.joshi.bhatt@gmail.com	+254713321777	\N	free	20-04-2018	21-05-2018	1000000	0	https://lh4.googleusercontent.com/-DEBLu10gyv4/AAAAAAAAAAI/AAAAAAAAAA0/4G8R73TpVh0/photo.jpg	\N	2018-04-20 10:20:37	2018-04-20 10:20:37	\N	f	f	NOVUS	\N	\N
-943	\N	\N	Esther Benedict	estherbenedict95@gmail.com	0656005910	\N	free	20-04-2018	21-05-2018	85	0	\N	\N	2018-04-19 22:27:31	2018-04-19 22:27:31	\N	f	f	NOVUS	\N	\N
-942	\N	\N	bruno ngosongo	brunongosongo88@gmail.com	0765503176	\N	free	20-04-2018	21-05-2018	10	0	https://lh5.googleusercontent.com/-buTneAebNSk/AAAAAAAAAAI/AAAAAAAAABA/-XPHFN54sSs/photo.jpg	\N	2018-04-19 21:07:34	2018-04-19 21:07:34	\N	f	f	NOVUS	\N	\N
-940	\N	\N	emmanuel muga	emuga19777@gmail.com	+255713291631	\N	free	19-04-2018	20-05-2018	5	0	\N	\N	2018-04-19 16:00:06	2018-04-19 16:00:06	\N	f	f	NOVUS	\N	\N
-939	\N	\N	gattym60@gmail.com	gattym60@gmail.com	0715466622	\N	free	19-04-2018	20-05-2018	2	0	\N	\N	2018-04-19 15:41:20	2018-04-19 15:41:20	\N	f	f	NOVUS	\N	\N
-938	\N	\N	Ann Shish	shiroann2@gmail.com	0714539831	\N	free	19-04-2018	20-05-2018	150	1	https://lh4.googleusercontent.com/-pOK1zMuS1M4/AAAAAAAAAAI/AAAAAAAAAXQ/9lLqMoFDhZc/photo.jpg	\N	2018-04-19 14:07:16	2018-04-19 14:07:16	\N	f	f	NOVUS	\N	\N
-937	\N	\N	Valiant Simchimba	valianteric@gmail.com	0765334892	\N	free	19-04-2018	20-05-2018	1	0	\N	\N	2018-04-19 11:48:09	2018-04-19 11:48:09	\N	f	f	NOVUS	\N	\N
-935	\N	\N	Simon Simumba	simumbasimon@gmail.com	0755359191	\N	free	19-04-2018	20-05-2018	1	0	https://lh4.googleusercontent.com/-4HYHbFaKKWI/AAAAAAAAAAI/AAAAAAAADQ8/Lq9nOCwHTKw/photo.jpg	\N	2018-04-19 01:42:52	2018-04-19 01:42:52	\N	f	f	NOVUS	\N	\N
-934	\N	\N	Chiito Msuku	csylviahen@gmail.com	0785363456	\N	free	18-04-2018	19-05-2018	4	0	\N	\N	2018-04-18 10:03:30	2018-04-18 10:03:30	\N	f	f	NOVUS	\N	\N
-933	\N	\N	Juma Hassan	juma295hassan@gmail.com	0713616109	\N	free	17-04-2018	18-05-2018	0	0	\N	\N	2018-04-17 17:43:24	2018-04-17 17:43:24	\N	f	f	NOVUS	\N	\N
-932	\N	\N	Alipo Mwatujobe	alipomwatujobe@gmail.com	07559364192	\N	free	17-04-2018	18-05-2018	2	0	https://lh3.googleusercontent.com/-WWCaXOpbX8s/AAAAAAAAAAI/AAAAAAAAAKE/P528Zvky4v0/photo.jpg	\N	2018-04-17 16:42:16	2018-04-17 16:42:16	\N	f	f	NOVUS	\N	\N
-931	\N	\N	jediawadh022@gmail.com	jediawadh022@gmail.com	+255686077223	\N	free	16-04-2018	17-05-2018	10	0	\N	\N	2018-04-16 17:18:47	2018-04-16 17:18:47	\N	f	f	NOVUS	\N	\N
-930	\N	\N	ANITHA LIVINGSTON	anithalivingston@gmail.com	0687512975	\N	free	16-04-2018	17-05-2018	4	0	\N	\N	2018-04-16 15:53:12	2018-04-16 15:53:12	\N	f	f	NOVUS	\N	\N
-929	\N	\N	Jennifer Yohana	yohanajennifer034@gmail.com	0715218699	\N	free	16-04-2018	17-05-2018	438	0	\N	\N	2018-04-16 12:56:43	2018-04-16 12:56:43	\N	f	f	NOVUS	\N	\N
-928	\N	\N	zeku man	zeku015@gmail.com	0759366288	\N	free	16-04-2018	17-05-2018	0	0	\N	\N	2018-04-16 12:12:07	2018-04-16 12:12:07	\N	f	f	NOVUS	\N	\N
-927	\N	\N	Alfonsia Mwenda	fonsia2012@gmail.com	0712694445	\N	free	16-04-2018	17-05-2018	4	0	https://lh5.googleusercontent.com/-QO61Ka3dGyo/AAAAAAAAAAI/AAAAAAAAAJ4/1FowneAdruM/photo.jpg	\N	2018-04-16 09:27:23	2018-04-16 09:27:23	\N	f	f	NOVUS	\N	\N
-926	\N	\N	ally kibara	allykibara9@gmail.com	0773103846	\N	free	15-04-2018	16-05-2018	1000	0	https://lh4.googleusercontent.com/-4mT0fiKFH8U/AAAAAAAAAAI/AAAAAAAAADw/r3AyEkH5ezs/photo.jpg	\N	2018-04-15 06:20:03	2018-04-15 06:20:03	\N	f	f	NOVUS	\N	\N
-925	\N	\N	victor mataba	vmataba0@gmail.com	0759727612	\N	free	14-04-2018	15-05-2018	8	0	https://lh4.googleusercontent.com/-qkIwRIkNecU/AAAAAAAAAAI/AAAAAAAAAlE/v7SO44a31Ek/photo.jpg	\N	2018-04-14 19:06:55	2018-04-14 19:06:55	\N	f	f	NOVUS	\N	\N
-924	\N	\N	Deneze Barton	www.denezemwamkinga@gmail.com	0657932898	\N	free	14-04-2018	15-05-2018	1	0	\N	\N	2018-04-14 15:26:52	2018-04-14 15:26:52	\N	f	f	NOVUS	\N	\N
-923	\N	\N	lydia richard	lydoriich@gmail.com	0762220205	\N	free	14-04-2018	15-05-2018	25	0	https://lh5.googleusercontent.com/-wwOc1wfaJCQ/AAAAAAAAAAI/AAAAAAAAACg/D8WZoI3lbok/photo.jpg	\N	2018-04-14 12:11:44	2018-04-14 12:11:44	\N	f	f	NOVUS	\N	\N
-921	\N	\N	Rashidi seleman	rashdseleman666@gmail.com	0673333080	\N	free	13-04-2018	14-05-2018	1	0	https://lh3.googleusercontent.com/-R5nu0Um_NKU/AAAAAAAAAAI/AAAAAAAAAF4/4cEzlsJjQN8/photo.jpg	\N	2018-04-13 17:12:01	2018-04-13 17:12:01	\N	f	f	NOVUS	\N	\N
-920	\N	\N	Hilda Doffa	doffahilda@gmail.com	0755191846	\N	free	13-04-2018	14-05-2018	20	0	\N	\N	2018-04-13 17:04:02	2018-04-13 17:04:02	\N	f	f	NOVUS	\N	\N
-919	255000470552	\N	Lilynice Chami	ownlife63@gmail.com	0713418475	\N	premium	09-07-2018	08-08-2018	0	0	https://lh4.googleusercontent.com/-ie7Jlw-bCWg/AAAAAAAAAAI/AAAAAAAAABQ/UZHYq6Zxytg/photo.jpg	\N	2018-04-13 11:49:15	2018-07-09 07:40:06	\N	f	f	Ass. Supervisor	\N	\N
-918	\N	\N	Reuben Busumba	busumbareuben@gmail.com	0717908928	\N	free	12-04-2018	13-05-2018	333	0	\N	\N	2018-04-12 15:52:29	2018-04-12 15:52:29	\N	f	f	NOVUS	\N	\N
-917	\N	\N	Richard Seifer	thelistener34@gmail.com	0713075281	\N	free	12-04-2018	13-05-2018	60	1	\N	\N	2018-04-12 12:09:30	2018-04-12 12:09:30	\N	f	f	NOVUS	\N	\N
-915	\N	\N	Hussein Chum	chumhussein@gmail.com	0712846230	\N	free	11-04-2018	12-05-2018	2	0	\N	\N	2018-04-11 17:02:32	2018-04-11 17:02:32	\N	f	f	NOVUS	\N	\N
-913	\N	\N	lynerene Maina	irenetravismaina@gmail.com	0706080875	\N	free	11-04-2018	12-05-2018	0	1	\N	\N	2018-04-11 14:05:50	2018-04-11 14:05:50	\N	f	f	NOVUS	\N	\N
-912	\N	\N	Yusuph Eliamin	yeliamini@gmail.com	+255621359337	\N	free	11-04-2018	12-05-2018	2	0	\N	\N	2018-04-11 13:56:20	2018-04-11 13:56:20	\N	f	f	NOVUS	\N	\N
-910	\N	\N	Adam Mamdai	mamdaia04@gmail.com	0621037798	\N	free	11-04-2018	12-05-2018	10000	0	\N	\N	2018-04-11 06:06:32	2018-04-11 06:06:32	\N	f	f	NOVUS	\N	\N
-908	\N	\N	Riziki Fumao	fumaoriziki@gmail.com	0689697019	\N	free	10-04-2018	11-05-2018	0	0	\N	\N	2018-04-10 18:35:44	2018-04-10 18:35:44	\N	f	f	NOVUS	\N	\N
-907	\N	\N	Riziki Mohamedi Fumao	ridhikif@gmail.com	0689697019	\N	free	10-04-2018	11-05-2018	2	0	\N	\N	2018-04-10 18:29:12	2018-04-10 18:29:12	\N	f	f	NOVUS	\N	\N
-911	255200019422	\N	Mwatima Massego	mwatimassego@gmail.com	0773471800	\N	free	11-04-2018	12-05-2018	2	0	\N	\N	2018-04-11 07:18:50	2018-07-07 09:15:04	\N	f	f	Ass. Supervisor	\N	\N
-916	255000615030	\N	Said Haji	haji37127@gmail.com	0655098283	\N	free	12-04-2018	13-05-2018	8	0	\N	\N	2018-04-12 11:33:29	2018-06-25 12:44:22	\N	f	f	Ass. Supervisor	\N	\N
-914	255000606585	\N	Cecilia Yonah	cecile.yonah30@gmail.com	0752396212	\N	free	11-04-2018	12-05-2018	3	0	\N	\N	2018-04-11 15:33:05	2018-06-22 09:24:59	\N	f	f	Ass. Supervisor	\N	\N
-980	255000464017	\N	Godlove Mapunda	gmatabwa.gm@gmail.com	0764783838	\N	premium	22-06-2018	22-07-2018	0	0	\N	\N	2018-04-27 22:16:37	2018-06-22 04:33:53	\N	f	f	Ass. Supervisor	\N	\N
-958	255000402058	\N	Glory Minja	gminja22@gmail.com	0656365953	\N	free	23-04-2018	24-05-2018	25	0	\N	\N	2018-04-22 21:02:21	2018-06-20 13:29:53	\N	f	f	Manager	\N	\N
-967	255000536855	\N	DENIS JIMMY	denisjimmy2@gmail.com	0752440754	\N	free	24-04-2018	25-05-2018	8	0	\N	\N	2018-04-24 19:30:31	2018-06-17 05:47:49	\N	f	f	Ass. Supervisor	\N	\N
-978	255000546205	\N	joseph francis	josephfransour@gmail.com	0719909025	\N	free	27-04-2018	28-05-2018	1	0	\N	\N	2018-04-27 12:39:02	2018-06-15 08:28:33	\N	f	f	Ass. Supervisor	\N	\N
-987	\N	\N	Mkuki Yusuph	mkukiyusuph0@gmail.com	0769711608	\N	free	29-04-2018	30-05-2018	3018	0	https://lh5.googleusercontent.com/-nw9cv68zMw4/AAAAAAAAAAI/AAAAAAAABXg/eewYoSCs3_A/photo.jpg	\N	2018-04-29 11:14:36	2018-04-29 11:14:36	\N	f	f	NOVUS	\N	\N
-986	\N	\N	Patric Chikomo	chikomopatric96@gmail.com	0652641696	\N	free	29-04-2018	30-05-2018	230496	0	\N	\N	2018-04-28 22:58:58	2018-04-28 22:58:58	\N	f	f	NOVUS	\N	\N
-985	\N	\N	Abdull Calim	www.abdulcalim000@gmail.com	0786154015	\N	free	28-04-2018	29-05-2018	2722	0	\N	\N	2018-04-28 16:59:01	2018-04-28 16:59:01	\N	f	f	NOVUS	\N	\N
-984	\N	\N	Marion Rubia	marionrubia42@gmail.com	0742809805	\N	free	28-04-2018	29-05-2018	500	1	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABDCKekiObu7busMSILdmNhcmRfcGhvdG8qKDRmMzYzODI1MTU4ZWViNDI0YzY3Mzk0YjYyN2UwMjhjYzFiNjAxZGIwAdPlwxlFyiWVe0gr8j46iFBLW4db	\N	2018-04-28 10:16:12	2018-04-28 10:16:12	\N	f	f	NOVUS	\N	\N
-983	\N	\N	Erick Joseph	erickjoseph957@gmail.com	0717646851	\N	free	28-04-2018	29-05-2018	1	0	https://lh3.googleusercontent.com/-ysYEMzG3bLg/AAAAAAAAAAI/AAAAAAAAABg/nbbsyyvs29c/photo.jpg	\N	2018-04-28 07:13:37	2018-04-28 07:13:37	\N	f	f	NOVUS	\N	\N
-982	\N	\N	Rosalia Kabakama	rosaliakabakama@gmail.com	0717178285	\N	free	28-04-2018	29-05-2018	563	0	\N	\N	2018-04-28 05:25:59	2018-04-28 05:25:59	\N	f	f	NOVUS	\N	\N
-981	\N	\N	Victoria Mkunya	victoriamkunya@gmail.com	0657280053	\N	free	28-04-2018	29-05-2018	0	0	https://lh6.googleusercontent.com/-gjNs6V-i5VE/AAAAAAAAAAI/AAAAAAAABtM/TtdHvawjF3s/photo.jpg	\N	2018-04-28 01:50:18	2018-04-28 01:50:18	\N	f	f	NOVUS	\N	\N
-979	\N	\N	Lilian Chambulikazi	chambulikazi.lilian5@gmail.com	0655969614	\N	free	27-04-2018	28-05-2018	0	0	\N	\N	2018-04-27 20:20:14	2018-04-27 20:20:14	\N	f	f	NOVUS	\N	\N
-977	\N	\N	Suwi Mapesa	suwimapesa123@gmail.com	0625641461	\N	free	27-04-2018	28-05-2018	4	0	\N	\N	2018-04-27 11:57:39	2018-04-27 11:57:39	\N	f	f	NOVUS	\N	\N
-976	\N	\N	Emmanuel Augenus	augenusemmanuelg@gmail.com	0743214833	\N	free	27-04-2018	28-05-2018	3322	0	\N	\N	2018-04-27 10:45:22	2018-04-27 10:45:22	\N	f	f	NOVUS	\N	\N
-974	\N	\N	Erasto Mabiti	erasto.mabiti@gmail.com	0655020840	\N	free	26-04-2018	27-05-2018	2	0	https://lh4.googleusercontent.com/-8OP1oRvUZoY/AAAAAAAAAAI/AAAAAAAAAC4/oQ2tQDbsaWI/photo.jpg	\N	2018-04-26 17:31:20	2018-04-26 17:31:20	\N	f	f	NOVUS	\N	\N
-973	\N	\N	Yangibona Katole	yangibonakatole@gmail.com	0759044942	\N	free	26-04-2018	27-05-2018	2	0	https://lh4.googleusercontent.com/-8SaOK_83fPw/AAAAAAAAAAI/AAAAAAAAAAk/wU3UXjZqK54/photo.jpg	\N	2018-04-26 15:28:40	2018-04-26 15:28:40	\N	f	f	NOVUS	\N	\N
-972	\N	\N	Catalogue Printers	cataloguep@gmail.com	0755191970	\N	free	25-04-2018	26-05-2018	4	0	https://lh6.googleusercontent.com/-3iH-LmJjMs0/AAAAAAAAAAI/AAAAAAAADvE/FziUaUMnaRI/photo.jpg	\N	2018-04-25 09:42:33	2018-04-25 09:42:33	\N	f	f	NOVUS	\N	\N
-970	\N	\N	Dadi Hassan	dadihassanc@gmail.com	0763497826	\N	free	25-04-2018	26-05-2018	1524	0	https://lh4.googleusercontent.com/-18lycdMt9sw/AAAAAAAAAAI/AAAAAAAAABQ/YVM1FaLoAVA/photo.jpg	\N	2018-04-25 08:08:11	2018-04-25 08:08:11	\N	f	f	NOVUS	\N	\N
-969	\N	\N	neema Mwasongwe	neymwasongwe@gmail.com	0658175104	\N	free	25-04-2018	26-05-2018	0	0	\N	\N	2018-04-25 05:52:00	2018-04-25 05:52:00	\N	f	f	NOVUS	\N	\N
-968	\N	\N	TATU MADIKAH	tatumadikah@gmail.com	0715273625	\N	free	24-04-2018	25-05-2018	107	0	\N	\N	2018-04-24 20:29:35	2018-04-24 20:29:35	\N	f	f	NOVUS	\N	\N
-966	\N	\N	Omary Bakar	omarybakar3@gmail.com	0672563036	\N	free	24-04-2018	25-05-2018	18	0	\N	\N	2018-04-24 17:56:53	2018-04-24 17:56:53	\N	f	f	NOVUS	\N	\N
-965	\N	\N	Yekonia Baliyendeza	yekoniabaliyendeza@gmail.com	0763745424	\N	free	24-04-2018	25-05-2018	4	0	https://lh4.googleusercontent.com/-ixpKA1RWFd0/AAAAAAAAAAI/AAAAAAAABXU/qpkT7rF5_Gg/photo.jpg	\N	2018-04-24 15:15:36	2018-04-24 15:15:36	\N	f	f	NOVUS	\N	\N
-964	\N	\N	Tunga Raza	razatunga@gmail.com	0764885671	\N	premium	24-04-2018	24-06-2018	1	0	https://lh5.googleusercontent.com/-SpsFxoZ671c/AAAAAAAAAAI/AAAAAAAAAI4/gq6eTh__l84/photo.jpg	\N	2018-04-24 14:06:48	2018-04-24 14:21:28	\N	f	f	NOVUS	\N	\N
-963	\N	\N	airini machange	airinimachange18@gmail.com	0763775929	\N	free	24-04-2018	25-05-2018	1	0	\N	\N	2018-04-24 10:05:59	2018-04-24 10:05:59	\N	f	f	NOVUS	\N	\N
-962	\N	\N	ALINDA SAWE	alindasawe@gmail.com	0757696165	\N	free	23-04-2018	24-05-2018	2	0	\N	\N	2018-04-23 11:55:43	2018-04-23 11:55:43	\N	f	f	NOVUS	\N	\N
-961	\N	\N	Asha Jape	ashakhj72@gmail.com	0773547272	\N	free	23-04-2018	24-05-2018	96	0	\N	\N	2018-04-23 11:26:57	2018-04-23 11:26:57	\N	f	f	NOVUS	\N	\N
-960	\N	\N	Rukia Mustapha	rukiamustapha51@gmail.com	0714095165	\N	free	23-04-2018	24-05-2018	1	0	\N	\N	2018-04-23 10:21:45	2018-04-23 10:21:45	\N	f	f	NOVUS	\N	\N
-957	\N	\N	Abdallah Shariff	shariffabdallah189@gmail.com	0716439492	\N	free	22-04-2018	23-05-2018	1	0	\N	\N	2018-04-22 19:55:25	2018-04-22 19:55:25	\N	f	f	NOVUS	\N	\N
-956	\N	\N	Vaileth Masaka	masakavaileth@gmail.com	0657938738	\N	free	22-04-2018	23-05-2018	1	0	\N	\N	2018-04-22 14:53:54	2018-04-22 14:53:54	\N	f	f	NOVUS	\N	\N
-955	\N	\N	SALVIUS MKULU	mkulusalvius00@gmail.com	075698799	\N	free	22-04-2018	23-05-2018	0	0	https://lh3.googleusercontent.com/-N3rEjzaIMoY/AAAAAAAAAAI/AAAAAAAAAAs/unue3DzWKwY/photo.jpg	\N	2018-04-22 12:58:43	2018-04-22 12:58:43	\N	f	f	NOVUS	\N	\N
-954	\N	\N	jumahawa.hj@gmail.com	jumahawa.hj@gmail.com	0753200965	\N	free	22-04-2018	23-05-2018	1070000	0	\N	\N	2018-04-22 04:01:01	2018-04-22 04:01:01	\N	f	f	NOVUS	\N	\N
-952	\N	\N	Nuzhat Kht	kht.nuzhat@gmail.com	0654970258	\N	free	21-04-2018	22-05-2018	4	0	\N	\N	2018-04-21 16:08:47	2018-04-21 16:08:47	\N	f	f	NOVUS	\N	\N
-951	\N	\N	mecky mary	meckyjmary@gmail.com	+255673932974	\N	free	21-04-2018	22-05-2018	574	0	https://lh6.googleusercontent.com/-396D6p7LTg0/AAAAAAAAAAI/AAAAAAAAAAw/dM-m5pxTl8s/photo.jpg	\N	2018-04-21 14:26:40	2018-04-21 14:26:40	\N	f	f	NOVUS	\N	\N
-950	\N	\N	The Talented Emma Genius Tz	emmathegenius1@gmail.com	0746605534	\N	free	21-04-2018	22-05-2018	5000	0	\N	\N	2018-04-21 13:18:06	2018-04-21 13:18:06	\N	f	f	NOVUS	\N	\N
-949	\N	\N	caroline swai	carolswai@gmail.com	0713223253	\N	free	21-04-2018	22-05-2018	6	0	\N	\N	2018-04-21 10:52:15	2018-04-21 10:52:15	\N	f	f	NOVUS	\N	\N
-948	\N	\N	Prudence Eustace	prudenceeustace832@gmail.com	0754472201	\N	free	21-04-2018	22-05-2018	3	0	\N	\N	2018-04-21 09:51:44	2018-04-21 09:51:44	\N	f	f	NOVUS	\N	\N
-975	255000550777	\N	Suma Mwaipasi	mwaisuma5@gmail.com	0753705179	\N	free	27-04-2018	28-05-2018	4	0	\N	\N	2018-04-27 09:00:26	2018-07-02 04:22:16	\N	f	f	Ass. Supervisor	\N	\N
-1009	255200020688	\N	Hellen Mrema	hellyhelz.mrema1990@gmail.com	0766064176	\N	premium	17-06-2018	17-07-2018	1451	0	\N	\N	2018-05-04 09:07:18	2018-06-17 19:52:02	\N	f	f	Ass. Supervisor	\N	\N
-1038	\N	\N	Lizzy Michael	lizzymichael98@gmail.com	0753302648	\N	free	08-05-2018	08-06-2018	1000	0	\N	\N	2018-05-08 18:51:00	2018-05-08 18:51:00	\N	f	f	NOVUS	\N	\N
-1037	\N	\N	Kines Kisuda	kineskisuda@gmail.com	0755712887	\N	free	08-05-2018	08-06-2018	9	0	\N	\N	2018-05-08 17:41:12	2018-05-08 17:41:12	\N	f	f	NOVUS	\N	\N
-1035	\N	\N	Hemed Salumu	salumuhemed55@gmail.com	0717494057	\N	free	08-05-2018	08-06-2018	1	0	\N	\N	2018-05-08 10:28:17	2018-05-08 10:28:17	\N	f	f	NOVUS	\N	\N
-1034	\N	\N	Kabi Rumisha	jumannezuberi85@gmail.com	0755733034	\N	free	08-05-2018	08-06-2018	1	0	https://lh6.googleusercontent.com/-vY3PyL1Tczs/AAAAAAAAAAI/AAAAAAAAACk/OEdcibo1wDk/photo.jpg	\N	2018-05-08 10:20:25	2018-05-08 10:20:25	\N	f	f	NOVUS	\N	\N
-1033	\N	\N	Jackline Josephat	jackiejosephat22@gmail.com	0717366403	\N	free	08-05-2018	08-06-2018	1	0	\N	\N	2018-05-08 10:19:50	2018-05-08 10:19:50	\N	f	f	NOVUS	\N	\N
-1029	\N	\N	Geoker Boy	geofreymodestusy@gmail.com	0753567758	\N	free	07-05-2018	07-06-2018	1	0	https://lh3.googleusercontent.com/-Ys5nwLHgyOg/AAAAAAAAAAI/AAAAAAAAAaI/Jhp2kTl1W3U/photo.jpg	\N	2018-05-07 19:51:56	2018-05-07 19:51:56	\N	f	f	NOVUS	\N	\N
-1028	\N	\N	Munira Natai	natai.munira@gmail.com	+255714525699	\N	free	07-05-2018	07-06-2018	1	0	\N	\N	2018-05-07 13:11:22	2018-05-07 13:11:22	\N	f	f	NOVUS	\N	\N
-1025	\N	\N	FAISARI ZUBERI	faisarizuberi7@gmail.com	0759611065	\N	free	07-05-2018	07-06-2018	100000	0	\N	\N	2018-05-07 09:18:42	2018-05-07 09:18:42	\N	f	f	NOVUS	\N	\N
-1024	\N	\N	Jacobda Kingmayo	jacobdakingmayo@gmail.com	0762241426	\N	free	07-05-2018	07-06-2018	1	0	\N	\N	2018-05-07 05:09:35	2018-05-07 05:09:35	\N	f	f	NOVUS	\N	\N
-1023	\N	\N	SALIM ABDULLA NASSOR	salimsokonitrader2@gmail.com	0777418541	\N	free	07-05-2018	07-06-2018	8	0	\N	\N	2018-05-07 04:23:14	2018-05-07 04:23:14	\N	f	f	NOVUS	\N	\N
-1022	\N	\N	Prima Gift	primagift34@gmail.com	0657413922	\N	free	06-05-2018	06-06-2018	465	0	https://lh3.googleusercontent.com/-bbnpZF8DbEQ/AAAAAAAAAAI/AAAAAAAAAAU/Dyst8msv-u4/photo.jpg	\N	2018-05-06 15:44:17	2018-05-06 15:44:17	\N	f	f	NOVUS	\N	\N
-1021	\N	\N	dj hunfred	jerremiahmbwilo100@gmail.com	0687743640	\N	free	06-05-2018	06-06-2018	1	0	https://lh6.googleusercontent.com/-6WXxNDcfeps/AAAAAAAAAAI/AAAAAAAAAB4/60Dg9BoI49Q/photo.jpg	\N	2018-05-06 06:23:33	2018-05-06 06:23:33	\N	f	f	NOVUS	\N	\N
-1020	\N	\N	Lameck Nestory	bjjms4248@gmail.com	714925274	\N	free	06-05-2018	06-06-2018	2000	0	https://lh3.googleusercontent.com/-peqd_53axZ0/AAAAAAAAAAI/AAAAAAAAAHI/YbNttmGKAGE/photo.jpg	\N	2018-05-05 21:55:32	2018-05-05 21:55:32	\N	f	f	NOVUS	\N	\N
-1019	\N	\N	edimundilinda@gmail.com Gloriasway	edimundilinda90@gmail.com	0765433599	\N	free	05-05-2018	05-06-2018	2	0	\N	\N	2018-05-05 14:50:53	2018-05-05 14:50:53	\N	f	f	NOVUS	\N	\N
-1018	\N	\N	Mwahija Kiwamba	kiwambamwahija@gmail.com	0679411370	\N	free	05-05-2018	05-06-2018	25	0	\N	\N	2018-05-05 10:06:03	2018-05-05 10:06:03	\N	f	f	NOVUS	\N	\N
-1017	\N	\N	George Urila	george73kiboga@gmail.com	+255686125175	\N	free	05-05-2018	05-06-2018	1	0	\N	\N	2018-05-04 21:02:03	2018-05-04 21:02:03	\N	f	f	NOVUS	\N	\N
-1016	\N	\N	Rachel Munis	rachel.exaud62@gmail.com	0752529237	\N	free	04-05-2018	04-06-2018	1	0	\N	\N	2018-05-04 19:34:55	2018-05-04 19:34:55	\N	f	f	NOVUS	\N	\N
-1015	\N	\N	emanuelsilvester9@gmail.com	emanuelsilvester9@gmail.com	0743393620	\N	free	04-05-2018	04-06-2018	25802580	0	\N	\N	2018-05-04 16:53:04	2018-05-04 16:53:04	\N	f	f	NOVUS	\N	\N
-1014	\N	\N	Sola Jr	solajr23@gmail.com	0778746064	\N	free	04-05-2018	04-06-2018	4	0	https://lh4.googleusercontent.com/-ukOGkLrO4Zs/AAAAAAAAAAI/AAAAAAAAHGc/qvo9IMHk-6A/photo.jpg	\N	2018-05-04 13:43:18	2018-05-04 13:43:18	\N	f	f	NOVUS	\N	\N
-1013	\N	\N	Sekunda Shirima	matrona1000@gmail.com	0759207388	\N	free	04-05-2018	04-06-2018	2	0	https://lh6.googleusercontent.com/-NPp0FahtkBA/AAAAAAAAAAI/AAAAAAAAF0Y/dx5ceVTQZPc/photo.jpg	\N	2018-05-04 12:05:50	2018-05-04 12:05:50	\N	f	f	NOVUS	\N	\N
-1012	\N	\N	Edward Magesa	eddymagesa@gmail.com	+255784955926	\N	free	04-05-2018	04-06-2018	1	0	https://lh6.googleusercontent.com/-hnSLY3W8zKA/AAAAAAAAAAI/AAAAAAAAAJs/6gxWjV_BiBw/photo.jpg	\N	2018-05-04 11:31:02	2018-05-04 11:31:02	\N	f	f	NOVUS	\N	\N
-1011	\N	\N	Glory Mkenda	glorymkenda1@gmail.com	0656187464	\N	free	04-05-2018	04-06-2018	4	0	\N	\N	2018-05-04 10:12:57	2018-05-04 10:12:57	\N	f	f	NOVUS	\N	\N
-1008	\N	\N	romacharia@gmail.com	romacharia@gmail.com	0727585885	\N	free	04-05-2018	04-06-2018	6	1	\N	\N	2018-05-04 05:10:56	2018-05-04 05:10:56	\N	f	f	NOVUS	\N	\N
-1007	\N	\N	Isacky Godfrey	ikyabula@gmail.com	0717617595	\N	free	04-05-2018	04-06-2018	0	0	\N	\N	2018-05-04 00:21:20	2018-05-04 00:21:20	\N	f	f	NOVUS	\N	\N
-1005	\N	\N	Andrew C Godfrey	godfreyandr@gmail.com	0716508496	\N	free	03-05-2018	03-06-2018	6	0	https://lh6.googleusercontent.com/-j1wPiNtsEvk/AAAAAAAAAAI/AAAAAAAAABA/mnJINkxBuEA/photo.jpg	\N	2018-05-03 13:24:47	2018-05-03 13:24:47	\N	f	f	NOVUS	\N	\N
-1004	255000463228	\N	cute neyda	cuteneyda02@gmail.com	0754771122	\N	premium	04-07-2018	03-08-2018	11	0	https://lh5.googleusercontent.com/-ThnvWe1AThg/AAAAAAAAAAI/AAAAAAAAAG0/eXR1Tn1PbFM/photo.jpg	\N	2018-05-03 10:44:02	2018-07-04 13:13:29	\N	f	f	Ass. Supervisor	\N	\N
-1003	\N	\N	peace rubagora	rubagorap@gmail.com	0783999044	\N	free	03-05-2018	03-06-2018	1	0	\N	\N	2018-05-03 08:12:48	2018-05-03 08:12:48	\N	f	f	NOVUS	\N	\N
-1002	\N	\N	anna Mtitu	annamtitu3@gmail.com	0655925086	\N	free	03-05-2018	03-06-2018	4	0	\N	\N	2018-05-03 06:01:48	2018-05-03 06:01:48	\N	f	f	NOVUS	\N	\N
-1001	\N	\N	Marero Anthony	mareroanthony38@gmail.com	07165387	\N	free	02-05-2018	02-06-2018	2	0	\N	\N	2018-05-02 19:53:26	2018-05-02 19:53:26	\N	f	f	NOVUS	\N	\N
-999	\N	\N	William Mato	matobill@gmail.com	0713781882	\N	free	02-05-2018	02-06-2018	565	0	https://lh3.googleusercontent.com/-g6690ECExEE/AAAAAAAAAAI/AAAAAAAAGOs/Jpw7TCf8ANE/photo.jpg	\N	2018-05-02 14:40:21	2018-05-02 14:40:21	\N	f	f	NOVUS	\N	\N
-997	\N	\N	diana ruheta	diana2ruheta@gmail.com	0765251201	\N	free	02-05-2018	02-06-2018	0	0	https://lh5.googleusercontent.com/-AP4iO6CtjlA/AAAAAAAAAAI/AAAAAAAAARw/DwJYIbf58s0/photo.jpg	\N	2018-05-02 14:05:13	2018-05-02 14:05:13	\N	f	f	NOVUS	\N	\N
-996	\N	\N	Benjamin Gwaku	benjaminigwaku2017@gmail.com	0687200211	\N	free	02-05-2018	02-06-2018	3	0	\N	\N	2018-05-02 12:31:03	2018-05-02 12:31:03	\N	f	f	NOVUS	\N	\N
-995	\N	\N	Ester Kawishe	ekawishe@gmail.com	0713566551	\N	free	02-05-2018	02-06-2018	2	0	https://lh3.googleusercontent.com/-5hHAp93D7u8/AAAAAAAAAAI/AAAAAAAAAHI/Ct8sYkEMsqg/photo.jpg	\N	2018-05-02 06:44:23	2018-05-02 06:44:23	\N	f	f	NOVUS	\N	\N
-994	\N	\N	Fatma Hemed	fatmahemedkassim@gmail.com	0715193370	\N	free	02-05-2018	02-06-2018	4	0	\N	\N	2018-05-02 06:13:06	2018-05-02 06:13:06	\N	f	f	NOVUS	\N	\N
-993	\N	\N	hadija bakari	bakari.hadija0@gmail.com	0716486076	\N	free	01-05-2018	01-06-2018	0	0	https://lh3.googleusercontent.com/-nrUtu6asz-E/AAAAAAAAAAI/AAAAAAAAAB0/oQIMAQ1nF7k/photo.jpg	\N	2018-05-01 13:29:02	2018-05-01 13:29:02	\N	f	f	NOVUS	\N	\N
-992	\N	\N	health talk with ivon mdeta	ivonmdeta@gmail.com	+255652986927	\N	free	01-05-2018	01-06-2018	2	0	https://lh5.googleusercontent.com/-T0yaaI2Ubhw/AAAAAAAAAAI/AAAAAAAAAAg/-Cy-rJkaZvA/photo.jpg	\N	2018-05-01 10:06:57	2018-05-01 10:06:57	\N	f	f	NOVUS	\N	\N
-991	\N	\N	Hamza David	hamzadavidchikweo@gmail.com	0718682227	\N	free	30-04-2018	31-05-2018	1411	0	\N	\N	2018-04-30 13:39:11	2018-04-30 13:39:11	\N	f	f	NOVUS	\N	\N
-990	\N	\N	Mwanne Kambangwa	kambangwamwanne@gmail.com	0755146793	\N	free	30-04-2018	31-05-2018	2	0	\N	\N	2018-04-30 09:10:33	2018-04-30 09:10:33	\N	f	f	NOVUS	\N	\N
-13	\N	Edwin John	Edwin John	edwin.johnny2016@gmail.com	+255769688544	\N	free	14-11-2017	25/12/2017	4	0	photo	\N	\N	2018-05-28 10:38:26	2018-05-28 10:38:26	f	f	NOVUS	\N	\N
-1043	255000547583	\N	Deborah Khan	deborahjulius31@gmail.com	0769317690	\N	free	09-05-2018	09-06-2018	10	0	\N	\N	2018-05-09 10:41:34	2018-06-18 04:28:42	\N	f	f	Ass. Supervisor	\N	\N
-1071	255000590703	\N	Azmina Aamir	azmina.aamir@gmail.com	0785313786	\N	premium	15-05-2018	15-07-2018	2	0	\N	\N	2018-05-15 19:52:42	2018-06-15 05:07:44	\N	f	f	Supervisor	\N	\N
-1036	255000098604	\N	Allen Massam	allenmassam3@gmail.com	0713394901	\N	premium	13-06-2018	12-12-2018	0	0	\N	\N	2018-05-08 16:32:06	2018-06-13 08:07:35	\N	f	f	Manager	\N	\N
-1050	255000443097	\N	Judith Mwafula	mwafulajudith@gmail.com	0715836052	\N	free	10-05-2018	10-06-2018	4	0	\N	\N	2018-05-10 05:29:57	2018-06-11 21:23:53	\N	f	f	Supervisor	\N	\N
-1041	255200000375	\N	Gerald Kessy	geraldkessy86@gmail.com	0717430646	\N	free	09-05-2018	09-06-2018	0	0	\N	\N	2018-05-09 07:40:19	2018-06-07 19:03:56	\N	f	f	Novus	\N	\N
-1070	255200021520	\N	Msofe King	msofeking03@gmail.com	0672971700	\N	free	15-05-2018	15-06-2018	1	0	https://lh3.googleusercontent.com/-z40vML4PWzY/AAAAAAAAAAI/AAAAAAAAAAk/zu1Q5XnfEfk/photo.jpg	\N	2018-05-15 13:26:14	2018-06-05 19:25:45	\N	f	f	Novus	\N	\N
-341	255000540323	\N	veronica kayusi	veronicakayus123@gmail.com	0719123453	\N	free	10-01-2018	10-02-2018	0	0	\N	\N	2018-01-10 16:50:30	2018-06-05 11:23:16	\N	f	f	Ass. Supervisor	\N	\N
-8	1234856985	Walter Kimaro	Walter Kimaro	wakyj07@gmail.com	0717138056	\N	premium	14-11-2017	08-09-2018	1	0	https://lh4.googleusercontent.com/-BDNoliXjAL8/AAAAAAAAAAI/AAAAAAAADQQ/p6Lt59dTzs0/photo.jpg	\N	\N	2018-06-01 08:34:42	\N	f	f	Supervisor	\N	\N
-1062	\N	\N	Edwin Lutiga	edwin.lutiga@gmail.com	+255769688544	\N	premium	14-05-2018	09-06-2019	4	0	https://lh5.googleusercontent.com/-DIhxiVmK5uU/AAAAAAAAAAI/AAAAAAAAAC0/Ka4G0W19x7g/photo.jpg	\N	2018-05-14 06:13:56	2018-05-28 10:39:56	\N	f	f	NOVUS	\N	\N
-1080	\N	\N	zacharia sanga	zachariasanga99@gmail.com	0753173971	\N	free	18-05-2018	18-06-2018	12	0	https://lh3.googleusercontent.com/-pHh46cjQndY/AAAAAAAAAAI/AAAAAAAAABg/POoBxdzDl-8/photo.jpg	\N	2018-05-18 03:29:58	2018-05-18 03:29:58	\N	f	f	NOVUS	\N	\N
-1079	\N	\N	hood ahmad	hoodahmad612@gmail.com	0659841870	\N	free	17-05-2018	17-06-2018	8	0	\N	\N	2018-05-17 17:57:22	2018-05-17 17:57:22	\N	f	f	NOVUS	\N	\N
-1078	\N	\N	Wiliam Seleman	wiliamseleman@gmail.com	0718501338	\N	free	17-05-2018	17-06-2018	2	0	\N	\N	2018-05-17 17:20:45	2018-05-17 17:20:45	\N	f	f	NOVUS	\N	\N
-1073	\N	\N	David Damiho	ddamiho@gmail.com	0713316259	\N	free	16-05-2018	16-06-2018	5	0	\N	\N	2018-05-16 10:52:44	2018-05-16 10:52:44	\N	f	f	NOVUS	\N	\N
-1072	\N	\N	Mandy Online Tv	mandyonlinetv1@gmail.com	0718642005	\N	free	16-05-2018	16-06-2018	2	0	\N	\N	2018-05-16 09:18:17	2018-05-16 09:18:17	\N	f	f	NOVUS	\N	\N
-1069	\N	\N	Sylvia Pertet	sylviapertet@gmail.com	0721589181	\N	free	15-05-2018	15-06-2018	1	1	https://lh6.googleusercontent.com/-OD9ge3oAmaI/AAAAAAAAAAI/AAAAAAAAYAQ/l3rwjKw7VAU/photo.jpg	\N	2018-05-15 09:15:31	2018-05-15 09:15:31	\N	f	f	NOVUS	\N	\N
-1068	\N	\N	Patricia Mhekwa	patriciamhekwa@gmail.com	0788500669	\N	free	15-05-2018	15-06-2018	2	0	\N	\N	2018-05-15 04:19:03	2018-05-15 04:19:03	\N	f	f	NOVUS	\N	\N
-1067	\N	\N	Ali Haji	alihajisaleh90@gmail.com	0778258959	\N	free	14-05-2018	14-06-2018	12580	0	\N	\N	2018-05-14 16:33:33	2018-05-14 16:33:33	\N	f	f	NOVUS	\N	\N
-1066	\N	\N	aysher mahamoud	ayshermahamoud@gmail.com	0754402025	\N	free	14-05-2018	14-06-2018	2	0	\N	\N	2018-05-14 15:29:34	2018-05-14 15:29:34	\N	f	f	NOVUS	\N	\N
-1065	\N	\N	Julie Lucas	julielucas34@gmail.com	0783601715	\N	free	14-05-2018	14-06-2018	5	0	\N	\N	2018-05-14 12:35:10	2018-05-14 12:35:10	\N	f	f	NOVUS	\N	\N
-1064	\N	\N	Elihuruma Madangi	madangielihuruma@gmail.com	0769925896	\N	free	14-05-2018	14-06-2018	1	0	\N	\N	2018-05-14 11:17:07	2018-05-14 11:17:07	\N	f	f	NOVUS	\N	\N
-1063	\N	\N	Beenishfida 14	beenishfida14@gmail.com	0685620883	\N	free	14-05-2018	14-06-2018	10000	0	\N	\N	2018-05-14 09:33:39	2018-05-14 09:33:39	\N	f	f	NOVUS	\N	\N
-1059	\N	\N	Lidia Elly	lidiaelly65@gmail.com	0673843407	\N	free	12-05-2018	12-06-2018	0	0	https://lh3.googleusercontent.com/-azGmyIFYyq4/AAAAAAAAAAI/AAAAAAAAAA0/4S1Mah3rTFs/photo.jpg	\N	2018-05-12 15:41:11	2018-05-12 15:41:11	\N	f	f	NOVUS	\N	\N
-1058	\N	\N	Clement Bankuwiha	clementbankuwiha1995@gmail.com	0759511190	\N	free	12-05-2018	12-06-2018	200	0	\N	\N	2018-05-12 06:17:22	2018-05-12 06:17:22	\N	f	f	NOVUS	\N	\N
-1057	\N	\N	Nuruel Njau	njaunuruel@gmail.com	+255765457708	\N	free	11-05-2018	11-06-2018	20	0	\N	\N	2018-05-11 20:16:09	2018-05-11 20:16:09	\N	f	f	NOVUS	\N	\N
-1056	\N	\N	dorah sumari	dorahsumari@gmail.com	0715286035	\N	free	11-05-2018	11-06-2018	520	0	\N	\N	2018-05-11 14:18:06	2018-05-11 14:18:06	\N	f	f	NOVUS	\N	\N
-1055	\N	\N	Bertha Dotto	dottobertha@gmail.com	0714776639	\N	free	11-05-2018	11-06-2018	1	0	\N	\N	2018-05-11 12:32:32	2018-05-11 12:32:32	\N	f	f	NOVUS	\N	\N
-1054	\N	\N	Theodorah John	theodorahjohn317@gmail.com	0768410722	\N	free	11-05-2018	11-06-2018	0	0	\N	\N	2018-05-11 07:36:37	2018-05-11 07:36:37	\N	f	f	NOVUS	\N	\N
-1053	\N	\N	bongo ads	infobongoads@gmail.com	0756325805	\N	free	11-05-2018	11-06-2018	5632	0	https://lh6.googleusercontent.com/--TDIW6rdgCc/AAAAAAAAAAI/AAAAAAAAAXg/HeRiXqXaC8c/photo.jpg	\N	2018-05-10 21:42:40	2018-05-10 21:42:40	\N	f	f	NOVUS	\N	\N
-1052	\N	\N	Bahati Kundya	kundyabahati12@gmail.com	0764222758	\N	free	10-05-2018	10-06-2018	944	0	\N	\N	2018-05-10 14:26:18	2018-05-10 14:26:18	\N	f	f	NOVUS	\N	\N
-1049	\N	\N	Wolfram Mwalongo	wmwalongo@gmail.com	0754931305	\N	free	10-05-2018	10-06-2018	10	0	https://lh5.googleusercontent.com/-UhlJBTpWaD8/AAAAAAAAAAI/AAAAAAAAAHA/IYpNlzz8rNY/photo.jpg	\N	2018-05-10 04:08:42	2018-05-10 04:08:42	\N	f	f	NOVUS	\N	\N
-1048	\N	\N	hezron barack	barackhez@gmail.com	0658637710	\N	free	09-05-2018	09-06-2018	4	0	https://lh6.googleusercontent.com/-FB8mwL7ZBw0/AAAAAAAAAAI/AAAAAAAAMdg/LNV9AirvWbE/photo.jpg	\N	2018-05-09 17:24:20	2018-05-09 17:24:20	\N	f	f	NOVUS	\N	\N
-1047	\N	\N	Mama Sasha	richiecharles155@gmail.com	0769766997	\N	free	09-05-2018	09-06-2018	2	0	\N	\N	2018-05-09 13:11:19	2018-05-09 13:11:19	\N	f	f	NOVUS	\N	\N
-1046	\N	\N	Fredrick Abisai	fredabisai@gmail.com	0653588291	\N	free	09-05-2018	09-06-2018	500000	0	https://lh6.googleusercontent.com/-rxTLuKZpFGw/AAAAAAAAAAI/AAAAAAAABRc/xvWHxB80CWo/photo.jpg	\N	2018-05-09 12:23:14	2018-05-09 12:23:14	\N	f	f	NOVUS	\N	\N
-1045	\N	\N	theresa bagenda	theresa.bagenda@gmail.com	0767551166	\N	free	09-05-2018	09-06-2018	4	0	\N	\N	2018-05-09 11:52:08	2018-05-09 11:52:08	\N	f	f	NOVUS	\N	\N
-1044	\N	\N	Sevaness Lemington	sevanesslemington@gmail.com	0715458773	\N	free	09-05-2018	09-06-2018	4	0	\N	\N	2018-05-09 11:13:14	2018-05-09 11:13:14	\N	f	f	NOVUS	\N	\N
-1042	\N	\N	Getrude Magawa	magawa30@gmail.com	0754877006	\N	free	09-05-2018	09-06-2018	0	0	\N	\N	2018-05-09 08:20:15	2018-05-09 08:20:15	\N	f	f	NOVUS	\N	\N
-1040	\N	\N	Cyrus Peter	danextle@gmail.com	0752887231	\N	free	09-05-2018	09-06-2018	200000	0	https://lh4.googleusercontent.com/-_Sw4xOe-5JA/AAAAAAAAAAI/AAAAAAAAADo/SkM4ibGBUa4/photo.jpg	\N	2018-05-08 21:22:03	2018-05-08 21:22:03	\N	f	f	NOVUS	\N	\N
-1039	\N	\N	Boniphace Pillar	boniphacepillar@gmail.com	0682167102	\N	free	08-05-2018	08-06-2018	1	0	\N	\N	2018-05-08 20:24:03	2018-05-08 20:24:03	\N	f	f	NOVUS	\N	\N
-10	255000449892	Wilbard Patrice	Wilbard Patrice	mallyawilbard8@gmail.com	0655661002	\N	premium	15-11-2017	07-04-2019	4	0	https://lh3.googleusercontent.com/-jGbubxpe5tU/AAAAAAAAAAI/AAAAAAAACqA/gIbRjG53LyE/photo.jpg	\N	\N	2018-06-04 14:32:41	\N	f	f	Manager	\N	\N
-1	\N	\N	admin	\N	\N	$2y$10$IKfk9FGqfzM6Bcr69FNzieSbgRQvuV0bb1pas2A5g3giV6Hh2W20S	free	14-11-2017	\N	\N	\N	\N	5fGjSOpTKe8UujTHACdZc3GU5FlOrXwXpb5WlxDNll92GlHR2pYI6NeXEvAk	2017-11-29 12:35:07	2018-05-28 09:02:03	\N	t	f	NOVUS	\N	\N
-155	255000295565	\N	Wilfred Anangisye	anangisyew@gmail.com	0718981390	\N	premium	30-06-2018	30-07-2018	1	0	https://lh6.googleusercontent.com/-ma5Z6XX_CPE/AAAAAAAAAAI/AAAAAAAAAEU/pPr-PwDrfRw/photo.jpg	\N	2017-12-14 05:07:18	2018-06-30 11:35:31	\N	f	f	Supervisor	\N	\N
-194	255000438903	\N	Beatrice Roman	triceroman@gmail.com	0784286340	\N	premium	25-06-2018	25-06-2019	2	0	https://lh4.googleusercontent.com/-BY1SVGatjHs/AAAAAAAAAAI/AAAAAAAAAC4/Ob2VmHdoJM4/photo.jpg	\N	2017-12-18 14:48:12	2018-06-30 04:48:49	\N	f	f	Ass. Manager	\N	\N
-540	255000041895	\N	Silem Godfrey	silemgf@gmail.com	0715868673	\N	premium	19-06-2018	19-06-2019	1	0	https://lh5.googleusercontent.com/-8hSV76p64_Y/AAAAAAAAAAI/AAAAAAAAqRY/Bmcq7iU9-dM/photo.jpg	\N	2018-02-09 14:25:27	2018-06-19 10:34:26	\N	f	f	Manager	\N	\N
-1123	255000411577	\N	cecilia patiu	otienolilian269@gmail.com	0753330730	\N	free	12-06-2018	13-07-2018	0	0	\N	\N	2018-06-12 12:58:29	2018-06-14 10:09:36	\N	f	f	Ass. Supervisor	\N	\N
-720	255200020024	\N	Samson Masalu	masalu912.sm@gmail.com	0683168545	\N	premium	14-06-2018	13-08-2018	2	0	https://lh5.googleusercontent.com/-Ah20033JmnA/AAAAAAAAAAI/AAAAAAAAArE/VgO_QNRdKgs/photo.jpg	\N	2018-03-08 13:55:01	2018-06-14 06:15:44	\N	f	f	Ass. Supervisor	\N	\N
-1088	255200021685	\N	Kissa Kabuje	kissakabuje8@gmail.com	0765441647	\N	premium	06-07-2018	05-08-2018	0	0	https://lh6.googleusercontent.com/-GF6_JVaOtvs/AAAAAAAAAAI/AAAAAAAAASA/Vk_CWPbwIt4/photo.jpg	\N	2018-06-05 15:51:21	2018-07-06 09:53:53	\N	f	f	Ass. Supervisor	\N	\N
-1111	255200022568	\N	Tinah Kweka	kwekatinah@gmail.com	0757628933	\N	free	08-06-2018	09-07-2018	0	0	\N	\N	2018-06-08 19:29:09	2018-06-08 19:29:09	\N	f	f	Novus	\N	\N
-500	255000305966	\N	marcia john	mashayo100@gmail.com	0759899466	\N	free	02-02-2018	05-03-2018	1	0	https://lh6.googleusercontent.com/-R7isonLJdqI/AAAAAAAAAAI/AAAAAAAAC2E/_W-DDVaklzc/photo.jpg	\N	2018-02-02 12:38:53	2018-06-07 19:52:07	\N	f	f	Supervisor	\N	\N
-1104	255200021537	\N	Elia Israel	eliaisrael44@gmail.com	0714150552	\N	free	07-06-2018	08-07-2018	0	0	\N	\N	2018-06-07 19:51:40	2018-06-07 19:51:40	\N	f	f	Ass. Supervisor	\N	\N
-1103	255200022268	\N	Jo'e Jose'p	kbusinare@gmail.com	0766005316	\N	free	07-06-2018	08-07-2018	0	0	https://lh3.googleusercontent.com/-GASYSRGgNn8/AAAAAAAAAAI/AAAAAAAAADQ/FiCatsmjQgM/photo.jpg	\N	2018-06-07 15:23:25	2018-06-07 15:23:25	\N	f	f	Ass. Supervisor	\N	\N
-1102	255200020610	\N	NADHIFA SASILO	nadhifasasilo2017@gmail.com	0754828803	\N	free	07-06-2018	08-07-2018	0	0	\N	\N	2018-06-07 15:15:03	2018-06-07 15:15:03	\N	f	f	Ass. Supervisor	\N	\N
-240	255000592347	\N	lizzy dommy	lizzydommy2@gmail.com	0686250006	\N	free	26-12-2017	26-01-2018	0	0	https://lh3.googleusercontent.com/-AO7bUb2vFMQ/AAAAAAAAAAI/AAAAAAAAAq4/xadVfk-_n0I/photo.jpg	\N	2017-12-26 09:09:01	2018-06-07 04:52:52	\N	f	f	Supervisor	\N	\N
-1101	255000618240	\N	teddlicious silvery	teddlicioussilvery95@gmail.com	0782778829	\N	free	06-06-2018	07-07-2018	0	0	\N	\N	2018-06-06 15:32:53	2018-06-06 15:32:53	\N	f	f	Ass. Supervisor	\N	\N
-1085	255200022228	\N	Said omary	kweka12@gmail.com	0712763697	\N	premium	05-07-2018	05-07-2019	0	0	https://lh3.googleusercontent.com/-p0iexI5Cmrc/AAAAAAAAAAI/AAAAAAAAAew/afKJ48LlkEc/photo.jpg	\N	2018-06-04 13:46:54	2018-07-05 08:46:57	\N	f	f	Supervisor	\N	\N
-1092	255520000243	\N	Haji Limka	hajilimka@gmail.com	0777843310	\N	free	06-06-2018	07-07-2018	0	0	\N	\N	2018-06-06 09:38:57	2018-06-06 09:38:57	\N	f	f	Ass. Supervisor	\N	\N
-1027	255000426269	\N	Slayo Fitness	ipriscus@gmail.com	0714928546	\N	free	07-05-2018	07-06-2018	0	0	https://lh6.googleusercontent.com/-dvI8m07Ah5g/AAAAAAAAAAI/AAAAAAAAALg/3aW00xD_RAk/photo.jpg	\N	2018-05-07 11:05:57	2018-06-06 08:47:22	\N	f	f	Ass. Supervisor	\N	\N
-326	255200017807	\N	Venance Munyasa	vmunyasa@gmail.com	0677269388	\N	free	08-01-2018	08-02-2018	2	0	https://lh6.googleusercontent.com/-IgTWI9PBBJA/AAAAAAAAAAI/AAAAAAAAACQ/X6Pot1wZKwM/photo.jpg	\N	2018-01-08 10:47:06	2018-06-06 08:18:28	\N	f	f	Ass. Supervisor	\N	\N
-1091	255000621759	\N	fredinafredinand@gmail.com	fredinafredinand@gmail.com	0764189885	\N	free	06-06-2018	07-07-2018	0	0	\N	\N	2018-06-06 06:44:46	2018-06-06 06:44:46	\N	f	f	Ass. Supervisor	\N	\N
-1090	255200022349	\N	VAILETH SWALE	swalevaileth@gmail.com	0768471767	\N	free	06-06-2018	07-07-2018	0	0	\N	\N	2018-06-06 06:25:21	2018-06-06 06:25:21	\N	f	f	Novus	\N	\N
-896	255000426481	\N	Getrude Shayo	shayogetrude11@gmail.com	0715045177	\N	free	07-04-2018	08-05-2018	1	0	\N	\N	2018-04-07 18:25:47	2018-06-06 03:17:47	\N	f	f	Supervisor	\N	\N
-1089	255000614470	\N	HUSNA SAID	husnasaid300@gmail.com	0776773434	\N	free	05-06-2018	06-07-2018	0	0	\N	\N	2018-06-05 18:04:44	2018-06-05 18:04:44	\N	f	f	Ass. Supervisor	\N	\N
-909	255000512569	\N	Frank Agrey	greyfranluk@gmail.com	0713131400	\N	premium	05-06-2018	05-07-2018	0	0	\N	\N	2018-04-11 05:05:44	2018-06-05 17:52:45	\N	f	f	Ass. Supervisor	\N	\N
-1087	255000307243	\N	Gloria Mark	gladyhsty@gmail.com	0756336184	\N	free	05-06-2018	06-07-2018	0	0	https://lh6.googleusercontent.com/-kSceFFw8WbA/AAAAAAAAAAI/AAAAAAAAAAA/wLqAnqZj5Nk/photo.jpg	\N	2018-06-05 15:24:23	2018-06-05 15:24:23	\N	f	f	Manager	\N	\N
-297	255000501255	\N	Neema Kajuni	kajuniney@gmail.com	0754923552	\N	premium	16-03-2018	12-09-2018	0	0	\N	\N	2018-01-04 07:55:10	2018-06-05 15:16:14	\N	f	f	Supervisor	\N	\N
-674	255000450839	\N	Farid Rashid	frseif@gmail.com	0754710542	\N	premium	28-05-2018	23-05-2019	4	0	https://lh4.googleusercontent.com/-MmlWMgwmq78/AAAAAAAAAAI/AAAAAAAAADk/WIeJu2dlgBw/photo.jpg	\N	2018-03-01 19:07:39	2018-06-05 15:01:48	\N	f	f	Ass. Supervisor	\N	\N
-118	255000273956	\N	William Marisha	williammarisha@gmail.com	0784200844	\N	free	09-12-2017	09-01-2018	2	0	\N	\N	2017-12-09 11:18:29	2018-06-05 14:58:51	\N	f	f	Manager	\N	\N
-1100	255693785624	\N	Samuel Thomass	samuthojo@gmail.com	0658185608	\N	free	06-06-2018	07-07-2018	0	0	https://lh4.googleusercontent.com/-QHUKSuIjcGk/AAAAAAAAAAI/AAAAAAAAASE/cYFHPFxEmxQ/photo.jpg	\N	2018-06-06 13:45:27	2018-07-02 12:18:48	\N	f	f	Ass. Manager	4.2	0
-211	255000550032	\N	Paloku Thereza	palokutrivis@gmail.com	0625700167	\N	premium	20-12-2017	15-01-2019	1	0	\N	\N	2017-12-20 11:42:23	2018-06-05 14:44:31	\N	f	f	Supervisor	\N	\N
-279	255000598660	\N	Jacque Joej	jacquejoej7@gmail.com	0718147784	\N	free	02-01-2018	02-02-2018	73	0	\N	\N	2018-01-02 08:51:14	2018-06-05 14:31:55	\N	f	f	Ass. Supervisor	\N	\N
-1086	255141412369	\N	Moses Kabungo	kbng.moses@gmail.com	0753111039	\N	free	05-06-2018	06-07-2018	0	0	https://lh5.googleusercontent.com/-NHf4Xx-odD0/AAAAAAAAAAI/AAAAAAAAChI/-j5PVYedNUk/photo.jpg	\N	2018-06-05 14:18:20	2018-06-05 14:18:20	\N	f	f	Supervisor	\N	\N
-63	254000270676	\N	Ebooks Pdf Kenya	aloysiusbota@gmail.com	0729029114	\N	free	04-12-2017	04-01-2018	102	1	https://lh5.googleusercontent.com/-ozEMZvZFv2o/AAAAAAAAAAI/AAAAAAAASTw/k8B2ZKOpVMU/photo.jpg	\N	2017-12-03 21:10:49	2018-06-05 13:39:41	\N	f	f	Manager	\N	\N
-9	255000469755	Chriss Geremy	Christopher Jeremiah Bhiloza	geremychriss@gmail.com	0768144870	\N	premium	14-11-2017	06-03-2019	6	0	https://lh3.googleusercontent.com/-qp8cjcE94-Y/AAAAAAAAAAI/AAAAAAAAHSU/l24MuIxm54M/photo.jpg	\N	\N	2018-06-26 07:18:19	\N	f	f	Supervisor	\N	\N
-1139	255200021281	\N	Jackson Ntamallah	jacksonntamallah93@gmail.com	0753332206	\N	free	17-06-2018	18-07-2018	0	0	\N	\N	2018-06-17 07:34:37	2018-06-17 07:34:37	\N	f	f	Novus	\N	\N
-1138	255000182417	\N	Khatib Shafi	khatibshafi70@gmail.com	0711809929	\N	free	16-06-2018	17-07-2018	0	0	\N	\N	2018-06-16 13:11:57	2018-06-16 13:11:57	\N	f	f	Novus	\N	\N
-1134	255200022494	\N	Bim Dashi	bimdashi7@gmail.com	0762890129	\N	free	14-06-2018	15-07-2018	0	0	\N	\N	2018-06-14 20:45:32	2018-06-14 20:45:32	\N	f	f	Novus	\N	\N
-1133	255000602063	\N	Noel Maarufu	noelmaarufu@gmail.com	0769510547	\N	free	14-06-2018	15-07-2018	0	0	\N	\N	2018-06-14 20:17:10	2018-06-14 20:17:10	\N	f	f	Ass. Supervisor	\N	\N
-1132	255200022549	\N	Glory Ludan	ludanglory@gmail.com	0769241137	\N	free	14-06-2018	15-07-2018	0	0	\N	\N	2018-06-14 18:20:55	2018-06-14 18:20:55	\N	f	f	Novus	\N	\N
-1032	255200020597	\N	Ahmada Hussein	ahmadahussein19@gmail.com	0779898619	\N	free	08-05-2018	08-06-2018	1	0	https://lh4.googleusercontent.com/-hDP9pODcUNo/AAAAAAAAAAI/AAAAAAAACuA/9kHFNGJ_Jv0/photo.jpg	\N	2018-05-08 08:35:25	2018-06-14 06:54:47	\N	f	f	Novus	\N	\N
-417	255200018187	\N	Ramadhani Shabani	rs7291266@gmail.com	0766158810	\N	free	20-01-2018	20-02-2018	1	0	\N	\N	2018-01-20 14:34:05	2018-06-13 13:01:58	\N	f	f	Ass. Supervisor	\N	\N
-1130	255000063489	\N	Eunice Togoro	eunicetogoro7@gmail.com	0762249841	\N	premium	13-06-2018	13-08-2018	0	0	\N	\N	2018-06-13 10:33:51	2018-06-13 10:59:57	\N	f	f	Manager	\N	\N
-1129	255200020167	\N	Joanmary Mayunga	joanmary.mayunga@gmail.com	0754420042	\N	free	13-06-2018	14-07-2018	0	0	https://lh6.googleusercontent.com/-DHn_F5YzNBk/AAAAAAAAAAI/AAAAAAAAEc0/IVoaD1zLmuw/photo.jpg	\N	2018-06-13 10:19:23	2018-06-13 10:19:23	\N	f	f	Ass. Supervisor	\N	\N
-1127	255000214918	\N	Abdul-latif Othman	abdulmziki@gmail.com	0711809929	\N	free	13-06-2018	14-07-2018	0	0	https://lh6.googleusercontent.com/-nwYEq3P0qjk/AAAAAAAAAAI/AAAAAAAAF7Y/l7HJJJaOBPs/photo.jpg	\N	2018-06-13 08:45:39	2018-06-13 08:45:39	\N	f	f	Novus	\N	\N
-1126	255000492728	\N	Innocent Francis Kisima	ikissima1@gmail.com	0719899282	\N	free	12-06-2018	13-07-2018	0	0	\N	\N	2018-06-12 20:02:25	2018-06-12 20:05:28	\N	f	f	Ass. Manager	\N	\N
-1125	255000601406	\N	Daudi Philipo Amasi	daudi.philipo@gmail.com	0764986631	\N	free	12-06-2018	13-07-2018	0	0	https://lh6.googleusercontent.com/-v3Iun4SLYOw/AAAAAAAAAAI/AAAAAAAAK7E/qeohMqf6qmA/photo.jpg	\N	2018-06-12 15:48:45	2018-06-12 15:48:45	\N	f	f	Ass. Supervisor	\N	\N
-408	255200018100	\N	Anita Simchimba	anitasimchimba32@gmail.com	0715442239	\N	premium	12-06-2018	12-07-2018	1	0	\N	\N	2018-01-20 06:13:03	2018-06-12 13:31:09	\N	f	f	Ass. Supervisor	\N	\N
-1124	255000604103	\N	Michael James	mj393749@gmail.com	0716838648	\N	free	12-06-2018	13-07-2018	0	0	\N	\N	2018-06-12 13:25:37	2018-06-12 13:25:37	\N	f	f	Ass. Supervisor	\N	\N
-1122	254200022653	\N	omar adam	omardev10@gmail.com	0653128687	\N	free	12-06-2018	13-07-2018	0	0	\N	\N	2018-06-12 11:10:05	2018-06-12 11:10:05	\N	f	f	Novus	\N	\N
-1121	255000256532	\N	Ferdinand Biedrawa	fmanirerekana@gmail.com	0735018229	\N	free	12-06-2018	13-07-2018	0	0	https://lh3.googleusercontent.com/--aoyW7StYBk/AAAAAAAAAAI/AAAAAAAAFrE/e7dt8UAnsnE/photo.jpg	\N	2018-06-12 10:23:46	2018-06-12 10:23:46	\N	f	f	Ass. Supervisor	\N	\N
-746	255000537412	\N	laura m.panga	lauram.pangak24@gmail.com	0767851747	\N	premium	12-06-2018	12-07-2018	461	0	https://lh3.googleusercontent.com/-2pBsJ0mF46w/AAAAAAAAAAI/AAAAAAAAABU/B3OhIjVnI3k/photo.jpg	\N	2018-03-14 06:19:30	2018-06-12 08:12:07	\N	f	f	Ass. Supervisor	\N	\N
-1120	255000615282	\N	HAMADI FADHILI	hamadifadhili1@gmail.com	0767421678	\N	free	11-06-2018	12-07-2018	0	0	https://lh3.googleusercontent.com/-iJnrUNR1f-A/AAAAAAAAAAI/AAAAAAAAAEQ/amtLrQBDs5k/photo.jpg	\N	2018-06-11 20:34:50	2018-06-11 20:34:50	\N	f	f	Ass. Supervisor	\N	\N
-1119	254000497474	\N	liam sam	sliam254@gmail.com	0717359689	\N	free	11-06-2018	12-07-2018	0	1	https://lh3.googleusercontent.com/-i5ini7bVyIM/AAAAAAAAAAI/AAAAAAAAQRc/mIc7d5pxC1Y/photo.jpg	\N	2018-06-11 19:57:14	2018-06-11 19:57:14	\N	f	f	Novus	\N	\N
-127	254000244000	\N	salome nduta	salomenduta62@gmail.com	0780398833	\N	free	10-12-2017	10-01-2018	120	1	https://lh3.googleusercontent.com/-21_tdF4ALnI/AAAAAAAAAAI/AAAAAAAAADo/ioytlIX5WxM/photo.jpg	\N	2017-12-10 19:14:23	2018-06-11 16:45:41	\N	f	f	Manager	\N	\N
-1118	255000593975	\N	Claudia Silayo	claudiasilayo2010@gmail.com	0766852167	\N	free	11-06-2018	12-07-2018	0	0	\N	\N	2018-06-11 16:30:26	2018-06-11 16:30:26	\N	f	f	Manager	\N	\N
-1116	255200022804	\N	Salha Ali Said	chalachanny@gmail.com	0776344442	\N	free	10-06-2018	11-07-2018	0	0	\N	\N	2018-06-10 10:24:18	2018-06-11 14:11:42	\N	f	f	Novus	\N	\N
-1117	255200022489	\N	Jane Regu	iscobabu9@gmail.com	0659447042	\N	free	11-06-2018	12-07-2018	0	0	\N	\N	2018-06-11 12:18:43	2018-06-11 12:18:43	\N	f	f	Novus	\N	\N
-1115	255000456412	\N	Nepha Mulungu	nepha.jm@gmail.com	0762805651	\N	free	10-06-2018	11-07-2018	0	0	\N	\N	2018-06-10 07:09:24	2018-06-10 07:09:24	\N	f	f	Manager	\N	\N
-1114	255200013557	\N	Husna Kiwanga	kiwangahusna@gmail.com	0714955949	\N	free	10-06-2018	11-07-2018	0	0	https://lh4.googleusercontent.com/-FDxRas6r53M/AAAAAAAAAAI/AAAAAAAAABw/NySZOsVUHo4/photo.jpg	\N	2018-06-10 04:14:41	2018-06-10 04:14:41	\N	f	f	Ass. Supervisor	\N	\N
-1113	255000608263	\N	Fam Domination	famdomination90@gmail.com	0756237913	\N	free	09-06-2018	10-07-2018	0	0	https://lh6.googleusercontent.com/-KPjmDF-kGRY/AAAAAAAAAAI/AAAAAAAAAB8/38DsoosCu0Q/photo.jpg	\N	2018-06-09 19:19:09	2018-06-09 19:19:09	\N	f	f	Ass. Supervisor	\N	\N
-1112	255000578955	\N	Adily Waziri	adilywaziri@gmail.com	0768407410	\N	free	09-06-2018	10-07-2018	0	0	\N	\N	2018-06-08 21:03:31	2018-06-08 21:03:31	\N	f	f	Ass. Supervisor	\N	\N
-1110	255000551820	\N	Evamary Henry	evamaryhenry@gmail.com	0656989113	\N	free	08-06-2018	09-07-2018	0	0	\N	\N	2018-06-08 14:13:55	2018-06-08 14:13:55	\N	f	f	Ass. Supervisor	\N	\N
-1109	255200021687	\N	christina mbilinyi	tinalumuliko2017@gmail.com	0763470388	\N	free	08-06-2018	09-07-2018	0	0	\N	\N	2018-06-08 13:59:23	2018-06-08 13:59:23	\N	f	f	Ass. Supervisor	\N	\N
-366	255000537047	\N	Becky Lynec	beckymafia.ej@gmail.com	0756344164	\N	premium	08-06-2018	08-07-2018	0	0	https://lh3.googleusercontent.com/-uGZS8fG1Llk/AAAAAAAAAAI/AAAAAAAALy0/g2YLAl2TS0I/photo.jpg	\N	2018-01-15 20:32:14	2018-06-08 13:48:52	\N	f	f	Ass. Supervisor	\N	\N
-1108	255000607070	\N	Dyegula Juma	dyegula2014@gmail.com	0764962800	\N	free	08-06-2018	09-07-2018	0	0	\N	\N	2018-06-08 09:34:04	2018-06-08 09:34:04	\N	f	f	Supervisor	\N	\N
-1107	255000586277	\N	Abdulkadir Mbarouk	mbaroukabdulkadir@gmail.com	0655113374	\N	free	08-06-2018	09-07-2018	0	0	\N	\N	2018-06-08 08:55:04	2018-06-08 08:55:04	\N	f	f	Supervisor	\N	\N
-810	255000518308	\N	gerady magaigwa	geradymagaigwa@gmail.com	0763923150	\N	free	28-03-2018	28-04-2018	4	0	https://lh6.googleusercontent.com/-3-mw7hzUB3M/AAAAAAAAAAI/AAAAAAAABSc/awA5Z_Dq9Fs/photo.jpg	\N	2018-03-28 06:27:05	2018-06-08 08:16:39	\N	f	f	Ass. Supervisor	\N	\N
-1105	255200022746	\N	Ghati Mnanka	ghatimnanka23@gmail.com	0684804108	\N	free	08-06-2018	09-07-2018	0	0	\N	\N	2018-06-08 06:55:16	2018-06-08 06:55:16	\N	f	f	Novus	\N	\N
-534	255000420818	\N	Grace Joseph Chale	gbashagi@gmail.com	0765860205	\N	premium	06-06-2018	06-07-2018	0	0	https://lh5.googleusercontent.com/-Eqg-QUG1HZg/AAAAAAAAAAI/AAAAAAAAAHo/_Rp9OQ--aiw/photo.jpg	\N	2018-02-08 09:23:37	2018-06-07 21:13:11	\N	f	f	Manager	\N	\N
-1161	255000618435	\N	exestusi daudi	exestusidaudi@gmail.com	0657611576	\N	free	25-06-2018	26-07-2018	0	0	\N	\N	2018-06-25 14:25:53	2018-06-25 14:25:53	\N	f	f	Novus	\N	\N
-1160	254200017372	\N	bevonny mokaya	bevonnym@gmail.com	0725278622	\N	free	25-06-2018	26-07-2018	0	1	\N	\N	2018-06-25 13:52:54	2018-06-25 13:52:54	\N	f	f	Novus	\N	\N
-1159	255000202340	\N	Rose Ihadike	rosemalemba96@gmail.com	0767999008	\N	free	25-06-2018	26-07-2018	0	0	\N	\N	2018-06-25 12:11:46	2018-06-25 12:11:46	\N	f	f	Manager	\N	\N
-1158	255200000374	\N	opprnee@gmail.com	opprnee@gmail.com	0656124777	\N	free	25-06-2018	26-07-2018	0	0	\N	\N	2018-06-25 10:09:02	2018-06-25 10:09:02	\N	f	f	Novus	\N	\N
-1157	255000602278	\N	Ramadhan Issa Mohamed	ramaissamohd@gmail.com	0773530442	\N	free	24-06-2018	25-07-2018	0	0	\N	\N	2018-06-24 11:38:59	2018-06-24 11:38:59	\N	f	f	Ass. Supervisor	\N	\N
-1156	255000625471	\N	joe mwatowine	joemwatowine@gmail.com	0656939210	\N	free	24-06-2018	25-07-2018	0	0	\N	\N	2018-06-23 21:43:10	2018-06-23 21:43:10	\N	f	f	Ass. Supervisor	\N	\N
-410	255000538520	\N	Alice in Tanzaland- Liccy Mdada	agmbelwa@gmail.com	0717167262	\N	premium	23-06-2018	23-07-2018	1	0	https://lh4.googleusercontent.com/-RN633MnfKpc/AAAAAAAAAAI/AAAAAAAADB4/uEmicr_SfJQ/photo.jpg	\N	2018-01-20 09:18:43	2018-06-23 08:14:09	\N	f	f	Ass. Supervisor	\N	\N
-1155	255200022715	\N	Nemilaki Peter	nemilakipeter@gmail.com	0765080687	\N	free	23-06-2018	24-07-2018	0	0	\N	\N	2018-06-23 05:36:35	2018-06-23 05:36:35	\N	f	f	Novus	\N	\N
-1154	255200022203	\N	Lucas mwilwa	lucasmwilwa@gmail.com	0753968552	\N	free	21-06-2018	22-07-2018	0	0	https://lh6.googleusercontent.com/-Sf5NrgDayyo/AAAAAAAAAAI/AAAAAAAAEb4/5YtanRRdOcY/photo.jpg	\N	2018-06-21 17:06:30	2018-06-21 17:06:30	\N	f	f	Ass. Supervisor	\N	\N
-1153	255200022505	\N	Yusuph Kisiba	kisibay@gmail.com	0655323305	\N	free	21-06-2018	22-07-2018	0	0	https://lh6.googleusercontent.com/-XpbZKjVhmgQ/AAAAAAAAAAI/AAAAAAAAABg/W1EVkrFYLSM/photo.jpg	\N	2018-06-21 16:54:56	2018-06-21 16:54:56	\N	f	f	Novus	\N	\N
-1152	255200022520	\N	Aneth Jasper	anethjasper158@gmail.com	0676474188	\N	free	20-06-2018	21-07-2018	0	0	\N	\N	2018-06-20 18:19:52	2018-06-20 18:19:52	\N	f	f	Novus	\N	\N
-1151	255000452669	\N	Robert Tairo	robbytairo210@gmail.com	0712713006	\N	free	20-06-2018	21-07-2018	0	0	\N	\N	2018-06-20 16:08:36	2018-06-20 16:08:36	\N	f	f	Ass. Supervisor	\N	\N
-1150	255000537957	\N	Edith Maganga	edithmaganga16@gmail.com	0754270297	\N	free	20-06-2018	21-07-2018	0	1	\N	\N	2018-06-20 12:34:59	2018-06-20 12:35:22	\N	f	f	Manager	\N	\N
-971	255000615028	\N	Khalfan Ngeleja	khalfanmanesty@gmail.com	0759509126	\N	free	25-04-2018	26-05-2018	2	0	https://lh5.googleusercontent.com/-JHoHyM1JjCE/AAAAAAAAAAI/AAAAAAAAARU/tWqfuFtyZio/photo.jpg	\N	2018-04-25 08:45:07	2018-06-20 12:12:21	\N	f	f	Ass. Supervisor	\N	\N
-1149	255200022979	\N	johnchami27@gmail.com	johnchami27@gmail.com	0715351827	\N	free	20-06-2018	21-07-2018	0	0	\N	\N	2018-06-20 09:50:43	2018-06-20 09:50:43	\N	f	f	Novus	\N	\N
-1148	255200001741	\N	rhoda sendama	rhodasl07@gmail.com	0712977022	\N	free	20-06-2018	21-07-2018	0	0	https://lh3.googleusercontent.com/-JxpPYL3BoFk/AAAAAAAAAAI/AAAAAAAAABk/rnj-bwR6CjI/photo.jpg	\N	2018-06-20 09:05:14	2018-06-20 09:05:14	\N	f	f	Ass. Supervisor	\N	\N
-1147	255200022830	\N	Joshua BONGOLE	joshuabongole8@gmail.com	0719737571	\N	free	19-06-2018	20-07-2018	0	0	\N	\N	2018-06-19 17:27:37	2018-06-19 17:27:37	\N	f	f	Novus	\N	\N
-1146	255200000779	\N	Sarah Kimathire	sarahkimathire68@gmail.com	0754546004	\N	free	19-06-2018	20-07-2018	0	0	\N	\N	2018-06-19 14:38:22	2018-06-19 14:38:22	\N	f	f	Ass. Supervisor	\N	\N
-1145	254000273492	\N	mathew lesanjo	lesanjom@gmail.com	0733403933	\N	free	19-06-2018	20-07-2018	0	1	https://lh6.googleusercontent.com/-6Om6iWuFmkQ/AAAAAAAAAAI/AAAAAAAADkI/lfyP5scze1w/photo.jpg	\N	2018-06-19 12:56:04	2018-06-19 12:56:04	\N	f	f	Ass. Supervisor	\N	\N
-1144	255000024396	\N	Mary Kiginga	kigingamary@gmail.com	0713422952	\N	free	19-06-2018	20-07-2018	0	0	\N	\N	2018-06-19 09:59:08	2018-06-19 09:59:08	\N	f	f	Manager	\N	\N
-1141	255000002200	\N	Anderson Kimaryo	andersonkimaryo@gmail.com	0785800900	\N	premium	18-06-2018	18-08-2018	0	1	\N	\N	2018-06-18 13:48:11	2018-06-19 08:24:40	\N	f	f	Ass. Supervisor	\N	\N
-1143	254000497628	\N	Destiny Achievers	destinyachievershg1@gmail.com	0789044046	\N	free	18-06-2018	19-07-2018	0	1	\N	\N	2018-06-18 18:27:05	2018-06-18 18:27:05	\N	f	f	Ass. Supervisor	\N	\N
-1142	255200013273	\N	Irene Munisi	irenemunisiaminiely@gmail.com	0757245342	\N	free	18-06-2018	19-07-2018	0	0	\N	\N	2018-06-18 15:43:56	2018-06-18 15:43:56	\N	f	f	Ass. Supervisor	\N	\N
-148	255000624529	\N	Rhobi wambura nyituga	robynawambura193@gmail.com	0674418259	\N	premium	18-06-2018	18-07-2018	4	0	https://lh6.googleusercontent.com/-7qQDxt5FSaM/AAAAAAAAAAI/AAAAAAAAAPc/Wmw3U9ZgXu0/photo.jpg	\N	2017-12-13 06:31:36	2018-06-18 13:13:29	\N	f	f	Ass. Supervisor	\N	\N
-270	255000569337	\N	Hussein Salehe	hussein.salehe11@gmail.com	0656756464	\N	premium	18-06-2018	18-07-2018	4	0	https://lh3.googleusercontent.com/-Z4rx6qdW3F0/AAAAAAAAAAI/AAAAAAAAABk/nAymJsT0Dek/photo.jpg	\N	2017-12-31 12:09:03	2018-06-18 11:18:34	\N	f	f	Ass. Supervisor	\N	\N
-1140	255000584505	\N	Emma Mputa	emmamputa@gmail.com	0625748804	\N	free	18-06-2018	19-07-2018	0	0	\N	\N	2018-06-18 09:50:15	2018-06-18 09:50:15	\N	f	f	Ass. Supervisor	\N	\N
-922	255000490264	\N	Nancy Sway	nancysway40@gmail.com	0759843989	\N	premium	18-06-2018	17-12-2018	1	0	https://lh5.googleusercontent.com/-ih3KvgNNBok/AAAAAAAAAAI/AAAAAAAAAMU/cqRK-sGHZKQ/photo.jpg	\N	2018-04-14 10:42:31	2018-06-18 09:02:22	\N	f	f	Ass. Supervisor	\N	\N
-583	255200068868	\N	Isaac Raphael	isaacraphaelsex@gmail.com	0767269729	\N	free	14-02-2018	17-03-2018	1	0	https://lh4.googleusercontent.com/-GJ-nIzQYlyM/AAAAAAAAAAI/AAAAAAAAAQw/x8Cwq38DxY4/photo.jpg	\N	2018-02-14 10:38:29	2018-06-16 11:59:31	\N	f	f	Novus	\N	\N
-1137	255000602482	\N	Samuel Mvile	s.mvile500@gmail.com	0752258480	\N	free	16-06-2018	17-07-2018	0	0	\N	\N	2018-06-16 07:22:16	2018-06-16 07:22:16	\N	f	f	Ass. Supervisor	\N	\N
-1136	255200000207	\N	Rahma Killo	rahmakillo@gmail.com	0714554515	\N	free	15-06-2018	16-07-2018	0	0	\N	\N	2018-06-15 15:58:18	2018-06-15 15:58:18	\N	f	f	Supervisor	\N	\N
-1135	255000601469	\N	Jeremiah Furaha	furahajeremy1990@gmail.com	0756456999	\N	free	15-06-2018	16-07-2018	0	0	https://lh3.googleusercontent.com/-S9eEJlXNJIc/AAAAAAAAAAI/AAAAAAAABco/H9YIzrZ7_jw/photo.jpg	\N	2018-06-15 05:56:04	2018-06-15 05:56:04	\N	f	f	Ass. Supervisor	\N	\N
-187	255000590889	\N	Winnie-rose Jeremiah	winniejeremiah@gmail.com	0672952458	\N	premium	14-06-2018	14-07-2018	0	0	https://lh5.googleusercontent.com/-qN-pIQMJCD0/AAAAAAAAAAI/AAAAAAAAKo8/qejfF0JLkXY/photo.jpg	\N	2017-12-18 09:37:00	2018-06-14 12:45:24	\N	f	f	Ass. Supervisor	\N	\N
-1131	255200022894	\N	PHONY JOACHIM	phonyjoachim@gmail.com	0766256973	\N	free	14-06-2018	15-07-2018	0	0	\N	\N	2018-06-14 11:48:16	2018-06-14 11:48:16	\N	f	f	Novus	\N	\N
-959	255000623033	\N	Nikhil Mansukh	nikhildharsi91@gmail.com	0713616717	\N	free	23-04-2018	24-05-2018	0	0	https://lh5.googleusercontent.com/-E9NeSxFhLXc/AAAAAAAAAAI/AAAAAAAAACQ/qKH4Ci6BdT8/photo.jpg	\N	2018-04-23 09:37:28	2018-06-14 10:44:34	\N	f	f	Ass. Supervisor	\N	\N
-1106	255456874123	\N	Jackson Twalipo	echasste@gmail.com	0767188777	\N	free	08-06-2018	08-07-2018	2.125	0	\N	\N	2018-06-08 07:11:19	2018-07-06 15:52:39	\N	f	f	Ass Supervisor	1.0.3	1
-1180	255200019461	\N	Zafrin Hasham	zafrin.hasham@gmail.com	0777913919	\N	free	29-06-2018	30-07-2018	0	1	\N	\N	2018-06-29 10:44:26	2018-06-29 10:44:26	\N	f	f	Novus	\N	\N
-1178	255200020502	\N	Abby Sigauke	abievina@gmail.com	0753686720	\N	free	28-06-2018	29-07-2018	0	0	https://lh4.googleusercontent.com/-ZkLYSCOKf8o/AAAAAAAAAAI/AAAAAAAAKPs/7NVjrjN8yvw/photo.jpg	\N	2018-06-28 14:53:59	2018-06-28 14:53:59	\N	f	f	Ass. Supervisor	\N	\N
-1176	255000422082	\N	Naomi Malema	naomimalema@gmail.com	0755709940	\N	free	28-06-2018	29-07-2018	0	0	\N	\N	2018-06-28 11:05:06	2018-06-28 11:05:06	\N	f	f	Ass. Manager	\N	\N
-1175	255200003945	\N	Rose Kessy	kessyrose.rk@gmail.com	0765639728	\N	free	28-06-2018	29-07-2018	0	0	\N	\N	2018-06-28 10:02:07	2018-06-28 10:02:07	\N	f	f	Ass. Supervisor	\N	\N
-1174	255200023141	\N	Victoria Domician	victoriadomy@gmail.com	0676092675	\N	free	27-06-2018	28-07-2018	0	0	\N	\N	2018-06-27 14:42:50	2018-06-27 14:42:50	\N	f	f	Ass. Supervisor	\N	\N
-1173	255000519566	\N	Elibariki Justine	elixmasuja@gmail.com	0759038799	\N	free	27-06-2018	28-07-2018	0	0	\N	\N	2018-06-27 14:37:37	2018-06-27 14:37:37	\N	f	f	Ass. Supervisor	\N	\N
-1172	255000436502	\N	Lightness Justine	lightnessjustine@gmail.com	0765828888	\N	free	27-06-2018	28-07-2018	0	0	\N	\N	2018-06-27 12:25:42	2018-06-27 12:25:42	\N	f	f	Ass. Supervisor	\N	\N
-1169	255000088850	\N	Robert Sulus	robertsulus@gmail.com	0714206089	\N	free	27-06-2018	28-07-2018	0	0	https://lh5.googleusercontent.com/-5Z6dP6bRXU8/AAAAAAAAAAI/AAAAAAAAAEI/1dS0Z-QROKU/photo.jpg	\N	2018-06-27 10:21:11	2018-06-27 10:21:11	\N	f	f	Supervisor	\N	\N
-1168	255000620072	\N	Kikuwi Sinna	kikuwisina@gmail.com	0719804481	\N	free	27-06-2018	28-07-2018	0	0	\N	\N	2018-06-27 01:26:09	2018-06-27 01:26:09	\N	f	f	Ass. Supervisor	\N	\N
-1128	255200018295	\N	Jessica Kagendo	jessica.kagendo@gmail.com	0754835679	\N	premium	13-06-2018	14-07-2019	0	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABECNmA6-Oh2LO9_gEiC3ZjYXJkX3Bob3RvKigyZjRiOWIzNjg1MzBlNDYzZDI0Y2VhZmY0NTQzNDY1ODJjMWM0OGQxMAHtiIf9SGL3ROOjP8U_PZYQEsaNWg	\N	2018-06-13 08:51:27	2018-06-26 19:10:42	\N	f	f	Supervisor	\N	\N
-1166	255200022686	\N	Atu Longo	atulongo34@gmail.com	0755896060	\N	free	26-06-2018	27-07-2018	0	0	\N	\N	2018-06-26 11:00:28	2018-06-26 11:00:28	\N	f	f	Novus	\N	\N
-1165	255656695890	\N	Ally S. Kaboko	a.kaboko686@gmail.com	0656695890	\N	free	26-06-2018	27-07-2018	0	0	https://lh3.googleusercontent.com/-dydCjJ8ySrc/AAAAAAAAAAI/AAAAAAAAAAc/GG-Hf4DLKv4/photo.jpg	\N	2018-06-26 10:50:27	2018-06-26 10:50:27	\N	f	f	Novus	\N	\N
-1164	255000415467	\N	tusa mahava	tmahava@gmail.com	0716953095	\N	free	26-06-2018	27-07-2018	0	0	\N	\N	2018-06-26 10:46:50	2018-06-26 10:46:50	\N	f	f	Manager	\N	\N
-1163	255200020756	\N	joseph sabinus	josephsabinus36@gmail.com	0768550170	\N	free	26-06-2018	27-07-2018	0	0	https://lh4.googleusercontent.com/-U_ExStd1WeI/AAAAAAAAAAI/AAAAAAAAASI/Psqp58i5kJo/photo.jpg	\N	2018-06-26 07:19:17	2018-06-26 07:19:17	\N	f	f	Ass. Supervisor	\N	\N
-1167	255000468487	\N	Dola Kalinga	dolakalinga@gmail.com	0755303686	\N	free	26-06-2018	27-07-2018	0	0	\N	\N	2018-06-26 17:30:48	2018-07-05 12:28:55	\N	f	f	Manager	\N	\N
-1177	255123456789	\N	grayson julius	graysonjulius@gmail.com	0712288231	\N	free	28-06-2018	28-07-2018	0.5	0	https://lh5.googleusercontent.com/-lxiZc_nOgS8/AAAAAAAAAAI/AAAAAAAAN78/WB9XE7mC0Wg/s200/photo.jpg	\N	2018-06-28 13:35:23	2018-07-05 15:04:00	\N	f	f	Ass Supervisor	1.0.3	1
-629	255200004845	\N	regina nsanya	ginansanya@gmail.com	0656722567	\N	premium	26-06-2018	26-07-2018	10	0	https://lh4.googleusercontent.com/-Zbr0Fpc-qpE/AAAAAAAAAAI/AAAAAAAAAY4/gzCApMzUNsk/photo.jpg	\N	2018-02-21 12:03:09	2018-07-03 18:11:21	\N	f	f	Ass. Supervisor	\N	\N
-1179	255000483063	\N	Esther Faber	angerisfaber@gmail.com	0622999998	\N	free	29-06-2018	30-07-2018	0	0	https://lh4.googleusercontent.com/-xW34X6GvrYM/AAAAAAAAAAI/AAAAAAAAPMI/pCFg1UTqwyc/photo.jpg	\N	2018-06-29 05:54:31	2018-07-08 15:24:04	\N	f	f	Ass. Supervisor	\N	\N
+COPY public.products (id, category_id, name, code, cc, image, description, created_at, updated_at, deleted_at) FROM stdin;
+893	3	FOREVER BEE HONEY	207	0.0700000000000000067	http://biasharaplus.herokuapp.com/uploads/products/207.png	A great-tasting, all natural sweetener loaded with nature's goodness.\r\nThroughout the ages, honey has been recognized as a premium natural food a storehouse of energy that is easily digestible. This great-tasting, all natural sweetener is loaded with nature's goodness.	\N	2018-06-06 06:54:21	\N
+895	4	25TH EDITION FRAGRANCE MEN	209	0.176999999999999991	http://biasharaplus.herokuapp.com/uploads/products/209.png	25TH Edition for Men is a fluid, aromatic fougre fragrance with a sensuous masculine blend of fruity, herbaceous and woody notes that are forever fresh and long lasting.\r\nThe topnote blends aromatic notes of crushed basil and Mediterranean lavender and evolves to reveal a masculine base of oakmoss, Mysore sandalwood, sensual musks, Virginian cedarwood, and tonka bean.	\N	2018-06-18 09:27:26	\N
+904	4	ALOE JOJOBA CONDITIONING RINSE	522	0.0709999999999999937	http://biasharaplus.herokuapp.com/uploads/products/522b.png	Forever Living Products Aloe-Jojoba Conditioning Rinse enriched formula with Vitamin B Complex and Hydrolyzed Protein has extra moisturizing power to leave your hair soft, shiny and manageable.\nThe unique combination of stabilized Aloe Vera gel and jojoba, an agent to remove electrostatic charges, conditions the hair to give it a feeling of freshness and a look of silky elegance.	\N	2017-12-05 12:23:44	\N
+924	5	ALOE ACTIVATOR	343	0.0589999999999999969	http://biasharaplus.herokuapp.com/uploads/products/343.png	Aloe Activator contains Stabilized Aloe Vera gel and Allantoin, an organic cell renewal agent. Aloe Activator is a superb moisturizing agent, containing enzymes, amino acids and polysaccharides.\nAloe Activator is incredibly versatile. Although regarded as a principal component of the Aloe Fleur de Jouvence regime, it is extremely effective for a number of other purposes, such as a skin cleanser and freshener.	\N	2017-12-05 12:22:53	\N
+1	5	A TOUCH OF FOREVER	1	2	1.png	Try and share your favorite products and build your business!\nTry some of our best selling and favorite products. Keep them for yourself or share them with others to build your business!	\N	2017-11-29 17:28:48	2017-11-29 17:28:48
+2	1	A TOUCH OF FOREVER	1	2	http://biasharaplus.herokuapp.com/uploads/products/1.png	Try and share your favorite products and build your business!\nTry some of our best selling and favorite products. Keep them for yourself or share them with others to build your business!	\N	2017-12-05 12:31:13	\N
+884	1	MINI COMBO-NUTRITIONAL	75	1	http://biasharaplus.herokuapp.com/uploads/products/75.png	A great introduction to the Forever Living line of products. Perfect to try or perfect to share!\nTry some of our best selling and favorite products. Keep them for yourself or share them with others to build your business!\nThis MIni Combo contains:\n* Aloe Vera Gel\n* Forever Lite - Vanilla\n* Forever Bee Pollen\n* Forever Bee Propolis\n* Forever Royal Jelly\n* Artic-Sea Super Omega 3\n* Absorbent-C\n* Fields of Green\n* Forever Lycium Plus\n* Forever Ginkgo Plus\n* Forever Kids	\N	2017-12-05 12:30:47	\N
+885	2	ALOE BITS N' PEACHES	77	0.100000000000000006	http://biasharaplus.herokuapp.com/uploads/products/77.png	Forever Aloe Bits N Peaches is just a touch of natural peach flavor and peach concentrate.\nFor centuries, people all around the world have used Aloe Vera for its health benefits. The addition of peaches provides carotenoids valuable as antioxidants and a source of vitamin A.	\N	2017-12-05 12:28:41	\N
+888	2	FOREVER FREEDOM	196	0.145999999999999991	http://biasharaplus.herokuapp.com/uploads/products/196.png	Forever Freedom has all the benefits of Aloe Vera Gel in a tasty, orange-flavored juice formula!\nWe've taken Glucosamine Sulfate and Chondroitin Sulfate - two naturally occurring elements that have been shown to help maintain healthy joint function and mobility - and married them with our stabilized Aloe Vera gel.	\N	2017-12-05 12:28:28	\N
+879	5	R3 FACTOR	69	0.129000000000000004	http://biasharaplus.herokuapp.com/uploads/products/69.png	Help your skin RETAIN its natural moisture, RESTORE its resilience and RENEW its appearance with R3 Factor Skin Defense Creme.\nR3 Factor Skin Defense Creme is a rich combination of stabilized Aloe Vera gel, soluble collagen and alpha-hydroxy acids, fortified with vitamins A and E, each vital to healthy skin.	\N	2017-12-05 12:22:34	\N
+894	4	25TH EDITION FRAGRANCE WOMEN	208	0.176999999999999991	http://biasharaplus.herokuapp.com/uploads/products/208.png	25TH Edition for Women is a fresh, white floral bouquet that blends sheer petals with warm, musky woods to create a soft and deep feminine character.\nThis unique bouquet begins with captivating floral notes of cactus flower and sparkling yellow freesia threaded with ivy leaves, for a lush green accent.	\N	2017-12-05 12:25:57	\N
+913	4	AVOCADO FACE & BODY SOAP	284	0.0269999999999999997	http://biasharaplus.herokuapp.com/uploads/products/284.png	Made with 100% pure avocado butter, Avocado Face & Body Soap loves your skin, moisturizing as it cleans with the natural rejuvenating properties of this powerful fruit.\nAvocado offers relief for almost every skin type, gently cleansing oily skin with no irritation to keep pores clear and healthy. For dry, sensitive skin, it smooths quickly and penetrates to nourish and moisturize.	\N	2017-12-05 12:24:04	\N
+922	5	FIRMING FOUNDATION LOTION	340	0.0919999999999999984	http://biasharaplus.herokuapp.com/uploads/products/340.png	Firming Foundation Lotion is a state-of-the-art skin care lotion specially formulated for use in our Aloe Fleur de Jouvence beauty regime. \nIdeal for daytime use to counteract the elements, it combines the science of dermatology with the art of cosmetology to produce an effective product that reduces the signs of aging by helping the skin to firm, retexture and tighten the pores, and to provide a foundation for makeup application.	\N	2017-12-05 12:22:21	\N
+934	1	VITAL 5 PACK	456	1	http://biasharaplus.herokuapp.com/uploads/products/456.png	Take the guesswork out of advanced nutrition with Forever Vital 5 - our solution to daily, healthy nutrition in one simple pak.\r\nVital5 contains Aloe Vera Gel, Forever Daily, Forever Active Probiotic, Forever Arctic Sea and ARGI+. Together these products help to support the transportation of nutrients throughout our bodies to our cells and tissues.	\N	2018-06-11 10:47:33	\N
+873	6	ALOE LOTION (TUBE)	62	0.0580000000000000029	http://biasharaplus.herokuapp.com/uploads/products/62.png	One of our signature products, Aloe Lotion is a wonderful, all-purpose, skin lotion with a high content of pure, stabilized aloe plus Jojoba Oil and Vitamin E to moisturize and soothe the skin.\nLight in scent but long on soothing dry, irritated skin, Aloe Lotion quickly restores your skin's delicate pH balance to keep it supple and soft.	\N	2017-12-05 12:18:33	\N
+917	4	ALOE SANITIZER	318	0.0170000000000000012	http://biasharaplus.herokuapp.com/uploads/products/318.png	Forever Hand Sanitizer with Aloe & Honey is designed to kill 99.99% of germs. The skin-soothing stabilized aloe and hydrating honey soften and moisturize as it cleans.\nLet's face it if you're an active family, there's not much you can do about picking up a few germs. But you can get rid of them quick. Forever Hand Sanitizer a big peace of mind in a tiny bottle.	\N	2017-12-05 12:24:53	\N
+918	6	ALOE SUNSCREEN SPRAY-EU	319	0.0840000000000000052	http://biasharaplus.herokuapp.com/uploads/products/319.png	Healthy summer skin has never been easier!Aloe Sunscreen Spray has SPF 30 and Aloe Vera to protect your skin from the aging and damaging effects of the sun.\nIf you and your family enjoy an active lifestyle, then that means you should always be prepared. Keeping everyone happy will keep you on your toes  so when you're prepared to be in the sun, there's no need to worry.	\N	2017-12-05 12:18:00	\N
+921	5	ALOE CLEANSER	339	0.0589999999999999969	http://biasharaplus.herokuapp.com/uploads/products/339.png	Aloe Cleanser is prepared from hypo-allergenic ingredients to create a light, non-greasy, non-irritating lotion that is pH and moisture-balanced.\nAloe Cleanser is fast and thorough in removing makeup, dirt, and other invisible skin debris. Use it as the first step in preparing your skin for a full Aloe Facial, or simply in the daily, routine skin care program of our Aloe Restorative Beauty Regime.	\N	2017-12-05 12:22:06	\N
+902	5	ALOE SCRUB	238	0.0640000000000000013	http://biasharaplus.herokuapp.com/uploads/products/238.png	With its unique combination of Stabilized Aloe Vera gel and solid micro-spheres made from pure Jojoba Oil, this effective skin cleanser is gentle enough for everyday use.\nForever Aloe Scrub gently scrubs away dead skin cells and debris that clog pores and dull the skin's appearance, to begin revealing radiant new, healthier skin.	\N	2017-12-05 12:21:55	\N
+901	5	FOREVER EPIBLANC	236	0.0800000000000000017	http://biasharaplus.herokuapp.com/uploads/products/236.png	Forever Epiblanc's exclusive formula is specifically designed to brighten the complexion and even skin tone while helping to diminish the appearance of dark spots.\nForever Epiblanc is most effective when applied directly to blemishes or dark spots on the skin. Use of Forever Living's Aloe Sunscreen, in combination with Forever Epiblanc, is recommended during the daytime.	\N	2017-12-05 12:21:11	\N
+898	5	ALLURING EYES	233	0.0980000000000000038	http://biasharaplus.herokuapp.com/uploads/products/233.png	Forever Alluring Eyes is a revitalizing under-eye cream, formulated using modern technology to reduce the appearance of wrinkles, fine lines and under-eye circles.\nForever Alluring Eyes is fortified with some of the finest ingredients to improve the suppleness and elasticity of the skin in the delicate and highly visible area around the eyes.	\N	2017-12-05 12:20:52	\N
+899	5	FOREVER MARINE MASK	234	0.0899999999999999967	http://biasharaplus.herokuapp.com/uploads/products/234.png	Forever Marine Mask provides deep cleansing while balancing the skin's texture with natural sea minerals from sea kelp and algae, plus the super moisturizing and conditioning properties of Aloe Vera.\nA long day of work or a hard day at play may leave your skin looking and feeling dull and dry. Added moisture and deep cleansing is the obvious solution to restoring and replenishing your skin's softness and natural texture.	\N	2017-12-05 12:20:38	\N
+920	5	REHYDRATING TONER	338	0.0589999999999999969	http://biasharaplus.herokuapp.com/uploads/products/338.png	Rehydrating Toner is a non-drying, alcohol-free formula that contains natural aloe vera and witch hazel, together with special skin moist-urizers and plant extracts, for toning the skin.\nRehydrating Toner is a gentle preparation used to remove the last traces of cleanser, makeup, impurities and dull, lifeless surface cells, thus providing good secondary cleansing and toning to tighten the pores.	\N	2017-12-05 12:20:13	\N
+874	6	ALOE MOISTURIZING LOTION(TUBE)	63	0.0580000000000000029	http://biasharaplus.herokuapp.com/uploads/products/63.png	Aloe Moisturizing Lotion is excellent for face, hands and body, helping to counteract the effects of pollution and the environment.\nWeather, wind and pollution  day in, day out, they take their toll on your skin. Now you can fight back with our exquisite Aloe Moisturizing Lotion. This unique lotion has outstanding humectant and moisturizing properties.	\N	2017-12-05 12:19:35	\N
+864	6	ALOE FIRST SPRAY	40	0.0790000000000000008	http://biasharaplus.herokuapp.com/uploads/products/40.png	This exclusive skin soothing formula is an excellent first step for soothing minor skin irritations.\nThe combination of aloe and herbs provide a naturally soothing, pH-balanced spray that is easy to apply to even sensitive skin. Aloe First is designed to soothe the skin after minor cuts, scrapes, burns, and sunburn.	\N	2017-12-05 12:19:18	\N
+875	6	ALOE HEAT LOTION (TUBE)	64	0.0580000000000000029	http://biasharaplus.herokuapp.com/uploads/products/64.png	Aloe Heat Lotion is a pH-balanced, lubricating lotion designed for a soothing, relaxing massage. The deep penetrating power of Aloe Vera will help soothe your muscles after sports or hard workouts!\nAfter a long, active day, we all know the misery of tired, aching muscles. This rich emollient lotion contains deep heating agents to make it the ideal massage companion for tired muscles and dry skin.	\N	2017-12-05 12:19:03	\N
+909	7	ALOE REFRESHING TONER	279	0.128000000000000003	http://biasharaplus.herokuapp.com/uploads/products/279.png	Sonya Aloe Refreshing Toner with white tea extract provides vital moisture to help keep your skin properly hydrated.\r\nThis alcohol-free toner is as refreshing as it is hydrating. Applied after cleansing with Sonya Aloe Purifying Cleanser, your skin will instantly absorb the nourishing properties of stabilized aloe vera gel, white tea extract, and cucumber.	\N	2018-06-18 09:29:38	\N
+910	7	ALOE BALANCING CREME	280	0.121999999999999997	http://biasharaplus.herokuapp.com/uploads/products/280.png	Sonya Aloe Balancing Cream contains aloe plus revitalizing extracts and advanced moisturizers. These rich ingredients will help maintain proper moisture balance and appearance of your skin\r\nUsed with Sonya Aloe Nourishing Serum, your skin will feel soft, smooth, and hydrated like never before!	\N	2018-06-18 09:30:01	\N
+932	1	C9/ULTRA VANILA AMINOTEIN	475	0.465000000000000024	http://biasharaplus.herokuapp.com/uploads/products/475.png	This effective, easy-to-follow cleansing program will give you the tools you need to start transforming your body today.\nThe Clean 9 Program can help you jumpstart your journey to a slimmer, healthier you. This effective, easy-to-follow cleansing program will give you the tools you need to start transforming your body today.	\N	2017-12-05 12:30:15	\N
+891	6	FOREVER ALOE MSM GEL	205	0.0929999999999999993	http://biasharaplus.herokuapp.com/uploads/products/205.png	Aloe MSM Gel combines these two powerful ingredients with herbal extracts and other select ingredients for soothing relief anytime.\nWhen you're looking for soothing relief, reach for Aloe MSM Gel. MSM stands for Methyl Sulfonyl Methane, an organic sulfur found in almost all living organisms. In fact, sulfur is the third most abundant substance in our body.	\N	2017-12-05 12:17:47	\N
+889	6	FOREVER SUNSCREEN	199	0.0599999999999999978	http://biasharaplus.herokuapp.com/uploads/products/199.png	Combining modern science with natural ingredients,this effective sunscreen helps to soothe,lubricate, moisturize and protect the skin against sun damage with SPF 30.\nWith an SPF of 30, Aloe Sunscreen blocks both UVA and UVB rays, while this silky, smooth lotion made with pure stabilized Aloe Vera Gel, rich moisturizers and humectants, maintains the skin's natural moisture balance.	\N	2017-12-05 12:17:31	\N
+931	8	FOREVER THERM	463	0.114000000000000004	http://biasharaplus.herokuapp.com/uploads/products/463.png	Forever Therm is a powerful, supportive formula to help boost your energy levels and kick-start metabolism, helping you on your weight-loss journey.\nForever Therm is designed to help accelerate your weight loss efforts so you see results faster and achieve your ultimate desired shape and weight loss goals.	\N	2017-12-05 12:13:11	\N
+870	6	ALOE BODY TONER	56	0.109	http://biasharaplus.herokuapp.com/uploads/products/56.png	Aloe Body Toner, a wonderfully warming and invigorating cream, is combined with the power of stabilized Aloe Vera Gel to shape and tone the skin.\nThis specially prepared cream, designed to beautify and firm the body, includes ingredients chosen to provide a rich warming and invigorating feeling.	\N	2017-12-05 12:16:59	\N
+869	6	ALOE BODY TONING KIT	55	0.329000000000000015	http://biasharaplus.herokuapp.com/uploads/products/55.png	Indulge yourself with an at-home body wrap designed to help trim, tone and tighten, minimizing the appearance of cellulite.\nWe take pride in this excellent collection, so treat your body to what it deserves, and look your very best with Forever's Aloe Body Toning Kit.	\N	2017-12-05 12:16:39	\N
+916	7	SONYA ALOE DEEP MOISTURIZING CRM	311	0.133000000000000007	http://biasharaplus.herokuapp.com/uploads/products/311.png	Sonya Aloe Deep Moisturizing Cream with Pine Bark Extract is a deep moisturizing cream that quenches your skin's thirst for moisture like never before!\nSonya Aloe Deep Moisturizing Cream helps maintain and deliver moisture deep within the outer layers of the skin to restore and preserve the skin's youthful glow.	\N	2017-12-05 12:15:33	\N
+911	7	ALOE NOURISHING SERUM	281	0.159000000000000002	http://biasharaplus.herokuapp.com/uploads/products/281.png	Sonya Aloe Nourishing Serum with white tea extract preserves and replenishes your skin's moisture to help maintain its youthful appearance.\nSonya Aloe Nourishing Serum's lightweight formula is so smooth that it is effortless to apply. It makes a perfect base for Sonya Aloe Balancing Cream.	\N	2017-12-05 12:15:20	\N
+908	7	ALOE EXFLOLIATOR	278	0.096000000000000002	http://biasharaplus.herokuapp.com/uploads/products/278.png	For those times when your skin needs extra exfoliation without the irritation associated with other harsh exfoliators, Sonya Aloe Deep-Cleansing Exfoliator is the perfect answer.\nThis deep-cleansing but gentle exfoliator with aloe and natural jojoba beads is the perfect combination to leave your skin feeling soft and smooth.	\N	2017-12-05 12:14:28	\N
+907	7	ALOE PURIFYING CLEANSER	277	0.128000000000000003	http://biasharaplus.herokuapp.com/uploads/products/277.png	Sonya Aloe Purifying Cleanser will leave your face feeling wonderfully soft, fresh and clean each time you cleanse.\nThe first step in the Sonya Skin Care regime, this remarkable cleanser with aloe and fruit extracts is designed to gently remove makeup and debris without overdrying.	\N	2017-12-05 12:14:17	\N
+935	8	LITE ULTRA - 15 SERVING - VANILLA	470	0.121999999999999997	http://biasharaplus.herokuapp.com/uploads/products/470.png	Forever Lite Ultra with Aminotein is the perfect addition to your healthy Forever Living lifestyle. Get on the path to effective and sustained weight management!\nTwo servings a day of Forever Lite Ultra, prepared with skim milk as directed, supply a full 100% of the Reference Daily Intake (RDI) for the vitamins and minerals shown in the Nutrition Facts section.	\N	2017-12-05 12:13:36	\N
+914	8	FOREVER LEAN	289	0.16700000000000001	http://biasharaplus.herokuapp.com/uploads/products/289.png	Forever Lean provides two revolutionary ingredients that can help reduce the body's absorption of calories from fat and carbohydrates.\nTogether, the two revolutionary ingredients found in Forever Lean can help you succeed in your quest to reach your ideal weight by helping to block the absorption of some of the fat and carb calories you ingest.	\N	2017-12-05 12:13:23	\N
+905	2	FOREVER POMESTEEN POWER	262	0.096000000000000002	http://biasharaplus.herokuapp.com/uploads/products/262.png	Get powerful antioxidants from Pomegranate, Mangosteen, and other exotic fruits with Forever Pomesteen Power!\r\nThere's no disputing the fact that antioxidants are extremely vital to our health. Forever Pomesteen Power has a proprietary blend of fruit juices and extracts, including Pomegranate, Pear, Mangosteen, Raspberry, Blackberry, Blueberry and Grape Seed.	\N	2018-06-11 10:48:28	\N
+872	6	ALOE VERA GELLY (TUBE)	61	0.0580000000000000029	http://biasharaplus.herokuapp.com/uploads/products/61.png	Essentially identical to the aloe vera's inner leaf, our 100% stabilized aloe vera gel lubricates sensitive tissue safely. Specially prepared for topical application to moisturize, soothe and condition.\nAloe Vera Gelly is a thick, translucent gel containing humectants and moisturizers. Readily absorbed by the skin, it soothes without staining clothes. Aloe Vera Gelly also provides temporary relief from minor skin irritations.	\N	2017-12-05 12:18:15	\N
+887	10	FOREVER B12 PLUS	188	0.0619999999999999996	http://biasharaplus.herokuapp.com/uploads/products/188.png	An excellent combination of essential nutrients.\nForever B12 Plus combines Vitamin B12 with Folic Acid utilizing a time-release formula to help support metabolic processes, cell division, DNA synthesis, red blood cell production and proper nerve function.	\N	2017-12-05 12:09:04	\N
+861	9	ALOE VETERINARY FORMULA	30	0.0800000000000000017	http://biasharaplus.herokuapp.com/uploads/products/30.png	When a family member suffers minor skin irritations, we reach for Aloe First. Since we also treat our pets as part of the family, they too should experience the power of the Miracle Plant", Aloe Vera.\nAloe Veterinary Formula is made with stabilized Aloe Vera gel as its primary ingredient and is ideally suited for external skin problems. The nozzle-control spray makes application to any size or type of pet easy.	\N	2017-12-05 12:12:53	\N
+929	10	NEW ARCTIC SEA	376	0.119999999999999996	http://biasharaplus.herokuapp.com/uploads/products/376.png	Not only more Omega-3's you get per serving, but also has significantly increased amounts of DHA per dose.\nNew and improved Forever Arctic Sea contains a proprietary blend that is exclusive to Forever Living and provides not only 33% more DHA per day, but creates the perfect balance of DHA and EPA for optimal health and wellness.	\N	2017-12-05 12:12:24	\N
+928	10	VITOLIZE FOR WOMEN	375	0.127000000000000002	http://biasharaplus.herokuapp.com/uploads/products/375.png	Vitlize includes a proprietary blend of botanicals to support hormone balance and promote overall health and well-being.\nThe natural blend of antioxidant-rich fruits, herbs, vitamins and minerals in Vitlize Women's Vitality Supplement is specifically designed with a woman's needs in mind.	\N	2017-12-05 12:12:11	\N
+927	10	VITOLIZE FOR MEN	374	0.119999999999999996	http://biasharaplus.herokuapp.com/uploads/products/374.png	Vitlize, combined with a healthy diet and exercise, offers a natural solution to support prostate health and men's vitality.\nThis unique, comprehensive formulation supplies a highly effective blend of potent herbs, vitamins, minerals, and antioxidants to help maintain normal urinary flow, promote healthy testicular function, and encourage optimal prostate health.	\N	2017-12-05 12:11:57	\N
+926	10	FOREVER IMMUBLEND	355	0.0929999999999999993	http://biasharaplus.herokuapp.com/uploads/products/355.png	Forever ImmuBlend is designed to support immune system function by addressing all aspects of the immune system from its first line of defense to its last.\nThis exclusive formula addresses all aspects of immune system function, providing both foundational nutrients required for a healthy immune system and natural botanicals that work synergistically to support immune function.	\N	2017-12-05 12:11:40	\N
+868	10	A-BETA-CARE	54	0.116000000000000006	http://biasharaplus.herokuapp.com/uploads/products/54.png	Forever A-Beta-CarE is an essential formula combining vitamins A and E, plus the antioxidant mineral Selenium.\nForever A-Beta-CarE's combination of nutrients, available all in one convenient product, is one of the most important complements to good health.	\N	2017-12-05 12:11:06	\N
+866	10	ABSORBENT-C	48	0.0690000000000000058	http://biasharaplus.herokuapp.com/uploads/products/48.png	Forever Absorbent-C with Oat Bran is an outstanding nutritional supplement that combines two vital nutrients into one convenient product.\nSince humans are among the few animals that are unable to make their own vitamin C, we must therefore get it from our food, drinks, and supplements, such as Forever Absorbent-C.	\N	2017-12-05 12:10:48	\N
+930	10	FOREVER DAILY	439	0.0800000000000000017	http://biasharaplus.herokuapp.com/uploads/products/439.png	Delivers a perfectly balanced blend of 55 nutrients, including essential vitamins and minerals.Forever Daily's unique formula is designed to nourish and protect our bodies by filling the nutrient gaps in our everyday diet and provide optimal health and vitality.	\N	2017-12-05 12:10:26	\N
+933	10	FOREVER ARGI+ STICK PACKS	504	0.302999999999999992	http://biasharaplus.herokuapp.com/uploads/products/504.png	ARGI+ provides all the power of L-Arginine, plus pomegranate.\nL-Arginine is a potent amino acid that helps to support what scientists refer to as the Miracle Molecule - nitric oxide. L-Arginine is converted into nitric oxide in the body, to help support circulation.	\N	2017-12-05 12:09:58	\N
+906	10	FOREVER ACTIVE HA	264	0.13600000000000001	http://biasharaplus.herokuapp.com/uploads/products/264.png	A unique form of low molecular weight hyaluronic acid, with moisturizing and lubricating properties.\nWith low molecular weight HA, plus the power of Ginger Oil and Turmeric, Forever Active HA is your key to becoming a well-oiled machine again!	\N	2017-12-05 12:09:45	\N
+892	10	FOREVER CALCIUM	206	0.0980000000000000038	http://biasharaplus.herokuapp.com/uploads/products/206.png	Provides the clinically proven quantities of Calcium, Magnesium, Zinc, Manganese, Copper and the Vitamins C & D to help maintain proper bone structure and function.\nForever's new form of calcium, Di-Calcium malate, is most effective at promoting optimum bone building since it stays in the blood stream longer and does not interfere with the natural pH balance in the stomach.	\N	2017-12-05 12:08:32	\N
+3	1	FAST START COMBO	2	2	http://biasharaplus.herokuapp.com/uploads/products/2.png	Get a jumpstart on your business with the Start Your Journey Combo Pak!\nStarting your own business can be difficult, but with the Start Your Journey Combo Pak, you will have all you need feel confident.\nThis combo contains:\n* 2 units of Aloe Vera Gel\n* 2 units of Aloe Vera Berry\n* 2 units of Aloe Propolis Creme\n* 2 units of Aloe Moisturising Lotion\n* 2 units of Heat Lotion\n* 2 units of Aloe Ever-Shield Deodorant\n* 2 units of Forever Bright Tootgel\n* 2 units of Aloe Lips\n* 2 units of Artic-Sea Super Omega 3\n* 2 units of Aloe Liquid Soap\n* 2 units of Aloe Vera Gelly\n* 2 units of Aloe Lotion\n* 1 unit of Bit 'n Peaches\n* 2 units of Forever Freedom\n* 1 unit of Aloe Jojoba Shampoo\n* 1 unit of Aloe Jojoba Conditioning Rinse\n* 1 Literature pack	\N	2017-12-05 12:31:02	\N
+867	6	ALOE PROPOLIS CREME	51	0.0800000000000000017	http://biasharaplus.herokuapp.com/uploads/products/51.png	Excellent as a skin moisturizer and conditioner, Aloe Propolis Creme is a rich blend of stabilized Aloe Vera Gel and Bee Propolis, with other ingredients recognized for their contribution to healthy skin.\nWho but Forever Living Products could produce a moisturizer as unique as Aloe Propolis Creme? Combining our world leadership in Aloe Vera and beehive products, Aloe Propolis Creme is one of our most popular skin care products.	\N	2017-12-05 12:16:24	\N
+883	10	FOREVER GINKGO PLUS	73	0.121999999999999997	http://biasharaplus.herokuapp.com/uploads/products/73.png	Ginkgo has been shown to increase circulation of blood to the brain, making it a remarkable brain tonic.\nForever Ginkgo Plus is a unique blend of four Chinese plants. Ginkgo Biloba leaf extract, its chief ingredient, is combined with the powerful Chinese herbs of Ganoderma from Reishi mushrooms, Schisandra berries and cured Fo-ti.	\N	2017-12-05 12:08:17	\N
+896	10	FOREVER MULTI-MACA	215	0.106999999999999998	http://biasharaplus.herokuapp.com/uploads/products/215.png	Forever Multi-Maca combines legendary Peruvian Maca with other powerful herbs and select ingredients, to create one of the finest supplements of its kind!\nMaca has been highly revered for over 2,000 years in Peru. According to legend, the Incan warriors ate Maca for strength and endurance before going to battle. The Spanish Conquistadors called it the sex herb of the Incas.	\N	2017-12-05 12:07:51	\N
+878	10	FIELDS OF GREENS	68	0.0519999999999999976	http://biasharaplus.herokuapp.com/uploads/products/68.png	A simple solution to convenience eating.Get the antioxidants you may be lacking. \nFields of Greens combines young barley grass, wheat grass, alfalfa and added cayenne pepper (to help maintain healthy circulation and digestion). We have also added honey to promote energy.	\N	2017-12-05 12:07:33	\N
+863	10	NATURE-MIN	37	0.0719999999999999946	http://biasharaplus.herokuapp.com/uploads/products/37.png	Forever Nature-Min is an excellent way to ensure that your body is getting the minerals and trace minerals it needs to meet the demands of a healthy, balanced lifestyle.\nYour body can benefit from nutrients locked deep in an ancient seabed, because four percent of our body weight is comprised of these minerals. Since our bodies can't manufacture minerals, we have to obtain them from our food or supplementation.	\N	2017-12-05 12:07:15	\N
+865	10	GIN-CHIA TABLETS	47	0.0719999999999999946	http://biasharaplus.herokuapp.com/uploads/products/47.png	Two ancient herbs: golden chia from the West and ginseng from the East, combine to make Forever Gin-Chia.Golden Chia, was used by southwest Native American Indians in the US at the turn of the century for its life-sustaining properties. Ginseng is a potent antioxidant.Together these two legendary herbs pack a powerful punch to help you get through the day.	\N	2017-12-05 12:06:57	\N
+876	10	GARLIC-TYME	65	0.0739999999999999963	http://biasharaplus.herokuapp.com/uploads/products/65.png	Garlic and thyme, the two powerful antioxidants found in Forever Garlic-Thyme, combine to create a great tool in maintaining good health.\nGarlic and thyme, the two powerful antioxidants found in Forever Garlic-Thyme, combine to create a great tool in maintaining good health. When garlic is cut or crushed, enzymes react to produce a powerful immune-enhancing agent.	\N	2017-12-05 12:06:42	\N
+871	6	ALOE BODY CONDITIONING CREME	57	0.160000000000000003	http://biasharaplus.herokuapp.com/uploads/products/57.png	Aloe Body Conditioning Creme is the ideal partner to Aloe Body Toner for keeping your body feeling smooth and supple.\nAloe Body Conditioning Creme is rich in European herbal extracts, emulsifiers and humectants. Effective as a massage cream, it can also be a spot rub for the entire hip and leg area, or for parts of the body which should not be wrapped.	\N	2017-12-05 12:17:15	\N
+881	8	FOREVER GARCINIA PLUS	71	0.121999999999999997	http://biasharaplus.herokuapp.com/uploads/products/71.png	Forever Garcinia Plus is a revolutionary dietary supplement, containing ingredients that may aid in weight loss.\nGarcinia works by inhibiting the enzyme which converts these calories into fat. As a result, the body will burn existing fat stores, thus aiding in weight loss.	\N	2017-12-05 12:13:52	\N
+900	10	FOREVER VISION	235	0.105999999999999997	http://biasharaplus.herokuapp.com/uploads/products/235.png	A dietary supplement with bilberry, lutein and zeaxanthin, plus super antioxidants and other nutrients to help support normal eyesight and improve circulation to the eyes.\nOur vision is a precious sense, and one that we should not take for granted. While we may supplement our diets with nutrients to enhance our overall well-being, we tend to overlook our eyesight as a necessary part of our health to maintain.	\N	2017-12-05 12:11:27	\N
+925	10	NEW FOREVER KIDS	354	0.0599999999999999978	http://biasharaplus.herokuapp.com/uploads/products/354.png	Give your kids the nutrients they need each day with Forever Kids Chewable Multivitamins.\nFormulated without artificial colors or preservatives, the phytonutrient base is taken from such nutritious foods as carrots, beets, broccoli, spinach, blueberries, apples, cranberries, tomatoes and strawberries.	\N	2017-12-05 12:09:20	\N
+897	10	FOREVER ACTIVE PROBIOTIC	222	0.117999999999999994	http://biasharaplus.herokuapp.com/uploads/products/222.png	With an exclusive, patented encapsulation technology that protects the probiotics then releases a unique combination of six beneficial strains of microbes.\nForever Active Probiotic is the only shelf-stable, 6-strain probiotic on the market today that requires no refrigeration. And what's great about Forever Active Probiotic is that it works in tandem with our patented Aloe Vera.	\N	2017-12-05 12:08:04	\N
+858	3	FOREVER BEE POLLEN	26	0.0599999999999999978	http://biasharaplus.herokuapp.com/uploads/products/26.png	Research by scientists suggest that Bee Pollen provides energy and may enhance stamina.\nBee Pollen is readily digestible and easily absorbed. Pollen is the fertilizing dust found in flowers. Bees gather pollen from flowers and bring it back to their hives to use as a food source.	\N	2017-12-05 12:27:40	\N
+859	3	FOREVER BEE PROPOLIS	27	0.129000000000000004	http://biasharaplus.herokuapp.com/uploads/products/27.png	Forever Bee Propolis' supports the body's natural defenses.\nWhen we think of bees, honey and pollen are usually the first things that come to mind. However, there's another powerful substance that bees play an integral role in, propolis.	\N	2017-12-05 12:27:27	\N
+855	6	ALOE BATH GELEE	14	0.0749999999999999972	http://biasharaplus.herokuapp.com/uploads/products/14.png	Rich in pure, stabilized Aloe Vera gel and herbal extracts designed to relax and refresh the body.\r\nLet Aloe Bath Gele soothe away your cares. Used with our loofah mitt, Aloe Bath Gele helps remove dead skin cells to reveal smooth, clean skin, while its rich formulation permeates your skin to soothe away dryness.	\N	2018-06-08 17:17:07	\N
+862	3	ROYAL JELLY	36	0.130000000000000004	http://biasharaplus.herokuapp.com/uploads/products/36.png	Royal Jelly can help support the immune system, increase energy and benefit the skin and hair.\nRoyal Jelly is a substance derived from the pharyngeal glands of the honey bee. This super food of the bees is specially blended with enzymes and fed to each bee destined to become a queen.	\N	2017-12-05 12:27:16	\N
+857	4	ALOE LIPS	22	0.0140000000000000003	http://biasharaplus.herokuapp.com/uploads/products/22.png	Forever Aloe Lips' soothes, smoothes and moisturizes chapped and dry lips\nhe soothing properties of Aloe Vera are ideally suited to care for your lips. Aloe, jojoba and beeswax combine to create the finest all-season lip product on the market today.	\N	2017-12-05 12:25:21	\N
+860	4	FOREVER BRIGHT ALOE TOOTHGEL	28	0.0309999999999999998	http://biasharaplus.herokuapp.com/uploads/products/28.png	Aloe Vera has long been treasured for its quality and versatility - including dental care. Your teeth will gleam with Forever Bright, one of the best toothgels on the market.\nFormulated for the entire family to use, Forever Bright contains only the highest quality ingredients. Natural peppermint and spearmint flavorings leave your mouth feeling fresh and clean.	\N	2017-12-05 12:25:06	\N
+856	2	ALOE VERA GEL	15	0.101999999999999993	http://biasharaplus.herokuapp.com/uploads/products/15.png	Our Forever Aloe Vera Gel is as close to the real thing as you can get.\nA product of our patented aloe stabilization process, our gel is favored by those looking to maintain a healthy digestive system and a natural energy level.	\N	2017-12-05 12:28:58	\N
+882	10	FOREVER LYCIUM PLUS	72	0.121999999999999997	http://biasharaplus.herokuapp.com/uploads/products/72.png	Forever Lycium Plus is a dietary supplement containing antioxidants, bioflavonoids and other beneficial phytonutrients.\nA fruit used in ancient China for centuries, lycium has been shown to enhance the complexion and help maintain energy and good vision.	\N	2017-12-05 12:09:33	\N
+880	4	GENTLEMAN'S PRIDE AFTER SHAVE	70	0.0599999999999999978	http://biasharaplus.herokuapp.com/uploads/products/70.png	Pamper and soothe your skin with the moisture of Gentleman's Pride, an alcohol-free aftershave in a clean, masculine scent.\nAs a razor blade moves across your skin, it can cause nicks, scratches or razor burn, leaving your skin irritated and dry. Feel the icy exhilaration of this unique blend of lubricants and moisturizers combined with pure, stabilized Aloe Vera gel.	\N	2017-12-05 12:26:25	\N
+877	4	ALOE EVER-SHIELD DEODORANT	67	0.0290000000000000015	http://biasharaplus.herokuapp.com/uploads/products/67.png	Aloe Ever-Shield Deodorant Stick provides effective, all-day protection against underarm odor and can be applied directly after showering or waxing without stinging.\nAloe Ever-Shield glides on smoothly, does not stain clothes, and maximizes the deodorant properties of aloe vera while eliminating ingredients that could be harmful	\N	2017-12-05 12:26:11	\N
+886	5	ALPHA E FACTOR	187	0.133000000000000007	http://biasharaplus.herokuapp.com/uploads/products/187.png	Forever Alpha-E Factor moisturizes from within to deliver an ultimate smoothness to your skin for a younger-looking appearance.\nThis light, emollient fluid is fortified with Vitamins A, C and E, Borage Oil and Bisabolol. It is an antioxidant fluid designed to combat free radical damage, which causes 80% of our skin's damage.	\N	2018-04-04 06:04:54	\N
+890	2	ALOE BLOSSOM HERBAL TEA	200	0.0700000000000000067	http://biasharaplus.herokuapp.com/uploads/products/200.png	A natural blend of leaves, herbs and spices for an outstanding flavor and rich aroma.\nRefreshing cinnamon, orange peel and cloves impart a warm, fruity flavor, along with allspice and ginger to soothe. Combined with aloe blossoms from our own plantations, this zero calorie tea is a great complement to your weight management program.	\N	2017-12-05 12:29:10	\N
+903	4	ALOE JOJOBA SHAMPOO 2016	521	0.0709999999999999937	http://biasharaplus.herokuapp.com/uploads/products/521a.png	Your hair will be shiny, soft and manageable with this pH-balanced, pure Aloe formula.\nStabilized Aloe Vera gel benefits not only your hair, but your scalp as well. The gel's properties make it a natural alternative to other shampoos, while this gentle, concentrated formula makes it suitable for all hair types.	\N	2017-12-05 12:26:41	\N
+915	4	ALOE MPD*2	307	0.0990000000000000047	http://biasharaplus.herokuapp.com/uploads/products/307.png	Introducing Forever Aloe MPD a liquid detergent that is highly effective and economical. Forever Aloe MPD is a multi-purpose, liquid concentrated detergent.\nThis safe, concentrated, liquid detergent is great for lifting grime, cutting through grease and removing stains without scratching or marking surfaces. It is versatile enough to do the job of many similar products on the market with a major cost savings.	\N	2017-12-05 12:24:19	\N
+919	2	FAB ENERGY DRINK	321	0.0189999999999999995	http://biasharaplus.herokuapp.com/uploads/products/321.png	FAB is a quick, refreshing way to stay energized and alert all day long.\nFAB's boost is different from other energy drinks because it gives you both immediate and long-term energy. The immediate boost comes from guarana, while the long-term energy is powered by ADX7 technology.	\N	2017-12-05 12:29:34	\N
+923	5	NIGHT CREME	342	0.129000000000000004	http://biasharaplus.herokuapp.com/uploads/products/342.png	Recondition your skin while you rest! The moisturizers in Recovering Night Creme give life to the look and feel of your skin.\nThe moisturizers in Recovering Night Creme give life to the look and feel of your skin. It is designed for night use to condition the skin while the body rests, helping to restore the Flower of Youth skin that is youthful in its appearance.	\N	2017-12-05 12:21:41	\N
+937	1	F15	528	0.585999999999999965	http://biasharaplus.herokuapp.com/uploads/products/528.png	Choose your fitness level!\nWith beginner, intermediate and advanced levels, you can decide where your journey takes you.\nYour F15 includes:   \nAloe Vera Gel 2X 1 liter bottles\nForever Lite Ultra Shake 1 pouch Chocolate\nForever Therm 30 tablets\nForever Fiber 15 sticks\nForever Garcinia Plus 90 softgels	\N	2017-12-05 12:30:05	\N
+938	4	ALOE HAND SOAP	523	0.0619999999999999996	http://biasharaplus.herokuapp.com/uploads/products/523.png	New and improved\nNew and improved, Aloe Hand Soap provides a soothing experience with each use.	\N	2017-12-05 12:25:41	\N
+912	7	SONYA SKIN CARE KIT	282	0.598999999999999977	http://biasharaplus.herokuapp.com/uploads/products/282.png	The Sonya Skin Care Collection contains five fundamental elements for cleansing, moisturizing and maintaining overall skin condition and appearance.\nAloe Purifying Cleanser, Aloe Refreshing Toner, Aloe Nourishing Serum, Aloe Balancing Cream, and Aloe Deep-Cleansing Exfoliator work together to leave your skin looking fresh and radiant. Treat your skin to the luxury it deserves!	\N	2017-12-05 12:15:48	\N
+936	10	FOREVER CARDIO HEALTH	312	0.133000000000000007	http://biasharaplus.herokuapp.com/uploads/products/312.png	A special formula designed to mix with our Forever Aloe Vera Gel to provide three important nutritional supports for cardiovascular health.\nForever CardioHealth supports healthy homocysteine levels, supplies co-enzyme Q10 to promote efficient metabolism, and provides heart-healthy antioxidants. Simply pour, stir and drink  it's that easy and your heart will thank you!	\N	2017-12-05 12:08:51	\N
 \.
 
 
 --
--- Data for Name: user_devices; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: user_devices; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.user_devices (id, user_id, device_id, created_at, updated_at, deleted_at) FROM stdin;
@@ -4353,7 +4554,6 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 172	159	dRbeMIH1IE0:APA91bGizEf984aWb2-fInN00gExXkGVJShYMjxnSguOtiJTulZK_2XZalf2ygoAE9pEZztl946A6TBOdeuNCZpa-6vLDOv4vT909KzgQ4f5ymckcG6MBS-3SNCBmA7AXduE6rvN9O6y	2017-12-14 10:40:11	2017-12-14 10:40:11	\N
 173	160	dRrELc6HT8w:APA91bGIbrSjuY1XG-FptnTnOSrGxFlqqLjPpYtY_ESDKbb1yvCWumCLW_3761K30RLOSt7o-fp3Hdr5yaesoQSBiXPAZf8pssHTebShR3EH0aJAv3d3QbQnrCiIfLUxEgXAq_R9JXAw	2017-12-14 13:33:06	2017-12-14 13:33:06	\N
 174	161	cP6rbl5bY7c:APA91bFmMFCC7qoPXJ96nhKW0wTWjBFcr2avXpv0uBYl2tgtt48VF9LqUuA1MzPa-lkivm0kdTsEvcpc-RAOD3jxARmMYrRysBwTlRSo1KGXRe0wehQuUilcPwxzDo4zqMbAWMgzfPZr	2017-12-14 14:54:26	2017-12-14 14:54:26	\N
-175	162	dVTh6g229zA:APA91bHqkSgTrFaDSwLKgl1O7M0ywUotQQiv63YFwcpO1tFyn2d3pp0xJUs9sjVhOS6dZSpLP_yJLvy9_7a6KZlL7z3Jxlx31zdYPtvbkk6J6W7xWIsUaHKVGKiYSki5RoUwrlaLgVZX	2017-12-14 19:17:17	2017-12-14 19:17:17	\N
 176	163	cg5UEndhjOs:APA91bFhd1m24e5wBXuBsRtm9PT-jqmPyfSnUY6PHe1eDIX-4KirJgS7bl51gX-w_MajyuqAmhhMExQPw6VzZnKR9WYpDHd_OW4YhvvibdEgdDFSb6Y-U4YH5uKYlUitZI1QRYb4xnla	2017-12-15 05:36:05	2017-12-15 05:36:05	\N
 177	164	fG9f3R_98pA:APA91bHivgrrr_TFy42aiMok5epq2OMdayye-3KiDR2wdZPPmVyxHqOeIA_ZnL_aUXgKLcEwXiurR8YSpOgIIqdO2thSnvmI3xMeDUqVHnuVFVzZmKIJYzDSrsHYpE_nqFNC2CUpvkRd	2017-12-15 05:39:54	2017-12-15 05:39:54	\N
 178	165	eqHo8RWUYEQ:APA91bELvysONRUHLbWP7IPCdl7BU_Pb6OBzIcTG-lBls2eeROSrWQK6lKXfK479AdyuyOYLUCv2OmI4iqkSAOyTkjQ9QhApsu_-okhwUQtSDRN01RE_xsrCrX6P9HR5dVP_pbnoGeeE	2017-12-15 06:23:23	2017-12-15 06:23:23	\N
@@ -4429,7 +4629,6 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 249	222	dcYNn_AarC4:APA91bGP3r5Uat39ATgrRg4dgXsAWY-1a8GZKfmroK1IopNa_fZeqOnI5c_gGeQRC6HXgXI3pCnx-KjxRc6ypUSiQRY6fp1DhYwc-rDi0QNxUYthMdU5Qe83gGt0-PbtBrSG2kxydHOm	2017-12-22 10:07:56	2017-12-22 10:07:56	\N
 250	223	cn783t9f3eA:APA91bHuahy1MINd3D_uxGPLkPWZOK7u53TVCRSAZwPs3FQ-edSgmlq8cMgVLUK--gpl5l9jh1taIa12CLsT91Rt5gBoTDM_swoKoWc1i6RLw-kzkIPZJqTXM-yE_4ufVYl7M38YIUzH	2017-12-22 11:03:29	2017-12-22 11:03:29	\N
 251	224	dV7xr2V4SRU:APA91bFXhK26pIV8yYoZz3ggc87WqW5fGIsxXKONslhy3NIZn4k93KwOLV1ph_x6x24-vblUamSvHSdFa6FRLiA_3nR5E5iQXSbL0rvD-3bsGjnv5qDXuHHPIQ2sJlfdOyj17107IS6m	2017-12-22 12:01:21	2017-12-22 12:01:21	\N
-252	225	d-7tr7K_bME:APA91bGL7v4svEwQNa769O02_TO2fFzXsv8CHbzUusWsCB6oE8NGrmSPZMHKK1ufQkTK_Ppx4E_DRSQ_ZjWmTw840nZc4lqZdMPutKLj-XwqQtZRKtHy2nEjVJgJQGE_ItFCXofpy-gx	2017-12-22 12:07:39	2017-12-22 12:07:39	\N
 253	226	e3IBm_3XGV0:APA91bFyVQpBRKuQ9t9H-xigGWsQeDkY9Sxu42oJx2obLOZ62qltU-aJFhj28JGh82sX6IYPp1nlvmfZClxnld8fn8kQZpy5nUCXFtMpFYioOWjJ5I97OWLiL5p9Ft-YiDHwQJtHUn9T	2017-12-22 12:10:02	2017-12-22 12:10:02	\N
 254	227	emSmO1lPsNI:APA91bHcJ0bi0Uc-a60Y9mziTjE_vhIX0ez67vpVSFIjLnQxjpvTF1l7Y6NK-sigI-6BFTAMzqeNa9lDuMcGF8Gb94ZKHqwtwi67lor1csMxIQPfFQj9gUNSAUIm1D5DxwkhxYkdfII9	2017-12-22 14:15:47	2017-12-22 14:15:47	\N
 255	228	fzmBAeHJe18:APA91bGJfUIiKn2lIsOPj0mu9Dxe6_1nLJiZPQKGhZKC1qnJvvJZoiimx0IkgAru6QH-OcdlBM19a3msGV2gjET1NVylvZbaJZuppuZ3ZDb21gQbjldPqOeYULy6CQcQnNOyE5Pw8Rq-	2017-12-22 15:46:44	2017-12-22 15:46:44	\N
@@ -4799,7 +4998,6 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 622	527	dem29XjK80w:APA91bFfcgzWx7v71DclxztgGsiFaseOmK9-2avJJ0nI_3A1oljtqWNXMjh3cLFFXBiXfFTWaxWnJ5ZUrMYavFBkhPX7PoPONaIBlVjmdzkDvm9iXvbw5Bhmb8aY_P-wSYWvrL3iAXx5	2018-02-06 22:32:19	2018-02-06 22:32:19	\N
 623	528	dqX1S9cy3Mc:APA91bGA4pD2eVAMSXnN1_wnZFrIwG49qfvn3UTmIhNyU_iqrzodosTTk1O6KiU7KhCWR295Mb_39p1ZwfUnIh7elcoTdz52cGvEqS6xFMLCTKv5N4hteKi25PmN8qxU1IwxdWUrjovp	2018-02-07 05:31:43	2018-02-07 05:31:43	\N
 624	529	e4O0m8N9TW4:APA91bHzQvNCymrqax_UAOp2u1vnHYSPhTigbwCqmBD6LHtFw495Wjv3Dmd6LIJRNvEPSOy8uv5HjDInHHHrmYmiLKwVYT-VBvHFSYutA2gtX6zj1xsQzAwhRZBHpjWB-cYgY-4mdpGS	2018-02-07 15:01:08	2018-02-07 15:01:08	\N
-625	530	efZQVca1Yek:APA91bEoMN-8OUTSJe9xfomb4J7Dfn7_WuOUEzdQ1Z8hAUoLtneWNs-MNc3su4xXXeXBV6tNhbK89hg0drGq7fTzyaslO1DvFydqTtq3e9lp29y6_6D_RFJDY5Ehq4BaK8kSjxQpjn2h	2018-02-07 15:08:12	2018-02-07 15:08:12	\N
 626	531	cmmHg-UYZYk:APA91bHTdfkCHAL7Un319p4FRW7ZT74yHBOQlVl0hQqgOq4SFr9SqoGCgiTrrInSP7b215WjxRRnHDDGwTkj9QkQoxZqGVJet8AW38oCqSSHQkxw3XnrU_8FFHSdYI0qQWbKx2PXC3lm	2018-02-07 16:16:35	2018-02-07 16:16:35	\N
 627	532	fmRC0ZA0OV8:APA91bEI3YmABdvbl3lD5S8WBIyFhVqYtQIDsJ_sNGP8CqVTHdoPMGRpCO-V8E3sYCVUGQv8trUrUODnmL5WrdqaD2cvEOYGS2ZleaYxXZRxuT8GN0m7ohCO6Gh7QokoBAaq4_zUIkUI	2018-02-07 17:55:58	2018-02-07 17:55:58	\N
 628	533	dmSlSfwLrL0:APA91bGCp4mndOz-U-7JcYk-Zg5UIcy5xfpEB2LmHmYVLFJKokXuQzEgXDriuYrqi7g00rg7gmCTMQqq5-zMnQEmIv-_46Op4zTQ9AJEikm6fcDVZ-JUxKGJPvutEE1ONjYIBjNNNh27	2018-02-07 18:35:59	2018-02-07 18:35:59	\N
@@ -5059,7 +5257,6 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 899	65	dmsIK1i9ZmY:APA91bFbNyoAfzOtPlqsstcKWOlB1cAvxED299bqeT4Zt0aAPfaB5jRSpEzSIAQO3imCbI4iuk6S2Nx9gKL8TXLGTqc4iMA8vfdATkk_PNVEalnhhM5ByylaEGcXhg6EDokl4EtisW9Z	2018-03-18 15:44:32	2018-03-18 15:44:32	\N
 900	763	dJpYiAhvYTY:APA91bFiSQcyh264n3NQCc2y_vmwDqdGvY78vP3nuQNOwF8T5HyiB_93vlAD5iiZy25otUxHvk5XYMqOrpyjYP4v8YuQ1tGuh4FjOxeLJ-GXJeqstf9yMosHD44z2uldC-vnOqvMR8-e	2018-03-18 18:12:16	2018-03-18 18:12:16	\N
 901	764	cr-DrnSdZXY:APA91bHE3ExIZNHL7TV-2EpAwuPSNYmQTvrCS3Uovmzv4eTtsgWQlun7VsaMkin1i7GzEDYjmSt2kuXHzQLZrxZQxkLeIMPEcAb5-2yQCvr7JON2PtHhlAfnjQYZeuA9XcTteNnVWOvr	2018-03-18 18:38:25	2018-03-18 18:38:25	\N
-902	765	erBdgjOn5zo:APA91bHH45Ved6p7q5FowkOtnh9gVz7IR5m6VIoHhmPlHxUTAJPGMItqkZyv8U8FXQw-gTu6lyiIxX6l_aPJFW_Rv6pTKLzT-H2PHtpBT6nCI2zJbRDlG19y49VwKZetysmU1LPc5Ncu	2018-03-19 04:06:27	2018-03-19 04:06:27	\N
 903	766	eC-A8DsYJyU:APA91bFd_S4fbrrSvmNkvGl1AWBawbwajQ558vfWF2bI4eQy6D3lZZynBWpGI3LE1Oz_vOYZ46B6hZ63pYdrM1FoU0CwkXG3iCKxSdNpn7Us5tEbtYOdUqDPw3sGlIljwpoU3WWbiQVO	2018-03-19 07:27:50	2018-03-19 07:27:50	\N
 904	767	ckrljBYF1FY:APA91bGyyJB-BJSduiX1dd5sFww8M0E8rTi3W0KvA6sWR-fVHjdk3a8VGxMMzBKbzpg2z1zUHzdHc9bzMquH22Q3_exToco_N7xIDWagVa_V621KxofHaDBqrSYXZTxWQEfXLytw_1BS	2018-03-19 08:32:09	2018-03-19 08:32:09	\N
 905	768	eUQky0hMCC8:APA91bFXw5qtudAKg-nrWk31IfsTtGe85v2RfdURHLu-4xhxhEOy5LxRqbHBoclLzLtYZVhx7RIRfBni9jDIi1ytX0E-P4mRFkl8-U7vuD_-TTXtiqz19CqwIPgMD2nI4FuWgOOdDqwJ	2018-03-19 09:09:18	2018-03-19 09:09:18	\N
@@ -5184,7 +5381,6 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 1025	19	czSMOf05I10:APA91bEwYwKZU71WfO3JJ741lZL8OrPvG2YoqC8iyy46qyT4JnSgVqmFMCVV8rmaxsE4fVwd99Kd0fgcPDWY81vnpnBe10nPlDeysFq-s6gzeM7M5sgPbN04KkUGbg-VrMhAguM6Dvaq	2018-04-05 10:44:02	2018-04-05 10:44:02	\N
 1026	849	fEtEKgiDlwE:APA91bHm8hYX41gYTN2CbUNDqGH6Jg7zkkjPTENi7JFLSOofDjEF0wKo7xG1RuDV0u-2oj0JVVBtQ9tzk3cbxbBZQuuxLzsnTWnlGTs4liz-BgQgVuz_j-VhQnvtDLEYF3K5XXBY0UjY	2018-04-05 11:31:55	2018-04-05 11:31:55	\N
 1027	850	dFmlZWfIrgs:APA91bFjA69z6Y3T0EGK19Q-OU_bvy9oOwL2E7eFy8eyF_FeQG6tTfxln0ozHHnRxFhmLpdVxjmMBPDcyXb_uYpxO-SsvBsjk_yY9EiLY_TbMdFPaLInXU_nH0RuCcsYJyhogyLJKH9E	2018-04-05 14:56:34	2018-04-05 14:56:34	\N
-1028	851	dcdJzCWRpk4:APA91bE_jI9uRJbdO6chWfpsCZjGFsTRsSmEOBncZFMrLrgkLOW4D_pT4DIMaM-qUvRO1zggaAfpANh91vTMhHRBRFq_HiL6e06b-BKy0yg3l3yUrMfSz6oAtwcG7qaYorzTpmP9hwZb	2018-04-05 16:42:35	2018-04-05 16:42:35	\N
 1029	852	c--VxeYXQGM:APA91bGBYK070C9gYjmPhetuhlmLVoKruiUucgPf2DcgsfxtbbT6Ff3d37faOv-viNfG0TggYCQhrrG04zDxh0aN7btekBZp8r7U1A5HgBflrCkULFkNBfFRbK2r2yJ7ypEOBD2lYJVw	2018-04-05 17:42:27	2018-04-05 17:42:27	\N
 1030	23	epO8CX2EAAI:APA91bES4QMm3LCDOXCFc1OMkz1Wz3XLEdo_Sxq7hta_YkQrKnJUKtGO4N3-miQKipmdwn-3Le_oxm849KIozePvJlXZYu98zQ_0W5CBr4YX9hgTaAWQIlGZm9Zr3V62r4QEikei6V_f	2018-04-06 07:10:16	2018-04-06 07:10:16	\N
 1031	853	cLAdH8tNWms:APA91bGAZPRcCjBb7zsUUXRIB6eLLga1NqP0tw5tDiJcNNaIsn__E96aozA8kUV9eEPkXVEQRuyLerygiaDUp-YfzpUlrEL0IhkmqnDUbLMEpj76z1PLKZILhlcIdjzEdcuvlutKWJ0d	2018-04-06 09:01:39	2018-04-06 09:01:39	\N
@@ -5215,7 +5411,6 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 1088	903	dxIqTjAeSS4:APA91bE0RYWMzumW8XR6tycZdofF-VvHFxf23iuFG-Ew3ky2BFFtMUdMFKCIbz_m6A4NYOCp8whMaO98eCTWeChOos093XX907rm4f1RH42q4iIu6lrWlvKhBohKCACjZpW7wEmRk0Ax	2018-04-09 20:42:14	2018-04-09 20:42:14	\N
 1089	904	c_s8FrcNO-I:APA91bH429AvjQ4yk8oX9gr_20c-nMFLQG8lW71CLzem_Xy19yrKsAG8PR5CArhV2g_FTChEpWZW8Ae8ja4l6P5V_CTk8t5kQcr3S6p_JO0dFQGk-2OdxhG3JRuett1-WN9R_gsLy-ku	2018-04-10 06:57:02	2018-04-10 06:57:02	\N
 1090	905	c8EqEN17o24:APA91bEupcWq885Q_q2G2WxYpLRq-y6g0t6ePM50ZxmxJbTf5hNG2wr1SEOlUqJEF-0P5mUXbmjSN84bk1r_WTYWIliDOw6zwNlfsoLc0Z6bO7tGMEZX7PdwTZ3Ud5edSP-5gYQ9GUZE	2018-04-10 09:04:43	2018-04-10 09:04:43	\N
-1091	765	fl0e9g-iuv4:APA91bGxOUiC2YdciKXZLZpKIDhaJ5vZ1T8UYGia60LGJNd1fVW1xe6KPhZwO2NT7t-2f5bt_RX9L1yj7yBhhynVOs0A6LMN6RqmZbLBawVEtq2wz7PQGPD6yt_t_uD6_4nsdP80q21Z	2018-04-10 09:10:12	2018-04-10 09:10:12	\N
 1092	906	ewQGwPaHbic:APA91bEkStjXbLZZ5DBNxqwuzkvsQ0aHpZb_M7Rl-9-ij4hrvCJO8naDcxnqG2LzQrKIc0pXQOcdIMrAcBjv-Tp9l-64qTJwNmISmb5GekGBJ8rPWDU_pCpT1PgwjTH63pvJVhRy3vfY	2018-04-10 14:08:55	2018-04-10 14:08:55	\N
 1093	322	c39QEEe0KNI:APA91bGJ531PEHz_U1bN3ewkJ_v189dXIrlzB83XD8mHA7cMsp9a2u5LaX8KeYh9jpWkGwPGm3knSVncGqCyz7qDDBVqREt3cwzjGiBKM4rLcbjKNb4iZIrvvDmI4-gdf7xqMz9WAeXJ	2018-04-10 18:10:35	2018-04-10 18:10:35	\N
 1094	907	djftGaygQ_0:APA91bE4vpY8GG1IxCZvSkTkXu5xfUMuMm_GwZGros7amLNlEoXPcCqdjqK5K1E3WhCeclIN48yCfrUmJDTHOgzCNtC78AByoBetCFwqOrzp6Edwo3SgfwCH5iFDRDWY453dl0Xf-Ejw	2018-04-10 18:29:12	2018-04-10 18:29:12	\N
@@ -5269,7 +5464,6 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 1143	936	dhKWVE4ryxY:APA91bF9k4cL3JejxXGh3n5dXv_ADMiOtqe-0ETx-19h8MsT5feV_vCHzPIO_YGoPGB7NZm1hq2l0leE6X_-S-56sCIt-AXsZSaOR8JMYxeJAEjDWgUAgmPKSUxfw9x36mDNzKR8hJmt	2018-04-19 09:14:13	2018-04-19 09:14:13	\N
 1144	630	ewTQTD_IpDY:APA91bEo2Y_HNnRZl43hgwj5SuyfU0Fl6LKsg4ALxJderRGtV2To9L-5KP0b9bNMK770hx8rjxKxW89ftwje4GtPDP0P1zoZ61eoYDpI8zMSs2isdHrn0YWddy0v836shQ-fSelbKHKb	2018-04-19 10:14:13	2018-04-19 10:14:13	\N
 1145	614	ea_wc-sGUXQ:APA91bGaVChfbK0fpV_x-W0CfozbSh9aNHn5_mCDcqdVg98ZtQSAnHCY3Vmg4HdtPCm9Glf43pFsiqXV3z8qE-JlKtAJNgjB_-GoaRuViiKKKpQHxN1wSPynuzv0_8p4QOzTAXl2PjWP	2018-04-19 10:38:35	2018-04-19 10:38:35	\N
-1146	851	cbJtk5lZjvc:APA91bHZtfmV9ykY7mh_xOaVsuGXpNc3KsChcXKqegydFRXgK3HOSwBp4HDpMEqsM64ihBnCgFj-D7EazNUJE7erWmrzkw3OpPY5FZcxblo3Qj-vrtcJ5mrk2S2p_bUHXYpjIsd-Hc75	2018-04-19 10:58:42	2018-04-19 10:58:42	\N
 1147	937	fF_wZV9dgtU:APA91bGZ5IEc__id8w64VjQTXaUZAGJQYibZcdgWfzXwwXo3qTaQq33HR6SSgAckY7lHbu_xr4f3FF4foyTHC-xFMBnB9PuEM1fmoBVW-rqi04KysZRX78UcfijZwWRWROTfAmlV_bVt	2018-04-19 11:48:09	2018-04-19 11:48:09	\N
 1148	938	dRS5PXuicf0:APA91bFBaKjxmKbqfxMrc8eIKiwe5-uT7_hG7O6YIvL5Sd1MbNJegUkl2LcydWUlbhzHwoQUUDPy7CZamyOum1LGiH6s8mhIfleCsYKxCjFa0Ps1fkfqQlIrQSHm-DuYH7isiPPwhHq5	2018-04-19 14:07:16	2018-04-19 14:07:16	\N
 1149	939	coiXccYLqxk:APA91bGlDf6VxghgG1C-2piHzkdk_bij1TLO10_EnS0XqDLEaMHBWaxfKmWfeIft_dK5CwClmodmc0OjwXPt9MBJR7adCUNLkryylBnCs25849-Rnwcs3Fu4yl-LF8vqc5_pDJfgFJ0d	2018-04-19 15:41:20	2018-04-19 15:41:20	\N
@@ -5322,7 +5516,6 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 1198	90	cEJ4cOdmjY0:APA91bFutJc2XncwZNtFcG0fYbPxiaB7qu58jyqxYZjf2w9Eas_ukziPs9qa94t0kUrGbIDB6rZ8qfuR5wcsbn0lXOf7pt-0R38p9wqwNwMIJIb-8wGhgSHGXR5kuvOYo0spHyLGCw-X	2018-04-26 20:00:55	2018-04-26 20:00:55	\N
 1199	975	cI07XCW3Se4:APA91bG08GFVQye2dk58kXndyq5yWMeF-gYXWxjr72OF22-c093qGumPLZniOrZSJSp82segsUE9LBbZXudz-QSdDxj-FcCE-xvQRScNJP2LSn80t_sEcljanwzl2vcbuZW2a1-FwBtV	2018-04-27 09:00:26	2018-04-27 09:00:26	\N
 1200	976	dIS2KfMxoiU:APA91bGdsOeF0Azq4NEQ3dMg5UGpRIGkzXKWoQi0m7YlYQTkAf-ZPnkifpxeFe7M6Dm_dB6XUA8dzFephcwIzlxyBAOIdSMn6N85IsSukuDlWmReCB8Dt-merlp2avOvC9kDeUFGNmL0	2018-04-27 10:45:22	2018-04-27 10:45:22	\N
-1201	977	cWqt2uAOtaA:APA91bEdtNPtAL0t9OGam_zRJcL00cvGLqkbqsEJfNwKnsH5N3auvoOyJGuCvGvB0PWqlmCdcDGpDP9D4TI927XtxByizPuEaXvIPk2KuYqZVqi4NMDp86VUn7bSDuTZq292hj48AQ5L	2018-04-27 11:57:39	2018-04-27 11:57:39	\N
 1202	181	dy_AkMchp-0:APA91bHIV_nWDZKj8UdZxuW8d1CKxtkZq7H3fV8pI1PnaQCuIbT-NetaqUccoKkW3hQyqryjYZMsNbO75CXpLkK-qSu3InP9GxlThUeOuLifpED84-C6z-MK0UESZn8RZohGJNM6pyr8	2018-04-27 12:03:19	2018-04-27 12:03:19	\N
 1203	978	ftifFV3FNPs:APA91bFzO0voULd9Tmu8GDrTXA9UqOCLAHaC9_i7vO9Y4kThMpfHZY7ysWayv3EAjw1KRM-zBl8CEKs6weQ6KMqvBQso5G2vIKkjMuBRTVx1e9ZdaR6DLt6dUB29CCV35JdHx9S73UVR	2018-04-27 12:39:02	2018-04-27 12:39:02	\N
 1204	226	eLxivOhSMtk:APA91bFSD9atL732t3eG1V4UbSe84S638YfB8IrM-uZCz4e9rKDxtJ2LZ5QoNHNCW1gzeMNE94KUMYTYM4Sc03E3cCII5nQxEFG61pBNeUsEIfLl1Tlg1Rpq4DFY7ODyCnS8Z2W5dYZM	2018-04-27 14:07:17	2018-04-27 14:07:17	\N
@@ -5590,17 +5783,15 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 1496	443	fjmYLdNtPYM:APA91bHUD1yfvScARoS6avFvp1AVXUNVH90vIDWaWh0BX1XPg7bZhDvSwTfGejtywEV5IPG4Vnfos2rrJVzt6A36cwaIAjOvI9j6aUMnIdMENnC2W_qiXpHIZ-aMh2GdbFPNFyCBezHK	2018-06-07 19:56:53	2018-06-07 19:56:53	\N
 1497	1104	NONE	2018-06-07 20:24:13	2018-06-07 20:24:13	\N
 1498	1105	cWVXy7EqunQ:APA91bHbzHIj_dpJjYUjriabry_m-8iW9iCRFFxVSTTe8CyONtiDrLeHoQZlRAeIseWeZbglRtj77wYTAyj1RVjKl2uH_WM_LfIyAO2-4oSeJQGjY4o2o4IO_O6iHpDiYYcNttaQn1gV	2018-06-08 06:55:16	2018-06-08 06:55:16	\N
-1499	1106	eyJhbGciOiJSUzI1NiIsImtpZCI6IjE5MjMzOTczODFkOTU3NGJiODczMjAyYTkwYzMyYjdjZWVhZWQwMjcifQ.eyJhenAiOiI1NzI0MzA0MzE5NzYtNXVwZ2kzNHRhajQzazF0ZHVhM25kcW9qY2JhMmk4MHMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI1NzI0MzA0MzE5NzYtNXVwZ2kzNHRhajQzazF0ZHVhM25kcW9qY2JhMmk4MHMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTgwNzA1MTg1NTU1MTQ2NTE2NzkiLCJlbWFpbCI6ImVjaGFzc3RlQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiRnc0Ni1QMUtocE1McU9GbjhlZ013USIsImV4cCI6MTUyODQ0NTQzMCwiaXNzIjoiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tIiwiaWF0IjoxNTI4NDQxODMwLCJuYW1lIjoiSmFja3NvbiBUd2FsaXBvIiwicGljdHVyZSI6Imh0dHBzOi8vbGg2Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tM3I3RlVBR20wMmsvQUFBQUFBQUFBQUkvQUFBQUFBQUFBQ0UvUE9qSTBjSFk4b28vczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IkphY2tzb24iLCJmYW1pbHlfbmFtZSI6IlR3YWxpcG8iLCJsb2NhbGUiOiJlbiJ9.edvm2FTujYmOYH8xWIZXcA8AreoFpvuosTSAbUKDnWj1LTS7pl6TNvzZ4XK0ngqlHVtbv6e8KjOnym7kVOwIMxMmiVaiPAYYGq4OERcflbH8oxI55YYZXeHO0dqgaJM8kECt9aA0DhO8U4bmgjs4MpIsg3JnHZNVqatzNAiLEXvZei0LKoFfvd40xGmYCAtBBaTcHVuebe8zHMQcbEXEXhBeZb9XTOlbtkREu2Ls2HNXMnHbAfFW4nGnxdlcyGKccdym7kT73mTHEOdTgDdMxNzQrOHXPIeV4CSqUYFgKT9cDxvVaCOSnSpCrUiLUpwE3QkiRUcdC57iAxltjJiLZg	2018-06-08 07:11:19	2018-06-08 07:11:19	\N
 1500	1107	fXVO_ostH6w:APA91bHKbDI8m_46pqzUfw40D9-f_QhdOh4UxZo4Av-cm_XxykJLKonUSsVc81WypsH80-J_HmBA1pglUkCe6mjDr5G00S1tjcgdOuBNDyAP4B_ECU6HSYOhWJ798Je8Cax6hUo3jsos	2018-06-08 08:55:04	2018-06-08 08:55:04	\N
 1506	48	NONE	2018-06-08 13:56:13	2018-06-08 13:56:13	\N
 1510	1112	dJi9CnVFP-o:APA91bEGivpfuZdRP-P4QrZiG7G0hZVleNSe7rH0fX5E-SU5OmaO56Mpz_NRkO1_JuShYZ94NbP3TwWK5SwOSYtZayjK2eP8nzFTOZqmP3tzr3pmD08Zw9T6H7yQi3PLd88EJ55VnKUA	2018-06-08 21:03:31	2018-06-08 21:03:31	\N
 1511	892	d_7fL-E0d3g:APA91bE29EQyB1GUJYstb6Sxqu36FDf8R0diN_1rW9SGgV8Z_rwXx4KHao6lwx3v9LVFEegOo3juVGQV3sixAwb5qa0CrO1ub7Pa8NgRYwtnd8gb0AXQMtS2ZQXUDAaUbKdSd7oC77tG	2018-06-09 08:04:30	2018-06-09 08:04:30	\N
 1512	224	cHCWlQheroA:APA91bHvDQH4BKCh-fTEdqOfHGujngL4A_-AJBpindZsNqY-9exlvSVcCWANY465qDEWEGX_RqvZRrPAcGXkqZtecc_Bp57YNWWUpUitvWAhk801bg0QJxevw7_rNd2B01yeJc17BguR	2018-06-09 09:33:04	2018-06-09 09:33:04	\N
-1513	1106	eyJhbGciOiJSUzI1NiIsImtpZCI6IjE5MjMzOTczODFkOTU3NGJiODczMjAyYTkwYzMyYjdjZWVhZWQwMjcifQ.eyJhenAiOiI1NzI0MzA0MzE5NzYtNXVwZ2kzNHRhajQzazF0ZHVhM25kcW9qY2JhMmk4MHMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI1NzI0MzA0MzE5NzYtNXVwZ2kzNHRhajQzazF0ZHVhM25kcW9qY2JhMmk4MHMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTgwNzA1MTg1NTU1MTQ2NTE2NzkiLCJlbWFpbCI6ImVjaGFzc3RlQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoicXVkN3phYjVvU3NuNGdmeWVyNHRZQSIsImV4cCI6MTUyODU0NzMyNywiaXNzIjoiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tIiwiaWF0IjoxNTI4NTQzNzI3LCJuYW1lIjoiSmFja3NvbiBUd2FsaXBvIiwicGljdHVyZSI6Imh0dHBzOi8vbGg2Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tM3I3RlVBR20wMmsvQUFBQUFBQUFBQUkvQUFBQUFBQUFBQ0UvUE9qSTBjSFk4b28vczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IkphY2tzb24iLCJmYW1pbHlfbmFtZSI6IlR3YWxpcG8iLCJsb2NhbGUiOiJlbiJ9.ZwDQVzmkXmK6iUOmTz0TWZEhAtIKBlGcva3URU4FhJh7-QmYzew9aDFJjs-KjtVm18igRLiP7kHmkO2y_MNXdEtNM2r8sCmJ9Ro4aFrgzCo0FFmI7zUeTHuAxu1AxfLwCoCw2d7s96P_1Hg0rB9qEl_weiXT-AtIjyGpW7LIz7e1JsTXz_nkaJhcblGbykusexdqNkbUrsZPnB4Xr8kBTtRheQdTrIZj2cC_Y-xGaRXfNOB41w66psL9wNrQ43_0M3YD0anJHHHbyJU4nMV6De4UctheqitgBQ9E5wyhU9B9ma-twAK8lRALudFhFzWLyuT1tFPeuMSJyKn8Ltr-MA	2018-06-09 11:28:49	2018-06-09 11:28:49	\N
-1514	1106	eyJhbGciOiJSUzI1NiIsImtpZCI6IjE5MjMzOTczODFkOTU3NGJiODczMjAyYTkwYzMyYjdjZWVhZWQwMjcifQ.eyJhenAiOiI1NzI0MzA0MzE5NzYtNXVwZ2kzNHRhajQzazF0ZHVhM25kcW9qY2JhMmk4MHMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI1NzI0MzA0MzE5NzYtNXVwZ2kzNHRhajQzazF0ZHVhM25kcW9qY2JhMmk4MHMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTgwNzA1MTg1NTU1MTQ2NTE2NzkiLCJlbWFpbCI6ImVjaGFzc3RlQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiUi1PMlM3eEJDcW42ck5KM2d0cnY1ZyIsImV4cCI6MTUyODU1MjQwMywiaXNzIjoiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tIiwiaWF0IjoxNTI4NTQ4ODAzLCJuYW1lIjoiSmFja3NvbiBUd2FsaXBvIiwicGljdHVyZSI6Imh0dHBzOi8vbGg2Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tM3I3RlVBR20wMmsvQUFBQUFBQUFBQUkvQUFBQUFBQUFBQ0UvUE9qSTBjSFk4b28vczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IkphY2tzb24iLCJmYW1pbHlfbmFtZSI6IlR3YWxpcG8iLCJsb2NhbGUiOiJlbiJ9.I_X0BYorCw4Tz_qQEQx2ds7ltzZaH0OIDapSSQ6kpI31_-_SQuoWIcI-9gdvYOV2c-6nBm8etKmZcVr9UJFvFsQOsNDIro92sFxfIHsvlZpHZjVDT7qG7AFma-TB0pRTdg7_TMAe-WZUXXji6k2I_YHpjmasdIvg1-WCs8MReu9qwxSPNGui41IrXpvjzYlHsahWfsBf9tCMDP1Ps5T_wqTH8JZiL2Pmf4aPnLtw-ZI5vNNTbIjlquWiU1Yr2p6o_9CLuFBuUicyABQTzCIoVn5uH2LhrKFnF0yqyP9VKnoFK-QHEwlnZmcufDFJmYzKy83Yb4fZy21P6EF1cMaMbw	2018-06-09 12:53:25	2018-06-09 12:53:25	\N
-1515	1106	eyJhbGciOiJSUzI1NiIsImtpZCI6IjE5MjMzOTczODFkOTU3NGJiODczMjAyYTkwYzMyYjdjZWVhZWQwMjcifQ.eyJhenAiOiI1NzI0MzA0MzE5NzYtNXVwZ2kzNHRhajQzazF0ZHVhM25kcW9qY2JhMmk4MHMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI1NzI0MzA0MzE5NzYtNXVwZ2kzNHRhajQzazF0ZHVhM25kcW9qY2JhMmk4MHMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTgwNzA1MTg1NTU1MTQ2NTE2NzkiLCJlbWFpbCI6ImVjaGFzc3RlQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiWlpiQlI3UjM0ZmxYNk1zV0laTWE0USIsImV4cCI6MTUyODU1MjkwNSwiaXNzIjoiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tIiwiaWF0IjoxNTI4NTQ5MzA1LCJuYW1lIjoiSmFja3NvbiBUd2FsaXBvIiwicGljdHVyZSI6Imh0dHBzOi8vbGg2Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tM3I3RlVBR20wMmsvQUFBQUFBQUFBQUkvQUFBQUFBQUFBQ0UvUE9qSTBjSFk4b28vczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IkphY2tzb24iLCJmYW1pbHlfbmFtZSI6IlR3YWxpcG8iLCJsb2NhbGUiOiJlbiJ9.aolr_8y7Y46maYQInDpGIhpwfa1qz-BSs6aZQR8e00s8gH4khmO4kzc-Wmoa41GSwrExxMYXH3_Yv3rNonR1K1V_4qAt3jRKF3FWBvxcFP2WkboAxUzdQZDqaZ2hqgaLMVSrnWwwITg7FNjsaBdWXun8J2Kslzn2UOqvdiyfbv6EWQ9yjLa5Ue7yPtYnno7LFuJChVNprwIdQhrX9p40RkUaytEkQcmCjVWSsQoXObC-aXLwjD653MGb8dcGxImJZ58C_wO2W9WTviPpNoYkevHTk5AQMpbRl_u96zIGaNJzvyyNF3AXgSAD3_bL5Z2VtxKzDq4cGbaXBDG2RyNeVw	2018-06-09 13:01:48	2018-06-09 13:01:48	\N
-1516	1106	eyJhbGciOiJSUzI1NiIsImtpZCI6IjE5MjMzOTczODFkOTU3NGJiODczMjAyYTkwYzMyYjdjZWVhZWQwMjcifQ.eyJhenAiOiI1NzI0MzA0MzE5NzYtNXVwZ2kzNHRhajQzazF0ZHVhM25kcW9qY2JhMmk4MHMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI1NzI0MzA0MzE5NzYtNXVwZ2kzNHRhajQzazF0ZHVhM25kcW9qY2JhMmk4MHMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTgwNzA1MTg1NTU1MTQ2NTE2NzkiLCJlbWFpbCI6ImVjaGFzc3RlQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoial9IampyQ19oSjZfRkpEeW5aRFQ3dyIsImV4cCI6MTUyODU1MzAzOCwiaXNzIjoiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tIiwiaWF0IjoxNTI4NTQ5NDM4LCJuYW1lIjoiSmFja3NvbiBUd2FsaXBvIiwicGljdHVyZSI6Imh0dHBzOi8vbGg2Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tM3I3RlVBR20wMmsvQUFBQUFBQUFBQUkvQUFBQUFBQUFBQ0UvUE9qSTBjSFk4b28vczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IkphY2tzb24iLCJmYW1pbHlfbmFtZSI6IlR3YWxpcG8iLCJsb2NhbGUiOiJlbiJ9.MdR3iM9-dgKJboR7ds-YLXchNUegFj3FhuUOwx4spehNdPWChkXOufwvWvLwRrfnxplMqKUqUAwBM8G1AAHA7kqguykM7s4TYZ3qvr1kbYEEqh9sbs5mQcdkRGudTOlf_mGsv0iJd6DhMDa8JOaOTBiVyLHsgae5-TJ0P00h7dFYEe_YxQVmg2nE1gUGRxpKxaBdJ5pJRZPqrWB473FYesz7QXAioWJ3Sfzg-AC_wPYtVv85C1RuSLBCqCEZjiVbuM37qwhN7TVVvDgTqzkiFiXBE48JUVLMUBLmtzqYqmKB5arEPSAM_VdflKy3cRRDxsqsX9_NStm9Lj043o_ODg	2018-06-09 13:04:00	2018-06-09 13:04:00	\N
-1517	1106	eyJhbGciOiJSUzI1NiIsImtpZCI6IjE5MjMzOTczODFkOTU3NGJiODczMjAyYTkwYzMyYjdjZWVhZWQwMjcifQ.eyJhenAiOiI1NzI0MzA0MzE5NzYtNXVwZ2kzNHRhajQzazF0ZHVhM25kcW9qY2JhMmk4MHMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI1NzI0MzA0MzE5NzYtNXVwZ2kzNHRhajQzazF0ZHVhM25kcW9qY2JhMmk4MHMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTgwNzA1MTg1NTU1MTQ2NTE2NzkiLCJlbWFpbCI6ImVjaGFzc3RlQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiakx4WG5mM2xxTVRaaTA0MjA3dHI1QSIsImV4cCI6MTUyODU1MzI3NSwiaXNzIjoiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tIiwiaWF0IjoxNTI4NTQ5Njc1LCJuYW1lIjoiSmFja3NvbiBUd2FsaXBvIiwicGljdHVyZSI6Imh0dHBzOi8vbGg2Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tM3I3RlVBR20wMmsvQUFBQUFBQUFBQUkvQUFBQUFBQUFBQ0UvUE9qSTBjSFk4b28vczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IkphY2tzb24iLCJmYW1pbHlfbmFtZSI6IlR3YWxpcG8iLCJsb2NhbGUiOiJlbiJ9.GvEAhf5xzAjvrGwll-XDSJv6RKFreWORnynsPzvI4oS23uOpgPXlqT2l1Fv5Xl_tyf5Ycn-68T0yJkDW8-IrTb4qu2Vc-OIfI60GpOUaH3AkN-lknqojk6ldenYWvD_V-qcz3pIdD7QKhNmQU2jkzuQ7o-ZTsHe4EFUs1Nnia07H3SWVixyUs1vAwzkg4WimeliiiwwL44vfWrbWynT8zXrKYRgLY98ROia3Nmk3GgsZRFKXafxokL_actA_BQRxzkaSktWMP4t6eFbvVInWco3TVmt4vXZe1j0OaN_rB29oSciGv0fQUGyM8tbCOX3Cyz7PqRJYI5Isz7O_L1Answ	2018-06-09 13:07:57	2018-06-09 13:07:57	\N
+1539	1121	dgCfTtqqkXU:APA91bF2UKnfZEs1R0ENIr5l_wSTkhkhhKrU9e5NmG9h3yGBEPPswcMn-TIhGHn9zN3B50c5a0q2Da4w9rmT_SXxfXqUV6daV78MvjyFAG09UREW1uWzAko7gWiQxEQN5LMcYhSb4Vth	2018-06-12 10:23:46	2018-06-12 10:23:46	\N
+1540	1122	drmsXqT9qWM:APA91bEVlon9y3bz3LU0Kehlrv2ex34XSZAO_ylBbnQzzvrKkxazEyKFwQ7CId0L2jXIWTyvi3NMeUMUmirBZIkqC0i1RWsRrAasWbPhw9ftcjL-SFllEuJkhwLLUPTu43OJftuKo1rT	2018-06-12 11:10:05	2018-06-12 11:10:05	\N
+1541	584	fl1YpPa17fc:APA91bHEhg-IRctqm3t0Pl8jIM3cmyOdX-pCkf9SBdryPBgpDux0hJAlmjOEXyIp71TPiXLzPG3qXPEaUk7aMlXNlRuGT3rcJ1YNRXqLDxDZsoDvG3MsWFhfSvUpDViJbhizRmz7aM64	2018-06-12 11:56:37	2018-06-12 11:56:37	\N
+1542	1123	fcjxI2gaMZs:APA91bFoczWNqVCAXFkFdWdQwWH0DIZTAyiqeOqpkmkvIjJBc5BDUrcL0w9kAuludjSoaafXBbvlCFqNXzZ-GUlSOReleSrVNOWyDKTCp0NzprJWUErnMErcJhLjBqvS3eaTjYJkcQT6	2018-06-12 12:58:29	2018-06-12 12:58:29	\N
 1518	1113	cMonIF5atSw:APA91bEagmZVKUypL0nBW_TCgfaU_sYl7QIshNKZTlX3dzubG7xLMRk1brliT_ijkm3XJ5lj21MW7bUA2vBK7bb6oO7uVSUySyCgnp6qSDBWiVjhaAlr8Ec-7vhU_y3KJtJzebZzhxxQ	2018-06-09 19:19:09	2018-06-09 19:19:09	\N
 1519	1114	d_xQsHl6o38:APA91bGxCldAGspy6x_DMwZXbNIpQFZWRdAsxptNibiIB3SjVasFSJEavYdmwWz7Ku3BpVAahm6EyaXSOPor8b5SngXjhdkt8sTQImwfaz7GEX0wmvt8N0MqoVVpqZy3a1X26qGnbC9F	2018-06-10 04:14:41	2018-06-10 04:14:41	\N
 1520	541	cz-xDcYVlCU:APA91bHHElkWBJbllI1gAPkvD-_2bwjVtggHuxMgnbeH5kiXYSyRM3v7kgVPkIEf3KbeueGP4k8sZp9ykN1lNks43s3tqOwhRELCJNMHfd_95RNofXOflZ2cFQtTAeasnXq5IuFEIJXj	2018-06-10 06:31:53	2018-06-10 06:31:53	\N
@@ -5622,10 +5813,6 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 1536	784	eeXlyRwLlkE:APA91bGFPXH6YddzRxC5c1Mtn_ohUiIfsOPsgOSW9Ij15qgQjXDoD2FPYGaGeFq-BB-Ao4NAO48BY08Zefe2I--aEmRszWmPgy3GudQxeHpSyDVn5CeTHFRjlxZSHCkLk-7WZS1t5nm5	2018-06-12 07:18:11	2018-06-12 07:18:11	\N
 1537	429	dmdtealMGns:APA91bHaw5JgiTwvjFC8i3rIMUXQ_vJYkp9jmqzmCOe4kNhPVE7rkNcbDjgDJfeWNBqFZ_kbiOJMsfiEqTV04Veb10fz6H9mKJvHWVUSRRjkHZ4LXQ4rW7mecX2fqcZFOqTyqBL1-ed5	2018-06-12 09:04:51	2018-06-12 09:04:51	\N
 1538	114	cwbl-jRoPOg:APA91bGPD934tFNrZHVCpJ1_gStvVmgg5ZLburRDknzjNkOBRlkkrWxG8Q45P3i3HkMDOCwP-Q1lD_rVp3lhHU-Si04sRbmVLpuPDUteRt5GajitdNUdcusdh_GKeIUEMcZcQj5Vdp20	2018-06-12 10:18:58	2018-06-12 10:18:58	\N
-1539	1121	dgCfTtqqkXU:APA91bF2UKnfZEs1R0ENIr5l_wSTkhkhhKrU9e5NmG9h3yGBEPPswcMn-TIhGHn9zN3B50c5a0q2Da4w9rmT_SXxfXqUV6daV78MvjyFAG09UREW1uWzAko7gWiQxEQN5LMcYhSb4Vth	2018-06-12 10:23:46	2018-06-12 10:23:46	\N
-1540	1122	drmsXqT9qWM:APA91bEVlon9y3bz3LU0Kehlrv2ex34XSZAO_ylBbnQzzvrKkxazEyKFwQ7CId0L2jXIWTyvi3NMeUMUmirBZIkqC0i1RWsRrAasWbPhw9ftcjL-SFllEuJkhwLLUPTu43OJftuKo1rT	2018-06-12 11:10:05	2018-06-12 11:10:05	\N
-1541	584	fl1YpPa17fc:APA91bHEhg-IRctqm3t0Pl8jIM3cmyOdX-pCkf9SBdryPBgpDux0hJAlmjOEXyIp71TPiXLzPG3qXPEaUk7aMlXNlRuGT3rcJ1YNRXqLDxDZsoDvG3MsWFhfSvUpDViJbhizRmz7aM64	2018-06-12 11:56:37	2018-06-12 11:56:37	\N
-1542	1123	fcjxI2gaMZs:APA91bFoczWNqVCAXFkFdWdQwWH0DIZTAyiqeOqpkmkvIjJBc5BDUrcL0w9kAuludjSoaafXBbvlCFqNXzZ-GUlSOReleSrVNOWyDKTCp0NzprJWUErnMErcJhLjBqvS3eaTjYJkcQT6	2018-06-12 12:58:29	2018-06-12 12:58:29	\N
 1543	1124	csLFonn89cI:APA91bGX0-lP9_GTzP5DKEIQjxTl8Y1fVv4nH8fq9ubhjCYIpZNXMuHD-fdId8FIgIp0BpPFiRmlUSi3Q1Oxuys-8xZuijK2IDpgLsoVefBwljLj1e9kd82dPkoijzIp1DPiF5SbGfy3	2018-06-12 13:25:37	2018-06-12 13:25:37	\N
 1544	1125	dLCMSGhLDO4:APA91bHe0R63PAhf7hvRpIs3niKWme8MEqQXCJLRYQ8nfOjVj05bNC-oC18t83_auiVyL8kOpNWW4eOTpjPRFImpJUjP24YRHJ_F6orUARGL1GsshGzaVqVgCbFvxd1H8rUF5cEcZqqO	2018-06-12 15:48:45	2018-06-12 15:48:45	\N
 1545	1126	e80wBe48pGI:APA91bFNzRiX3Mz3zSTCprjON2ZLv_dVpwvPR0SG_SFaC_f3dTooEaXtcE6AteqSC5jJskQmnejLN-mYcfYj_L8zOu75L47XCiXrZkuc4QtOvkT4y1toZiZnJJ6R_UPerxFoKDRCS1am	2018-06-12 20:02:25	2018-06-12 20:02:25	\N
@@ -5673,8 +5860,6 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 1587	1143	dqTFpThgNVw:APA91bFlrEfCZk45L1n-tcoQZwa5wqzgpWXuzkYMM-qZMII9yJuoUf4_wA3nlqrriBL6puE4zikzKWpfCwAmarqGw3r9FzSvBWYF88KtXZA414oAwk3XRj6_PV1HrclQvmGzbdnITxsi	2018-06-18 18:27:05	2018-06-18 18:27:05	\N
 1588	1060	cObSpoH2KRY:APA91bEng3o8vPGPoMTJEHdpETobVK-EN8P6IUBDedEXBOC0qz6iL-mI2IuYj_ukkPjLnDS6DFBOZsgcEJIkAFh2fqV-Ass3h70Zp_mBZY6bbfTlRVJV_oLAWcZsuBs18ymepm6RdXF9	2018-06-18 18:29:48	2018-06-18 18:29:48	\N
 1589	1052	dgWuRwDknXk:APA91bGM4-HqXZpu0QqQfukU9keC5NfPLohlmgvPkW4WfHX1mmhWHOUnrDO4E7nOMY37gRnMXyzU0zHBYeIkQoWWrStZtqnEESyfDFY_Z1N40J3OrY9_A7uj0_fc11rM70h_LIM7zn9y	2018-06-18 19:44:40	2018-06-18 19:44:40	\N
-1590	1106	dG4FPU2soJo:APA91bEGrXrCRHDBv192iOTpgPHV7QAAXXd3yUmWHfA134Om-K9vl9ZpoQEySGoZFzo1C0Yk4swKctrG2CRsEklzT0cAkwkXvSeGOhDVX5u9b6yY7GBJtV8cTy4OBa0FeSDi2fGpQaUr	2018-06-19 09:10:21	2018-06-19 09:10:21	\N
-1591	1106	ev_a5_FXhDM:APA91bHGl4Hg26MHCKwiyyuP4Dp67fZXMj7-F1kiGPPcCzC73WVLHyLKMD1F10JXOOCvUYRJCpe7nSW0L2HZ2-OcgMDsRusMgq3WfE-H7BuhVdvGT19GDDO9geOrI79qnxSEwhABbRAkZIe8bRspvAGZ2qwBygUPuw	2018-06-19 09:29:14	2018-06-19 09:29:14	\N
 1592	1144	ektglDFT1KE:APA91bEBAVhdFeHseuOsAnYhw09_wBWY1frAC0hBXlBT84-COgOn-G4_w2a7FAETnGVLrvHVnXgF9OgFMFc8dZ6dp1t36Bir6TzVdGU35IVkpPfoU1uP6uVBboA2_O_gFEFj0XTW7ehA	2018-06-19 09:59:08	2018-06-19 09:59:08	\N
 1593	610	cIZoIlOFUd0:APA91bEmnl848vkpCoKRlHRx0jbJxYyWyVI-WcYeD4BW506UsBqxSBPK0TipdzqSSH3YPvaRVq9d1U2GLpX_dRGMcHxZ2C1MdblRO-zMf4kwVfej7wXYIQNgvHdoQtqzSG8CmEg1E4VXIhT-1JIWulJVdOxg6AuTTw	2018-06-19 10:57:37	2018-06-19 10:57:37	\N
 1594	1145	cqlJTMG3vAQ:APA91bGE7LhV9EZl0g4fqwakIUw5S3haPesamRfhUpHr3MEnNQ2fFE-tazssGCI0vOh8ivKlE_XRoKMdTCfzYqU3pA66o20Q89tO8CMUHNhU7__577OP7PYcXIA1s8b-_bQ_gmmu-3AAIncFLi9Rnf-_YHhettV0zw	2018-06-19 12:56:04	2018-06-19 12:56:04	\N
@@ -5690,7 +5875,6 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 1604	1152	dLvKuH5ody8:APA91bH8YrV9KcYNwZGVO2-gfHtig8bdvX0CWCOIR8-y3Uw09Fv7Zq3RNonvETEOVNiO8OyEj4PqUuc5VFjqib1WvHGKIczU11a0wvXZEhD7k4xsQvwxwGhcgGdsEWnfXV4KSMQ5qNEPcQQZN5i3x83jO8HTo6XmSQ	2018-06-20 18:19:52	2018-06-20 18:19:52	\N
 1605	704	dxBfSIPDzlQ:APA91bGB4fBQoLEzqy4Vv-7QJAVq8B985YpGkqhN_N6nSA0cR5-stMYW9pYIBbeV0V9apzP6k5uhzSSoNjpA4m7Oey5H7971nX7kQHawLDSS9STv2SxXU9BOMdiKDkBSwh4QVxIEGtI4MftVG9gVmXAE4dJF-nj8Tw	2018-06-20 19:45:57	2018-06-20 19:45:57	\N
 1606	98	ddJcLuQY3Jc:APA91bFWcoEAusVAK2YO2BMjB8Z3Fa48ErkOjrYLHuMD0ZPM9kM_g7xbOtyODCTFs449mUHSDlkSWfjIYtY-tPtwqM7lttcP6oipupcQ3nAqJszKiEr6Cs1et3a25AIl06sifLCp6iu-tJXxK2bX74SuEeQ642Sdrg	2018-06-20 22:16:05	2018-06-20 22:16:05	\N
-1607	1106	ckyG2K0fj70:APA91bE3Z0xgz018KJbz_lPCjv7tGmjT18UA14S1BgktuZT-dV-4ckhkBUOYnaAfvY9YSpETr57-cKWidZdtf_qDfx6-wD4KUlIJxhKw62K1vqxpc70sFQTBtIGtYOvn-BAu4y8S_p-Se58Htfxpezj-ef3_2S1FOQ	2018-06-21 07:39:48	2018-06-21 07:39:48	\N
 1608	88	eEo9aGu0T1k:APA91bHVYEHH-YH7sCxqwGVk6We07Rw5TAEKf-LIdNR7kU4HzZUGmofS-fIHAhl4XImKhIRfWfcvJK2Wom0MqUXlv1yhJ8NZ08Ml62BdfkdfcADLHiqIpFOfAcbtjvVY5UABBSpBWYq4PGyaYwG4kB3XzvWg8ky3-Q	2018-06-21 09:07:50	2018-06-21 09:07:50	\N
 1609	443	fXg6gmiCtZc:APA91bFntp-aZyUnUDHmqy53InvIsT3TNV1edLGMJ71SBicKM5NlHN6P0f2lwd24It0seG5gDuumbAF5vjekS7yYf1slck1VQnPTYXPWVykHS7YgAY4iVLxGJCe2ocHvfiCEQX6GFaUr-SvtlDgixSkT7e39FR4hvQ	2018-06-21 11:07:48	2018-06-21 11:07:48	\N
 1610	594	dQKEJHbSR3E:APA91bFR5wCbHtKqb731xuSC-KiqGF1HhAhPwvwqFr4v3Nlo0A0tXu7KNCH8ap25gtvKaPYLwLYxWp6H_TiTCSwQ1DvTBuF6LwHXy_HV6bDc7CzERMvphvAXiBZQ_eQUHVKoSh9_uOODRWBEUEK61_q5z_9HUaKVdg	2018-06-21 12:02:51	2018-06-21 12:02:51	\N
@@ -5762,7 +5946,6 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 1676	405	f0Oc3dHOaDo:APA91bHRgkkO8N_MOs-n9P5wezs4-sz6sG9zi2E3RBdsYiWrDx1UwJMx-mdKzFeXH8X3ERgrQabpJmI8_EBOFu7JQ-4iaQx9WioOhSx8tByJf18Bz9BoEJ8LDevZFR5pHCIjT2TBxs5OvEy7wbqmonx_TiUJWJYZDA	2018-06-29 18:19:56	2018-06-29 18:19:56	\N
 1677	1182	cEQelN-AenM:APA91bGp3FGOsJbELh5QoNP5A7Bb-oPxMoLfEpQIpPb564R4IaFZI3tp5BMY4RV0Hb7cmzEqQCLp6VyALdhb2Jvpf_ArdhGhncgiuHNIv2mwChVcAFfQY3jaCqnrNwK_MA8hiMUq4tOgqHCrRLK560jAK2Gon4BwhA	2018-06-30 03:45:30	2018-06-30 03:45:30	\N
 1678	232	NONE	2018-06-30 07:31:35	2018-06-30 07:31:35	\N
-1679	1106	eKAnSP_ZRvw:APA91bGjnjHJzjnP3tNP0JFDF60ukO4bvr_2H6GgTzBCKyIoZIMIEwszsFRT1fLR3NFTBvSbq3G7v6pXuiof-lJ6MTdrsJk9u8zDBdw_1ZjLFEvgUWiryoSGcAdwgsm3hEg_Z_gf-Pxe	2018-06-30 07:40:33	2018-06-30 07:40:33	\N
 1680	783	cb1OWiYYqFY:APA91bHB3Zj6G6f4UXycMasfrSR0rYuDBEsVcztG8-s9tkU2H_HtBSxMAhRhydtPi0vDGultf5kly2pmGrHF3OdI7FbSEqpy_X3EgZb1_s2XFSkc39fBev_0aYWmjT8pCYsLC2qVNnNqvteKbTXAsfuA7lqbFgvj4A	2018-06-30 07:57:50	2018-06-30 07:57:50	\N
 1681	1101	ebIx_RNlAlg:APA91bHp4b_KR1gVsMWIaoa6hGNtb2igAoE3_MPp7u09YlSIRY666sOZvtu8Bm_zOoM3zGh6kkzB_BvCdmczu8Tygrzk61e4gNzS6U0t7v4CZFuBE2h8h0KM-OZUZ_Gg8-VG54sFR8h6iqqinxpNaSYxu3jRsRVFtw	2018-06-30 08:22:52	2018-06-30 08:22:52	\N
 1682	1183	cNSkvXF7UlI:APA91bHPHazNoZXnZRZq00txgDRAoUybuJ0nwXl-pJihG0xAnQRuWyOqmsr4OhARtDpOqEmyd9i8wsnuVjwaidusUmOZhQqHJvPSauc_hFlz0u3vk6VeJ0djekj3jhXoGwwDtIFbTaX4	2018-06-30 10:59:07	2018-06-30 10:59:07	\N
@@ -5772,7 +5955,6 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 1686	443	fMDNGXvzmEU:APA91bEDJ_wvm6JYAIa5wLO-elRU_4PIiOOncg3Nah-0VyFyZLPrOeDmZZvmjzHP_VdnEAYe13agpq4VHuR8VO-tc0-t8oF2yE22bFGp_vR4So5qYQuLR6Vf7n6Rgu-A2fM_oXBbHxKuYzv03Xs_XfQb_7jGeSkABQ	2018-07-02 09:59:54	2018-07-02 09:59:54	\N
 1687	1100	hgghasasjakjsasnxjk	2018-07-02 12:18:48	2018-07-02 12:18:48	\N
 1688	416	cCuU8R02nhk:APA91bGbmVM8m6qtKKr_9aOqJIy6nvtqoSG0HKgV5x4fvgYrjbfpEXUH5cyU_YISGTAjTGnnkuqra5A08Nr5FXbdTUT2AdOEmGlyED1yqmOqJUfRa-Y21UPPc4xfHUwG3vvVb_v6V5jMp11VLxSR8n5gTzAVARavcA	2018-07-02 13:57:32	2018-07-02 13:57:32	\N
-1689	162	er56nK429M0:APA91bEyWF4tOZgqFmLjkJBtpWKOjTfDx276udFyoBQAgNTPLSSUOEZ9ikbmoJXlDV53zl2k0YQCkDFGJAS6H0X0iZM8SBCLP7M4VHf7-fr__r7GueqAm0g0unlNK0FcQjL-aCjgVfDJixEzgIgaKYPN8BLtltgIXw	2018-07-02 14:14:03	2018-07-02 14:14:03	\N
 1690	416	cszk7QwieAs:APA91bGhV0XnXaao7VWQoXCStS_4fYbJF7R-k2UlHRgGzK-cFAnRnsnvGEPjDgwyAr5gaFX3pDKJ41AwHtfflqxfxayzW14MEqu04OsmAiRxiW7fmvLqvC55WZIDTBSgApe-3YFaoCVB--wGm47AiS5T-e1ikcgWTA	2018-07-02 15:35:39	2018-07-02 15:35:39	\N
 1691	1185	dH_VYYnZoiM:APA91bHnLDivnewqEYWKH3GA6KBw9lIR55Oou1M1LOH1Bjj-1X59kBCkxgrIFF7knnL07tA_I81etzIRNg6dGfHEnhFBFjg8JADrPSkd7bE1nSF7LgfdDfA_3cEdku9faQx4Tf0z3jqDfem8o91ZXUYWCNax9qBclQ	2018-07-02 16:11:01	2018-07-02 16:11:01	\N
 1692	1186	eqZWqsWQ1Kk:APA91bEl40TWMtrTbuSpdcz1CWqTvZ8bNCbs5HNXLCUoM_K0_bpHeKQbG1Xv9bVfJElbanEWnDuvbOPYmWaK9whKqRqGQg9Igr-xtXAOD63d18rACRMb1r4fy8Ydkp1PDheuiuWtZDDMZ58ZOp2B-Q1DdAEPBcSeQQ	2018-07-02 16:58:38	2018-07-02 16:58:38	\N
@@ -5789,7 +5971,6 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 1703	277	fd5I68QIcgE:APA91bFUD5CWfYjR7dCGChMtA1cCRXF9bu_Bgw46nNNkdf-g-xMNHpSkwYHGZw6KaVk3zlOTyXMlTdaJVlZOIVYe93MZDjPjBEi6UTlat-1SE6OutHN4BCKPOViWQvX1CrxWLDKer6-YNJzA-mnK886B4ylncTaEOg	2018-07-03 11:36:31	2018-07-03 11:36:31	\N
 1704	1193	em4uY1MQJGQ:APA91bFSJt8rhh4ZxTjU7HAax3ONbSX4-9NqSVpo1YUc2YZzNnz7zahfPUrNdrIJA8gfgGqiXsiSizTiw3ml7cT2mYc-pnxJy5etWJZeyuSU-o1pSZIRwwS9bPFE82WSfgYYtXUTBYbw9Y7BPzACBy4b89ITdIWBJA	2018-07-03 12:26:39	2018-07-03 12:26:39	\N
 1705	1115	dCgALaXBQbk:APA91bEDvdEI5Et9tjyiQouFd-156L_qlSrB8ijHz-mwsAyE22GORRvNG8ftjgTGFOkkjJwRLP24J_9uknd8bHxxki9Os1pdN-dqu-oNlAMADZ7yLvUVE1jzKn6jlsrJlWDuF7O2qy7Tf2pSwu2dkW4k0LBxD-9gog	2018-07-03 13:11:35	2018-07-03 13:11:35	\N
-1706	1194	dP-N4znukvo:APA91bF-c7l2ftB1zrur1w1rRAj5Ot0UztoNqstg5t5FPCNxF2-Z1WzYx6lWQmagPN1KV4zt904KqSGK8RtDxMyBeOwDp6FClzt537K_ICaO0RZEx53OAsybir4IgOdyS3KqDUOL6Ud4u8JIS77V4eNiWlMLElcowQ	2018-07-03 14:23:30	2018-07-03 14:23:30	\N
 1707	913	e9jLCp3yHk4:APA91bHQczke29HQDMZhB8LnOSFWoSi2OzynEJEX46onG7arLAuE0kafQHDtIueM09QF31bqo8r7_pSfdINrTOOWhE3E1SXP4f__w4rMFCvb4AkH6ET1cAQ_iIqNlrFdbI-s06p3g3j9ZEhG5YwyhTJVO3G812izMA	2018-07-03 14:27:55	2018-07-03 14:27:55	\N
 1708	1195	fZ-FUtkJsO8:APA91bGPAmiapb634g11LUU_XGZY2IBuWWAaDR4wNR01qxiUfZkURtsoVCE44b7P0Au8nT08XjkefX2doL7dGg_3moU28q7tZdGPJKclVCMzaa7OTjL3V_PyGi421UJDRVmUsKdmxqxbW8pqUGqaYuxvwQtTJjzpgg	2018-07-03 15:54:05	2018-07-03 15:54:05	\N
 1709	390	ezrhUoMo96s:APA91bF47iib8BxJtoSQ0XA-fIq_Q_1_I894h2g8k5HAXZ-TQQfuhcjwmKXBSWR2m4N0vBAp1df8MvcKHjDYEaxaMLZbJFNC-9RaKqI7i__SjprGtV7wsiFUSmNdYkDcqD_Ag4aqiYGC	2018-07-03 18:02:33	2018-07-03 18:02:33	\N
@@ -5803,7 +5984,6 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 1717	1009	c3wPibfUyi0:APA91bGGaEvT-gWFydfn1gUWZYkyJDoiiNq7NtL1GyQPSvIXqbkNXJG3_sgOMoI_lc92NzAXx2R4KZ_7LK-l5AX_Es4PAsFkSoIb-k7zt-31H-FWwycl7MzZ2DkDBMet6Td4LmqV9IjEadhbBhWayeN4h1UOEUsprA	2018-07-05 05:39:26	2018-07-05 05:39:26	\N
 1718	788	eAA1HCU0ooM:APA91bGW-Hu91_ndylnP_gP8GFkwGA9010rDaeUUI0BFBmPYuW61L0AX7-rM-G-4cDDMn-80R4W_PMOdAk_qogB0ZzZnNLzJxFJst-bwjOet1NqcUnVPou0JJM6aqggHwHkpsI5kXLYt7L18IXhgdYEbFrCemy_haA	2018-07-05 05:51:13	2018-07-05 05:51:13	\N
 1719	1197	fYic8JHu8rs:APA91bGA0SUmRI8jg5GFs4ZyPuFJOakRdVJ8MH6fUpMuSBZh1MZLW17P61Pd--JgO5-hPI2f-XVKOL-doChsSBBZX-26uyewe5OcV-xPVIm4pI9MZxjGNDqRmGg95etNgez43Shu67Cn6YkPS6EOb8j_7uJdJQKdrw	2018-07-05 13:29:01	2018-07-05 13:29:01	\N
-1720	1106	dDQq5B5r58I:APA91bEjazzQYRyAs61j9Asc8hviF93O3ypiZQ42IvKScJ2WH6xB8CVkv1NOnZk5pYEe7OBjwICboEh8FZJlBgtrnFJjeQj3VwxWiQc8tmYTJEqXnnwIBX9wmT6sYcJadWHj5UDxJSE-aAKggeeTaYNzusIm_hCN9Q	2018-07-05 16:01:15	2018-07-05 16:01:15	\N
 1721	361	eytvTWP4hg4:APA91bHYHbVPs3HUbqTydBWfLwsyZ61hgQaDgJ9aapW9HLSHIypk7hL-W9Kw8IFrczXBIyps3-SxhABrXRExrw0fQiQuQZqGfvtVgl9ItMtNl4hPCDFxIJ1C2l-uTDD1f07gdmugXRk4S4jYr3EgbFaSqDqL_sPyXQ	2018-07-06 08:52:52	2018-07-06 08:52:52	\N
 1722	230	esi_UNdUPls:APA91bELSXIh4m7Rt12f8_XKLjQPe9NMnQb1t-UFNPB3PxFOYLzBCyje0legmpUIR_83axfUu7qXhLFEkGJZo_Fhdb-KOx6flPXBMy8lU5aVX5aGE7v8Gqu_IKly8f5TIrUo6XJ3UOo4ycajsrxppgSTXUeyd5RIrg	2018-07-06 12:37:06	2018-07-06 12:37:06	\N
 1723	1198	d7uQkk4gu9Q:APA91bE1PCVgG6V76U2lUYNO4EshG5ppOojWnBb5y5G7wlqdP9IUi0MG3qGnSerR3ROr0XNQakjLNsHhI1EA9ExDwFt6K2hxx6Unw6VyJyKS7uUtl_2shw1XMt8tOI6qCKSi4LKlRwkhbmw1BmLreb20PwL5aw_KIg	2018-07-07 07:08:33	2018-07-07 07:08:33	\N
@@ -5823,122 +6003,1771 @@ COPY public.user_devices (id, user_id, device_id, created_at, updated_at, delete
 1737	1206	NONE	2018-07-09 10:12:14	2018-07-09 10:12:14	\N
 1738	405	eTEPA4tcTs4:APA91bHkYKuf6T4oAHiQxaT8-8yc4-kHJuqXjsCIM9qF9X0gov1n8mL1XZKklslyDJrueOgC3F40R_6cm9-0-73VI_REXOXtH2Coa0qFw4ANONmBg2f5Fmd96wTyP_PdGB3pG9wAgo2vmtMZ0_l615pR9Qk3Jv4BHw	2018-07-09 10:39:40	2018-07-09 10:39:40	\N
 1739	1036	eDdR8fXxvZA:APA91bH2-MkIT-vI0_rm--IUDmVm9GAJw9IIqE-_BGUInGM_SNnHPgFcYV8LZcJCJhlVZSyT7ICEqY9EBk9Uc3W5bcEdjMy8Lpn3LCDaU-j3F33_wXi-JaWjrfysMuFaMVZsasBxm_ebgJc5TTXXDPfUXNg_JlVH3w	2018-07-09 12:05:10	2018-07-09 12:05:10	\N
+1740	1204	fPlulh70LLk:APA91bEGSY23kSsaiZTzlK_mwQD4iiwVYofynNYir7s3myudMW--ty1f0dUefS9lDrvjmk6BoPI4hDYuHqM4dtUOybfoAYPv8O5IItyTuNIakHhY-uZxIW9IDSV_0wLUCKcHIQj8EhYqnXl616qIUmcRsoHZ1zPXUA	2018-07-09 16:07:45	2018-07-09 16:07:45	\N
+1741	87	dhJa3pUntYY:APA91bGKc2iydNU9s8xXhGYi7RC-5kq7DYee-2QWJ1YP9vUO4Sqan3mxrJbPVrIsxKpws4OuYOLRt7x4HcbKTkYfxqK0Ph2ICsBF2oscKqDdOlvXQybgM6QxdQO1ILwibYDG4eeAeNoZiQzOyDX7wQ6dsMx695YvZg	2018-07-09 16:55:00	2018-07-09 16:55:00	\N
+1742	1207	cPSqipXTYzQ:APA91bHTLArxr1npyNJXAnW6kcZtaMOkdwWqcL_1MM2B5b0-5pu9-BKfSQdvoQ07Zc0jj4YlLQX9p-62HmLZPC-92guVMYUQT8n0U7rraNkFfD36PSBEo4DC3Sd_CgsjmmooWk1CRfcEqfLwRO_SL0jG_IExBfJCxw	2018-07-10 04:56:46	2018-07-10 04:56:46	\N
+1743	1208	egpFZHXRAyk:APA91bFagacJ7G5NeafobAxtzFr_XkO5E8pjuMNrMbITHs4Am7rhbwWRMdjszC8gc6kxXblBso_Y80LVQfBAi1VK5opYC1Jb2EngPMlmtM8dyPDSzOIcA7jyhozu-TCichagZ-UnQyq-9SyW0n7shTjvQHYqvn7cEA	2018-07-10 11:03:38	2018-07-10 11:03:38	\N
+1744	223	dMcYKtM8KR0:APA91bFy_v_goTscNcZjpvLyZV8zLCD-lGQc5i42Uvl_z50Bvtr2hqTaIFGUF1Ejbi6t0iXxn4bs41aLf-gmeQAdPMJlr9alNdKcrgwzf1H81W-i6F3cvkgLyDKDxiJuhtcLAw1LDnKSxWYR9C5TB4U3M9C-RAAlQg	2018-07-10 11:56:04	2018-07-10 11:56:04	\N
+1745	1209	fm2k_Oym0p8:APA91bHjHxTUkq45YhTqR-ipznumv8ryyQzjnX0XyOZEj4BnoYVQkU40Kw7bbH81y19cpzK44W9wohKjI0mMstsaXD6Sx8qem1gDYw0QjG0XVl6lsfetd9FWZsXNmci3QmwlrdEZ7KZ-2rhPaPcsyHLIRH1nqDq25Q	2018-07-10 18:47:04	2018-07-10 18:47:04	\N
+1746	223	dsuW84hsIas:APA91bE8kGgOjp0_qRZ8qzO1HasZn078NCq95ObT7cxNO1N9GpKKgH9whWIJejzywX9JSlnZ8KYCfLJQVSfaye1Wn1hx9tIANzkUfgPCjq7mIJekEq5J54pbTOyM9H-7Y106kb_HNS9lwZVmr_r-CQmHpIUxrzi1WA	2018-07-11 08:41:47	2018-07-11 08:41:47	\N
+1747	356	fl8I9HEuQU0:APA91bEgqe46rBJsXx_Af8biw_F3TERHamvLwckM55jyWLJRheqwUWajN8svXMrIU-fhV5EexioQ-MsZCVItWzns7ZHgOnEGCHe1wyrLsY_ShpIhHx7sV8GZOBU-_VObu-oWtW9c__LDoPhlj0KkfMObWewLicvWgQ	2018-07-11 08:51:04	2018-07-11 08:51:04	\N
+1748	1210	fplK0Byruf0:APA91bGZMGYvUAhnCeASMGUpxcR-JmkAOWfVZ-zMTsGKGIwD030b6BgbD33ZU8z-4DFsffutk_ceDxD662G0zOpIC6-hxOatR4L7MWWDn_D6W1dc9XyC0h0-tJ1ZiAmN252taWdvhInPLi7L170dtjmSWbpjIb4rdA	2018-07-11 13:23:26	2018-07-11 13:23:26	\N
+1749	1211	ekJcEYgCOK4:APA91bEEXUezJNTblmOf7OHyxN_fbuS1te_PFvtT_pLrv46cMREOWUJEqJFr1bzo7xmMcVAtLQHJbv-AeCBjCNWRyFvL2zgRbm8FxQmuBzM6tRJ0xbx70jujT98P40i5o2b0GVrodXoYdFWFMAzfhLiuGlffN33lEw	2018-07-11 14:17:00	2018-07-11 14:17:00	\N
+1750	603	d67lXT8QPBM:APA91bHudVTqXECnp8Q8v-d1ELB6-8TJ56aXH8SZQwkdT3T98ZrBcNQo9uhHkJXjpzFJfgyLadG4u0P7YTevRIRY49c0HOKafGCz23HrKyz4lagAwDkip-68oSGXsJeNjdmYCjyoKd_NelW7xcKmvw5hOUvOu1qaSg	2018-07-11 14:19:46	2018-07-11 14:19:46	\N
+1751	452	fmxAGZMtGcg:APA91bFrwDW27vYV9Jp6_L21QAbImGIikxZGWFiQDX38ZEufNN5ty6af5IG7KfqqjJ0ntVj4y4BhizyxfdpU8sjZtKcW8n3sfqm3kHKaeEhEKezsC_fQveK9WyDkh9fJ2ihkx1ePLiO6gLGdMxN61vaZo39Hms87Tg	2018-07-11 16:24:55	2018-07-11 16:24:55	\N
+1752	1212	cpCNdGpRbfo:APA91bHvy37pZUl52ZK6haphv5UJcqqVK37RDf2rczWpdACwi19xs6iBB90hqq4dU0ciB7jsUVqRhhsHdH6ziWIxJtD1cI9aK63rpueoFX7r8eAlFzQK2-I_nYvqFLZm_9lqsjpJW9l1pE9ZuCKpObUbR7XLnw4WaA	2018-07-11 18:02:47	2018-07-11 18:02:47	\N
+1753	1213	epbr0vCPgcc:APA91bFObrL6rmHBZPLWsxPXAzgL2hm0zixXGqDm590jFmwiaakBOtksa5Wb5vO8TMAOiUYy0m6F6fedWuhLnlzwL9AGH5TNQFRsd1s83CR_l2QywsMX7-ni-O26zqM6v0sApJ5GQ9te07K4_sFNuh6vh1FCJMlGFg	2018-07-11 18:51:11	2018-07-11 18:51:11	\N
+1754	1071	eyPdEDxXW24:APA91bGNoV3ut_zAXjKwVuolfAl2sdZR-dAkI-N07HkybfECGR2EAweL0HDwgKwA7CWge9vmNw1NnVkdP3krVXj1OR2PJtFa8ZuNsF5-opJO7YNqwN2e6tBfwpCRQDuPoqHD4gbgwIygJWlNDSXrjn2yu0DsSwmg4Q	2018-07-12 02:38:55	2018-07-12 02:38:55	\N
+1755	1036	eRI_8uO22TM:APA91bGUHIb8EgMBPDkaZox6YaAQtNpDVx3CYNcJzxDRSsNgHDfCR70pqZ2yzeO_hzX8-YzhKFOetpKlZwI8_hfSepGcR_AV8Fq1i1LW6ETKchXd53FN2e1IEtjRnem0r9aNqzmmofHG-8JCRjKnqZpFXVCGWGV_Ow	2018-07-12 04:11:32	2018-07-12 04:11:32	\N
+1756	1214	c5lNjFf94vw:APA91bEYI7UQEj0dxkpqNMxs2ZJQ8uD-klvSJeD-lF0r-pJYxbksbuNFy4E5tvhpWsIpkll5VvROjrua8IUr-mbfKrt-3NRMxok6niigtIYr5loC964jcsgUsIfNj-URAktmRRYpIK6M9rCjv1v8WxOX46NG5wWqsQ	2018-07-12 09:23:24	2018-07-12 09:23:24	\N
+1757	56	czQxY2kPrFw:APA91bGDP1oAl1avSGy2aeVsTCduZCFhW2KlPLgyoloHygFSgyiZGfn2z3ADJjdsQJ5qHR4tcg7DfTDy4S0hAxNbHeQDEmqoBJlG0Ms64VGYKCi5jR8aaxST9D_mB-eXXKSC-MX7Lv2FowIF3JH9DQmXVNf2tq0J4w	2018-07-12 13:41:59	2018-07-12 13:41:59	\N
+1758	1215	ehSqk4b9DlY:APA91bEc6ttTlJDUfI8bK_OnsNlOOElTLOvh6gII4h5J_4t82xwCGwUq7IN8wfRELGC2lHAc1R9mcakIFZ2lJT2Juxvjp5X9xqR466h1AylM1ZJSl07CoSbgkBFMdrtdZUlzaPWyRmVvHq62hBou8oTJdhGK24V2mA	2018-07-12 13:42:22	2018-07-12 13:42:22	\N
+1759	1216	fPki1sQbOw8:APA91bEQsaNU-VmxMRUeH2Gw3YsRo7pIMlwsz1FIzpTZCZGfDI2MMUFbMTlceVpqzKiUUMST6g7Ta27pk-7Uinp4ML3DiYwORLUPW2IiUz8Rx4unDWyQAsGmRZCjH8-sG3oyuspU37RqOKU_U5vErgIMd-CFXC8Zcg	2018-07-12 14:40:48	2018-07-12 14:40:48	\N
+1760	1217	fS0Hlk23mUc:APA91bGc6nOoOFHeDoJJjtaMc1AZZc82T0nHmUq9TTS25k_OXX5XOQbOwGa5cDmRcSSFAJBPpxSTVvZXA5EFn6ERi3SihSrhCt5zbjlWWLxguUr2tfKtbfRNB85RANattnu_7wDRKtETu4CTjnhkZRHCJEEgRKwCdw	2018-07-12 15:19:28	2018-07-12 15:19:28	\N
+1761	204	eFT4TNXowW0:APA91bEr8kQt9qbPyGozjZZueNN1wtTFT5zvz7Rln0nYQCSnCzPfm3bPt2QwzfghlpYz7FO-rLShz7jV1HJJCbtvOVEsj7cBrHjM-u6T-CRdv88DRnVSqBw3n5N-C9XRnKn-aStvdhhW6afV-DrC5VzsamywAyHK3w	2018-07-12 15:32:07	2018-07-12 15:32:07	\N
+1762	413	dVIx8fqlLzE:APA91bEKQzYZbdnZ-WcSnxe86iUWhzLRhi-Sy32BVWqe0niLhflKhQzWvt5_pyK-xruit5gsFLrl9Pq82CaTO7HchU-lw7dJ6fcFsqE5U3ta7QUB93RKw2R-isnzF_I_V-YgcNS56bthQUuKD9Fuu9xtvUYJJDXj1A	2018-07-12 17:33:06	2018-07-12 17:33:06	\N
+1763	413	f1WGJw3Y7FE:APA91bG7CSsAhKhNG3nJ5r7-dsbf7w2rGOk1W6GjPT3frsEGqCZpK6R8niS8inQdiGoqLj0gkqEwSka6lAqOp39FppOeJml_VhRl-wQOxJvgir4KZeQpcR-8ewq1RySFqpmceAJsH0DgttXK0aJ0t8XVQyYIJHVn3Q	2018-07-12 18:13:50	2018-07-12 18:13:50	\N
+1764	415	dRR3HJj2an0:APA91bEospbtv4ePxSrz4d9w1vVU9RujcWQPgiD-NInTsBrzPxSjXQxwQX9O0-I33HLvYi3VY3O5jgPXKpCSGtKUZnXXh55qiYQoMI23NvaZ9gD08oEm1LW_q2-imZEFq7Mphkj4WcTyfyergNyVN9iN_N8QAbNVNg	2018-07-12 21:27:34	2018-07-12 21:27:34	\N
+1765	9	cj-ceDEfaNE:APA91bHVm8q3X9DO2G1MyAkkRSNhmt7mTlGMRSqInxeaz3odOwouVQrqrV3MIK7SEHoRtBuVNJkYFfnG5OQUgzM1fgs1fPTYJkWdu4cUbQudPVqb8yQUz8duaFwCDvCG-2E50QWwQ5DCkZIvs1Pqn89RGPPHyWk0-w	2018-07-12 22:20:39	2018-07-12 22:20:39	\N
+1767	205	c-axG1-laoQ:APA91bHRM2kiLv1hkBDQDbuonsi4r1rS4CEAziftdtRFQhvOpHYQj5oiZOynve8ui7B-6qjJK3w7nJXypkBKdZ6EW6TyM0VYouPLUd91T6MtWl1VLt3njWZ35M8o1KpG3cMzwl6h8vj6e_dj69BBj62ygRI3mPiWCQ	2018-07-13 11:40:21	2018-07-13 11:40:21	\N
+1768	9	NONE	2018-07-13 11:42:44	2018-07-13 11:42:44	\N
+1769	415	fuevpD_RbP8:APA91bGB5SMSqHqGPfXfAyTtQ_PADdJqNu7rFHGsKsb1njkA02io88-tm_SRdgfNTo8J1iOUhCQJe3GudIXeZ54OS--cdstVQhMW6vtVD71w91t7CqX7NCFsidASzdWPPVFNEhEwOtRQzqWEtyhs_HhfMPZsTQC2Ew	2018-07-13 16:42:04	2018-07-13 16:42:04	\N
+1770	114	eE3yBvBaFUM:APA91bFPMjStv24cMXFZ71ZX-a6c2dXtWgIGVJK5LxLaZYAzY8wNpcvNGjg0yrQqlAWwap-lEY06FWM49diGZmFgV2zLuK9aoOQzf0IYPmvObVIQEtHk6JDV9J4cKaC7u8lhI629M2U6X3-BJyxMn0XudYszSQosVQ	2018-07-14 09:55:34	2018-07-14 09:55:34	\N
+1771	1036	fPI9NFrEWMg:APA91bGtCRgvGxbhxqRrHY0vzFkMUO-1qJ3FaJ3CzVByTgEotMP0AmFLuDbu3yLekJNwT1QOxvTEnO6lx3NVuIDFyCBQdfyLrfLd8vRhxGBC8zLBoYpCWDgYtG3GQntbz8Ae7R4S2pUqMLentWtQb_TeAEwlTRM5cg	2018-07-14 10:14:20	2018-07-14 10:14:20	\N
+1772	218	eRnxHwy0BVw:APA91bEHCPqGcYgZTyixoQIsBHkEykfl-S21UAMWbRs2-mP3t59npLRwdDHkBrj7__exQUqr0LGZGH4vku0GYyTLTmWxo7qJnoKxhYUF9w1CBRj4rwFG2NWqj-TynaAFjGIac5n7NGSIbIuu1BHF9dwCL-XJkgy8JA	2018-07-14 10:28:35	2018-07-14 10:28:35	\N
+1773	11	fJYFRaZwvxs:APA91bHUdtyP4kk6Qh0g9WXkE67apYx5raNOiMizcZFn683sv-OJrj4UAXVMBd634oYgG3ViTeSESBB-HsJzWv85abvpFnVIjTHQD-JzDYIQI0dvFx_vfbNpKpBa5_By_MnibruviKjdYAWV_PG7RxTYzdyWQ_gByA	2018-07-14 11:46:42	2018-07-14 11:46:42	\N
+1774	1219	fvNm2ZXb2bc:APA91bEm9DcxdLnRJIsV-j1Rmu-bys-ajvnq9nYKN9fVJZbp8n5gec2QDUnBlkczb-W-wh7gFg1E8vnA_847VJFQK8c4Ef43DjjyUiweLmwtbJmNytVsg_XwdYTKrDiUP6x-9VCuLYjeRJQGcZv27htpzVDyqY2wdQ	2018-07-14 14:51:58	2018-07-14 14:51:58	\N
+1775	403	dvlwwfi-ixs:APA91bHfytR28WwiGFnL7LFYVd74JwgBr1tyb8VdfeD6EBKBdAK8hb0WbwslDrRk-jc89MttdzgeFUt5Ce5LIZIYC4ct92Y-Rs_WuuBTneiZwDHqKSfx8EcIVJWZaIn_sxWTpip98L9rXsSkgHSg-tzkbfWQDdYGgQ	2018-07-15 16:48:22	2018-07-15 16:48:22	\N
+1776	935	fFASFbKsQXM:APA91bGBfgApRJBRTpUELKgAZo0w-ME887WTPPYhkUKcxrdnnE_xLZN-kBvgA_7DL3qDxzlKcNTxhMFhp-IRmr2DGR1fQ1yR7sNWi3vMtln29cARZMDt2Qp4ltH9vkVtMYIiRc0z6zOu8DKzqJBF2OxMc3dYgbqBCQ	2018-07-15 19:17:06	2018-07-15 19:17:06	\N
+1777	412	cob2VWVqF8s:APA91bFjCNukmv-oTcwu5IotjGe98H0RA01jncaXBJzbOioCfkuN0mkzVpcSQVSRM-IPChYXVRl4iW99Fghj5IWy6fGG-hRSxdU5DXY2hcO08Yw4-QsSlWZ1fi2jRYsNu4iK_9x8nemvePx9AsekBjbWMlQRQI88qA	2018-07-16 04:46:52	2018-07-16 04:46:52	\N
+1778	1149	dPZrAZt41aU:APA91bE1bP1lOYLz-nN4uCVynt52wh33f-0Sn_n5aRhDWL7TG3aXteg_Ci7PIJG4dfpanNupwIGaUvZGl1WeTcjKmMuh93BSd1f8WvrSSnngjgdnVrE0kDfEgSm3Ck46aATB2QAus_0UiLdFVout37eLkp4vgqacow	2018-07-16 07:37:55	2018-07-16 07:37:55	\N
+1779	1220	eZy911LYU6s:APA91bFD8jmo24YNmXODtCxZiENQg4ePaYbta77cdr7ZJg3ShkgTOyE04L0AhhL2MVHV44t_NZ6i6Tdk2JMnOpEM_HnYrx_4xrvUJESYMO2CFpVBhFx03z-Vz8jQA0h3DBhSTo3SkY-np6u7pd7j2-M7zwn0Ata3yQ	2018-07-16 07:55:02	2018-07-16 07:55:02	\N
+1780	1036	fnMu8aWg22o:APA91bGpdF1NpfoKdM3hBDIn8xy5MFy2RGazh1bhypG8NpnHGyfXqj6vQgUipJjlSDkNx-pU9cjgZlRvZK7HWlwv4crFIfMjGmWUS9lIXUJVPOyAXPzcLJkZ7GryomwZ3jbWItLT2IbCW2FIQcqqpRfrEyYDRr5x9Q	2018-07-16 10:50:33	2018-07-16 10:50:33	\N
+1781	917	fnf9TO8-DEk:APA91bGNGXjPDydVQbUlLVpvvvIIkWADay18Vlhg4B8fBZ6O1yLEP31GMPNC9ezy7KCBPxwDXEZ8qdgB6Kcoorr0WzMkIgM9ocz1vJTyw6I8lSCKW9pb5l4s0yrH8hRFWcgPmOJKDH-ZuUEBcUC60pAb97DZI9pmHA	2018-07-16 14:25:14	2018-07-16 14:25:14	\N
+1782	41	e3rtwcZyhdA:APA91bHoE4KCRutgVAapmfZDHLtk8VCm7lcywN1yHSctugLifnBl_BxrAQS5F8LkzNMYxQbdj3sakQHiFez6Uk9-kubvia_S8RMsRBPGBHWmb1wgr90nqfKfLWQAikUw3F4AJvb4pwKzPnAWqxkjR1Ovg_7g1cT9aA	2018-07-16 19:39:48	2018-07-16 19:39:48	\N
+1783	718	cGYw53SbgBo:APA91bHkbCDKAsZWgUve32_9mC5Kno0QiwnQ550VTZGZgt2e9g7QRHGjymSA_ln2mEmtcOM8rdEL8Upj-G91fNJr9PCD6qn6Ar8sxvgFFakrbw5Luh2mYjg25NafOpy-9uup0BEyEGJCpK65q0yud214nIMRtlRFjA	2018-07-16 20:41:04	2018-07-16 20:41:04	\N
+1784	718	fl7MCivbFOY:APA91bFK3lxTzKDZe8id6tKAvPZQx9PCQuDx5xdlrBzLUjkk083tzjSkR8ELhzVdx4pZ83mg4Y5tr4tV8c9iLEF60Hyezq9ZY3xbPpipV-E54vLfaHXkEpxV1UbogjqarQ-HUBMISImsaO4u12jrzZEPtP6I528iwQ	2018-07-16 20:47:27	2018-07-16 20:47:27	\N
+1785	927	dfmfvIdEzic:APA91bHstbxNf5tokt9GI26BZKiNBIxQtt9S8B3UPmMt7qCpbB6qb-ieV7OW5iJgIsrodA1VgEn5hl2d3uPYUykCCumC26cLClQih6ZHdYPVGZmA4I9W40arGSRpgPiZwoD135s4Y5JhRaJ7xPDSZAYscqk_dGMrCA	2018-07-17 03:14:07	2018-07-17 03:14:07	\N
+1786	1221	f5nBkx7SGl4:APA91bEFkeASWtQL7vhrz8PhYEYSpfNEUblPdxMYo8VSCfRYBb9fa9rfQrLxHnI_vJkCS5oXFJ9O5kcWpogMuq_zXYOD1bsjjrzNeX9JwlAt1TqOduh2VTy8xb-BLwfZjH6BOPEukatS	2018-07-17 06:42:29	2018-07-17 06:42:29	\N
+1787	181	cKgWLn2vgoY:APA91bEl0T6jgVPjhlNe4Kn0HtfPmPs5EfKHYNNmQ6uj0ubFAYl2CdvPJSJ0I6_4NaexE3fHrBwXtdsf2KvHiiszqNZFB60d_uwJrBd_j66jopjIPjdiPfhkkhd8c_WWZx5HVvrzMJN8sLHEgpwIiQ96ESJArwjEJQ	2018-07-17 07:04:20	2018-07-17 07:04:20	\N
+1788	1222	fV9EUXyFIN0:APA91bF1GL4iJnCTxYZIb5pe9ul8SKcH1L7xKYdj8w8gkDIlUtrFeFJ56Pf3D-zR9SqmTM3NzPuaZPbPpLGXUAePucADJmRv9R2PZTAu7WFwUl-_TuHdjn2tTH226ycY3ehRMBK0K6iH8lHJtnPRPWESrYxppP6SMg	2018-07-17 08:32:25	2018-07-17 08:32:25	\N
+1789	1139	dmWqRFJUjhs:APA91bE_vywZ8dguzXE2r97BCzq9-AEGF03cluqk6lVIatbpkj4k4zELDsT_bb5-kepySMlBH7vxw-zQwDD4lgNoIBN_D5I2vISKKNH1zw5-Pk9IDEdJFxZW5vl7HhXIASd8DcWgCaNUMiI9gNy62JebV4ueLPq9DA	2018-07-17 10:12:21	2018-07-17 10:12:21	\N
+1790	1223	fyfRIqQ0FOc:APA91bHpaS2JGTFoS4feHeZW7OjIuxN8wGJ9d10yoxLjYGgjdqne3wChVLObgQQjn7nUqQpekqEXqDrBA1z0QbtXFFvK6ySu1K3rNaLNg9uY_iK9Z-aFY8U_LttBaA3W-WZ1KaHPZ7vjnCid_mH4NS13eUycZM1JTQ	2018-07-17 10:48:59	2018-07-17 10:48:59	\N
+1791	1224	f58MkPHM-2k:APA91bEOJz5u0-Ku3iNdlO5ZCmTe4XNlnhPo09cOy4qb8LMcg0URuCnZvUIe1iZixVc-_hwzKHVYlP6ljlX0QlX5H_2FRS8X7Fu6HgWvuVj5Ownunq1-PVclBSeTqf7485yORY6nJcFvTX-HGJROaFv_GTJjKG8snw	2018-07-17 11:07:46	2018-07-17 11:07:46	\N
+1792	1225	fWJJ80HZWi4:APA91bGCJCZKI7a2BFIfVdpBgJC_uzdY-0OgNhpai9XVKTNFAw6BD87ZddlZIj-gvBKXTYnYQ5WA8YBE5vwb3DDp90JBgD54Lx22nKCsLTZZ-9QFh9YXBIM1M_EjkywSmsxUAlQypcPB5WoOzLBmAu-uqqUvfsEAfg	2018-07-17 13:48:41	2018-07-17 13:48:41	\N
+1793	1226	dRp206iMxDE:APA91bH_EVPeeuyfRKpuN94U15kZ0Cqf1ls6EhogBGQlbiN_hvb8E2cToHpVx8-u9bql7Bb6UVwlN-gHdLyYbr2MHRDk6LJt-Vz3rYQWrxxPDmCDCjSkymK0ZBoliCAWoL85E6h5zlqRWJ9B4nYrNZZvD9U9DhSFiw	2018-07-17 15:11:33	2018-07-17 15:11:33	\N
+1794	1227	erQdh9wiyWs:APA91bG4jT376nm9zxshrK12FPE6anI40b563u9Iffxr98B7cjsApuPs93eKwhVPYJ7xFugqehat_sYqRYY_IH2IuHafywiC1HeFTN2EUQfvVbtOLwo7V-aouE-LvfYyHCYj9Ct-UrJIYsM_OXFBiFOd-FV-ZsTShA	2018-07-17 15:35:07	2018-07-17 15:35:07	\N
+1795	1155	cM2OD8rsdmA:APA91bEJHgogoWMy20pPjad522fT01lBgPV5maCJLjuigtDNXYzNR4HU1LkoYDO3oR41lHu1XnF8BFutW9e9zoI_5MnPr1ASnpqxQ-rOBMfpA22yKKtCzeEZqjcuIqyAKDzeHWRE6fTRyfzhJSbyRI32oXhxL_W-Cg	2018-07-18 05:46:23	2018-07-18 05:46:23	\N
+1796	1228	d9bscWMdAK8:APA91bFbp0ZQDxbzaJnuywmVfLU_jWnubIOUlYwYlMgrFnlvvaVcD7_SRkd3SDt4QipztSwzWKlrfU4Rc4v8Yk5jW5GanbtH7fhMaC5txuS73zzbYPgYpTdez3hrIamhBVSyNKk0DYEFLQAJFnDFbCqK3bIo7ByS5w	2018-07-18 07:36:48	2018-07-18 07:36:48	\N
+1797	1229	NONE	2018-07-18 10:02:07	2018-07-18 10:02:07	\N
+1798	893	cCIrCBAyrhg:APA91bEPJ7O_hOXr5pttm4eSgi6lbflQvGBHW4Le6mI6EH2D04U5r_Mpbv7z4hBqI57uiCqv0y3bFp6SveAxLFpNutbFV4o5ZmzQ0jc3OdM58-eCAnB37tvoinvBG5WVBC7bb_eS8ZQCPcsN95dYQB-vKOtir0fNFQ	2018-07-18 10:09:06	2018-07-18 10:09:06	\N
+1799	9	fOsZBgcyLJ0:APA91bGlunvpY0LDhebQi_4EhgSf06k57coegJY8O5aOF6lt2kjSb6L2iR5yrq-71PvvRfYbzyURbx0b4fsULP_Cb_Z2QFasUSsXqtnGiibDgLRca1ILAsAZ1NltyaFwUM34fWWa80nGo2WtIUe_Y21HjQC25S4JYw	2018-07-18 19:00:48	2018-07-18 19:00:48	\N
+1800	1205	eH3fw8iPBcU:APA91bEgmYomjwAfX11qZNz7mF2WdxyfJNBG6emgHz-wCT7miU4GFEz6ihneojdg0hK9NzRKYF1AGpj8KBiLIy-Mk95o7H2rvrGp4rZPnAwniS_NqnEn3PK2rGNZKP3k-P5pb3tOL1ZjclQQ9B_c3mIMrEHq68ArGA	2018-07-19 03:45:30	2018-07-19 03:45:30	\N
+1801	789	fs6fgWYW0WE:APA91bF9qm9RZnsuc8qw17kdB19XWkV9mPz7Fu96n8gVlhDSMeTDskjScliDqBZeNtChT1kWdBchQUOfBblGtQOChklq16Aa5Z8nQRBy5sC1kwZq5DjOhC444G-hJCSORQO7txq0oVou83dWfACOCH34mwLBP446dg	2018-07-19 08:37:46	2018-07-19 08:37:46	\N
+1802	834	ftIS8284OHw:APA91bEGMB5i5sW-Mi1FgXpDDZ3Zcpp4t1FfKSZ_MD2CsXzampGLuK_NUhcARKoy7FxOcx3LlM2Dz5fmdAwITDLa1RdsfdcDDLtuaZtvXfwKbYTXVSv-uAaP5QcQQPIVcDpgAG34jgODy3z6qQPci3xE8NVc__7rGA	2018-07-19 09:27:55	2018-07-19 09:27:55	\N
+1803	178	caY89iDgQJc:APA91bFwnYH72p1aF-_wJQ9HTFGgaGKOz43xa4NYSBD3HspX5DQ0y1cuOnV8df9sbbVQ_ZtZzi-Fbc34zDpPUd8xoDtaXF1piLUPR--2_pfEQFHEX4KQ7loHEcx8f0mzkKB89w6YqYGt	2018-07-19 09:31:47	2018-07-19 09:31:47	\N
+1804	1230	dNagsgnoMAw:APA91bE3RMErGvg-zxD8F56r2DbroRPyUP6n2-9NflnRRoxzFbn0Pc3bRims9iMGDkmwj20ofzZ29mqeEVq52balGBmy5Onl801KwRtJ_hLOQX1pi8_n8NpTGQlhfdOid5Vnz_omHgKQyVoXm_rheqoRHxAKkjG2qw	2018-07-19 12:50:49	2018-07-19 12:50:49	\N
+1805	1231	f8ux5FTzSUY:APA91bFpLnqRwQva0ajfB-tfZ-Se6iaRgQ1A5hpXKVur1-yMKpA_4N6ci9ofI8VlFahWKej-QK7q9608ztthSQgZy9P7tD2oK3z8KxdeJAtDIxUsAPiAi8vtr0TfAqQEZ1VmwWTCr6txG9WPj5Rf6rH_d2IEwW-rQA	2018-07-19 13:25:38	2018-07-19 13:25:38	\N
+1806	901	dzEbnlafEQk:APA91bFywCAfz5XSoj0dDpgm86STbfuhPwYvGED9fWCqBUK3kgcDyPzE3l3S58ZYCnS_IsuWkHBqKguU053FNKmyyNlZHl3qx8826espg7ofmTXx5odfy04TgwhxTvOUcq42JDFOaveMLpB0h7JxVGzI38sR_4FN9w	2018-07-19 16:40:13	2018-07-19 16:40:13	\N
+1807	1232	djqoRwCrQfo:APA91bE5RpfuoZIs97R45VMCB7lHrjXqIQTluiSwMYC9EQ45fLd6orcvqKjZlzu0J-WiuE2VPI6vrlnf9qdGZWVZTCusa-rs5REeaAvX8MGPz5kn8kiclBHaYWdhb8eiMgOuAeZ5W7a72ETtUE8YxrAIza9UJV6tZQ	2018-07-20 08:07:27	2018-07-20 08:07:27	\N
+1808	644	cQtgKpwTr_A:APA91bE89UaFCJVWzltFfxD_jAJh0y4_WdYUBE05ik_xFDQdUtDvf9V8nnxwWcflQWA6iIo0chAfCIH0BcIhfEZENl8cdXaCkshlED5bW3JySjdp97gewlRIFoOlbAjFpYIRXCWfAKtlGO6wVQ8IULHXDr9uDHIvCA	2018-07-20 08:48:16	2018-07-20 08:48:16	\N
+1809	1233	fv20mQWR9g0:APA91bG_oSU3B5IMUhTpqW1Aah3FbDu-rKT_FFplvdahiQu9P0kxb1lCF-gHOjlVmyq-3y5ej8V9c6zsougxINUM9-DxCVY2ddUBOJ7VdCovoMIg4adpDA7LB3jWhpkdybGEvsMLmBxfG5Uxqps9aA88QX5CJaB_hg	2018-07-20 15:15:06	2018-07-20 15:15:06	\N
+1810	42	cIibiRZwmow:APA91bE7TXHy7HeF3JLCXzvBf9L3wxFD8QjxKoy5Vg8YFNO2dqg8QaTwX2E0pBp4UTla1PfPrj5_3MBxIe2Jbesy7IkvxMRCFBRLs9v3j4_2faHLGzAylCTh33uvEx0Bc5N3_40Ca1qTGhzgt1JXITM7RlJVLQiR6g	2018-07-20 15:52:22	2018-07-20 15:52:22	\N
+1811	1234	dpYk10xrroM:APA91bHhGxMI2isV_TAubVyWxlmCZru10914x1c--jWxpJG3W5whVZCWj4melkwJd6-cCRvpEwjeYo4ct7zqwgrNLmr7RaEFuQsrkiTXBmMohqB2NBDZjbfumzlFk_9ei4r5YxwXhja6sg6JzUu9ZydgJB3_04HZsw	2018-07-20 16:18:17	2018-07-20 16:18:17	\N
+1813	1235	f6YfRgyeU6Q:APA91bGZz73M7fvo_P-v3es_BzTP3EZIkd_9gwbH2u_DCog1X6dWjm4yyLcANH5GwV3Abb3KxDlTJaaNbPzyLfa5SR3X_CpYw60jKIkJLx20gkSoYvYcAoc7t9sBV2hXZGXHLJSS5c65yhaSgUD8ZEYBBasN--oMOw	2018-07-20 18:05:11	2018-07-20 18:05:11	\N
+1814	408	fhi_8lRfXfg:APA91bFbaULSiBho7Z1pdeETKjfmn_w3aC1A-1_n1Smyk-Gs5qW8IjyYprfYNlxyTL_4Y3EEl1uDrwoqMG_wVAH30j3AhYQMNIY1V-Tvh25KzHQX_fT2wrJxZBZwH3295ku-M3O2FZSAYQvTW4kvOYdEdXVSaOi3Ag	2018-07-20 18:38:25	2018-07-20 18:38:25	\N
+1815	1236	d__ji8EyzGk:APA91bF1VvxOkm-mO65wxC11n5XA_7VahZinE4SP4TWxk4Ry-j8OHbDeaVxjsJa7IpPghcP5XGCRyI2o4WB4MaWkXmAnLHtjJOvXyDHqoFq-3IlX74euFbeVUAVDQW03zYedDHFt-ooMb-KCHiU-WDHo2-rFk214xg	2018-07-20 19:59:07	2018-07-20 19:59:07	\N
+1816	1237	fbkre7UXGTg:APA91bETy5NxMTtFfyQtzm4Tbl6bjUR0zuW1lGyIBiRA84ESHHgF_HA8o02v3pHNu_GxAtZpAELK6o3iUn231FCVBJ9YAct_clUM1JxQmIdy9q6vWKXzhniSbnrMKRuUP7PJOgBrWEk2sZIn6YIEesm0Yq_N7o_0Ew	2018-07-21 05:33:54	2018-07-21 05:33:54	\N
+1819	9	fW20oWFudxo:APA91bGj_YEvKLdfvH5-KSr9b17qiBJNAZYoBcXDcJ_iyrdHwlpZugf__F82F0irnTq08ickcyhxRiuAdgkJuIWnFeRg7MyhrecpNDu0lhne3iqwjWmoVg5ux4XN5qkm7DIuQGKQ8VsFiDiQmCUGer0FtTX3XeQGmA	2018-07-21 09:33:11	2018-07-21 09:33:11	\N
+1820	488	e45fQ4BPxNg:APA91bH4Zk2GBFll45N8QMpiIk4fYma4GBPH0YDi5wez_4Yt6BA-6g0EVuQHF-avKpLHpZjLlNvX0rDDVJSQsc1CXonlyvCGvlVnEblG7qyHk163uQ-4Is37rpEvtMwHqCXs0q4wMVZKRKyykeJWjyEE5uvKsmdTZA	2018-07-21 09:48:01	2018-07-21 09:48:01	\N
+1821	1154	cCA_3NnxqBE:APA91bHpO4na4Uo5Sd50cFVl8n_K343q9WeSfsN5-WmIFhkQeZLSUOA4xtstrPGpMfsGYmm-wlauKrZOu8b48pu1gWhKiiXY2voBo7LT7CQyAHLUwvL3_iRyOIhDhK5qAFRpmLkDSwKMSWAsx0PzBx0c3BSPw5XpTQ	2018-07-21 12:04:02	2018-07-21 12:04:02	\N
+1822	651	NONE	2018-07-21 12:23:01	2018-07-21 12:23:01	\N
+1823	1154	dcyxDU1EXOs:APA91bEuvKaAmeLRfeWvvtNGc2yV6DjftEmVBZOilGwxrD1cC66RdExb4RR0JOLDwtvul36OSIZN9-ei1CaWGPJrkAZGAaHa9bMl557PhYaKwxv7O8LPXY_miy-tsBKCLvSKSFakJy4j0hm5_wP97QX4NABZTP-hNw	2018-07-21 12:32:53	2018-07-21 12:32:53	\N
+1824	30	eGMf-cixTws:APA91bHBO2gcMJAMEWaHhkhdYKZqK9g7soOPLP3NFdD8NlQVDjmz6hVPZHw6ZFKjSfMwcBAnQZp-TUaEUr3hFZ3bp7dLHH8eUIDQr8dNtVD7TRz6gvPXU28xxnlQAByfGgDNBYx93pwokIul0Dhi3FWuUmAcJCa4Ow	2018-07-21 16:30:52	2018-07-21 16:30:52	\N
+1825	1238	f7q6J6QcJsE:APA91bFzJq--czCD-PyhF6RqjL_06P9m68L5-PhOdyLI4aiaVRXM4SFERXeZug8b1rFqd3_C7FKlGJS_Gh6NgAWghjTAF_Z1yI1kcZaE_HYkJnwGTpn_6Y3xj44xiuOaGY7Wv38vAQN7RPrYeTU1x3dkF1u-v-EvvA	2018-07-21 17:27:11	2018-07-21 17:27:11	\N
+1826	958	fB14uQY21NQ:APA91bFYTESOQV7nzbojoVYF9eo8bermsi7EEz14znNYVR1GM20OPK0mFbj3CyA90ZFPMVCKeZ5HQKP3z6L8GyJOg_kotUH14q3yEFmyx8jqVSAfS4cAyp7UHIPqDj5TDcv3ZHPNeyByfQxzPN4OOqxOuGd_zPIO5g	2018-07-21 18:55:47	2018-07-21 18:55:47	\N
+1827	1239	eAtJVk7LATM:APA91bHuqeDREMHYMLjRuxBOpp4PRN2gukXmB1kz3GjIri20lpF5sUY8pIPhPsfyaltkv12ktWvTO3yQC8DBBwRXEqAxJ56ISdlewiDdcMQvDKbP65ntQG5mj0y03UmfJiFTIRTZb7_7Quun-Qggm2b3gJD_Y-mcIA	2018-07-21 19:23:42	2018-07-21 19:23:42	\N
+1830	1240	ebF_BeCXpck:APA91bHnItVg7XmcSeEFokZ9UkGIgQUqVg1c3T48ZEUrFaBvZN2NKvV35DN4rmPPl4h7lpOqPHel-DMqjlc4Wk1nY09N0zcNhIYQJFA91apjnrBzaCnISuI9fzeSpWcHDjRdTxgvIdZIq5MNs-PEG1ySJB1ndkmZ9A	2018-07-23 04:27:46	2018-07-23 04:27:46	\N
+1831	1241	dt22AuZqsYs:APA91bG5aMsHOrb1LpLVTBoQDJ3hwUrywLhHbbvRlMEv3-sQuA6ST4Ykvjv8QY6mESeDYL1X78bMfoELVvdAn_3tWWsr9PtMaCoke8qW506EKHXc_SGXXgnBjVJHAgiVKcx_QzmSHOg8r6nYjgQjKQiO833ldUOuOA	2018-07-23 05:39:10	2018-07-23 05:39:10	\N
+1832	523	dUqiET1aUbo:APA91bEggO-1Z0IumtlA8wPEFSbOTGSAUq8yNidmgPsx3wRmocGJAGOfOoddSmHtZhp9t36r1g5N-KZ_wPdf0flW5ncu6K37uyefnHS20lxqQrhdn6kZP75s79gtB9zazJvdvD7on_Fv_RzmmyAlEHZwR3PjLaycLw	2018-07-23 07:22:11	2018-07-23 07:22:11	\N
+1835	850	fkvz3ZgrAFY:APA91bEq-wRo82Lr_jd9KlDrOAIKC6U_dKWgdTOx4izDZspYL7OOf4QyagGj6UN6jPnbt8Jtqzb1YiVFfdAJ0LZAxGGEboDXw0G-bdf3TZlcEEGYCGv3ykLhZMWt4nrUHcXVIK2MIeddvY_fvD6627qfOSxIm4OJ8Q	2018-07-23 13:45:58	2018-07-23 13:45:58	\N
+1836	1242	d9_iy6AynCc:APA91bGO4ZDCMsDVBogMTnbXWPYmWygDgC00RY8GoH1IKx7iHLR5LxcQs2TfFO-53ljF8JrFwUHW6ZNgmkUPG5EixRKn0kNiGcwmtY0jJitkL1gbAPryp7c5UJ3p-2Y99seAcAA0B412-_Y7OcW3IORJaNmDM5Nzqg	2018-07-23 15:23:30	2018-07-23 15:23:30	\N
+1837	1043	fBz-cPLGCoE:APA91bGnSstOpDmKe4S5bSL4stB3MQPyOAQ8B4oP5rBDvKznxTwDPtHKV4P3msXrbg5dP-F7mMNw24qsjaj_kyiF0JXlLx_1hgGnP4srJuSLZ6yFt25qc0tsSPI-T8BX39pa1IpKV5GWBXKiZaJINnKXLZ-0mu5iiQ	2018-07-23 18:56:19	2018-07-23 18:56:19	\N
+1838	544	cgpp42xQEGg:APA91bGqX8PZgjuX2KfPZ3YgbGNlnk9G5Uphh4_7rhyjlo7t3w2ms_solwb2eovX4JogvrgOoErhbuh9o1mU6sQC6N8D6Pkx0wNF8QWcqMk73xWVLQIK80RLKR9NjT_vXxuyc3Lorr2rvabYcHyx3tOmwr0yhFSO7w	2018-07-24 02:44:06	2018-07-24 02:44:06	\N
+1839	1243	eNwX9glK7FA:APA91bHJwoB7vdWVUuVHaAs_sRgbyf780mmhUxEe-p_94ZdYMZ7xSGwfJAX0NS0ANmuD4IjgO0KtdfzwRd_VNjFlgOKbvYE9XQpxUvSaBrAwIXRbYTmO2e4rllf-llX4qLHq7CTZyUfEkxH3jBs4JDY-UFi-R5wuOg	2018-07-24 04:18:18	2018-07-24 04:18:18	\N
+1840	235	e_dN6OTpEKw:APA91bH4b1k5mlnJNeP48dOFuo3tCY6_0E84_2wu3HI9FfcpBjYTWvC16vKP0-dz3Bt3qB9IcSxed_iUW5UgC41PXsF-8gv-I29BV-njocRLV8K8KrUVtJWApmupkemxLTxWzro5TZK2MUmiW74PsOVQEfxa0yyAFQ	2018-07-24 10:19:46	2018-07-24 10:19:46	\N
+1841	1244	duiwU7_92Y4:APA91bGLrqaeTRhGt02cHIksXzLSi608cxobgxwbnbqknoeX36DplP-Y44q0q4jB9hWoEmk8xRBtiwTlCfJOwZtBz6nMiUBZp68emSJ_BJp7FTuCQTU33tn8-WWqGUtXU4jNA61BatmyynpCRcaP4jqeNPB2-8mGBQ	2018-07-24 11:38:02	2018-07-24 11:38:02	\N
+1842	1245	fFxj8YV_2sw:APA91bG4Rg5pSS2ry8h25XuvvORjG5X26PszVnPsvx3PxqK1_mCUEYzuq3gfKI5VyhB0YG8Vu3XWFvTHfzgY1OvGDVJQp50_eY8JXcxNSfgy_tcH7n1PQuwvw2JstiE2YuQd54-iKVlM7c1Wv7j9G8a5NgNLnSrabw	2018-07-24 13:59:08	2018-07-24 13:59:08	\N
+1843	1246	ffHau_Qmp68:APA91bH3Zd9mKpeXKv6AagSIzIzIporgVWXRDaryk7ZkJlhPDwmoPPt97DVl53a0TDvJJTfBV25UX-Nmfq34Ie6iPvDtBXeWHI1PvzdysRybBY_Faz4B8GbLplxzz7KGHMzAE2kcS0_90rfLtXAeb1tH6t3HqVCvCg	2018-07-24 14:52:44	2018-07-24 14:52:44	\N
+1844	180	eIFgvAyb8MI:APA91bE7tFS6-UtHvSvfJ9xLTfht3mdoWbPDw34opCwh8RWFglBBJuop9srgeIFWLttlJCXh0KH0lmBWhJ0nd7Udmddv_LwonS1UkzRIptN8ZxCI9ura6NlwjvKR2KPa0HfxPaATHBEBIGf3id-r7ksLFl0WVyGzhA	2018-07-24 17:54:31	2018-07-24 17:54:31	\N
+1845	99	enXKtqg9PR4:APA91bGUKjB62Q7Cyw-8m6wcBmMLOde3dIK81Dliiv20gR8fCkVB52oMA9FOEKz7wO08_GRmQXliDwPkQrbS4JDIdeF_saG1ke6nfNh9Db3CShBrw2_5y5aVtDUPzN7JIyOxKVwLZAxboERjzcK_lyeRn1stGThzxA	2018-07-24 18:48:07	2018-07-24 18:48:07	\N
+1846	1133	NONE	2018-07-24 20:03:18	2018-07-24 20:03:18	\N
+1847	1247	fqy4NvMJrkQ:APA91bG3EnlQWxjoWWqI3LWJZWD9cNX8pVRP5-EREMSUBKIpV5WVU41D7eNXroUTtbqrJcjS1wiMG-r2KbIBoOkY5dbs6D2wIQJjvziHyftjyWOaR95Pak-WyZetXcyFWIyIrzoUgJlY8riJyQZtJkbQZ25k8KLIyQ	2018-07-25 03:47:12	2018-07-25 03:47:12	\N
+1848	1248	f4tDR6aazG0:APA91bH7Uba9OOqA7qm7noExSzqrtoQTAtaDyrFvE5xybbWVR77fnHhwvcDVcD9YFN4rVzcc26-eHytFKfKvHuoiTMlin6Ze0KvKZ4Ur9ZZOWyWSysQpKBgnSW8SvgTiu27vL16UKJxGqcoxRLpkmzW7FBATgzlVWg	2018-07-25 06:16:54	2018-07-25 06:16:54	\N
+1849	528	NONE	2018-07-25 07:29:46	2018-07-25 07:29:46	\N
+1850	318	d6W34LVSiTI:APA91bFtYT_NQO_DHlcRl3uitvMRj5lZTEivJfXh7OJQGGFUD-PP4NZADeiFUKic-2LTnDRy8LfGeq0-yL22PyR6zOiuoaS0nEsUqNjuFmhLqn-Czpyk-LOROEzUA9FIyRBTw348zAWrSzv0n7fEJ7eT9eEYjivpEw	2018-07-25 10:17:49	2018-07-25 10:17:49	\N
+1851	777	dg-x69_qUGg:APA91bGR17ZTwALDa81B7G8gJ1O4E0cllx6RCJg_Tnvg5APHJF5LkEbntb1oJwebWAG0XkgSYuHgj8Z3Wl-lJMeUgSSGtIxlf2Jdq5JnkkdR8FlODEP2fAc0I7h1WGcmtteRUtNLRseMccyvf_5gDZo6Ge5kzANBMQ	2018-07-25 12:28:15	2018-07-25 12:28:15	\N
+1852	1092	eAH1Krh99bY:APA91bHa7HvutxCX_UpceESZvr2VCxHvOYkaDL6LNVAiQRpSBbCPOseMpuyqWllCnF_tkgEQPDBXA1HERauzr4iI0u224-cORD1WS3SJZgIZs6hlKrTtmz_cIF7ZMVjnN5aTL8qIGzSDYKQ5NFdmtws7vBIXyiQC_Q	2018-07-25 14:57:49	2018-07-25 14:57:49	\N
+1853	36	fcNlOkAsUMc:APA91bHuKbx4qcrVf0IqnfBqGSTgo2QTRWa_ZEG2ZLR5-7-zYZzqF4FqBTYb91uwUL7QgJ40vJXxJiQ6SdyAgRuW2leK88DtZZ4Ia5Dj6kiWVR_BAKyouTGsFRnJSRn-QGLzHnvq0mfwm1R5cv8Nyo252VDIk8VLBQ	2018-07-26 06:09:21	2018-07-26 06:09:21	\N
+1854	1249	fEVnWf4Ob2w:APA91bEvMggK8TM4JLMotBpMgTu6JFYsMDuGBNdDOG9yN03YNcNWAh1TrFoMP7FgU5EZuzEq3XNZz5mjd2yMAcV5HEVD1Km4Z1UbGyIZlMrChIslMHFyeXOnD51qn0Ld3Uwz1T94EUVnOOwPLE2qLo4bSXZojXPlcg	2018-07-26 08:03:30	2018-07-26 08:03:30	\N
+1855	1250	doSml40roRY:APA91bGycA71h0HVILe28UD0jkEo7VvXJk5lKTksqaZXsiDdnqyQ6bNefLB2luB3-hkzvMB0ILdaJQphZRDBr7grvQvq3zAbJ_V22foQLDUQt3EY3rksDHgpptJGgNouT08DGVqzrogGCN0eZA9I8eY4Co4y6IFhgA	2018-07-26 08:30:15	2018-07-26 08:30:15	\N
+1856	1251	e0sCrrSqecU:APA91bEf8PmoNc18SBPb141sxQCJUMsoaqo68khNghaNtmhOjRDpLQeV3yTiDMsHJS4UvL91ALHDr5VwPOo1kzQqoetIGy531kPjKmCOSjJV8aXCc4YC2PfpFM3K9p3i_R_797o5HYTcegYtkfHU6Htz9SeFfcpxmw	2018-07-26 09:43:08	2018-07-26 09:43:08	\N
+1857	1252	fyXc2GVfabM:APA91bHcdj6GsjZBXH2925kw2SXuYgBR_ghxPAE5XYC7S6JHAjRdJLk6ogOammRWKPeIHNJJeLj4uDK7C7tAGZhSliaZK69LGgs_MzM9ic5MtsVK2SetMWWazqmTvtbuqLPeEd1n9Kibbwmx3Ob-t2JOh4crzyuMeg	2018-07-26 09:47:04	2018-07-26 09:47:04	\N
+1858	156	dj_VuS5LRlw:APA91bHLOUpH4CTh3EXegeEMKZ9nvWGBN-mOmLHKM28sWmErpWh7ZOhcbEaZ7JfjKYn2cZTJe_2jA3ez4jg_A9XUutZOyW-X1N99nu81jimVBy-CQVrp6FmwHHQCliv-M7yzEkLuiuED80BQmjwslOD4OMmK5LXv2Q	2018-07-26 11:21:01	2018-07-26 11:21:01	\N
+1859	1253	cn47EUfV_sY:APA91bHkGmYvzF6X4GYdtXRuYSIhT7RNfjpehez5N8wbaAeAaeN7KPKVQ1vhFfyn3qo9jzgBgWlEV5-b7zKbkoWlsXiZ7QUYp3UQNl4X5ljEF8Sg_wiX9gmci2vKs6ENbvY4WnGVYpCaWBOBdAn_AmZkACJDXv_07A	2018-07-26 11:28:37	2018-07-26 11:28:37	\N
+1860	1205	cuCNdAO6zcw:APA91bHLrbcrvOMh5Nj5t3jsSZFi6SLWLhC-zYeOkTMFizZ_8y4kUTK7PR6BovfwOVjjEd3esXI6jgVGn4D67akQKMefEsElgMFN_mPYJL8WqsVz0qaIunteh5iAkoAXh19yc-QfhwQkYVNW3JKwweVuL_KRjx2ONw	2018-07-26 14:18:41	2018-07-26 14:18:41	\N
+1861	1165	chmLDUA6sJY:APA91bEc1mYwrcHnJcKywGmytKz43WF9aDpFvo6IJ71ns4rB5m6YEVeWpgGTkP_B4-QjMGzqOXnTEqw0e_CZMYnIEhZ9Hi2hnzYIvrKarHPoRLPr7Fvk0eucGcXGOx-9G1ZRXVLNISLiA-TvoQ58Aq7S2rpwl1J1Tw	2018-07-26 14:58:42	2018-07-26 14:58:42	\N
+1862	1254	dpXETN2otaU:APA91bHOgyeRZOfybFl986P8DtI5tOT2wEBczxKk-xmvCjF4pq1CEh7Bvujr8fEJxOa-L5MET-MEvit-WomfAFLcr6Rk2QFqdt6e7QGaAriQ1_sxPVDNfU5WnMLrvtWgqxjMjsiY-N9p	2018-07-26 18:09:28	2018-07-26 18:09:28	\N
+1863	1255	ejYk0RwuoLo:APA91bH6SvfDbahI5396Ds0j2aFXOAkZB1KDwShVNUwz8Xzd9zjXwpXTB2iUQ_3Ag-AOUHJCB2cUi34BmbSSk27OqUBF-nqt7OgxZBFoHYaUdFbO7mhE209MGd1nizuu4lr3emwYqHiMNaPCNhOuwAdbXZohAOK2OA	2018-07-27 05:25:58	2018-07-27 05:25:58	\N
+1864	1256	eftt1WNwOb8:APA91bG4WPMLZ-T8eVaheh7gLM2x1n6lhKvJ383dwg8l_iYEnHCopYcvZ9xhi0_B1_3cTOMzDDm0b6lQicU_z5T_ik7vKPqjy4wzOphqFFf6H21VKspsd10M5dwkABcTj4uuXL7--k3UbkMCpkEKvLuQBruwRevP1w	2018-07-27 06:26:06	2018-07-27 06:26:06	\N
+1865	856	di_csV0Lh4M:APA91bEIekTV8uK6rKWzEftTJYNBQ14OpMJC9VixwXd9kibBsL1AlIUQXXMV0Ir-B_H8zXEa-Q9uRgSulDvZlvgSjsSUIRtwSoHU8IOJg_OyEgzYEthHoPmtR62CN-gw_xYGRA2Z5qaC4ft2g7VBSd3Q2Da4CWShrg	2018-07-27 11:04:24	2018-07-27 11:04:24	\N
+1866	1257	fnuA7fzESbY:APA91bGbSe84Wlsid5iGni6_kwP2VUh8UwsZw6CRpNDZwzANRPjp4Kzg8UO21JFyn6FcXaCXZ7KDy3BFEnuDUo-3NLLZ6uHUfnuJIQgiQfI-SUpm9O58OCiqlY8kOGSzrlmCPLGVtYO2okqtDRS9q9LEkh1d68MUfw	2018-07-27 11:04:45	2018-07-27 11:04:45	\N
+1867	99	fXtYSkFpGo8:APA91bFIY7wyYsnDe8Z1tN8yN3hkOPL8ghcrk71EkhJnkpBP6lMUCtSQsX75R6sJLBRQfoccp-SzbEsgbaOBsqi4yBkEAoyHj5Dg2X4sCwbHBhYOxd_CJ0jRuVKcIanhf4VMHNdg8mur5G-ljnY7s0AiBWZSuq7aQg	2018-07-27 12:15:29	2018-07-27 12:15:29	\N
+1868	1258	eOF1pF0Hjf8:APA91bGopNbTLEjaDG9mRtwlE5naxClovqLmQNT1yX2SVDND_OW4UifxeV6WVpwMjYPejp94cRKnPiXnxB52fpHprQb2jQccOXq1D_jcwBmj7ZpANgiRuAzVGk7wHATdBWWF3fmU2pVtxTMwy3goVNYK7_ky32_abQ	2018-07-27 13:27:34	2018-07-27 13:27:34	\N
+1869	911	NONE	2018-07-27 14:20:04	2018-07-27 14:20:04	\N
+1870	1133	fy6uX63zNbI:APA91bGbWvnsSSjUTEZOmOqvjAlh22h28-OUE65fq4Iynm6bNrn8KVKfc7Sq2Xh68JBzIgdG0xGb14JF4nptQBNhslKa07V_ZLmCc71Bo9Ex7gKRe2xdEUaG3Io2qUhG0TiL3UCfCHFawVBKi6GDvNMGXtZGaphy3g	2018-07-28 07:13:07	2018-07-28 07:13:07	\N
+1871	261	dr-6mBkf7VE:APA91bGM5f9dO_Y8jrjv39UzIeVOYPVQaVIMRVoK838E38foJijhWe_HYgdF7gp9tJojfszaOI1_Ksi6RwMGM1ry6uXlTNgkfWze-UuCQ5SCWgnLW8jTFgNmYvQLQn7h-XTK_OvgNHgS2dJXhUv82w16gL8DqhUUXQ	2018-07-28 09:32:01	2018-07-28 09:32:01	\N
+1872	1259	dFB6zQItmx4:APA91bEDIkD7p-pYaEEXnOezVtffeiNpYO_5lJvyhifdql4gL8VpEL_Wi_h7afDagYDrM9N1OtloWzdjdRfm7c17AvmalJyPM-hAyJxoQuBAqvs3gubqhkqqo5BEYC5nZrwFAlr1agJXmH4Qh_IO-D4j-F_vWADYsA	2018-07-28 11:20:56	2018-07-28 11:20:56	\N
+1873	1260	fAm_2urYuuk:APA91bERUMiDgjqcqBaRSSoqOIQlOAt7NFn1W92g-PAhpyFmR-u8ZYi8_F81akcVzMKx4ShOVDKZyu0Fcz6pnXl53AUA_ryo8vykRSKrDWgUrQdWB-mUOBC9MVBkuspGSh_akLETQTuQK8NdOPU6rIQ7CjEYN_YY_Q	2018-07-28 13:42:31	2018-07-28 13:42:31	\N
+1874	917	NONE	2018-07-28 13:49:43	2018-07-28 13:49:43	\N
+1875	1261	coBg4B2Ll9k:APA91bGvDGdM7_OLIDUAiAtY_geOKSTUFCRehrP3132ybX1b5lLi5qHHVVXYfIrSrsIFYrtT_Asqlu-5zl7fagADUXu07XpjErGGloSMhQFmQe078Z1VsEGKMFqtGdzAAnYSfKDJMMnbwF9NN7wvwKW3NW0TctLj6g	2018-07-30 11:18:02	2018-07-30 11:18:02	\N
+1876	341	dns7B581tBY:APA91bGS8Vg5PQOhxcS033w3_1yEuBvMPCZwrdmU6vbfh_JtshK2cl0jZdl3bjvVJ7hg8tQInL5OwIhi49qQyJniKJkwey07aC2UFZnsJXh7tW1x4UvuXr6b6dRiYvsNXuNwyCYZaVHkeiWtdHR7jbhr0XPFr26G-g	2018-07-30 12:05:06	2018-07-30 12:05:06	\N
+1877	1262	cUOM59y3wtw:APA91bEWWLIvNiwtmhc6mIwJ3QNNNMFy0-DRrlidcidgA_-pTuX68UqwQ4giYWpPh7WP60oGokdgHL9nA0VqNm6mdUpTZSg529DlNDcGdJMo1s6hdciEqJxlfiKwOyyeycW-hwLDWgAoDkw44SKsH1pIynm2Bns98w	2018-07-30 12:34:06	2018-07-30 12:34:06	\N
+1878	1263	eSpvaPfVMMU:APA91bFP8S5-tpQjAQ0f6PlU8joN37BxUpDzdVUXZUXlQqPR8xd8jfsk4ura0n6pec6Y_2MkYuoy9FzdcDVZ0yrAu3SZztKdCClnpoU6QmXMyqOrBVD1yQl9rIItT3V2m3EImTdWtrY4TxjjVP5UiNb3mIASHX4iTQ	2018-07-30 17:18:48	2018-07-30 17:18:48	\N
+1879	1264	dRo8Mv3ds54:APA91bGOZKYL0Z3G1awPMvUpG0XZWVUNP6V7anb2WAUkSt6l2-TqAUyTXEmKI0LqKFVSkIwmzwL_Tlesemn7F_FB1MIyaKxAux9fbOC1IVkTeww6RbE9dZnkqd7nXoj6erFeQtKHx1ka	2018-07-30 18:52:35	2018-07-30 18:52:35	\N
+1880	180	cGdYWmq5JXc:APA91bEzkB1jVfLLckcwu4ku93U0Z0LT89tdcgeWPFt-MPRe-J4cTocFH6gsdHpj5STiw_6HoKRGLSOFbVN2AKGMVNy8czzREm61UfbkIzWQgt45eOAt8BNxe4e-6p4u0GOUSlO-4J8kWocSWEBapBPCMHm1uCuWFQ	2018-07-30 19:25:30	2018-07-30 19:25:30	\N
+1881	796	dfMpsPZmBwI:APA91bF6fCh3ix-EpIzPfXH51nCgSlfEgDEFTCb4T0UoitfGTpBFKzgsTmG7zAUFosQ0qmZ1vVXfxo2v0GgBilLSDD8mL98EbqgEhiRjQZyHfwgRBOX5mxhr_jbWbH6HTz-W2GnCdBN61exDZ2_nLyBnsWvV-HFpxg	2018-07-31 10:00:28	2018-07-31 10:00:28	\N
+1882	911	fNthzdlor5c:APA91bEDUYAjJIR2d5l0xy_5-GHvaz9t0Hydmjs4ALqu7Fca6le0u7IhuAcmZziXvrrHWpqLwQpcG3lwMR7pyX6eps3F_xipJPqZY_q0RH6wgYBMbtMnvorNMlc0pMnXw36nCVdKBJJxXxQy_Q922okLkAeBTR77cw	2018-07-31 14:24:38	2018-07-31 14:24:38	\N
+1883	1265	e5KO93PXd8w:APA91bGXEImX17Y2mGU0rac15NEIl6572TzWU65s9bJyJwDdyBR2UgAXh5sI7oE4pU1RqImz0JKNJKrP4oNNhwWh85G8wdHGuFXEk52LJ0YpVNSiWYjm00tZxgatjjLRAsBFdUwkks5Xl9dkINq5F4uk4_Z5wtAfbQ	2018-07-31 14:42:32	2018-07-31 14:42:32	\N
+1884	437	eBOjkO7c27w:APA91bH6FHZfxaCyQ74orIQjXWMd2mIYRU_MYkMCSixUux5jA_UJIIMdAE33KVYSOl-989PFYyASWER9GxXKCK0wuwhy9JKO18kuDYMFZk1g_yXWck6myg9RkU8O7bau2Cw9i4z5Obd-0yknT8S8ivO39ueZ5QeLyA	2018-07-31 16:58:52	2018-07-31 16:58:52	\N
+1885	1266	eHcyJ4EUa44:APA91bH0bOJbpOXTu4VkecTeItAGDM3A6vp7E6zc5kPWqxadNUXWJiNLLwbFWvhp7XZ3Y-a54bZLYBDB6I5mZblZ64d0DM5EwAYq7gNZIrsyBNEbfmIlcJCrdAkt_-MZ5GZg1w1rlK3nC3hpQ_CTT9mRwjrEL2G0rQ	2018-08-01 08:59:20	2018-08-01 08:59:20	\N
+1886	1267	cI9JssGH3F8:APA91bHvuwwHD1xXWEIDd-NqVIX7CV-NaPNf8Jegx_3TF3xkVKSNNFS5ctMVfjJdEmVqhdaOFkeI6LVSWeWEXboaf-oDadDysFsAIYCQYv1cWWkzjUbWQUz8DwyOGGBKZrY32FtQggnUq2Xp0wwcrxVFR3L-QmZ-lA	2018-08-01 15:43:10	2018-08-01 15:43:10	\N
+1887	87	fzCPikKQr7E:APA91bHggbQy2NkItkrn-K1zKx6Ouy5GPSUaPgZhMr-1MyJekWHHKl1KMSO2PUrfcyfGDNO3fofSW0ZG5HAU2joHKdoSCGC4r2PjoyoMx-5R_BjOsepyGFD9NJ2Xa5qfHMuu5Z3XIiX9tnJiyRhtV2m2K4nx8v8lMA	2018-08-01 15:45:03	2018-08-01 15:45:03	\N
+1888	858	fYJHT9qRKKc:APA91bE1hLm3JRLJiBIZNDcz318LLRvW0LZrLg-shBKlLc8YBYttkp9em_0GdTfGx8tg6Ngnyh29yhquNHmYp_e-eE10msaohA8nFAJytsXCYrsVyldLAy7AsJQuOjwP4qLwMSWLhMQy5Z_A_POjb2cxCYswf5EpeQ	2018-08-01 15:53:09	2018-08-01 15:53:09	\N
+1889	836	dh1ufeZFHnE:APA91bGUn_HXjjb0j0VLoCcSSLjze9CoA1zfTiNI7iQhBRwtrSdAJhgqj_chYiaPM_Up5GijF2V8wFOzPtOwAPVaYhdaPfZRX87Jr1f5ElrKbodIaglelsS-kI3hzAeQCx9fF8lD-n0uVW_0AMG5T-D285olek7iBA	2018-08-02 05:38:46	2018-08-02 05:38:46	\N
+1890	1268	fiSEn5nKRnA:APA91bGlwdnMj3mtIv7k8BDXBYclOT1kWA7p9MT3vi3uDmQ3Q4s9AJr2NBb_tUiO6q3Qf3LfXKDFxj-WH-tTkmqTU6wcaz8iGwHfrEGccv7Ztgpfy90eLlPyjKaCm-rSMDetdTtrS1-6vSB4ZzMCtQFR2kpLRHtoEQ	2018-08-02 06:36:57	2018-08-02 06:36:57	\N
+1891	935	fJVh_TMIsNY:APA91bHlc__0a038_GnD1HlxNlD7hbDibQncwlXC8eaIjyRUkC8NDnQJuX-4XFj9N_ss0jp3CmHgpdrt8AcYZxWBPkd2uF-oD0nf8TlMeNXBBULhQeATpZNtLVhktYoSdI3xDpcZVegCdwbt4FtcBIMCBm9o1Ywuyw	2018-08-02 07:41:15	2018-08-02 07:41:15	\N
+1892	973	duRaj3c4S00:APA91bHUdH55LgVGLFgCiY3n70m1VReF3VHfVkfYROWxf6Lenb1i33JBfgJpbwuo2OxaC8tcaXs7EdHWUEGqrG2JFDPTqyuMHmQxrz50zFVlBsVw1YRf3gIMf4bEE3lAq3xiSahnvnJE7vg9g5Qnzsr6MzKpbLKG4Q	2018-08-02 08:24:49	2018-08-02 08:24:49	\N
+1893	973	ecbqYU9cKAQ:APA91bHpUG7-8Hk70Mrm80_oHDxhsZjtsxti1NKUb0m916n5lwolAqsWXGpwP1vN3KS4fCxIbMBEb_ssmj5jPw2HWWa_KNSgvu8M7sf4vGYu6Ot--oP_OkBEtpgqDMJzPtqkPmmtZSKwgDRuCJlzaimvBHiWz8Lvug	2018-08-02 08:49:16	2018-08-02 08:49:16	\N
+1894	293	NONE	2018-08-02 08:53:50	2018-08-02 08:53:50	\N
+1895	973	fZ1__UhZ5FE:APA91bGKc-kzyrBZlPU0Sn-6kyAF5QSrCP8hBrsuEua8H_LDW15iZqzC4Ymuc8y9mwcTGclHSxgLmBHWJyX51Ztce2gl7w4qFWQZ7fz0Bnk_iaNM83EfmoihmRNWKf_9T-__mW973ewHKz29JODqTli9GFEMLYo7Qw	2018-08-02 09:23:05	2018-08-02 09:23:05	\N
+1896	850	efq1V2VcECc:APA91bGKhOHSjSBn-yLPPrI4FA9lUWWQQAeN9v-Yz78Laqw6BPRbfOH-npfAjMKorBKSpMnvWcE8e3vUkulTB2e2-sN6bAteLC6pIF9lMDQxg2ihESpip9VkBNbBIQc_YDdaETl_45UJflWWlmJErLSS7W5ViqGn_Q	2018-08-02 10:15:02	2018-08-02 10:15:02	\N
+1897	973	e5hjjD3QTLc:APA91bG6Q0uXZr0Fz8p2Gc5tKh_reSEyS26OYtiR3VMtpimMwd3eu3DWosHj3rw5EzKP3GFPXb2KD7t0ux9fxqy2thkKJsOxZ17ggAXWcladhJg0IhVqxkKST8kRTksqQOLZ8ymR29KcUiIxUqsHSU1wGVx5Ak975g	2018-08-02 10:21:35	2018-08-02 10:21:35	\N
+1898	973	c2y7RUpNRBk:APA91bHgFleEp8quiXyViTfSy48KBcOj5bmuq-OrC3E_RJOjSBkdkWFBrJNZ8fbJT6Ibf8n2p2L-FV1Cj8o5JfDS44TiM8tfcVL7k_di93b5Exp-H5w28Bk3rBhL2uQLBk4A9ZQ_z-cgLt41kvGWfzvGBSkfClzJtg	2018-08-02 12:09:47	2018-08-02 12:09:47	\N
+1899	1257	eNk53OdtRc4:APA91bHaBXMRnUwEKglI4qBr_f0umaP4lP-VhpJ0VYq0IiWIxS720QFpuc5xKGNGCraeGzZqP57Vh__Nlsx5UiI6y0MGutVhPKa5utQGmQipDcfAkTvOoD8ex2dTjdacCntn2UFVBtezlkHNh0T60vOx_ESRFM3KYw	2018-08-02 13:25:50	2018-08-02 13:25:50	\N
+1900	917	cOZQkL9H7UI:APA91bEvYXj3bzS5MABXW_8pBEPkKFqBmKvlfewGml42LIlFkztZ3j837eLbAxNvxvX82Ke2n6hpcNDkdsdRgJwiegnchfry3ckdVGYfYq4AvHWeJPDatXzrNSGAWV_ePXOTfxkNEY0F0bEDVPUjnAjiwUtZyjpu1Q	2018-08-02 15:01:46	2018-08-02 15:01:46	\N
+1901	591	dDOdN2814mU:APA91bFao4ExJqeZUwTsHIdaPWKJElJa_q77PYgfeQxV3VsoabrQrLcnexdnFkSwADW7wpfzCf45Isn682LuRUCGAf3a7mQJnMORnG2bmLWQXKolAgkqneMk_kmuBKfeVpwTL9uuYWprC6DQU-URDfaKTaH5z16P8g	2018-08-02 15:17:15	2018-08-02 15:17:15	\N
+1902	1269	eH1XsQB6zGc:APA91bHQxM1FStJ_n4ojSbCFP_TURs6QDvNBMqemwN1f54-HS4NbyR5mMZ_wFF5vqCMlJFEHwvZq5ZoBrBQSrqsQ0C0Bd_vuxQ8Bl_cL9XiSZVEX-ysSIzpHi8QDzHrOvh8-nDAoXLEnHmYxQ91j2MS3b4nClK7dSg	2018-08-02 17:25:50	2018-08-02 17:25:50	\N
+1903	1270	efiRiEJ5Tyw:APA91bEE8UIevrEwj4EgY85NSZZIqq4LKnxqWAEsSZKnho4i-Qz5tv45Q4AnFW0skXF7AxV40Uy6y_tOHTgbqQj5_bnfRxlf98AwaUOMIOfTdSBDwXbuz1T04Zc-0Y-UFhUBr1tVGGczmfgfFm0LHdbYAHqIBgrwKw	2018-08-02 21:29:49	2018-08-02 21:29:49	\N
+1904	366	eILCmyYpbT8:APA91bF6TXtM5n9gQufq_PFyMTGSAs4xmAcsY_1O_cCOPJosL-HHXuWJ5nmEj1EoQ-CHPrihM_sUeYiArlycps8oFGJDj67l7TZwvkSdnNo5z72i7sZldJ80oHi6alKuVdMimtqlYVPxh1DLxmpzwXWWOqybMra07Q	2018-08-02 21:43:44	2018-08-02 21:43:44	\N
+1905	1155	fhIEhHE3N7E:APA91bFtgXRj5FRDltGJD6OhprEsdacPRtW35SsjVkl8lMAFpnXiLpmYH2gqggrejUX28RykbgqAzB4zczTQGpLzEiNdIMm4WmJLhhqIru0--hkVZef4sx-UnlnO4Efw38RkxhocGkHSQs5MmR9sJbrfPccEkdhCeQ	2018-08-03 03:16:10	2018-08-03 03:16:10	\N
+1906	1271	emHkC8zlNAo:APA91bF4thpwJxmPnBux8XramDQOg5_PTr0IF4tYP5QNyE76AMdbkMkBWYAsDMfXg2pBmyC-ij1kmrKtrczpP_S9-qGwORXGB55yf6phLm4xkoHEXGfOwlqalKAhoGdvDb5K3LaNEDt9kzrN1ORQJ8bz882v-I5O1g	2018-08-03 04:27:07	2018-08-03 04:27:07	\N
+1907	1272	cR-Bwjla_Lw:APA91bEpz4GFpFBt-JOwIDRLFxt3HDr1e_Tiad49TYIfKHrg2S3dXYUuKuSsmGhOnVJ18L3J95rcv5wHL2Lhuibr-8bBdLfsJ-2bd_1lRV90DInhGKrrFfI7_QqvN7ENYanhPdvUU-7M	2018-08-03 07:05:24	2018-08-03 07:05:24	\N
+1908	1273	eUWxBRgoy1g:APA91bEKjjFeEn957Gj5UNa-V5i3ohSmw0CKJI58RH7qL5Yhj9nv9jrOae_1hRnloMFTbnAv5lS4yDuKzYygYQKhXGgZ6ryjQkUKsChMReHCWGcID33nYGlW4Max9hsuruEjetjHQ_B7rKRnQVtNbSbPOR7kjZpDxg	2018-08-03 08:05:53	2018-08-03 08:05:53	\N
+1909	1257	fl1ZL6m-OlU:APA91bFgzrPyseizl6faDyRccuD2fdq1WArtVOPxpxprtS9Npiz6CKkwi2duE3t4Z7rJCAktH5d5f1-iDB0nGlZT-lOzDpMw9T_lab1fV9idI88s47PjEUUDvRZ_nP11XahTka2bQ9Rfe2RSUoqNhW-DrV3ZJ8xEEw	2018-08-03 13:21:47	2018-08-03 13:21:47	\N
+1910	1274	cVuUf8FT9-g:APA91bFw8JYDVAAHAZKcWEMD0Mlby1WbrJKOZ1pefzTFgk3Q3UWeZbiw6tikEyJD0EoatXTq926kmDIYqy4jWvxr22HuGDSpxk7TIcruyD-PYmIYipyeK-Wbj9WlLSuoFDLM4A6gRnDScqvDpKec_Vqsn4q2iPp1DA	2018-08-03 13:29:32	2018-08-03 13:29:32	\N
+1911	1275	cupoG-XimGk:APA91bHm7eU1amSA1OaQVPdLnLDNMtg6uCOPbmM9C0njaq37ZeG-6oajUgwm5Ie_KOk_WGpU9ET7_08QN5cyutnNGs6JO8jamzej49-dodv41ouIoGysQtitjYoon-6cJ1aJik-uerHcmgb4FC_m5TbgBCv-pLnZ1g	2018-08-03 13:38:02	2018-08-03 13:38:02	\N
+1912	326	NONE	2018-08-04 06:06:28	2018-08-04 06:06:28	\N
+1913	326	e1Z2Y14L3oU:APA91bG9MVXrCTWixYp4DehgB5qLpSttjoSUdy_A3Wvtp-UYcSmZJBMOWIXDXfZ7WHRNOWuaRN-ClLXuW_Q0XogKj6yQxGJZPNvTtCxOa0L_BvVMjIcS5nLfM_eKK1Oke9KtOReoqFZ6JX35QGkMvswdhs08EiC8kg	2018-08-04 06:10:53	2018-08-04 06:10:53	\N
+1914	1276	eBQiP6dLL0k:APA91bH076xBkH7kX_jPyEZysVWajfMLxMfWtpdS-y0L2a8MyPybNAthuN2zTeEtVuBca4AoMjldWQWpjl9wcCBz4OdXKx6KBwAC9Qf4IJxrHp9SjSlyfP8puXR2gT1rJ3NCyuI89Ugk	2018-08-04 12:00:48	2018-08-04 12:00:48	\N
+1915	1277	flnStKKYmS0:APA91bEX-OxtJFPGHGQKj3w2WKGXFuhtTrSicYK9qnzAsCJlZ6QOB3tenEm4DjxkAiaw5dwmnfE0i-UR2qCvs2UTAYyTc8OHAmTR9519Ye0OZstJxIEGSiF6vI-x2UlLg6KdVCU6igOo5qUYC98KsmedlV6lYzSerA	2018-08-05 04:56:05	2018-08-05 04:56:05	\N
+1916	1278	esg316tzpmQ:APA91bHounB3hHOV3wWSqLV8qiZS4x0WpFfoSgZn0OiuUJhkYvfqXgaKTU9hUB54tIdrBuf7UqEaZB997WPVH4uQrvYuNRMAY14VXUW-9IfPvhKejd5PgiVPeNLgVk9M5JNRutWRaSdPITUiofK_mhfp1A4o3TyYhg	2018-08-05 07:28:59	2018-08-05 07:28:59	\N
+1917	1279	dfJO1jYtSUI:APA91bEI0-rHPBnrMb_AlGQPx_jKoJYY5r8uEFDuDiGL_4Yf9SqXtpTRsPRgrJMTWiVqe_Yy-xSURNh0zDpxf0piN65g42gmeNcnwo6VPsmXRGLIIDMLH7xLeHBkJRNItvZFEyeGxUga4hqPE6zZxHXSxhmCXnWpOg	2018-08-06 00:58:20	2018-08-06 00:58:20	\N
+1918	235	cbA8sW7rQ5M:APA91bGzVbuUsyo_KJsPFWfxxlnmaK7lP_5rf6TXyy2mptE6KuX96-FXNq8yyeYwqjuqq_FUMcH6xckWxr7HxSGB9Qtghkz5RPin9oTFmD15phtOHTaBBX44yBg5Phe6r7JZI9_K3p8v_7ecVb8HpCQmgjQK6sXXiw	2018-08-06 07:09:44	2018-08-06 07:09:44	\N
+1919	1115	d9cct5CPeqQ:APA91bEKau2t8qf3y43JulBzIMjkBVi7sUhBpb3SVQi2NpJ9jSWRmv19Hi8sgdv4uSr12Lc56QLjuh4U2etDAd_2lLHn1U2EPUkr7Q6Ih2zwcVMQBhKMdHu_5eB8Xdm-dRl9Gg1kfVgun8oWWgyZZT4Y2ZcY3Pyt1g	2018-08-06 07:54:24	2018-08-06 07:54:24	\N
+1920	529	c784pRdbDTQ:APA91bG9FU3EHFPebyhIomMwrrxcQZAsalpAnhPwWpBHu04RaRobhbdahgapZfaAUyOCbDDG92wjl0Fa1KCIiNCWrL5c8mQ9aw83H_So0SBfWm7sLR88wRetWq4WxYxl3d0ctCtw1taVGRmvEu6z-V_CgBOrs2_SEg	2018-08-06 08:43:01	2018-08-06 08:43:01	\N
+1921	1280	dJ2EzMCAKbE:APA91bGyJ8emuzmynfFsocpJ_75qfYEIoqMSu99fQcLz1ONjSGAjX3aFAio1t05f8y00_kUdPXfGL2r9uM_5vNGyfk5vxEkxQGMwUchUoFITv-zhA0juAh53l4K6nHVO1zI14WPezMtVhunCX93-DgZsqXMRAl7g7w	2018-08-06 10:19:59	2018-08-06 10:19:59	\N
+1922	1281	ftujFa1iwp4:APA91bFaocxjGaAjNWst9JM2-USfEhMgJWXKuMxYI-24vf-Uk20AKRr2AIDY5MeHSBFfDUGPqs76LBAx_e9DTgDxKJcoxY_J5gV-1TyryGEai0LOOoSA7LpQ4v3dmHPoE-mq1J_2nrK7	2018-08-06 10:54:24	2018-08-06 10:54:24	\N
+1923	1194	asjdk	2018-08-06 11:59:55	2018-08-06 11:59:55	\N
+1924	1282	c1JKWoCkGh4:APA91bH3VTZzHYUu-F9vjqeEiot8lDwjNoB70xkfcROBy3x07ex4mGm8iuJ7MJ5DxrbV8TSvvTRhmq8mJXepZiIXhVvlSnQE4foy5M2Mx430ym4KkZcTTk15DWHdpt6vSbOSDta9Mn07721bXgqApHcpaZiaS6BB-g	2018-08-06 12:26:48	2018-08-06 12:26:48	\N
+1925	48	ep1qUNvnhzQ:APA91bEUj6NPpZR1hnh8KzLItcCB88v_24XLN3y1b2Zy-R7SZfWvsZtlO6acdbJl5cFKikh8C5Nl-4DpFieCmMwujTx3fv_sWgnjUIj8KqARJVv3knjHSg3heCdUJzRzkf4NQIuGDfdpeNj3ScAisyIeRRQjgD5zKw	2018-08-06 15:02:12	2018-08-06 15:02:12	\N
+1926	1125	czedtUN5aT8:APA91bGlM80ns5TLOVKPCHuPxQVwpJlTeq_l4mpNSTrxJWgV5bm6W7e0sPQzlUDARepyiLLe4IXVLKv_tOu9F8HdEP_rlWckYXuLBVq2IZsWpvUkEcEFc-vCR-wGeuRpleMsW-N5gr_5X44SdZ4ba2D5TkT0_lcz5g	2018-08-06 15:38:21	2018-08-06 15:38:21	\N
+1927	1283	eFG8fPLA3e4:APA91bHWXZqQ3eFnynfp7mxehOtom-l1_4luLZJT4Ob9dsbfTiDSaiXSE7AmMDg9FG1eo-uVUz3T0q6_1IkGhGQXLDvoS_1fM_vNNSe6uzGUa7vBbJmdtDpiQKNdx3qPcLP5GwCHtMeSDqBLUfdMLKSlkeZ9_t1GIg	2018-08-06 16:31:58	2018-08-06 16:31:58	\N
+1928	1125	dZ5zCK8FQC8:APA91bHw93ggQRvwtguFBf01Z4iI0V60x07o3FBkhX_ubAwATJeF6lOWDxM6iQtli2xJr6IUK02l3-zgFlj8bcPiFIeHXbF0HfSKitfV47NH7-rEgQpgMcsHTfaiqH767TAKYLvAr_yoAxfAbREUYIMn5G2niFLZHg	2018-08-06 16:55:42	2018-08-06 16:55:42	\N
+1929	187	d6i_G0SmOmQ:APA91bFOhdWcoxio712zW_4Ht3MU5kteafL62uLhTvMFWOccKSNFLAydOdBEAxClWB-dgqPoESOEmIWOIjijmDO3SjYbEv2kE5IU61GB5JLfREYvJZXnkC95UV0HjiHrmO_LNpfO-a4a3bYVQZSXf3DBajk-x72E6g	2018-08-07 07:49:37	2018-08-07 07:49:37	\N
+1930	1284	fui7AfZphoU:APA91bHyqfvHFSSLpj_eoPYaFUGmBLWTgNXzIk4WLeIDH7GL-WJ4Up8PdiD6u2m85OQ3213KnldK5amqAkn7k4CSJN6_gsGhE5ES4ujh85TM6R7NQkykku5sqnFmBczJCUn4bMDRPMWZgKCeizk7S7VAVEA9mUS0BA	2018-08-07 08:24:27	2018-08-07 08:24:27	\N
+1931	235	eS5ybA4ukEk:APA91bEsXvKYc9QAMLEZKb8Ox-3Z5WtqNsfDwVsZHGMENdZJ9QJtN7PTEdohzmhhp0U9kYwJEzOkMzcomcInZIV_YGrERJpEwUPpDX9HbEJ3wTy7yRV4tDKZFXiLjkuI-6f2qM1_dkbOMMy4vcNvRQx2fT86QaCkKA	2018-08-07 08:37:37	2018-08-07 08:37:37	\N
+1932	489	d-thbZPASnQ:APA91bGS0PNP1SFXTKh0FeK8A2MpA70FUUTKNThK50lH8gCkKYM_1ZneICJWnRMWlusaRzsK6dlZ_-gYT0JEK9EuTk38bkc5L8MNO70ci9FKM04HysQwUEzUuPBvq1xESfXqXjuXI2BvGbCqmYOqyrfhVyoBlRHjNw	2018-08-07 14:37:17	2018-08-07 14:37:17	\N
+1933	917	dylGMTwIuGQ:APA91bFX0FIcCL_oSn66LCtXjcfV7Rxarlyt-GEg9R4BzYCPEnLMk46DSlCzn2Pagcy7KmJHepKkCGoj5KNAAFUkbIudsk-UlStradQ33Kk_6T6JQDMC7AcZnSkG6yDG6FpnroG6GhwpHKToosYUlx7O5FIr_m7HJA	2018-08-07 16:47:40	2018-08-07 16:47:40	\N
+1934	1133	fdwwix4FWY8:APA91bGE1UJd1FeTeJjb7b-3xsoUkNvgFzrASJIPXQBi_POVUEH_v2G7Ox5-LnS22rG1CCnkunJXqUsTZ-h_bovLd3Tq3sSoINSQnraAF9BQYzEh1xYrTyA-Mnt9FVV0Qo2D9b9x6WezCPAbgUCOdNY0lg-FuDrOug	2018-08-08 04:56:59	2018-08-08 04:56:59	\N
+1935	1085	dNZXiWTPzhU:APA91bFY19IJfVZHEcO81KBMYHbu9VACUENfRd8ElgweSrSNUD-A5yH925RE7uKwzueG3lS1sgpFIS_Xjv_7SXQsydosKtGvAAUfPJlit28XdjVaZRNxHeyrgiyouhu-7_YbQX0d7FyB0L1mj5ult-PRVmrtQ0InhA	2018-08-08 08:00:18	2018-08-08 08:00:18	\N
+1936	1285	f0dYssiq5Nw:APA91bEwIhGwPKPZOeSxj7lmI6qMiV2_aJMENvjff9Jz8-vcwEhqnI6PBfd2qvL7REdweIzUfo5ulEaphXQ_jw6Lp2esAqNBzTDbkXGR60qslAi7z2vrcBEI3OM8mismtYA50AEHlos7HCM8bwyTPs7-06nWJCx8Og	2018-08-08 08:09:51	2018-08-08 08:09:51	\N
+1937	588	cYQ7V-O_cPo:APA91bGrVtRqqENM6_xTED2xdSOXtXFVjQZiXcUYaEe35AuGEaEWKdY7etbaznS2kMQ6L0vmQYKlqw49aXDuOOccDLN9KVdsv1Xn9GrppHwq1K6h1cLfKY0Jrar50BEnRvYiXza2Nv29u33pR4Cdwr9jhfdJrhB0pg	2018-08-08 09:18:00	2018-08-08 09:18:00	\N
+1938	1126	ebr8ZamJsMw:APA91bH-xsSRQ7jeWzpu3dXPHVRLmzW_UJzeLPa6A3ndlNL8x9SYQFkkmqWl5F0OH5nUl0cjbN9QXpkVo0ACOSHdO2B7LMYF47zQPMwrBMcSsviGL_E0yye-GD2Wiam4dP92TWnUvnuAVhkssZzwsW_lS6U6bDM5uw	2018-08-08 16:13:14	2018-08-08 16:13:14	\N
+1939	1286	f_aM0DNks5g:APA91bFSV-1EMNOmfKOUANA5F3eeTNAWRpu_hR3XN70Stu3OQmK4WRhcezTU50Bx0MNOR8XDpHvJe0L6FIWmQAe_TaS7In8G9Z7gfwIV5w9ReQHtD3HzVZT8sy6VMCwmtAVBUpht38e7yoMsQ_hmhIkynTZaUbwofg	2018-08-08 16:37:16	2018-08-08 16:37:16	\N
+1940	1264	ew8fIAGdrv0:APA91bFmTvjdIm2NiaYs5FTEpvngb8Dclw-GIRT-D4-B19HAUG1ebrzkKn91mEVszgOEhTZcJrMADxu51aqBymqT7l-KyadV7hOxdRYr_KSkCsYbaEZLc-OUYDUBZLNJIMEMLw6KbRWaPUSTLbnizIPsq_Lt0G82Sg	2018-08-09 08:32:11	2018-08-09 08:32:11	\N
+1941	1287	f23uCrQx2_I:APA91bHu9cKj4KQs3XpNb6ai10NxYJyL0ngOnxB5EL1abWqZgZFYgEF1GfpCTT3uP7Ygtq7-17J93IpQSGScd8t_Ls3WcpqVLKYzwJOTiOV69cdBJ7fDPqn4_pBMxQmwqL9xxUdV18BU2XBAMOCSZIRq1Woc3hwcOA	2018-08-09 10:02:54	2018-08-09 10:02:54	\N
+1942	398	efIABMrS_Fg:APA91bHyDDaZPpbT7u0xfIoi6YMo9Mh7iXlbBigOEk5WNNF_DEJsY48tr4VbG5RZ0jIrvKtXH0oAgxYYpXQ4PjmZz3sV3DMhv0I37Y1ooSif0Id5bs7qSgnsfBEwN9ut-9brzuEy4xoEwM6SoiP2It3QBbeFxkS5jQ	2018-08-09 11:52:57	2018-08-09 11:52:57	\N
+1943	1288	cxv6aXrczFg:APA91bHMdhcd78LgID-2a3oDMj3nmDdgLP-kV4MaibrCDN82gBw2i4jxN-u15NQVCVNco6UJhfMfZTOHeW_gA54JceK-BTfWew99bAr75yTlUiPdktiKkwtvGws1yp930CxETP-1xzZwZKGH65ebDT5yQqsihxfEmw	2018-08-09 11:55:45	2018-08-09 11:55:45	\N
+1944	1289	ec3JUPqr5ks:APA91bGwOrbUSbLl437liTFPg_02ypz3ppwvnhXd46ddTwcYGIVqH-Tr7DAUR9Q_2hOl6jcqa1gbe9Nv8nQWobG6a-dse1uxCECI2vtE3YzU4Qc6lVOmusZ8KwYS6z3Z1fYuw-jHUyF0jvJZElreLzodXwY8x_jmJg	2018-08-09 14:45:04	2018-08-09 14:45:04	\N
+1945	1290	ddWYXRZkkd0:APA91bFWdJ5NhMeU6hHBWxxxwvU6yTRHbROg-arLhMW0F3I8uk5_7n11X7gZtHkAHPwvIxYmdmkvGcJp5YLT3h8LWW8NVoZUS-NkRXWLmDPDE_OBWiy3Hp1n3qBDCibu1Y1cuQfkAi-jAzIO5kLgvG5wQa6wQqfp2g	2018-08-09 15:20:11	2018-08-09 15:20:11	\N
+1946	687	d26xVlr0TPk:APA91bFH_416Wf9r4vAaapI_OR2_cRouGRRywg0dzv6TsB3tII3K33q-3L0D0yginf4d7weeoQcRMl53d36z_DMBdCkX0v2P8vzJM5ZHCaJQyQbPRiSA7wf8-xh9vBMB5zDRs48OLBAm-ZibP5HNHdZnf2HRCxWI8w	2018-08-09 16:41:10	2018-08-09 16:41:10	\N
+1947	385	fRzOh9Oqdlc:APA91bHjXG7QWrlVgFuvc7rIFeJ5UuNQmH0UyvlOWlnIYnrbWxQ9bKCr4mus8rRVdnWCYA3sEsn4cOrG1Qnz_IGQCvblb2WRIJ-AhpnwMFWhcjM8Uddi5Z7c6AwJfyTd2bRp8LoftWSZyv7yxte5qrz4sz8aMkXPyQ	2018-08-09 19:34:29	2018-08-09 19:34:29	\N
+1948	1291	fRBqthC5JlE:APA91bHHTSLK3zqhm27XqvNd4a3Xr94MJHb3Fkc74dr8G9x0Gg-ATxbOun28bXkqVlFdzwiteaVMv7PJQDQVA6xvFy_hnf0SwxOkA5h5W1Ee2_B1GB4otpL2L3ms6se-1ky5p-NsLL5g5703BDgOA6IVsrGreLvSjw	2018-08-09 19:50:36	2018-08-09 19:50:36	\N
+1949	85	czEOeTww-Q4:APA91bFHuW2I5agx_syWy3flc2Rav9ZuK5OytuDLoN4PC3iSOzQQ9DolepJeJwbmiHuqsiFHvnwU4HHiJ8EhS6CzJoejG-X5yHy7mLcKGb2FpVbbQdYQGM0LJIJthS9q5gcWSYDOKNp2wrN4F_LIfu7ApLHr8lw0Og	2018-08-10 07:56:35	2018-08-10 07:56:35	\N
+1950	783	NONE	2018-08-10 14:42:39	2018-08-10 14:42:39	\N
+1951	1205	fEuVtByuiIM:APA91bF4wu1h4XYF4BBodj7_hh1-YdbuUrid5mzYY9Wp9zunHHnsgFsXzNEZ7QRIee_ZyBkmKaEhV3UYz3gSo-xgOaJXzb7yaly1VILiSBfOwsIBilGJYbTpbFMc52TQzR_Wn4b4Ul_Im07gd0SrP-tJ0Vj6PBGr-A	2018-08-11 09:31:48	2018-08-11 09:31:48	\N
+1952	1292	caXlFLDWPLk:APA91bG6zlqzHidYVtbIOeTUFkbyBPsngEUWUQmDXnxURZNn9tSfAIj_fjByJbvEKEOcTum1c3rAt0fUAq66rtcR5FZwa3mMDfc47nLEj9ZJuRgtj_Yc4CDIRy9qoFiIP7Dy4Z4FtdCVHI-Q6HsIBRhq-qTm8Gjj6Q	2018-08-11 09:55:10	2018-08-11 09:55:10	\N
+1953	1293	dDg2UC4-Z6g:APA91bF2mXawFp9q4mAuFmvydLynwCH9drRZI-H5ncsSNDCy8DtkLMhUB_9kJYAGWqHRpPDbVyedQSX36FWzDCM6Kyge82N5_1IWrO4fpqD9ViCNzISK6an59TmLWyXqgMvHNDzWgWKnctTl4Ago9UpTDd7H3MyZ1w	2018-08-11 10:26:00	2018-08-11 10:26:00	\N
+1954	352	dvAqzoXLUDo:APA91bHljYcxBK-cW8yb39q013WVtlmVNkLFMI9NgeBz4af3WJ6uRnv-VQYl38zFZlH2lN28vJGq0c6YeC7dOc9AlSPlQRNgPIEcGRSutjBJVdVjXpA4f8nVE9jMwIU9mM2n-d0ac3aMhAcuhg4UTlBPNE9jA4jkzg	2018-08-12 10:52:34	2018-08-12 10:52:34	\N
+1955	19	cQIs8WxEY2k:APA91bEcFQ6Gfyj_mtH6O6ZGLfBYylo4radUAdY6r5Bc0c66qBmayn_K7-slkndG1Og3_S-SM2-16ZTnFIneNyxjTnqoOtpdeGz-GD-Knbto7NctLUY7mo9BQo9YVpl_Sj7Wufy3EYM0rIOExsi2o7NYpZFPBDHyGQ	2018-08-12 14:23:58	2018-08-12 14:23:58	\N
+1956	1294	e0Rh1knh66s:APA91bFd4PqJ-4RHtVsjGjtSbSwhGrJbjQ1V0giZwG5O4V1mhCar-FTnU5yYt0HRHKrPJAjlY9rUHRI0IIIX-bDwfJz4HJnLN1Z7TzpQIrsE4oYW_YSd7lTW7OYKC5BEZnefnFXRJudpDyHkEJMGCgvmoSurxQbpwQ	2018-08-13 04:41:39	2018-08-13 04:41:39	\N
+1957	1295	ev6eqPBurrU:APA91bH1S_4lxT6fcg2t9vZ7y_2ZxgKSt7kPXfsTsnehGV6XFN5EYy4jqhELlPOZWQYH1179voATe9PKGGwFWc7jcQl-RJVBFKCcE9yK6bDHtK9ZgI-woDme5EowwW5PamihM7jKy8eIfk7W_NOdYHEWQpwoeC8oZg	2018-08-13 07:56:51	2018-08-13 07:56:51	\N
+1958	1047	dLypTkScrfg:APA91bFD09MwH6cg6PM6V0In3oNYoqamzrVE7k-9Xx450ADd0vUDtqMFlnLkYE0an0GS3096bvxGP8kwyNbKmNZp3St7QxPh17SGE0IcPJfz_ddDU0jBMsFDpELtVvD_kaCkSAj44_m5CZI5m7kxA4Le8q56exx4wA	2018-08-13 08:52:44	2018-08-13 08:52:44	\N
+1959	1296	dc262TB8RsI:APA91bGeS3AVmcamWoEybEX6vWd1LNn0Y70z3CFCw4yyFuW97K_jM6psJjeFDPeN6YudOyrPCFpZ5RemjyimhBkvI3UqVZzhFPgj9MsmkHFjpTpe2G3_o9oLBGahaL581XX67FlnpmqLSxLf3O3v3QBjHQO6wRE2EA	2018-08-13 09:49:10	2018-08-13 09:49:10	\N
+1960	21	e9x6D0Nm3Ec:APA91bGeIegvfT_o9aIARP0jNRKu4XB94mOg7zceykZNqnlQs2E7AU_9PENvkOlCCHKEZLLSYisZZhCPXzHBzVMNPof-7-WJMNi2FC7vhVX_AxmM5RB9B0jncQL83hcv6Nuc02ROhNkm-gbmc4OXrmqE2z0BlCK8Uw	2018-08-13 14:07:46	2018-08-13 14:07:46	\N
+1961	1297	coqEv4hifF8:APA91bH_tdbOL_sDjtQsU98UjvWDkE3ZLusYvgBjBhWQivYQIfNQBhKOivB5zd5ZOrlFb-Qg5cno1lnzwFYV6i_yDSNaUiTNjARnF2FuRcZIZfQxkra8IN9ZHJw6NQsVfgsIBCJNPVHqVxCLptz-u5a79UXhKckHxg	2018-08-13 17:33:57	2018-08-13 17:33:57	\N
+1962	1298	clKruvHS1SU:APA91bF0n_WqUewdz6LWvIUnuPz-36SLgOvrdVpe_At3Q_LPLQnok9fvllT5XlJaoPgYXESD-QMXRGFEacDk4-S6n5QpgJYbb2tpNPEhJo3taEqdAPusSCDUmsDUtV0KU5fpPU2TGF3JFiPdKMfcYAEfz0qX3vlxYQ	2018-08-14 06:31:47	2018-08-14 06:31:47	\N
+1963	1299	clXnZKeTeg8:APA91bGh8nG-KS3joUlu9ugOTMSvkVwtaZ8Wg0-_fEUY3JZR8LrKmEUs6sv46TSWh2kUyD5Cmnig6skJ5Csu4vpd2SvZTPaeR3VZVOLbDA47w_jqyELNKjaHAg3nLWmhvL40aDrJcTzOEhLf-wu4WOKRO6YpuGJzqw	2018-08-14 10:40:41	2018-08-14 10:40:41	\N
+1964	973	f0F9Vj3XwpI:APA91bFSQLtoXKfq7U4XING7D258QanQ6LhXC0w3TxgGWS4Fuv0XB8OWNFvqALssceetWyUBgOEcVi6JB28cA6idS7lH_yT4Ay-bXqxDcPIkMKwK3M_EgvI3Tk46Pbe0rDSoUFVUxw2j4EgqhS7HMHFWg71HFRJDMg	2018-08-15 04:03:01	2018-08-15 04:03:01	\N
+1965	1300	f9CLqP4r9Kc:APA91bHKRfcnbzk4Bm3XZQN3SsNyXbeEYKrw-Ahd7-fTqNV_0fHXLbXyDQH_LqeR3HHrohk-HzY5UstSC2IhwTU9eVtwsuuHQjGhzVdRS-bKcY2yvW2eHKEJbTtj9vVSxndfeoJ6KR7_	2018-08-15 07:22:17	2018-08-15 07:22:17	\N
+1966	1301	eiUxhJ2NAIU:APA91bHGpjOC0Ce8n1vPGNUjzVTunpuKuqfcN2Xsplqr8Ih4T9PbA19OJfgzf1MYot7MluiLTNHcnIruX1x3cPwwrKf9YzlNAYgwKT2YoxCJVcWr93Y5robx1TP0ud5zuZD8wTupZF2SZJwLBCSMSrQp4jpS5-l14w	2018-08-15 09:30:58	2018-08-15 09:30:58	\N
+1967	1302	cFruipkPeWM:APA91bGVvrClEwvQWdD3kj0gILwxzzg0waSRqtAWEHJB77EYjEfpts5DhNxspKtsLJd03z2LZ2l61mcdTdL8ebApTz1KAo73v3TMYVnESfPOw1-03vH-QTCoQIsqu_rcevHjOPG2B3JbeGK4FknGInwq-ygC6Ta2PA	2018-08-15 18:19:08	2018-08-15 18:19:08	\N
+1968	1303	dMgk_AKG8uw:APA91bHxAgy--KiuPn2RJAExb9Pxq1mFn7pbg52dSmU_mxy8Ssk1S67QPzlJXPhdD8jZ05g6GlAAug8hbIgXY9FPOZuX67ItyOVFcc05nXk6q_L9JCu9OOsRZ0uX44nHPpeKHLJDGoNODKf6OnRM4BfTAmg2t62xpg	2018-08-16 09:29:25	2018-08-16 09:29:25	\N
+1969	1304	ftbvLp5X8q8:APA91bEU2sW1rVKQa1Om25T3d76HaXd4G3xsu5sROnOd0HQa34L-FuXfPXBToZnJftQyJR1UAOVAAUt0EXkgDfcQb5wVhzDqjHMbcmcXDOIixz0kV4UsTzJK4dD1XmjHqYCBjaf96EdonKlaK-4JkJirlk9Grlt6Pw	2018-08-16 10:37:30	2018-08-16 10:37:30	\N
+1970	1305	cz09UqbHjeQ:APA91bHQmwAHPGobWajBxkzNG-khyh0IBl-arjXfnpR0dROMLWnPhv-cblaxPZxWHHrHk9QLFVUMkJUO_KcGZ4hk45jNCQ9FmvajBRQ7tCFOlqbPmRaZjHTV88d_xBQtZbGUpe0tGjPuBasW4XQE4EmlSpMHDLjtmg	2018-08-16 10:47:13	2018-08-16 10:47:13	\N
+1971	1306	d4r08W9jyWU:APA91bE5aTpoCmxz-RHQYxMTjgaiQ8AyGhQWijEZf7xA9x86SnuED4_g_mZm91LAUCvCyFY6ePvwbV5ITgUCRDOa3Cik6Llt5jH5QJSDVG6n9IU7SLa27ZvZEEBH5AsxxToWKoQEC6KWR2CCbVVkcpHzXND1qK6KXA	2018-08-17 09:38:31	2018-08-17 09:38:31	\N
+1972	1307	dS9MkrjWAaw:APA91bEjx0Sov86rvpu3kLAtZuu_vqfFRJBhs-hvw3MR0s31fqdp0uGP8fysqBMCEdeJLAzfZJydMsJQouQr7Xs48ZVI8Uwm6FynPbPl1t-IFO_mkAMBebIslfqT9n1LkJWhtEV0brIZFITd3yK7_-O1plwl0Y6pOw	2018-08-18 10:01:11	2018-08-18 10:01:11	\N
+1973	1308	fThHc0tJ7u4:APA91bEkN_NEA_4sO7vpMfc-g-rUUCvSMUOVDdoJplGBLZe5zBFmBmmVe2J-I0eJnSxNfWFPp3_Ez_AO4PsFxtcpbA-2q4WNktbWhEHbTPdcHx7OXveCmdzoMXRMv7Rfc0FC9O-H7Urq	2018-08-18 13:38:13	2018-08-18 13:38:13	\N
+1974	54	ck44Ztuik4c:APA91bGcKoA0m-ewdyPJuqevC4oXlL30X3aiNNSM2ZYyZjPFuCuVpGov3Yom1Jf99TNh93nQgszAORwqebejdeAkZu8QkiNWyOz7_M9Si9PazTKiP2aHGTjoRWa6Nt8AKeH7EVit5C4vrhVTQ9trZGcykt5m3XkTxw	2018-08-18 17:55:49	2018-08-18 17:55:49	\N
+1975	958	d6-juIKid_A:APA91bGtcBwYtL1ivXrIS0jFBwwSNP9zu7pufhnoXM0vL_AB7Cu6K9PYj_Bd8YF3Mx7-OUUweGqW2booswRpGL2cFM4zaF14Kj_SBGDzmHw14wZeXxMwNdslqEXh5f6f6tRpXeFk6_I946L8bjFsKEBnFQ75onn-Sg	2018-08-18 21:52:05	2018-08-18 21:52:05	\N
+1976	1309	fxHROLNvPLI:APA91bFQJJeeLzOtRZxmQzP9U4NfHowxsQC97KRxC_lvPdBo_ZRCfuaRR6QeYhKX6FBHaH7SY_B3VlvxESB4L2JSQTtX7II2NrPOz7MyH3DMLlVK8UOOEPdM1pZ9TL043geTrzxg3AlFxhTj2COqK0GBwlvb_PJfwA	2018-08-19 06:43:10	2018-08-19 06:43:10	\N
+1977	1012	cgN4x7gNoaE:APA91bGEDI72f07GAmoGNvYWFAMvH3SJlm0wgUpaELiZD5aaeXMCJp4yJTzTFZv9UQYRceGUV08g1gvgQfWsmv9Zu-r4FqNYwGogVpGox_njDi2JQuwIpC5JwGxkFn4xTQTBE3YPXEdD8NsCaSwAeaQfxfEkAwGqsA	2018-08-19 13:07:15	2018-08-19 13:07:15	\N
+1978	738	fE59AqeGR_0:APA91bGbErlme07w73fOwzB9zwf_aH_BDd3jL_JrxSQvyFiHmrNrvp7WU0Q6tSS18D0MxXE9vOLsFHw_LARfCgx7OCFCD1A6oexGrBBeIY4ErWxs_0brdDpV5_7S1EjNIrot9fnadtpVinC6l7LMK5NOTgTP7jjItA	2018-08-20 10:47:49	2018-08-20 10:47:49	\N
+1979	1310	emqyqLmZX90:APA91bEV2W7R8ESp9sPVDqM8VmIN4dXPwiY4dF-nLaHr0a0IOl4qHV71NMbj-DLCeuIL8ovtIQmpjelpPCdtq38bg3Vo4QbzthWhnI7NI3rAebLfJJ79HT-09dp_hqGP4YwzKfKAOAGympKEtZTeD7nV5m7MlHIGEQ	2018-08-20 12:45:39	2018-08-20 12:45:39	\N
+1980	1311	fMDNGXvzmEU:APA91bEDJ_wvm6JYAIa5wLO-elRU_4PIiOOncg3Nah-0VyFyZLPrOeDmZZvmjzHP_VdnEAYe13agpq4VHuR8VO-tc0-t8oF2yE22bFGp_vR4So5qYQuLR6Vf7n6Rgu-A2fM_oXBbHxKuYzv03Xs_XfQb_7jGeSkABQ	2018-08-21 11:38:19	2018-08-21 11:38:19	\N
 \.
 
 
 --
--- Data for Name: versions; Type: TABLE DATA; Schema: public; Owner: meventeufdltog
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (id, business_id, name, username, email, phone_number, password, subscription, subscription_start_date, subscription_end_date, total_cc, country, image_url, remember_token, created_at, updated_at, deleted_at, is_admin, is_system, current_level, version, os_type) FROM stdin;
+437	255000542409	\N	Adili Kayuni	adilikayuni91@gmail.com	0752372308	\N	premium	02-08-2018	01-09-2018	12	0	\N	\N	2018-01-23 16:41:08	2018-08-02 07:30:03	\N	f	f	Ass. Supervisor	\N	0
+1280	255200024223	\N	Editha Yohana	yohanaeditha42@gmail.com	0767409309	\N	free	06-08-2018	06-09-2018	0	0	\N	\N	2018-08-06 10:19:59	2018-08-06 10:19:59	\N	f	f	Novus	\N	\N
+1181	255000303611	\N	Godson Jeremiah	godsonjeremiah@gmail.com	0714141111	\N	premium	15-08-2018	14-09-2018	0	0	https://lh5.googleusercontent.com/-DSECeOSN2a4/AAAAAAAAAAI/AAAAAAAAMuI/yV90uGTzPCI/photo.jpg	\N	2018-06-29 13:06:27	2018-08-15 17:22:03	\N	f	f	Manager	\N	0
+1233	255200022920	\N	Pelagia Deocres	deocrespelagia@gmail.com	0769977916	\N	premium	20-08-2018	19-09-2018	0	0	\N	\N	2018-07-20 15:15:06	2018-08-20 14:54:03	\N	f	f	Novus	\N	0
+29	\N	\N	William Ngininai	ngininai@gmail.com	0757356045	\N	free	02-12-2017	02-01-2018	12	0	https://lh5.googleusercontent.com/-qum2ImJnGko/AAAAAAAAAAI/AAAAAAAAACs/XiIroOPzjfk/photo.jpg	\N	2017-12-02 12:01:57	2017-12-02 12:01:57	\N	f	f	NOVUS	\N	0
+26	\N	\N	Ester Minja	minjaester25@gmail.com	0762210098	\N	free	02-12-2017	02-01-2018	1	0	\N	\N	2017-12-02 09:56:45	2017-12-02 09:56:45	\N	f	f	NOVUS	\N	0
+22	\N	\N	Lightness Salema	namjire@gmail.com	254000034165	\N	premium	02-12-2017	28-12-2018	2084	0	https://lh4.googleusercontent.com/-GdouzzyajHY/AAAAAAAAAAI/AAAAAAAAHGM/i4FJrYbEong/photo.jpg	\N	2017-12-02 09:09:45	2017-12-02 09:14:50	\N	f	f	NOVUS	\N	0
+20	\N	\N	Laurencia Maheri	lauramaheri97@gmail.com	0752642660	\N	free	02-12-2017	02-01-2018	25	0	\N	\N	2017-12-02 08:52:52	2017-12-02 08:52:52	\N	f	f	NOVUS	\N	0
+18	\N	\N	Dickson Samwel	dixonmsaky@gmail.com	0765578464	\N	free	02-12-2017	02-01-2018	56	0	https://lh3.googleusercontent.com/-uIiwLmZgYnE/AAAAAAAAAAI/AAAAAAAAAXk/sO5iQOhGpZE/photo.jpg	\N	2017-12-02 08:08:11	2017-12-02 08:08:11	\N	f	f	NOVUS	\N	0
+17	\N	\N	emmanuela ngalu	ngalu.emmanuela@gmail.com	0713008154	\N	free	02-12-2017	02-01-2018	10	0	\N	\N	2017-12-02 07:50:17	2017-12-02 07:50:17	\N	f	f	NOVUS	\N	0
+16	\N	\N	Denis Laizer	laizerdenis@gmail.com	0753183247	\N	free	02-12-2017	02-01-2018	4	0	\N	\N	2017-12-02 07:37:58	2017-12-02 07:37:58	\N	f	f	NOVUS	\N	0
+15	\N	\N	amos mahugila	amosmahugila324@gmail.com	0684267909	\N	free	02-12-2017	02-01-2018	2	0	https://lh3.googleusercontent.com/-XWkpIfsdLEs/AAAAAAAAAAI/AAAAAAAAFvo/LIZQE7i7sf4/photo.jpg	\N	2017-12-02 07:17:39	2017-12-02 07:17:39	\N	f	f	NOVUS	\N	0
+14	\N	\N	Joel Vankibona	joelvankibona@gmail.com	0715839704	\N	free	02-12-2017	02-01-2018	10	0	https://lh6.googleusercontent.com/-yNqlrsgdNC0/AAAAAAAAAAI/AAAAAAAAABU/Y9kojd4w8_Q/photo.jpg	\N	2017-12-02 07:10:48	2017-12-02 07:10:48	\N	f	f	NOVUS	\N	0
+718	255000498060	\N	Nancy Samson	mateti56@gmail.com	0687354357	\N	premium	16-07-2018	14-01-2019	1	0	https://lh6.googleusercontent.com/-NQO0rCuIkug/AAAAAAAAAAI/AAAAAAAAKEk/FXZ094OeIKQ/photo.jpg	\N	2018-03-07 19:50:13	2018-07-16 20:59:32	\N	f	f	Ass. Supervisor	\N	0
+2	\N	\N	ipf_pay	\N	\N	$2y$10$uiQNtrTxUtyNRjZ1S1YGjeuOq5ueTDK3jSRCCWKFeHNwUD0181RNi	free	14-11-2017	\N	\N	\N	\N	\N	2017-11-29 12:35:07	2017-11-29 12:35:07	\N	t	t	NOVUS	\N	0
+449	255000464457	\N	Denis Steven	dskiula@gmail.com	0757112234	\N	free	25-01-2018	25-02-2018	2	0	\N	\N	2018-01-25 08:35:39	2018-06-06 08:39:11	\N	f	f	Ass. Supervisor	\N	0
+485	\N	\N	Flora Mwaijele	floramwaijele@gmail.com	0767296966	\N	free	30-01-2018	02-03-2018	3	0	\N	\N	2018-01-30 04:25:28	2018-01-30 04:25:28	\N	f	f	NOVUS	\N	0
+484	\N	\N	Leticia Mpeka	mpekaleticia@gmail.com	0718778424	\N	free	30-01-2018	02-03-2018	0	0	https://lh5.googleusercontent.com/-BgWtPuJslFA/AAAAAAAAAAI/AAAAAAAAABk/Xvkv0nyQGuo/photo.jpg	\N	2018-01-30 01:38:47	2018-01-30 01:38:47	\N	f	f	NOVUS	\N	0
+1234	255200017002	\N	Hassan Bakar	hassanhayuu1995@gmail.com	0765868796	\N	free	20-07-2018	20-08-2018	0	0	\N	\N	2018-07-20 16:18:17	2018-07-20 16:18:17	\N	f	f	Ass. Supervisor	\N	\N
+529	255200017905	\N	neyma clement	neymaclement@gmail.com	0769611956	\N	premium	06-08-2018	04-02-2019	2	0	\N	\N	2018-02-07 15:01:08	2018-08-06 08:51:45	\N	f	f	Ass. Supervisor	\N	0
+60	255000606215	\N	Nevala Kyando	nevalakyando6@gmail.com	0715312966	\N	premium	03-12-2017	29-06-2019	4	0	\N	\N	2017-12-03 14:11:51	2018-06-29 14:16:57	\N	f	f	Ass. Supervisor	\N	0
+42	\N	\N	mey petro	meyankod@gmail.com	0757463994	\N	free	03-12-2017	03-01-2018	1	0	\N	\N	2017-12-03 02:16:37	2017-12-03 02:16:37	\N	f	f	NOVUS	\N	0
+41	\N	\N	Shaban Mshana	mshanashaban8@gmail.com	0718215446	\N	free	03-12-2017	03-01-2018	1	0	\N	\N	2017-12-02 21:36:00	2017-12-02 21:36:00	\N	f	f	NOVUS	\N	0
+483	\N	\N	Nusura Asaa	nusuraasaa@gmail.com	0773787334	\N	free	29-01-2018	01-03-2018	2	0	\N	\N	2018-01-29 13:32:34	2018-01-29 13:32:34	\N	f	f	NOVUS	\N	0
+482	\N	\N	Getrude Uisso	uissogetrude99@gmail.com	0768777702	\N	free	29-01-2018	01-03-2018	5	0	https://lh5.googleusercontent.com/-Y8HP0MTBnAk/AAAAAAAAAAI/AAAAAAAACnk/BA3gEbpgSAM/photo.jpg	\N	2018-01-29 12:42:26	2018-01-29 12:42:26	\N	f	f	NOVUS	\N	0
+469	\N	\N	Diana Robert	dianarobert478@gmail.com	0714492946	\N	free	29-01-2018	01-03-2018	0	0	\N	\N	2018-01-29 08:09:12	2018-01-29 08:09:12	\N	f	f	NOVUS	\N	0
+467	\N	\N	charles Chami	chalzchami@gmail.com	0784687318	\N	free	28-01-2018	28-02-2018	0	0	\N	\N	2018-01-28 18:39:57	2018-01-28 18:39:57	\N	f	f	NOVUS	\N	0
+466	\N	\N	Eliza Joel	joeleliza89@gmail.com	0764798827	\N	free	28-01-2018	28-02-2018	4	0	\N	\N	2018-01-28 17:58:00	2018-01-28 17:58:00	\N	f	f	NOVUS	\N	0
+465	\N	\N	Kuruthumu Silver	kuruthumusilver@gmail.com	0718412744	\N	free	28-01-2018	28-02-2018	3	0	\N	\N	2018-01-28 17:15:17	2018-01-28 17:15:17	\N	f	f	NOVUS	\N	0
+464	\N	\N	Evarson Kimario	evarsonkimario@gmail.com	0627749401	\N	free	28-01-2018	28-02-2018	1000	0	\N	\N	2018-01-28 13:24:39	2018-01-28 13:24:39	\N	f	f	NOVUS	\N	0
+463	\N	\N	Frida Allan	fridahallany123@gmail.com	0718893552	\N	free	28-01-2018	28-02-2018	0	0	https://lh3.googleusercontent.com/-UBxsFWW19Ww/AAAAAAAAAAI/AAAAAAAAAIQ/2kULp905fT8/photo.jpg	\N	2018-01-28 11:57:16	2018-01-28 11:57:16	\N	f	f	NOVUS	\N	0
+462	\N	\N	Glory Matemu	gtemu75@gmail.com	0769816875	\N	free	26-01-2018	26-02-2018	2	0	\N	\N	2018-01-26 20:19:10	2018-01-26 20:19:10	\N	f	f	NOVUS	\N	0
+459	\N	\N	Godwin Mruma	gmruma90@gmail.com	0675396433	\N	free	26-01-2018	26-02-2018	675396433	0	\N	\N	2018-01-26 15:44:47	2018-01-26 15:44:47	\N	f	f	NOVUS	\N	0
+457	\N	\N	Daniel Dansizo	danieldansizo@gmail.com	0655704758	\N	free	26-01-2018	26-02-2018	2	0	\N	\N	2018-01-26 10:54:59	2018-01-26 10:54:59	\N	f	f	NOVUS	\N	0
+456	\N	\N	Chri Sumaye	chrisumaye@gmail.com	+757510853	\N	free	26-01-2018	26-02-2018	3	0	\N	\N	2018-01-26 10:48:56	2018-01-26 10:48:56	\N	f	f	NOVUS	\N	0
+455	\N	\N	Sensei Dady Karate And KRAV MAGA classes Online	senseidady@gmail.com	0715202740	\N	free	26-01-2018	26-02-2018	2	0	https://lh4.googleusercontent.com/-sucPEqf3Ch4/AAAAAAAAAAI/AAAAAAAAACs/C2C3Obkdqus/photo.jpg	\N	2018-01-26 09:31:27	2018-01-26 09:31:27	\N	f	f	NOVUS	\N	0
+454	\N	\N	Jane Msangi	jdmsangi@gmail.com	0622444924	\N	free	26-01-2018	26-02-2018	0	0	\N	\N	2018-01-26 09:27:29	2018-01-26 09:27:29	\N	f	f	NOVUS	\N	0
+453	\N	\N	Makalanga Nshashi	nshashim2@gmail.com	0789654444	\N	free	25-01-2018	25-02-2018	10000	0	\N	\N	2018-01-25 20:22:21	2018-01-25 20:22:21	\N	f	f	NOVUS	\N	0
+451	\N	\N	rachael mwendo	rakelmbinya@gmail.com	+255688925627	\N	free	25-01-2018	25-02-2018	2	0	https://lh5.googleusercontent.com/-hqgYlqn6ndY/AAAAAAAAAAI/AAAAAAAAABY/vKJyPghAyFg/photo.jpg	\N	2018-01-25 12:46:04	2018-01-25 12:46:04	\N	f	f	NOVUS	\N	0
+1200	255200023319	\N	George Shirima	georgeshirima408@gmail.com	0759089902	\N	free	07-07-2018	07-08-2018	0	0	\N	\N	2018-07-07 19:12:42	2018-07-07 19:12:42	\N	f	f	Novus	\N	0
+448	\N	\N	jerry martin	jerrymartin561@gmail.com	0754399223	\N	free	24-01-2018	24-02-2018	626	0	https://lh3.googleusercontent.com/-sWo_RoXUJb8/AAAAAAAAAAI/AAAAAAAAABg/l3FFQHzQBG8/photo.jpg	\N	2018-01-24 18:40:07	2018-01-24 18:40:07	\N	f	f	NOVUS	\N	0
+446	\N	\N	Sekela Mwaijuki	mwaijukisekela@gmail.com	0745087273	\N	free	24-01-2018	24-02-2018	4	0	\N	\N	2018-01-24 13:53:44	2018-01-24 13:53:44	\N	f	f	NOVUS	\N	0
+445	\N	\N	Fatuma Makarani	fatuma.makarani89@gmail.com	0655771835	\N	free	24-01-2018	24-02-2018	1	0	\N	\N	2018-01-24 10:40:28	2018-01-24 10:40:28	\N	f	f	NOVUS	\N	0
+444	\N	\N	Salmini Bakari Mbonde	muhemasalmini@gmail.com	0754313550	\N	free	24-01-2018	24-02-2018	1	0	https://lh5.googleusercontent.com/-iBQCApb-DHA/AAAAAAAAAAI/AAAAAAAAGyw/0z6pLEY6rEo/photo.jpg	\N	2018-01-24 08:48:44	2018-01-24 08:48:44	\N	f	f	NOVUS	\N	0
+393	\N	\N	Mwinyi Robert	mwinyiroberts84@gmail.com	0754632680	\N	premium	18-01-2018	13-02-2019	2	0	\N	\N	2018-01-18 10:39:22	2018-01-24 08:00:35	\N	f	f	NOVUS	\N	0
+442	\N	\N	Chris Kapinga	chriskapinga6@gmail.com	0754427514	\N	free	24-01-2018	24-02-2018	754427514	0	\N	\N	2018-01-24 07:56:08	2018-01-24 07:56:08	\N	f	f	NOVUS	\N	0
+145	\N	\N	issa Ngoro	ngoromlandani@gmail.com	0718650863	\N	premium	12-12-2017	11-01-2018	0	0	\N	\N	2017-12-12 13:52:43	2018-01-24 07:52:20	\N	f	f	NOVUS	\N	0
+438	\N	\N	Happy Kalinga	happykalinga43@gmail.com	0764476666	\N	free	24-01-2018	24-02-2018	2	0	https://lh6.googleusercontent.com/-rJB3zGkmXa8/AAAAAAAAAAI/AAAAAAAAADk/svOZGpFMZgY/photo.jpg	\N	2018-01-24 05:17:35	2018-01-24 05:17:35	\N	f	f	NOVUS	\N	0
+436	\N	\N	Irene Greys	renygreys@gmail.com	0653684580	\N	free	23-01-2018	23-02-2018	1	0	\N	\N	2018-01-23 15:15:13	2018-01-23 15:15:13	\N	f	f	NOVUS	\N	0
+435	\N	\N	Elinami Manka	elinamanka07@gmail.com	0787054046	\N	free	23-01-2018	23-02-2018	2	0	https://lh6.googleusercontent.com/-4pHZ8_fzbxI/AAAAAAAAAAI/AAAAAAAACJw/H5nbRHuDWxQ/photo.jpg	\N	2018-01-23 13:31:46	2018-01-23 13:31:46	\N	f	f	NOVUS	\N	0
+434	\N	\N	Janeth Fratern	j9fratern@gmail.com	0713400632	\N	free	23-01-2018	23-02-2018	0	0	\N	\N	2018-01-23 10:31:45	2018-01-23 10:31:45	\N	f	f	NOVUS	\N	0
+433	\N	\N	MAGRETH KIBAJA	magiekb@gmail.com	0762206297	\N	free	23-01-2018	23-02-2018	25	0	https://lh4.googleusercontent.com/-ZPqxkn7a-6s/AAAAAAAAAAI/AAAAAAAARzc/_dvlkaSPHIQ/photo.jpg	\N	2018-01-23 07:22:26	2018-01-23 07:22:26	\N	f	f	NOVUS	\N	0
+432	\N	\N	isaeli swai	isaeliswai@gmail.com	0716825182	\N	free	23-01-2018	23-02-2018	2	0	\N	\N	2018-01-23 05:31:56	2018-01-23 05:31:56	\N	f	f	NOVUS	\N	0
+1221	255000597381	\N	Emmanuel Mwasomola	emmanuel.mwasomola2015@gmail.com	0654841771	\N	premium	16-08-2018	15-09-2018	0	0	\N	\N	2018-07-17 06:42:29	2018-08-17 04:19:12	\N	f	f	Ass. Supervisor	\N	0
+1281	255200022805	\N	Nassor said Abdulla	nassorabdulla1989@gmail.com	0773969377	\N	free	06-08-2018	06-09-2018	0	0	\N	\N	2018-08-06 10:54:24	2018-08-11 19:05:16	\N	f	f	Novus	\N	\N
+528	255000587888	\N	PENDO BARNABA	barnabapendo7@gmail.com	0755634081	\N	free	07-02-2018	10-03-2018	0	0	https://lh6.googleusercontent.com/-wqhEp6mkTQ0/AAAAAAAAAAI/AAAAAAAAAB0/IQYC0LgSw2A/photo.jpg	\N	2018-02-07 05:31:43	2018-07-25 07:30:43	\N	f	f	Ass. Supervisor	\N	0
+1282	254000497959	\N	Irene Masha	irene.masha12@gmail.com	0703210931	\N	free	06-08-2018	06-09-2018	0	1	\N	\N	2018-08-06 12:26:48	2018-08-06 12:26:48	\N	f	f	Manager	\N	\N
+520	255000540335	\N	magdalena kingu	magdalenakingu@gmail.com	0717700750	\N	free	05-02-2018	08-03-2018	0	0	https://lh5.googleusercontent.com/-WlAB1wShxbI/AAAAAAAAAAI/AAAAAAAAE54/9vVKU7nwo7A/photo.jpg	\N	2018-02-05 16:15:36	2018-08-17 06:53:08	\N	f	f	Ass. Supervisor	\N	0
+90	\N	\N	kemmy christopher	kemmychris@gmail.com	0657675950	\N	free	07-12-2017	07-01-2018	2	0	\N	\N	2017-12-07 03:16:58	2017-12-07 03:16:58	\N	f	f	NOVUS	\N	0
+86	\N	\N	zulekhamohamed2009@gmail.com myfeisal1	zmyfeisal@gmail.com	+255657147133	\N	free	06-12-2017	06-01-2018	1	0	\N	\N	2017-12-06 14:59:07	2017-12-06 14:59:07	\N	f	f	NOVUS	\N	0
+1222	255000576633	\N	Stephen Lukindo	stephen.lukindo@gmail.com	0715295774	\N	free	17-07-2018	17-08-2018	0	0	\N	\N	2018-07-17 08:32:25	2018-07-17 08:32:25	\N	f	f	Ass. Supervisor	\N	0
+527	\N	\N	dorismahene@gmail.com	dorismahene@gmail.com	0711916523	\N	free	07-02-2018	10-03-2018	1	0	\N	\N	2018-02-06 22:32:19	2018-02-06 22:32:19	\N	f	f	NOVUS	\N	0
+526	\N	\N	Rashid Saleh	rashidsaleh91@gmail.com	0717074123	\N	free	07-02-2018	10-03-2018	456	0	\N	\N	2018-02-06 21:39:18	2018-02-06 21:39:18	\N	f	f	NOVUS	\N	0
+525	\N	\N	JOSEPHINE MOSHA	jmaureen25@gmail.com	0782351207	\N	free	06-02-2018	09-03-2018	0	0	\N	\N	2018-02-06 16:58:58	2018-02-06 16:58:58	\N	f	f	NOVUS	\N	0
+524	\N	\N	Michael Anthony	mngomba565@gmail.com	0713936540	\N	free	06-02-2018	09-03-2018	2	0	\N	\N	2018-02-06 11:44:17	2018-02-06 11:44:17	\N	f	f	NOVUS	\N	0
+11	255000616571	Edmund Munyagi	SAMWELI ELINAZI	ekmunyagi@gmail.com	0755518289	\N	premium	16-11-2017	07-05-2019	10	0	https://lh6.googleusercontent.com/-KOYuH_2SUxs/AAAAAAAAAAI/AAAAAAAAA0U/0poKG-N0iB8/photo.jpg	\N	\N	2018-08-18 08:01:54	\N	f	f	NOVUS	\N	0
+1235	255000430556	\N	mundy sichalwe	mundy.sichalwe@gmail.com	0756273803	\N	free	20-07-2018	20-08-2018	0	0	https://lh4.googleusercontent.com/-1ynx6mIvNjU/AAAAAAAAAAI/AAAAAAAAFL4/aPkoVCzL48Y/photo.jpg	\N	2018-07-20 18:05:11	2018-07-20 18:05:11	\N	f	f	Manager	\N	\N
+178	255000477561	\N	Donatha Mnele	donnydonna.dc@gmail.com	0682003737	\N	premium	31-07-2018	30-08-2018	153	0	https://lh5.googleusercontent.com/-f30ATWjNZQQ/AAAAAAAAAAI/AAAAAAAAFKg/Cy-C_6svXUo/photo.jpg	\N	2017-12-17 08:54:35	2018-07-31 10:57:03	\N	f	f	Supervisor	\N	0
+127	254000244000	\N	salome nduta	salomenduta62@gmail.com	0780398833	\N	free	10-12-2017	10-01-2018	750	1	https://lh3.googleusercontent.com/-21_tdF4ALnI/AAAAAAAAAAI/AAAAAAAAADo/ioytlIX5WxM/photo.jpg	\N	2017-12-10 19:14:23	2018-08-06 14:50:38	\N	f	f	Manager	\N	0
+443	255308764567	\N	samuel thomas	samueldev7@gmail.com	0685423985	\N	premium	04-06-2018	03-08-2019	80	0	https://lh5.googleusercontent.com/-QB9L_YMgUWM/AAAAAAAAAAI/AAAAAAAAABM/8j6a_FTGljA/photo.jpg	\N	2018-01-24 08:15:18	2018-08-14 10:19:17	\N	f	f	Supervisor	3.0.6	0
+518	255000518940	\N	Debora Frank	frankdebora84@gmail.com	0759310631	\N	premium	03-08-2018	02-09-2018	0	0	\N	\N	2018-02-05 08:07:25	2018-08-03 14:21:15	\N	f	f	Ass. Supervisor	\N	0
+1283	255200024168	\N	Mussa Hemed	mussahemed23@gmail.com	0656722078	\N	free	06-08-2018	06-09-2018	0	0	\N	\N	2018-08-06 16:31:58	2018-08-06 16:31:58	\N	f	f	Novus	\N	\N
+905	\N	\N	mapinduzi hasani	mpndzhasani5@gmail.com	0752395527	\N	free	10-04-2018	11-05-2018	0	0	https://lh5.googleusercontent.com/-q0rlIUA8VzI/AAAAAAAAAAI/AAAAAAAAAOE/fBtOTSX3ctU/photo.jpg	\N	2018-04-10 09:04:43	2018-04-10 09:04:43	\N	f	f	NOVUS	\N	0
+787	\N	\N	Leonidas Karumuna	karumunar@gmail.com	0756953356	\N	premium	22-03-2018	22-05-2018	0	0	https://lh5.googleusercontent.com/-gCLfJ2465FM/AAAAAAAAAAI/AAAAAAAAAMQ/xyr4zjb4fMc/photo.jpg	\N	2018-03-22 18:11:35	2018-04-05 08:26:20	\N	f	f	NOVUS	\N	0
+824	\N	\N	Elnison Mugiira	elnisonmugiiragichuru@gmail.com	0705129055	\N	free	30-03-2018	30-04-2018	539	1	https://lh5.googleusercontent.com/-sub-H9zL3-o/AAAAAAAAAAI/AAAAAAAAABI/p0YHEf0iTr0/photo.jpg	\N	2018-03-30 10:42:09	2018-03-30 10:42:09	\N	f	f	NOVUS	\N	0
+716	\N	\N	Mohamed Waziri	mohamedwaziri79@gmail.com	0715667670	\N	free	07-03-2018	07-04-2018	1919	0	https://lh5.googleusercontent.com/-PzVJspsY384/AAAAAAAAAAI/AAAAAAAAABE/nTMbzYIi1gE/photo.jpg	\N	2018-03-07 14:38:36	2018-03-07 14:38:36	\N	f	f	NOVUS	\N	0
+1226	255200017725	\N	Ummy Mohamed	ummymohamed9@gmail.com	0716740726	\N	free	17-07-2018	17-08-2018	0	0	\N	\N	2018-07-17 15:11:33	2018-07-17 15:11:33	\N	f	f	Ass. Supervisor	\N	0
+645	\N	\N	Happyness James	habatrina@gmail.com	0712464880	\N	free	26-02-2018	29-03-2018	500	0	https://lh4.googleusercontent.com/-QaMVWYZZ6QI/AAAAAAAAAAI/AAAAAAAABjU/2_189CgQ76M/photo.jpg	\N	2018-02-25 22:36:09	2018-02-25 22:36:09	\N	f	f	NOVUS	\N	0
+172	\N	\N	rhoda msuya	rhodamsuya47@gmail.com	0657673030	\N	free	16-12-2017	16-01-2018	79	0	\N	\N	2017-12-16 08:46:58	2017-12-16 08:46:58	\N	f	f	NOVUS	\N	0
+171	\N	\N	Jim Kigola	jimkigola71@gmail.com	0786378060	\N	free	16-12-2017	16-01-2018	2	0	\N	\N	2017-12-16 04:19:00	2017-12-16 04:19:00	\N	f	f	NOVUS	\N	0
+758	255000438920	\N	Amina Salim	ssamy222@gmail.com	0766456365	\N	premium	04-07-2018	02-01-2019	1	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABECKeMmOePxsT61QEiC3ZjYXJkX3Bob3RvKig1N2ZmZjNkZThjMTlkYTI4NmM1ZjJjNjBkMmJlMDQxNjljYmUzNDNlMAE3U2yIilide-hw4Oc2YNOkhP4mBg	\N	2018-03-17 06:22:11	2018-07-04 11:14:39	\N	f	f	Supervisor	\N	0
+1223	255000446181	\N	ESTHER SARIAH	sariahesther@gmail.com	0682553333	\N	premium	17-07-2018	16-09-2018	0	0	https://lh5.googleusercontent.com/-ULltMPrtCIQ/AAAAAAAAAAI/AAAAAAAACek/12g2P_ta5ec/photo.jpg	\N	2018-07-17 10:48:59	2018-07-17 13:04:49	\N	f	f	Ass. Supervisor	\N	0
+519	\N	\N	Fathiya Masoud	fathiyamasoud62@gmail.com	0629741507	\N	free	05-02-2018	08-03-2018	5	0	\N	\N	2018-02-05 11:42:58	2018-02-05 11:42:58	\N	f	f	NOVUS	\N	0
+517	\N	\N	Lazaro Abila	lazaroabila77@gmail.com	0682126964	\N	free	05-02-2018	08-03-2018	123	0	\N	\N	2018-02-05 07:50:29	2018-02-05 07:50:29	\N	f	f	NOVUS	\N	0
+516	\N	\N	Juma Dyegula	dyegulajuma@gmail.com	+255764962800	\N	free	05-02-2018	08-03-2018	0	0	\N	\N	2018-02-04 21:53:14	2018-02-04 21:53:14	\N	f	f	NOVUS	\N	0
+515	\N	\N	Mwema Khamis	mwemakhamis4@gmail.com	0777722287	\N	free	04-02-2018	07-03-2018	4	0	\N	\N	2018-02-04 13:41:22	2018-02-04 13:41:22	\N	f	f	NOVUS	\N	0
+514	\N	\N	sarah mchaki	mchakisarah@gmail.com	0652334550	\N	free	04-02-2018	07-03-2018	1060	0	\N	\N	2018-02-03 21:17:58	2018-02-03 21:17:58	\N	f	f	NOVUS	\N	0
+513	\N	\N	tony washington	mwashington009@gmail.com	0714902502	\N	free	03-02-2018	06-03-2018	0	0	https://lh3.googleusercontent.com/-a-BujGQjiAs/AAAAAAAAAAI/AAAAAAAAADU/RsNQ62JOF1c/photo.jpg	\N	2018-02-03 18:37:00	2018-02-03 18:37:00	\N	f	f	NOVUS	\N	0
+511	\N	\N	Edwardy Kennedy	edwardykennedy@gmail.com	+255766431520	\N	free	03-02-2018	06-03-2018	2	0	https://lh5.googleusercontent.com/-Qew76qwc2HQ/AAAAAAAAAAI/AAAAAAAAABw/olFw2Fc_so8/photo.jpg	\N	2018-02-03 16:48:28	2018-02-03 16:48:28	\N	f	f	NOVUS	\N	0
+510	\N	\N	Despina Mahenge	mahengedespina@gmail.com	0763955496	\N	free	03-02-2018	06-03-2018	4	0	\N	\N	2018-02-03 16:04:33	2018-02-03 16:04:33	\N	f	f	NOVUS	\N	0
+509	\N	\N	Stella Ndonondo	stellandonondo@gmail.com	0718114739	\N	free	03-02-2018	06-03-2018	2	0	https://lh4.googleusercontent.com/-KFcHEyn6w-M/AAAAAAAAAAI/AAAAAAAAAAs/ngy-Hd4__kA/photo.jpg	\N	2018-02-03 15:50:14	2018-02-03 15:50:14	\N	f	f	NOVUS	\N	0
+508	\N	\N	hussein mohamed	hm2032170@gmail.com	0711809929	\N	free	03-02-2018	06-03-2018	50	0	\N	\N	2018-02-03 15:32:54	2018-02-03 15:32:54	\N	f	f	NOVUS	\N	0
+507	\N	\N	Sylvanus Gombanila	sylvanusgombanila@gmail.com	0765026349	\N	free	03-02-2018	06-03-2018	2	0	\N	\N	2018-02-03 10:40:38	2018-02-03 10:40:38	\N	f	f	NOVUS	\N	0
+10	255000449892	Wilbard Patrice	Wilbard Patrice	mallyawilbard8@gmail.com	0655661002	\N	premium	15-11-2017	07-04-2019	4	0	https://lh3.googleusercontent.com/-jGbubxpe5tU/AAAAAAAAAAI/AAAAAAAACqA/gIbRjG53LyE/photo.jpg	\N	\N	2018-08-17 08:30:48	\N	f	f	Manager	\N	0
+1236	255200023013	\N	sakina jamali	sakinamjjamali@gmail.com	0682681554	\N	free	20-07-2018	20-08-2018	0	0	\N	\N	2018-07-20 19:59:07	2018-07-20 19:59:07	\N	f	f	Ass. Supervisor	\N	\N
+461	\N	\N	Samwel Bashaka	sam4bashaka@gmail.com	0767949119	\N	free	26-01-2018	26-02-2018	2	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABDCIu61ObN-_XxaCILdmNhcmRfcGhvdG8qKDllZjU1MGRiOTJkZTE1OGNkZWM5OWYwMDdiOWUxYjNkY2YzNThkNWEwAUAqbsgWdhXB80gMvs_S_EG90KRp	\N	2018-01-26 16:04:03	2018-01-26 16:04:03	\N	f	f	NOVUS	\N	0
+384	\N	\N	Chihiyo Mariki	chihiyo.mariki@gmail.com	+255767227117	\N	free	17-01-2018	17-02-2018	2	0	https://lh3.googleusercontent.com/-lozik-DrMws/AAAAAAAAAAI/AAAAAAAAADQ/N9LC4MsYAso/photo.jpg	\N	2018-01-17 19:10:08	2018-01-17 19:10:08	\N	f	f	NOVUS	\N	0
+379	\N	\N	Mohamed Ally Mohamed	mmohamedally77@gmail.com	0784216619	\N	free	17-01-2018	17-02-2018	888	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABECK3IgMm4g-uZogEiC3ZjYXJkX3Bob3RvKigxYmFjZWNjYzczYmNjNThiOWZiZTljYmI1MmJiMjEyYjA3OWQ4M2RkMAGo2bX43r53xe-W76OqgRbEdwNIuw	\N	2018-01-17 10:15:53	2018-01-17 10:15:53	\N	f	f	NOVUS	\N	0
+305	\N	\N	Denis Magehema	denismagehema@gmail.com	0657888494	\N	free	05-01-2018	05-02-2018	2	0	https://lh6.googleusercontent.com/-KUqF_CPeiYs/AAAAAAAAAAI/AAAAAAAAA6A/zs3TZWpBMdQ/photo.jpg	\N	2018-01-05 12:20:19	2018-01-05 12:20:19	\N	f	f	NOVUS	\N	0
+269	\N	\N	Jackson ADAGALA	adagalaj@gmail.com	0724256268	\N	free	31-12-2017	31-01-2018	2	1	https://lh4.googleusercontent.com/-9vitHjsdSp8/AAAAAAAAAAI/AAAAAAAAAIE/VB-S0h9ZRRg/photo.jpg	\N	2017-12-31 08:02:14	2017-12-31 08:02:14	\N	f	f	NOVUS	\N	0
+217	\N	\N	martina john Mutenyo	mjmutenyo@gmail.com	0767436799	\N	free	21-12-2017	21-01-2018	0	0	https://lh4.googleusercontent.com/-nr7-fFhumVQ/AAAAAAAAAAI/AAAAAAAAAEE/Wnwr_3Qf6TQ/photo.jpg	\N	2017-12-21 08:05:38	2017-12-21 08:05:38	\N	f	f	NOVUS	\N	0
+68	\N	\N	Hellen Stephen	suwilanjihellen@gmail.com	+255684245021	\N	premium	04-12-2017	03-02-2018	8673	0	https://lh6.googleusercontent.com/-GA7M-mr8G4E/AAAAAAAAAAI/AAAAAAAAAEE/vhPWNTuFmwA/photo.jpg	\N	2017-12-04 17:43:13	2017-12-20 18:01:48	\N	f	f	NOVUS	\N	0
+131	\N	\N	Michael Richard	michaelrich2103@gmail.com	0656587881	\N	free	11-12-2017	11-01-2018	656587881	0	\N	\N	2017-12-11 07:03:15	2017-12-11 07:03:15	\N	f	f	NOVUS	\N	0
+130	\N	\N	Zed Dickson	dicksonzed@gmail.com	0763518071	\N	free	11-12-2017	11-01-2018	0	0	https://lh3.googleusercontent.com/-dOWlU0w0NDQ/AAAAAAAAAAI/AAAAAAAABXA/gbY3IgCiafo/photo.jpg	\N	2017-12-11 06:12:29	2017-12-11 06:12:29	\N	f	f	NOVUS	\N	0
+505	\N	\N	epetia tangila	epetiatangila@gmail.com	0768013968	\N	free	03-02-2018	06-03-2018	1	0	\N	\N	2018-02-03 07:15:27	2018-02-03 07:15:27	\N	f	f	NOVUS	\N	0
+502	\N	\N	ally makota	allymakota14@gmail.com	0652406334	\N	free	02-02-2018	05-03-2018	0	0	https://lh4.googleusercontent.com/-QD75LjMauO8/AAAAAAAAAAI/AAAAAAAAACQ/uTh6hEQHJQA/photo.jpg	\N	2018-02-02 17:17:27	2018-02-02 17:17:27	\N	f	f	NOVUS	\N	0
+501	\N	\N	Ally Hamisi	allykhamista@gmail.com	0785168159	\N	free	02-02-2018	05-03-2018	568	0	\N	\N	2018-02-02 14:20:50	2018-02-02 14:20:50	\N	f	f	NOVUS	\N	0
+499	\N	\N	Hasewa Kwimba	hkwimba10@gmail.com	0766865115	\N	free	02-02-2018	05-03-2018	0	0	\N	\N	2018-02-02 10:09:40	2018-02-02 10:09:40	\N	f	f	NOVUS	\N	0
+496	\N	\N	Dan Charles	dannycharles008@gmail.com	0655500410	\N	free	01-02-2018	04-03-2018	4	0	https://lh6.googleusercontent.com/-u8A-sfoZZhM/AAAAAAAAAAI/AAAAAAAAACw/snjDZ-bLn0w/photo.jpg	\N	2018-02-01 08:36:37	2018-02-01 08:36:37	\N	f	f	NOVUS	\N	0
+494	\N	\N	Laurence Lala	lala500030@gmail.com	0756612120	\N	free	01-02-2018	04-03-2018	1	0	\N	\N	2018-02-01 02:24:57	2018-02-01 02:24:57	\N	f	f	NOVUS	\N	0
+497	255000574151	\N	Frankwell Dulle	dullefw2011@gmail.com	0754819531	\N	premium	01-08-2018	31-08-2018	4	0	https://lh3.googleusercontent.com/-gZV3nDUnCjU/AAAAAAAAAAI/AAAAAAAAAWM/ndGRVfxKxzQ/photo.jpg	\N	2018-02-01 11:35:21	2018-08-01 12:06:55	\N	f	f	Ass. Supervisor	\N	0
+1284	255200017872	\N	Evelyne Mhina	mhinaevelyne0895@gmail.com	0677207325	\N	free	07-08-2018	07-09-2018	0	0	\N	\N	2018-08-07 08:24:27	2018-08-07 08:24:27	\N	f	f	Ass. Supervisor	\N	\N
+504	255200011426	\N	sylvester godyfrey	sylvestergodyfrey1027@gmail.com	0625572552	\N	free	03-02-2018	06-03-2018	0	0	https://lh3.googleusercontent.com/-PP2_tuLElEU/AAAAAAAAAAI/AAAAAAAAAF8/1ZhDg_W_xGI/photo.jpg	\N	2018-02-03 05:45:13	2018-08-07 09:28:58	\N	f	f	Ass. Supervisor	\N	0
+495	255000614980	\N	DEODATHA AGRICOLA	deodath1990@gmail.com	0783253848	\N	premium	10-08-2018	10-08-2019	2	0	https://lh4.googleusercontent.com/-hkHD97RZUWA/AAAAAAAAAAI/AAAAAAAAAAw/Mc2waiIOisI/photo.jpg	\N	2018-02-01 05:30:55	2018-08-10 08:17:05	\N	f	f	Ass. Supervisor	\N	0
+498	255000616879	\N	Monica Tairo	monicatairo89@gmail.com	0716534033	\N	premium	17-08-2018	16-09-2018	4	0	\N	\N	2018-02-02 07:01:58	2018-08-17 09:32:33	\N	f	f	Ass. Supervisor	\N	0
+1224	254200023752	\N	Haika Meena	haileynimrod@gmail.com	0795431301	\N	free	17-07-2018	17-08-2018	0	0	https://lh3.googleusercontent.com/-4XFgi_wEnB8/AAAAAAAAAAI/AAAAAAAAEhw/-a42wQHY8Ow/photo.jpg	\N	2018-07-17 11:07:46	2018-08-17 16:53:55	\N	f	f	Novus	\N	0
+408	255200018100	\N	Anita Simchimba	anitasimchimba32@gmail.com	0715442239	\N	premium	21-07-2018	20-08-2018	1	0	\N	\N	2018-01-20 06:13:03	2018-07-21 05:20:23	\N	f	f	Ass. Supervisor	\N	0
+585	255200018715	\N	Nancy Mtui	nmtui4@gmail.com	0755784085	\N	free	14-02-2018	17-03-2018	2	0	\N	\N	2018-02-14 12:13:53	2018-07-23 08:50:12	\N	f	f	Ass. Supervisor	\N	0
+489	255000456235	\N	Exuper Vitalis Njau	exupervitalisnjau@gmail.com	0767744267	\N	free	30-01-2018	02-03-2018	25	0	https://lh4.googleusercontent.com/-zuiGdo6kFJs/AAAAAAAAAAI/AAAAAAAABkU/bomRup55o_E/photo.jpg	\N	2018-01-30 14:55:24	2018-08-07 14:38:45	\N	f	f	Supervisor	\N	0
+258	\N	\N	BARAKA NANYARO	barakanyaro@gmail.com	0759334015	\N	free	29-12-2017	29-01-2018	4	0	https://lh5.googleusercontent.com/-W4XEnZVZ3B0/AAAAAAAAAAI/AAAAAAAACW4/KoAk1u4VSqw/photo.jpg	\N	2017-12-29 11:20:15	2017-12-29 11:20:15	\N	f	f	NOVUS	\N	0
+257	\N	\N	Mwanaidi Mbaraka	mwanamubarz@gmail.com	0744398149	\N	free	28-12-2017	28-01-2018	433	0	\N	\N	2017-12-28 15:16:04	2017-12-28 15:16:04	\N	f	f	NOVUS	\N	0
+1182	255000621461	\N	Teodata Angelus	teodataangelus@gmail.com	0758225367	\N	premium	30-06-2018	30-08-2018	0	0	\N	\N	2018-06-30 03:45:30	2018-06-30 06:23:11	\N	f	f	Ass. Supervisor	\N	0
+1199	255000574619	\N	Debora Kimambo	deborakimambo24@gmail.com	0713711211	\N	free	07-07-2018	07-08-2018	0	0	\N	\N	2018-07-07 16:29:12	2018-07-07 16:29:12	\N	f	f	Ass. Supervisor	\N	0
+1225	255200023724	\N	regnald godwin	regnaldgodwin@gmail.com	0767354161	\N	free	17-07-2018	17-08-2018	0	0	https://lh5.googleusercontent.com/-V7L91sx1ZY0/AAAAAAAAAAI/AAAAAAAAAC0/DCxAUCThh8I/photo.jpg	\N	2018-07-17 13:48:41	2018-07-17 13:48:41	\N	f	f	Novus	\N	0
+493	\N	\N	Tress Mkulu	tressmkulu@gmail.com	0689106761	\N	free	31-01-2018	03-03-2018	0	0	\N	\N	2018-01-31 20:54:52	2018-01-31 20:54:52	\N	f	f	NOVUS	\N	0
+492	\N	\N	Mubarak Aly	mubagx13@gmail.com	0777803537	\N	free	31-01-2018	03-03-2018	2	0	https://lh5.googleusercontent.com/-mt3WlPxsb84/AAAAAAAAAAI/AAAAAAAAABk/fGtVBpHkl2Y/photo.jpg	\N	2018-01-31 15:32:07	2018-01-31 15:32:07	\N	f	f	NOVUS	\N	0
+491	\N	\N	Alex sulle	alexsulle152@gmail.com	0762280774	\N	free	30-01-2018	02-03-2018	762280774	0	\N	\N	2018-01-30 17:15:48	2018-01-30 17:15:48	\N	f	f	NOVUS	\N	0
+490	\N	\N	frank mungure	frankmungure83@gmail.com	0655213757	\N	free	30-01-2018	02-03-2018	2	0	https://lh3.googleusercontent.com/-L5bobJ-be6w/AAAAAAAAAAI/AAAAAAAAAJs/32JXczSYZus/photo.jpg	\N	2018-01-30 15:31:35	2018-01-30 15:31:35	\N	f	f	NOVUS	\N	0
+487	\N	\N	ANTELMA LUTAMBI	antelmalutambi@gmail.com	255656493501	\N	free	30-01-2018	02-03-2018	2	0	\N	\N	2018-01-30 10:11:47	2018-01-30 10:11:47	\N	f	f	NOVUS	\N	0
+486	\N	\N	Malimi Heri	malimimitis@gmail.com	0653195990	\N	free	30-01-2018	02-03-2018	1	0	https://lh3.googleusercontent.com/-MOzo0LDygng/AAAAAAAAAAI/AAAAAAAAAMo/aliCa5FqnPU/photo.jpg	\N	2018-01-30 08:17:20	2018-01-30 08:17:20	\N	f	f	NOVUS	\N	0
+488	255000454444	\N	grace minja	graceminja@gmail.com	0755456635	\N	premium	20-06-2018	18-01-2019	12	0	https://lh4.googleusercontent.com/-y0fqeXN2RdQ/AAAAAAAAAAI/AAAAAAAAAOc/iWWgHPppcKY/photo.jpg	\N	2018-01-30 12:44:22	2018-07-19 06:28:34	\N	f	f	Manager	\N	0
+662	\N	\N	Mgeta Joseph	josephmgeta1995@gmail.com	0754299939	\N	free	28-02-2018	31-03-2018	20	0	\N	\N	2018-02-28 15:12:21	2018-02-28 15:12:21	\N	f	f	NOVUS	\N	0
+602	\N	\N	Lidia Nikolass	lidianikolass35@gmail.com	0718174402	\N	free	16-02-2018	19-03-2018	1	0	\N	\N	2018-02-16 09:49:30	2018-02-16 09:49:30	\N	f	f	NOVUS	\N	0
+601	\N	\N	Julius Mwakajeba	jmwakajeba@gmail.com	0716810817	\N	free	16-02-2018	19-03-2018	10	0	\N	\N	2018-02-16 08:57:17	2018-02-16 08:57:17	\N	f	f	NOVUS	\N	0
+600	\N	\N	Oneka John	onekajohn8@gmail.com	0753630304	\N	free	16-02-2018	19-03-2018	5	0	\N	\N	2018-02-16 06:51:23	2018-02-16 06:51:23	\N	f	f	NOVUS	\N	0
+599	\N	\N	Diana Mwakitalu	dianamwakitalu17@gmail.com	0718933496	\N	free	15-02-2018	18-03-2018	2	0	\N	\N	2018-02-15 17:14:47	2018-02-15 17:14:47	\N	f	f	NOVUS	\N	0
+598	\N	\N	Shukuru James	shukurujames81@gmail.com	0719259797	\N	free	15-02-2018	18-03-2018	1	0	\N	\N	2018-02-15 16:42:20	2018-02-15 16:42:20	\N	f	f	NOVUS	\N	0
+597	\N	\N	Muhtasim Issa	muhtasimissa339@gmail.com	0786116922	\N	free	15-02-2018	18-03-2018	4	0	\N	\N	2018-02-15 16:27:04	2018-02-15 16:27:04	\N	f	f	NOVUS	\N	0
+596	\N	\N	Silvya Maina	mainasilvya@gmail.com	+254702107833	\N	free	15-02-2018	18-03-2018	0	0	\N	\N	2018-02-15 16:24:45	2018-02-15 16:24:45	\N	f	f	NOVUS	\N	0
+595	\N	\N	Joseph Gama	gamajoseph37@gmail.com	0763906049	\N	free	15-02-2018	18-03-2018	1	0	\N	\N	2018-02-15 15:49:44	2018-02-15 15:49:44	\N	f	f	NOVUS	\N	0
+594	\N	\N	Pasko Ibrahim	paskoibrahim5@gmail.com	0745389294	\N	free	15-02-2018	18-03-2018	2	0	\N	\N	2018-02-15 14:34:36	2018-02-15 14:34:36	\N	f	f	NOVUS	\N	0
+593	\N	\N	damas pecha	damaspecha@gmail.com	0764597227	\N	free	15-02-2018	18-03-2018	23	0	\N	\N	2018-02-15 14:26:51	2018-02-15 14:26:51	\N	f	f	NOVUS	\N	0
+592	\N	\N	Tumain Ginus	tumainginus@gmail.com	0717692881	\N	free	15-02-2018	18-03-2018	0	0	\N	\N	2018-02-15 08:34:10	2018-02-15 08:34:10	\N	f	f	NOVUS	\N	0
+590	\N	\N	Fatma Khamis	khamisf308@gmail.com	0773029801	\N	free	15-02-2018	18-03-2018	368	0	\N	\N	2018-02-15 08:14:18	2018-02-15 08:14:18	\N	f	f	NOVUS	\N	0
+589	\N	\N	Baraka Eliah	barakaeliah8@gmail.com	0745087273	\N	free	15-02-2018	18-03-2018	4	0	\N	\N	2018-02-15 06:07:29	2018-02-15 06:07:29	\N	f	f	NOVUS	\N	0
+573	\N	\N	Rehema Sumari	rsumari90@gmail.com	0754498408	\N	free	14-02-2018	17-03-2018	2	0	\N	\N	2018-02-14 09:45:42	2018-02-14 09:45:42	\N	f	f	NOVUS	\N	0
+572	\N	\N	Deogratias John	deogratiasjohn41@gmail.com	0764366668	\N	free	14-02-2018	17-03-2018	44	0	\N	\N	2018-02-14 06:40:05	2018-02-14 06:40:05	\N	f	f	NOVUS	\N	0
+571	\N	\N	Rehema Amiri	rehemaamiri066@gmail.com	0714554515	\N	free	14-02-2018	17-03-2018	7	0	\N	\N	2018-02-13 21:17:07	2018-02-13 21:17:07	\N	f	f	NOVUS	\N	0
+570	\N	\N	Wardy Ema	wardyema@gmail.com	0673982007	\N	free	13-02-2018	16-03-2018	4	0	\N	\N	2018-02-13 15:20:41	2018-02-13 15:20:41	\N	f	f	NOVUS	\N	0
+567	\N	\N	Gad Lims	gadlims45@gmail.com	0701994765	\N	free	13-02-2018	16-03-2018	10000	1	\N	\N	2018-02-13 11:14:42	2018-02-13 11:14:42	\N	f	f	NOVUS	\N	0
+588	255000551070	\N	Helfrid Gama	helfridg@gmail.com	0764116130	\N	free	15-02-2018	18-03-2018	2	0	\N	\N	2018-02-15 05:40:33	2018-08-08 09:19:04	\N	f	f	Ass. Supervisor	\N	0
+1285	255000422081	\N	vasco mwakigala	vascomwakigala@gmail.com	0753190496	\N	premium	08-08-2018	08-10-2018	0	0	\N	\N	2018-08-08 08:09:51	2018-08-08 12:04:48	\N	f	f	Manager	\N	\N
+648	255000575276	\N	Rubotha Finihas	rubothafinihas@gmail.com	0752327313	\N	free	26-02-2018	29-03-2018	0	0	\N	\N	2018-02-26 05:45:35	2018-07-20 15:29:05	\N	f	f	Novus	\N	0
+1286	255200023831	\N	Huzaima Mohd	huzaimamohd@gmail.com	0655717875	\N	free	08-08-2018	08-09-2018	0	0	https://lh4.googleusercontent.com/-HmY14hyWe9w/AAAAAAAAAAI/AAAAAAAAAtQ/dEZDijNEQEk/photo.jpg	\N	2018-08-08 16:37:16	2018-08-08 16:37:16	\N	f	f	Novus	\N	\N
+1183	255200019695	\N	Oforo Vivian	oforovivian600@gmail.com	0658639985	\N	free	30-06-2018	31-07-2018	0	0	\N	\N	2018-06-30 10:59:07	2018-06-30 10:59:07	\N	f	f	Ass. Supervisor	\N	0
+566	\N	\N	Elias Mhema	eliasmhema34@gmail.com	0769318806	\N	free	13-02-2018	16-03-2018	5000000	0	\N	\N	2018-02-13 10:56:05	2018-02-13 10:56:05	\N	f	f	NOVUS	\N	0
+555	\N	\N	Matokeo Dyabene	matokeodyabene28@gmail.com	0769353586	\N	free	13-02-2018	16-03-2018	2000	0	\N	\N	2018-02-12 23:18:56	2018-02-12 23:18:56	\N	f	f	NOVUS	\N	0
+553	\N	\N	Irene Gideon	irenechinko@gmail.com	0766045980	\N	free	12-02-2018	15-03-2018	1	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABDCKTdwvPPlLieRyILdmNhcmRfcGhvdG8qKDQzZWVlMzZmOGJlYjlhMDdmMDRiY2Q0ZjJmNjExN2U0NjJhOTA2OTYwAavxIxAOJvw2FCc_IPdBIFnJ9rSh	\N	2018-02-12 13:13:34	2018-02-12 13:13:34	\N	f	f	NOVUS	\N	0
+552	\N	\N	EDNA MOSHA	moshaedna76@gmail.com	0629865800	\N	free	12-02-2018	15-03-2018	2	0	\N	\N	2018-02-12 13:12:45	2018-02-12 13:12:45	\N	f	f	NOVUS	\N	0
+551	\N	\N	shax ramson	shaxramson45@gmail.com	0719121208	\N	free	12-02-2018	15-03-2018	50000	0	\N	\N	2018-02-12 10:15:22	2018-02-12 10:15:22	\N	f	f	NOVUS	\N	0
+550	\N	\N	Seif Kasonta	seifflpaloe@gmail.com	0712345975	\N	free	12-02-2018	15-03-2018	2	0	\N	\N	2018-02-12 07:28:06	2018-02-12 07:28:06	\N	f	f	NOVUS	\N	0
+548	\N	\N	Alex Pius	dgn100summer@gmail.com	0765887767	\N	free	12-02-2018	15-03-2018	1	0	https://lh4.googleusercontent.com/-WIQx0SBVfy4/AAAAAAAAAAI/AAAAAAAAATE/cjUvA9s3EXY/photo.jpg	\N	2018-02-12 04:06:55	2018-02-12 04:06:55	\N	f	f	NOVUS	\N	0
+547	\N	\N	john mrutu	jmrutu4@gmail.com	0652844581	\N	free	11-02-2018	14-03-2018	10	0	https://lh3.googleusercontent.com/-lssefOKhWHQ/AAAAAAAAAAI/AAAAAAAAAAw/7ZD4vvjJmgI/photo.jpg	\N	2018-02-11 09:14:45	2018-02-11 09:14:45	\N	f	f	NOVUS	\N	0
+546	\N	\N	Hamisi Hassan	hamisihassan11@gmail.com	0716711174	\N	free	11-02-2018	14-03-2018	30	0	https://lh4.googleusercontent.com/-0M-novR2vco/AAAAAAAAAAI/AAAAAAAAD54/QHUOpXzQkUA/photo.jpg	\N	2018-02-11 05:55:11	2018-02-11 05:55:11	\N	f	f	NOVUS	\N	0
+545	\N	\N	cma.seminars@gmail.com	cma.seminars@gmail.com	0754370805	\N	free	10-02-2018	13-03-2018	6	0	\N	\N	2018-02-10 05:37:23	2018-02-10 05:37:23	\N	f	f	NOVUS	\N	0
+543	\N	\N	maymuna zubeir	maymunazubeir75@gmail.com	+255772317373	\N	free	09-02-2018	12-03-2018	2	0	https://lh6.googleusercontent.com/-EoUJMzMQSkY/AAAAAAAAAAI/AAAAAAAAABo/MbOUiRzvPoU/photo.jpg	\N	2018-02-09 14:58:13	2018-02-09 14:58:13	\N	f	f	NOVUS	\N	0
+542	\N	\N	Stanislaus Dogani	stanislausdogani1978@gmail.com	0784533312	\N	free	09-02-2018	12-03-2018	10090001	0	\N	\N	2018-02-09 14:54:59	2018-02-09 14:54:59	\N	f	f	NOVUS	\N	0
+539	\N	\N	Sigifrida Joseph	siggyjoe87@gmail.com	0717173804	\N	free	09-02-2018	12-03-2018	20	0	\N	\N	2018-02-09 13:29:58	2018-02-09 13:29:58	\N	f	f	NOVUS	\N	0
+538	\N	\N	nusrat hanje	nhanje90@gmail.com	0719644323	\N	free	09-02-2018	12-03-2018	2	0	\N	\N	2018-02-09 12:52:13	2018-02-09 12:52:13	\N	f	f	NOVUS	\N	0
+537	\N	\N	Aidan Nyamhanga	aidantheonas@gmail.com	0716166843	\N	free	08-02-2018	11-03-2018	800006	0	https://lh3.googleusercontent.com/-t7gaeUny8k4/AAAAAAAAAAI/AAAAAAAADRc/56cRi4QZx3o/photo.jpg	\N	2018-02-08 18:04:11	2018-02-08 18:04:11	\N	f	f	NOVUS	\N	0
+536	\N	\N	Magge Ngowo	ngowomagge@gmail.com	0713625055	\N	free	08-02-2018	11-03-2018	1	0	\N	\N	2018-02-08 12:52:45	2018-02-08 12:52:45	\N	f	f	NOVUS	\N	0
+535	\N	\N	yahya ubwa hassan	yahyaubwa@gmail.com	0773144776	\N	free	08-02-2018	11-03-2018	2	0	https://lh4.googleusercontent.com/-bEKu5jE-xuk/AAAAAAAAAAI/AAAAAAAAzsM/tOc1Ha__YM4/photo.jpg	\N	2018-02-08 12:48:19	2018-02-08 12:48:19	\N	f	f	NOVUS	\N	0
+533	\N	\N	Alex Kinwiko	alexkinwiko15@gmail.com	0755874652	\N	free	07-02-2018	10-03-2018	10	0	\N	\N	2018-02-07 18:35:59	2018-02-07 18:35:59	\N	f	f	NOVUS	\N	0
+532	\N	\N	Sudi Msuya	sudimsuya@gmail.com	0752525971	\N	free	07-02-2018	10-03-2018	0	0	https://lh4.googleusercontent.com/--O7QxRcJYKU/AAAAAAAAAAI/AAAAAAAAABU/JYBmIRi_ZHo/photo.jpg	\N	2018-02-07 17:55:58	2018-02-07 17:55:58	\N	f	f	NOVUS	\N	0
+584	255000615318	\N	allyghanim5@gmail.com	allyghanim5@gmail.com	0655524043	\N	premium	09-07-2018	09-07-2019	321	0	\N	\N	2018-02-14 10:50:01	2018-07-09 06:49:44	\N	f	f	Ass. Supervisor	\N	0
+620	255000486655	\N	Tatu Omar	tatuomar27@gmail.com	0777877990	\N	free	19-02-2018	22-03-2018	1	0	\N	\N	2018-02-19 17:10:33	2018-06-07 10:59:35	\N	f	f	Manager	\N	0
+591	255000607171	\N	Godlisten Estomih	godlistenestomih744@gmail.com	0758955029	\N	free	15-02-2018	18-03-2018	5	0	\N	\N	2018-02-15 08:18:46	2018-06-05 14:54:39	\N	f	f	Ass. Supervisor	\N	0
+682	\N	\N	Salma Mohammed	salmakassam864@gmail.com	0719987878	\N	free	02-03-2018	02-04-2018	11	0	\N	\N	2018-03-02 16:31:41	2018-03-02 16:31:41	\N	f	f	NOVUS	\N	0
+659	\N	\N	John wilson	sombawilson@gmail.com	0675348750	\N	free	28-02-2018	31-03-2018	1	0	\N	\N	2018-02-28 09:05:49	2018-02-28 09:05:49	\N	f	f	NOVUS	\N	0
+658	\N	\N	Eveline Joel	evelinejoeleve@gmail.com	0743281711	\N	free	28-02-2018	31-03-2018	0	0	\N	\N	2018-02-28 08:15:06	2018-02-28 08:15:06	\N	f	f	NOVUS	\N	0
+653	\N	\N	Joseph Changeka	josephchangeka6@gmail.com	0767502622	\N	free	27-02-2018	30-03-2018	767502622	0	\N	\N	2018-02-27 19:37:08	2018-02-27 19:37:08	\N	f	f	NOVUS	\N	0
+650	\N	\N	Joseph Josee	josephjosee6@gmail.com	0766477878	\N	free	26-02-2018	29-03-2018	33	0	https://lh5.googleusercontent.com/-5BksDXhRCMo/AAAAAAAAAAI/AAAAAAAAAM0/6k_ihgqyoXI/photo.jpg	\N	2018-02-26 10:46:57	2018-02-26 10:46:57	\N	f	f	NOVUS	\N	0
+649	\N	\N	Judith Panya	judith.panya@gmail.com	0757682816	\N	free	26-02-2018	29-03-2018	0	0	\N	\N	2018-02-26 10:18:57	2018-02-26 10:18:57	\N	f	f	NOVUS	\N	0
+647	\N	\N	Finias Kasulu	finiaskasulu@gmail.com	0752327313	\N	free	26-02-2018	29-03-2018	0	0	\N	\N	2018-02-26 05:39:38	2018-02-26 05:39:38	\N	f	f	NOVUS	\N	0
+1237	255000468640	\N	Joyce Rweyemamu	rweyemamujoyce70@gmail.com	0754728126	\N	free	21-07-2018	21-08-2018	0	0	\N	\N	2018-07-21 05:33:54	2018-07-21 05:33:54	\N	f	f	Manager	\N	\N
+544	255000615404	\N	Jane Mlay	janemlay762@gmail.com	0657461124	\N	premium	25-07-2018	24-08-2018	0	0	\N	\N	2018-02-09 15:41:27	2018-07-25 14:34:48	\N	f	f	Novus	\N	0
+299	255000484975	\N	EXUPER VITALIS NJAU	exupernjau@gmail.com	0717292270	\N	free	04-01-2018	04-02-2018	25	0	https://lh3.googleusercontent.com/-wHFWDOnjpgs/AAAAAAAAAAI/AAAAAAAACx4/MyNicwpmzts/photo.jpg	\N	2018-01-04 10:04:58	2018-08-06 11:31:35	\N	f	f	Supervisor	\N	0
+1238	255200020709	\N	WENDRINE OBEID	wendrineobeid02@gmail.com	0765451635	\N	free	21-07-2018	21-08-2018	0	0	\N	\N	2018-07-21 17:27:11	2018-07-21 17:27:11	\N	f	f	Ass. Supervisor	\N	\N
+1184	255000401624	\N	Isabellah Luhanga	isabellah.luhanga@gmail.com	0712380112	\N	premium	02-08-2018	01-09-2018	0	0	\N	\N	2018-06-30 14:59:18	2018-08-02 19:39:12	\N	f	f	Manager	\N	0
+340	\N	\N	JOAKIM RUKEHA	joakimrukeha@gmail.com	0753111134	\N	free	09-01-2018	09-02-2018	0	0	\N	\N	2018-01-09 20:58:12	2018-01-09 20:58:12	\N	f	f	NOVUS	\N	0
+339	\N	\N	NALINDWA MGWENA	nalindwam@gmail.com	0716165456	\N	free	09-01-2018	09-02-2018	102	1	https://lh4.googleusercontent.com/-ukNHZ0N7Vv4/AAAAAAAAAAI/AAAAAAAAABY/umLWW4OaV1c/photo.jpg	\N	2018-01-09 19:49:07	2018-01-09 19:49:07	\N	f	f	NOVUS	\N	0
+1201	255200023214	\N	Salim Bakar	salimbkr602@gmail.com	0776496168	\N	free	08-07-2018	08-08-2018	0	0	https://lh6.googleusercontent.com/-cQkMHO3HNZo/AAAAAAAAAAI/AAAAAAAAACw/TjXtjsLUnz4/photo.jpg	\N	2018-07-08 09:07:32	2018-07-08 09:07:32	\N	f	f	Novus	\N	0
+1227	255000500299	\N	rugayana kabarua	rugayanakabarua@gmail.com	0765216590	\N	free	17-07-2018	17-08-2018	0	0	https://lh6.googleusercontent.com/-nC3Q9bQ7flE/AAAAAAAAAAI/AAAAAAAAACk/Do8Y7o67d7I/photo.jpg	\N	2018-07-17 15:35:07	2018-07-17 15:35:07	\N	f	f	Ass. Supervisor	\N	0
+646	\N	\N	Tuma Cholo	tumacholo72@gmail.com	0774678805	\N	free	26-02-2018	29-03-2018	10000	0	\N	\N	2018-02-26 05:09:17	2018-02-26 05:09:17	\N	f	f	NOVUS	\N	0
+643	\N	\N	Saumu Ramadhan	ramadhansaumu21@gmail.com	0773103846	\N	free	24-02-2018	27-03-2018	100	0	\N	\N	2018-02-24 06:25:19	2018-02-24 06:25:19	\N	f	f	NOVUS	\N	0
+642	\N	\N	Vivian Oforo	vivianoforo@gmail.com	0658639985	\N	free	23-02-2018	26-03-2018	1	0	\N	\N	2018-02-23 18:32:58	2018-02-23 18:32:58	\N	f	f	NOVUS	\N	0
+640	\N	\N	YESAYA HEZRON	yesayahezron2@gmail.com	0768844593	\N	free	23-02-2018	26-03-2018	1234	1	https://lh4.googleusercontent.com/-6kMoJK2XzKw/AAAAAAAAAAI/AAAAAAAABv4/CzpJiueDCaI/photo.jpg	\N	2018-02-23 10:37:48	2018-02-23 10:37:48	\N	f	f	NOVUS	\N	0
+639	\N	\N	Naomi mwanjali	naomimwanjali000@gmail.com	0719378282	\N	free	23-02-2018	26-03-2018	7890	0	\N	\N	2018-02-23 09:27:58	2018-02-23 09:27:58	\N	f	f	NOVUS	\N	0
+637	\N	\N	Edward Mwema	edwardmwema250@gmail.com	0758657030	\N	free	23-02-2018	26-03-2018	758657030	0	https://lh5.googleusercontent.com/-yWD_5ixlWFQ/AAAAAAAAAAI/AAAAAAAAABg/p3I5EMwLp9k/photo.jpg	\N	2018-02-22 21:59:04	2018-02-22 21:59:04	\N	f	f	NOVUS	\N	0
+636	\N	\N	godg kimaro	godg.kimaro@gmail.com	0782991990	\N	free	22-02-2018	25-03-2018	0	0	\N	\N	2018-02-22 14:53:06	2018-02-22 14:53:06	\N	f	f	NOVUS	\N	0
+634	\N	\N	Grace Sikaona	grasasikaona1@gmail.com	0713472247	\N	free	22-02-2018	25-03-2018	2	0	\N	\N	2018-02-22 09:53:59	2018-02-22 09:53:59	\N	f	f	NOVUS	\N	0
+631	\N	\N	Jackson Johnson	jax862@gmail.com	+255764178040	\N	free	21-02-2018	24-03-2018	100	0	\N	\N	2018-02-21 18:19:44	2018-02-21 18:19:44	\N	f	f	NOVUS	\N	0
+630	\N	\N	Lilian Paul	lilyanpaul1991@gmail.com	0768530983	\N	free	21-02-2018	24-03-2018	0	0	\N	\N	2018-02-21 18:02:38	2018-02-21 18:02:38	\N	f	f	NOVUS	\N	0
+628	\N	\N	cannan mzito	mzitocn1346@gmail.com	0765166242	\N	free	21-02-2018	24-03-2018	100000	0	\N	\N	2018-02-21 08:08:22	2018-02-21 08:08:22	\N	f	f	NOVUS	\N	0
+626	\N	\N	Faustine Mlanzi	www.mlanzione@gmail.com	0687866453	\N	free	20-02-2018	23-03-2018	1000000	0	\N	\N	2018-02-20 20:17:14	2018-02-20 20:17:14	\N	f	f	NOVUS	\N	0
+624	\N	\N	subira juma 12345678	subirajuma26@gmail.com	0657065878	\N	free	20-02-2018	23-03-2018	2	0	\N	\N	2018-02-20 11:06:10	2018-02-20 11:06:10	\N	f	f	NOVUS	\N	0
+623	\N	\N	Naftal Kisinga	nafkisinga@gmail.com	0784955922	\N	free	20-02-2018	23-03-2018	0	0	\N	\N	2018-02-20 10:17:12	2018-02-20 10:17:12	\N	f	f	NOVUS	\N	0
+617	\N	\N	lymomary9@gmail.com	lymomary9@gmail.com	0753534393	\N	premium	19-02-2018	21-04-2018	4	0	\N	\N	2018-02-19 11:17:31	2018-02-20 07:10:50	\N	f	f	NOVUS	\N	0
+622	\N	\N	Humsiya Yasini	humsiya.yasini@gmail.com	0656025577	\N	free	20-02-2018	23-03-2018	2	0	\N	\N	2018-02-20 03:54:10	2018-02-20 03:54:10	\N	f	f	NOVUS	\N	0
+621	\N	\N	Mohamed Nuraly	mohamednuraly5@gmail.com	0657373825	\N	free	19-02-2018	22-03-2018	5325	0	\N	\N	2018-02-19 19:49:17	2018-02-19 19:49:17	\N	f	f	NOVUS	\N	0
+619	\N	\N	doris mahene	dmahene95@gmail.com	0711916523	\N	free	19-02-2018	22-03-2018	1	0	\N	\N	2018-02-19 16:36:02	2018-02-19 16:36:02	\N	f	f	NOVUS	\N	0
+618	\N	\N	Rhyechricious Kim	rhyechricious012@gmail.com	0756930603	\N	free	19-02-2018	22-03-2018	0	0	\N	\N	2018-02-19 12:19:12	2018-02-19 12:19:12	\N	f	f	NOVUS	\N	0
+616	\N	\N	Felista Machange	felistamachange@gmail.com	0713282039	\N	free	19-02-2018	22-03-2018	8	0	\N	\N	2018-02-19 08:51:38	2018-02-19 08:51:38	\N	f	f	NOVUS	\N	0
+644	255000507214	\N	wazirihenr60@gmail.com	wazirihenr60@gmail.com	0759113934	\N	free	24-02-2018	27-03-2018	0	0	\N	\N	2018-02-24 14:16:36	2018-07-20 08:48:57	\N	f	f	Supervisor	\N	0
+614	\N	\N	zaninkha semuguruka	zannysemu@gmail.com	0715033204	\N	free	19-02-2018	22-03-2018	2	0	\N	\N	2018-02-19 07:57:11	2018-02-19 07:57:11	\N	f	f	NOVUS	\N	0
+613	\N	\N	Kephas Opiyo	kephas2020@gmail.com	+255625907989	\N	free	19-02-2018	22-03-2018	1955	0	https://lh4.googleusercontent.com/-XLTYe6wtUlc/AAAAAAAAAAI/AAAAAAAABQ8/kpdgk-PWlcE/photo.jpg	\N	2018-02-19 04:00:28	2018-02-19 04:00:28	\N	f	f	NOVUS	\N	0
+612	\N	\N	Merick Zala	zalamerick@gmail.com	0620294160	\N	free	18-02-2018	21-03-2018	0	0	\N	\N	2018-02-18 18:46:05	2018-02-18 18:46:05	\N	f	f	NOVUS	\N	0
+611	\N	\N	NurDin Yussuph	nurdinyussuph@gmail.com	0765100319	\N	free	18-02-2018	21-03-2018	0	0	https://lh3.googleusercontent.com/-OvWeZ3ZOwi4/AAAAAAAAAAI/AAAAAAAAOfE/5pdi6cu6N34/photo.jpg	\N	2018-02-18 10:16:18	2018-02-18 10:16:18	\N	f	f	NOVUS	\N	0
+609	\N	\N	teddy matasha	teddymatasha@gmail.com	0655443205	\N	free	17-02-2018	20-03-2018	15	0	\N	\N	2018-02-17 10:22:15	2018-02-17 10:22:15	\N	f	f	NOVUS	\N	0
+608	\N	\N	Evarest Kivaria	evarest1995@gmail.com	+255657464054	\N	free	17-02-2018	20-03-2018	2	0	\N	\N	2018-02-17 08:09:04	2018-02-17 08:09:04	\N	f	f	NOVUS	\N	0
+607	\N	\N	Dj4s J4	bileaverble@gmail.com	0755252682	\N	free	17-02-2018	20-03-2018	200	0	\N	\N	2018-02-17 04:57:07	2018-02-17 04:57:07	\N	f	f	NOVUS	\N	0
+606	\N	\N	Fahad Said	fahadalismailiy@gmail.com	0655488358	\N	free	16-02-2018	19-03-2018	419	0	\N	\N	2018-02-16 18:19:16	2018-02-16 18:19:16	\N	f	f	NOVUS	\N	0
+605	\N	\N	Phina Shao	phinershao.ps@gmail.com	0755183830	\N	free	16-02-2018	19-03-2018	2	0	\N	\N	2018-02-16 16:24:32	2018-02-16 16:24:32	\N	f	f	NOVUS	\N	0
+1287	255000306021	\N	kazymate company	kazymatecompany@gmail.com	0657442255	\N	free	09-08-2018	09-09-2018	0	0	\N	\N	2018-08-09 10:02:54	2018-08-09 10:02:54	\N	f	f	Ass. Manager	\N	\N
+1239	255200022037	\N	Glaides John	glaidesj@gmail.com	0752698203	\N	free	21-07-2018	21-08-2018	0	0	\N	\N	2018-07-21 19:23:42	2018-07-21 19:23:42	\N	f	f	Ass. Supervisor	\N	\N
+1288	255200024070	\N	Angela Kagaruki	angela.kagaruki@gmail.com	0717918445	\N	free	09-08-2018	09-09-2018	0	0	https://lh6.googleusercontent.com/-EQaEiXTDqVs/AAAAAAAAAAI/AAAAAAAAACU/xhhhcBAKyoE/photo.jpg	\N	2018-08-09 11:55:45	2018-08-09 11:55:45	\N	f	f	Novus	\N	\N
+383	\N	\N	jackson ngambila	jacksonngambila89@gmail.com	0716557096	\N	free	17-01-2018	17-02-2018	716557096	0	\N	\N	2018-01-17 18:28:10	2018-01-17 18:28:10	\N	f	f	NOVUS	\N	0
+382	\N	\N	mbwana Hamisi	mbwanah22@gmail.com	0712926365	\N	free	17-01-2018	17-02-2018	2	0	https://lh4.googleusercontent.com/-QbEfTTZUbHk/AAAAAAAAAAI/AAAAAAAAAFc/okspSF8bovc/photo.jpg	\N	2018-01-17 18:23:46	2018-01-17 18:23:46	\N	f	f	NOVUS	\N	0
+1185	255200022602	\N	Ali Sheha	alisheha57@gmail.com	0653383249	\N	premium	02-07-2018	01-10-2018	0	0	\N	\N	2018-07-02 16:11:01	2018-07-03 21:45:38	\N	f	f	Ass. Supervisor	\N	0
+1202	255000602943	\N	Emmanuel Archard	www.emmanuelarchard@gmail.com	0767135120	\N	free	08-07-2018	08-08-2018	0	0	\N	\N	2018-07-08 11:48:11	2018-07-08 11:48:11	\N	f	f	Novus	\N	0
+1228	254200014300	\N	david chege	dvdchege38@gmail.com	0791600347	\N	free	18-07-2018	18-08-2018	0	1	https://lh4.googleusercontent.com/-_9HKSrp9mes/AAAAAAAAAAI/AAAAAAAAABw/GsuQAJxVIeY/photo.jpg	\N	2018-07-18 07:36:48	2018-07-18 07:36:48	\N	f	f	Supervisor	\N	0
+604	\N	\N	Baraka Donard	barakadonard.bd@gmail.com	0765266510	\N	free	16-02-2018	19-03-2018	123986	0	https://lh6.googleusercontent.com/-4lEyvfK0xDo/AAAAAAAAAAI/AAAAAAAAADE/Kf4hMzlsIBs/photo.jpg	\N	2018-02-16 14:02:07	2018-02-16 14:02:07	\N	f	f	NOVUS	\N	0
+615	255000477660	\N	Delvina Augustine-Mfanga	dasmfanga@gmail.com	0767298172	\N	free	19-02-2018	22-03-2018	0	0	https://lh5.googleusercontent.com/-rJO2g8YRZcU/AAAAAAAAAAI/AAAAAAAAANI/eA-Pni8GetA/photo.jpg	\N	2018-02-19 08:16:15	2018-07-06 06:56:29	\N	f	f	Supervisor	\N	0
+728	\N	\N	kili Apps	creativeprinting360@gmail.com	0754500541	\N	free	10-03-2018	10-04-2018	1	0	https://lh6.googleusercontent.com/-Gt9rXwE09Zg/AAAAAAAAAAI/AAAAAAAAAFg/UnjIugrH-ZQ/photo.jpg	\N	2018-03-10 07:42:07	2018-03-10 07:42:07	\N	f	f	NOVUS	\N	0
+726	\N	\N	phidelisjesca64@gmail.com	phidelisjesca64@gmail.com	0766727773	\N	free	09-03-2018	09-04-2018	0	0	\N	\N	2018-03-09 14:22:22	2018-03-09 14:22:22	\N	f	f	NOVUS	\N	0
+725	\N	\N	Jinal Gudhka	jinalgudhka83@gmail.com	0682240283	\N	free	09-03-2018	09-04-2018	2	0	\N	\N	2018-03-09 13:21:44	2018-03-09 13:21:44	\N	f	f	NOVUS	\N	0
+724	\N	\N	Remigius isdory kazaura	rkazauradoc@gmail.com	0713147899	\N	free	09-03-2018	09-04-2018	11	0	\N	\N	2018-03-09 10:47:54	2018-03-09 10:47:54	\N	f	f	NOVUS	\N	0
+723	\N	\N	Grace Mlawa (Gee)	lifarda1@gmail.com	+255719868702	\N	free	09-03-2018	09-04-2018	0	0	https://lh6.googleusercontent.com/-9Yze6w3ng_U/AAAAAAAAAAI/AAAAAAAAJVY/fnNcwN3ukF4/photo.jpg	\N	2018-03-09 10:16:46	2018-03-09 10:16:46	\N	f	f	NOVUS	\N	0
+722	\N	\N	petermuthaura5@gmail.com	petermuthaura5@gmail.com	0705556459	\N	free	09-03-2018	09-04-2018	2	1	\N	\N	2018-03-09 06:24:35	2018-03-09 06:24:35	\N	f	f	NOVUS	\N	0
+721	\N	\N	Furaha Mganda	mgandafuraha@gmail.com	0783562825	\N	free	08-03-2018	08-04-2018	0	0	\N	\N	2018-03-08 18:29:07	2018-03-08 18:29:07	\N	f	f	NOVUS	\N	0
+719	\N	\N	JASMINE ABDALLAH	jazzabdallah@gmail.com	0717926099	\N	free	08-03-2018	08-04-2018	556	0	\N	\N	2018-03-08 04:28:26	2018-03-08 04:28:26	\N	f	f	NOVUS	\N	0
+715	\N	\N	Mawazo Joge	jogemawazo@gmail.com	0719957706	\N	free	07-03-2018	07-04-2018	1234	0	\N	\N	2018-03-07 12:28:51	2018-03-07 12:28:51	\N	f	f	NOVUS	\N	0
+714	\N	\N	Doroth Mwakyusa	mwakyusad18@gmail.com	0789576511	\N	free	07-03-2018	07-04-2018	2	0	\N	\N	2018-03-07 11:31:01	2018-03-07 11:31:01	\N	f	f	NOVUS	\N	0
+713	\N	\N	Isaya Mbawala	isayambawala559@gmail.com	0767429697	\N	free	07-03-2018	07-04-2018	2	0	\N	\N	2018-03-07 07:40:26	2018-03-07 07:40:26	\N	f	f	NOVUS	\N	0
+712	\N	\N	nyillwatts@gmail.com	nyillwatts@gmail.com	0716225025	\N	free	07-03-2018	07-04-2018	1	0	\N	\N	2018-03-07 06:38:54	2018-03-07 06:38:54	\N	f	f	NOVUS	\N	0
+651	255000506350	\N	Aida Nasrath	kemmyassey@gmail.com	0659086608	\N	premium	10-06-2018	10-07-2018	0	0	https://lh4.googleusercontent.com/-yQW5NbdYufM/AAAAAAAAAAI/AAAAAAAAADw/36MAqpB5DwU/photo.jpg	\N	2018-02-26 21:12:16	2018-07-01 14:29:17	\N	f	f	Ass. Supervisor	\N	0
+710	\N	\N	Jacqueline Raphael	jacquearaphael@gmail.com	0716704904	\N	free	06-03-2018	06-04-2018	2	0	https://lh6.googleusercontent.com/-Z1IE_HdUYUU/AAAAAAAAAAI/AAAAAAAAAGs/xmWgHnvW11A/photo.jpg	\N	2018-03-06 15:36:37	2018-03-06 15:36:37	\N	f	f	NOVUS	\N	0
+708	\N	\N	Dereck Naftali	derecknaftali@gmail.com	655127965	\N	free	06-03-2018	06-04-2018	5	0	\N	\N	2018-03-06 08:06:07	2018-03-06 08:06:07	\N	f	f	NOVUS	\N	0
+707	\N	\N	kelvin kirimi	kelvinkirimi1@gmail.com	0712500686	\N	free	06-03-2018	06-04-2018	0	1	https://lh4.googleusercontent.com/-VuU-vkPQK8U/AAAAAAAAAAI/AAAAAAAAABg/Fb7Vr-wwHYY/photo.jpg	\N	2018-03-06 07:26:41	2018-03-06 07:26:41	\N	f	f	NOVUS	\N	0
+705	\N	\N	donasian frank	donasianfrank6@gmail.com	0769019112	\N	free	06-03-2018	06-04-2018	2	0	\N	\N	2018-03-06 04:35:13	2018-03-06 04:35:13	\N	f	f	NOVUS	\N	0
+703	\N	\N	Paldina Raymond	paldinashafuri@gmail.com	0654783187	\N	free	05-03-2018	05-04-2018	2	0	\N	\N	2018-03-05 12:50:03	2018-03-05 12:50:03	\N	f	f	NOVUS	\N	0
+702	\N	\N	Rose William	www.rosewilliam82@gmail.com	0717798235	\N	free	05-03-2018	05-04-2018	3	0	\N	\N	2018-03-05 11:47:43	2018-03-05 11:47:43	\N	f	f	NOVUS	\N	0
+701	\N	\N	Julius Mussa	juliusmussa907@gmail.com	0757575704	\N	free	05-03-2018	05-04-2018	100512885455	0	\N	\N	2018-03-05 11:29:24	2018-03-05 11:29:24	\N	f	f	NOVUS	\N	0
+698	\N	\N	Darius Elias	dariusdvd@gmail.com	769587068	\N	free	05-03-2018	05-04-2018	0	0	https://lh4.googleusercontent.com/-29jiEJRm1PA/AAAAAAAAAAI/AAAAAAAAABo/UXq29xbSQLg/photo.jpg	\N	2018-03-05 05:07:49	2018-03-05 05:07:49	\N	f	f	NOVUS	\N	0
+694	\N	\N	zaujia mroki	zaujiamroki@gmail.com	0672825917	\N	free	04-03-2018	04-04-2018	0	0	\N	\N	2018-03-04 19:46:58	2018-03-04 19:46:58	\N	f	f	NOVUS	\N	0
+693	\N	\N	sonah0992@gmail.com	sonah0992@gmail.com	0689714956	\N	free	04-03-2018	04-04-2018	250000	0	\N	\N	2018-03-04 17:52:25	2018-03-04 17:52:25	\N	f	f	NOVUS	\N	0
+691	\N	\N	Josephine Minja	josephineminja1@gmail.com	0754296813	\N	free	03-03-2018	03-04-2018	3690	0	\N	\N	2018-03-03 17:05:40	2018-03-03 17:05:40	\N	f	f	NOVUS	\N	0
+1240	255200023225	\N	Inshirah salim	azya.mkasha@gmail.com	0677363357	\N	free	23-07-2018	23-08-2018	0	0	\N	\N	2018-07-23 04:27:46	2018-07-23 04:27:46	\N	f	f	Ass. Supervisor	\N	\N
+777	255000448457	\N	Dorothea Laiser	dorothealaiser@gmail.com	0713944226	\N	free	21-03-2018	21-04-2018	120	0	\N	\N	2018-03-21 06:32:13	2018-07-25 12:28:58	\N	f	f	Manager	\N	0
+430	\N	\N	Riziki Abdalla	rizikiabdalla@gmail.com	0674313517	\N	free	22-01-2018	22-02-2018	1	0	\N	\N	2018-01-22 14:04:37	2018-01-22 14:04:37	\N	f	f	NOVUS	\N	0
+428	\N	\N	Agness Gabriel (Aggie Gabe)	agnesgabriel3@gmail.com	0654818439	\N	free	22-01-2018	22-02-2018	0	0	https://lh3.googleusercontent.com/-m-VppkcwFUA/AAAAAAAAAAI/AAAAAAAAD58/vpOx_Z5s3gc/photo.jpg	\N	2018-01-22 09:25:29	2018-01-22 09:25:29	\N	f	f	NOVUS	\N	0
+1186	255000420647	\N	Bosco Mtani	boscomtani@gmail.com	0767977255	\N	free	02-07-2018	02-08-2018	0	0	https://lh5.googleusercontent.com/-iejJg17ntQ8/AAAAAAAAAAI/AAAAAAAAABU/dxLAT0xTT3I/photo.jpg	\N	2018-07-02 16:58:38	2018-07-02 16:58:38	\N	f	f	Ass. Supervisor	\N	0
+1203	255000415465	\N	Abdul Kiyumbo	abdulkiyumbo8@gmail.com	0716190474	\N	free	08-07-2018	08-08-2018	0	0	\N	\N	2018-07-08 14:10:44	2018-07-08 14:10:44	\N	f	f	Novus	\N	0
+1229	255200023537	\N	sarah andrew	sarahandrew04@gmail.com	0764039836	\N	free	18-07-2018	18-08-2018	0	0	\N	\N	2018-07-18 10:02:07	2018-07-18 10:02:07	\N	f	f	Novus	\N	0
+690	255000442219	\N	Andrea Muhozya	andre.muhozya@gmail.com	0788366511	\N	premium	03-07-2018	01-01-2019	3	0	https://lh3.googleusercontent.com/-oIwKc_9aA6c/AAAAAAAAAAI/AAAAAAAAiQo/Hc4KJW5bokc/photo.jpg	\N	2018-03-03 15:45:50	2018-07-03 16:07:13	\N	f	f	Supervisor	\N	0
+689	\N	\N	Ahmed Abdu	ahmedamourabdu@gmail.com	077333383	\N	free	03-03-2018	03-04-2018	1	0	\N	\N	2018-03-03 07:58:39	2018-03-03 07:58:39	\N	f	f	NOVUS	\N	0
+686	\N	\N	edward john lupasa	tughelepo@gmail.com	+255658318484	\N	free	03-03-2018	03-04-2018	5000000	0	https://lh6.googleusercontent.com/-8KZhcCyDRQY/AAAAAAAAAAI/AAAAAAAAH0o/bmV8n9pU21I/photo.jpg	\N	2018-03-03 03:04:48	2018-03-03 03:04:48	\N	f	f	NOVUS	\N	0
+685	\N	\N	Abdulsamad Said	swabdulsaghir@gmail.com	0652837606	\N	free	03-03-2018	03-04-2018	568	0	https://lh3.googleusercontent.com/-adPHPsWnpS4/AAAAAAAAAAI/AAAAAAAAADI/Dk5G5_IlSAQ/photo.jpg	\N	2018-03-02 22:32:58	2018-03-02 22:32:58	\N	f	f	NOVUS	\N	0
+684	\N	\N	Teddy Maurice	teddymaurice111@gmail.com	0762590338	\N	free	02-03-2018	02-04-2018	4	0	\N	\N	2018-03-02 18:55:42	2018-03-02 18:55:42	\N	f	f	NOVUS	\N	0
+676	\N	\N	Juliana Lawrence	nakietem202@gmail.com	0757123999	\N	free	02-03-2018	02-04-2018	1584	0	\N	\N	2018-03-02 05:08:38	2018-03-02 05:08:38	\N	f	f	NOVUS	\N	0
+675	\N	\N	Stella Steven	stellasteven849@gmail.com	0713888851	\N	free	02-03-2018	02-04-2018	1	0	\N	\N	2018-03-01 22:15:45	2018-03-01 22:15:45	\N	f	f	NOVUS	\N	0
+669	\N	\N	Sophie Augustine	augustinesophie20@gmail.com	0713555508	\N	free	01-03-2018	01-04-2018	0	0	\N	\N	2018-03-01 15:25:18	2018-03-01 15:25:18	\N	f	f	NOVUS	\N	0
+665	\N	\N	Frank Makubi	frank1makubi@gmail.com	0786225429	\N	free	01-03-2018	01-04-2018	0	0	\N	\N	2018-03-01 13:12:10	2018-03-01 13:12:10	\N	f	f	NOVUS	\N	0
+664	\N	\N	Raphia Kimaro	raphiakimaro@gmail.com	0753174107	\N	free	01-03-2018	01-04-2018	25	0	https://lh3.googleusercontent.com/-fymwbR2bVBo/AAAAAAAAAAI/AAAAAAAAAA4/JBoTbZd8GIY/photo.jpg	\N	2018-03-01 12:18:02	2018-03-01 12:18:02	\N	f	f	NOVUS	\N	0
+663	\N	\N	Dativa Herman	dativaherman@gmail.com	0656351553	\N	free	28-02-2018	31-03-2018	0	0	\N	\N	2018-02-28 19:45:55	2018-02-28 19:45:55	\N	f	f	NOVUS	\N	0
+711	255200019266	\N	Lilian Omune	lilianomune@gmail.com	0652856708	\N	free	06-03-2018	06-04-2018	3	0	\N	\N	2018-03-06 16:19:22	2018-06-30 11:04:53	\N	f	f	Ass. Supervisor	\N	0
+688	254200011769	\N	emmanuel bota	emmanuelbota20@gmail.com	0724299718	\N	free	03-03-2018	03-04-2018	0	1	https://lh5.googleusercontent.com/-RiulBGYM3ag/AAAAAAAAAAI/AAAAAAAAAgo/t0LwTEDeo7c/photo.jpg	\N	2018-03-03 05:30:11	2018-07-03 19:31:17	\N	f	f	Supervisor	\N	0
+237	\N	\N	Said Mdee	saidmdee27@gmail.com	0766430585	\N	free	25-12-2017	25-01-2018	764	0	\N	\N	2017-12-25 04:19:13	2017-12-25 04:19:13	\N	f	f	NOVUS	\N	0
+740	255200018724	\N	Twitike Bertha	twitikebertha@gmail.com	0755649317	\N	premium	12-03-2018	07-04-2019	201	0	\N	\N	2018-03-12 15:51:05	2018-06-05 15:16:25	\N	f	f	Ass. Supervisor	\N	0
+770	\N	\N	Anna Simon	isackanna39@gmail.com	0766363964	\N	premium	19-03-2018	19-05-2018	472	0	https://lh6.googleusercontent.com/-KggFzwcegms/AAAAAAAAAAI/AAAAAAAAACU/TDlPdGZBF4g/photo.jpg	\N	2018-03-19 12:44:16	2018-03-25 14:49:31	\N	f	f	NOVUS	\N	0
+778	\N	\N	Zakaria Rulangaranga	zakariarulangaranga@gmail.com	0787269067	\N	free	21-03-2018	21-04-2018	0	0	\N	\N	2018-03-21 10:03:34	2018-03-21 10:03:34	\N	f	f	NOVUS	\N	0
+775	\N	\N	ally Hamisi	allyseleman02@gmail.com	0654904821	\N	free	20-03-2018	20-04-2018	3	0	https://lh6.googleusercontent.com/-0D6qbbpGOgM/AAAAAAAAAAI/AAAAAAAAABY/xhesZ8XbHOU/photo.jpg	\N	2018-03-20 08:21:05	2018-03-20 08:21:05	\N	f	f	NOVUS	\N	0
+774	\N	\N	Naomi Chege	naomichege68@gmail.com	0701508616	\N	free	20-03-2018	20-04-2018	2	1	\N	\N	2018-03-20 08:02:25	2018-03-20 08:02:25	\N	f	f	NOVUS	\N	0
+773	\N	\N	Gloria Boniface	glorygepf@gmail.com	0767529542	\N	free	20-03-2018	20-04-2018	0	0	\N	\N	2018-03-20 06:07:19	2018-03-20 06:07:19	\N	f	f	NOVUS	\N	0
+772	\N	\N	Shija Jilala	shijajilala8@gmail.com	0756922949	\N	free	20-03-2018	20-04-2018	3	0	\N	\N	2018-03-20 05:12:30	2018-03-20 05:12:30	\N	f	f	NOVUS	\N	0
+771	\N	\N	ROSEMARY KATABALO	rosemarykatabalo@gmail.com	0655027402	\N	free	19-03-2018	19-04-2018	35	0	\N	\N	2018-03-19 18:49:20	2018-03-19 18:49:20	\N	f	f	NOVUS	\N	0
+767	255200011732	\N	Maggie Machilu	maggiemachilu11@gmail.com	0752210774	\N	premium	17-07-2018	17-07-2019	1	0	\N	\N	2018-03-19 08:32:09	2018-07-17 10:26:51	\N	f	f	Ass. Supervisor	\N	0
+766	\N	\N	Method Mwashambwa	methodmwashambwa38@gmail.com	0755474137	\N	free	19-03-2018	19-04-2018	755474137	0	\N	\N	2018-03-19 07:27:49	2018-03-19 07:27:49	\N	f	f	NOVUS	\N	0
+764	\N	\N	Matelefu Sales	matelefusales@gmail.com	0628177770	\N	free	18-03-2018	18-04-2018	10	0	\N	\N	2018-03-18 18:38:25	2018-03-18 18:38:25	\N	f	f	NOVUS	\N	0
+763	\N	\N	Matilda Minde	matildaminde5@gmail.com	0685534478	\N	free	18-03-2018	18-04-2018	4	0	\N	\N	2018-03-18 18:12:16	2018-03-18 18:12:16	\N	f	f	NOVUS	\N	0
+762	\N	\N	Zahra Said Majili	majilizahra11@gmail.com	255785100409	\N	free	18-03-2018	18-04-2018	1	0	\N	\N	2018-03-18 10:57:18	2018-03-18 10:57:18	\N	f	f	NOVUS	\N	0
+761	\N	\N	Neema Lulomba	neemalivingstone89@gmail.com	0755254734	\N	free	18-03-2018	18-04-2018	5	0	\N	\N	2018-03-18 06:07:28	2018-03-18 06:07:28	\N	f	f	NOVUS	\N	0
+1289	255200024235	\N	Ahmad Ferouz	mouldyalsalty@gmail.com	0772222851	\N	free	09-08-2018	09-09-2018	0	0	\N	\N	2018-08-09 14:45:04	2018-08-09 14:45:04	\N	f	f	Novus	\N	\N
+1241	255000466111	\N	troyo daniel	danieltroyo2018@gmail.com	0625704758	\N	free	23-07-2018	23-08-2018	0	0	\N	\N	2018-07-23 05:39:10	2018-07-23 05:39:10	\N	f	f	Supervisor	\N	\N
+468	\N	\N	Cyri Lasway	cyrilasway5@gmail.com	0655161092	\N	free	29-01-2018	01-03-2018	0	0	https://lh3.googleusercontent.com/-WJQjB1sOExQ/AAAAAAAAAAI/AAAAAAAARwo/QwNQA1WA2iE/photo.jpg	\N	2018-01-29 04:20:11	2018-01-29 04:20:11	\N	f	f	NOVUS	\N	0
+1187	255200014267	\N	Zaujia Mohamedy	zaujiamohamedy@gmail.com	0672825917	\N	free	03-07-2018	03-08-2018	0	0	\N	\N	2018-07-02 21:49:08	2018-07-02 21:49:08	\N	f	f	Ass. Supervisor	\N	0
+1204	255200023527	\N	Peace Joshua	peacejoshua3@gmail.com	0678945288	\N	free	08-07-2018	08-08-2018	0	0	https://lh3.googleusercontent.com/-MnnkciODIYM/AAAAAAAAAAI/AAAAAAAABOU/_cUonCeS5G0/photo.jpg	\N	2018-07-08 16:49:19	2018-07-08 16:49:19	\N	f	f	Novus	\N	0
+1290	255000559392	\N	Regina Simfukwe	simfukweregina@gmail.com	0768001133	\N	free	09-08-2018	09-09-2018	0	0	\N	\N	2018-08-09 15:20:11	2018-08-09 15:20:11	\N	f	f	Ass. Supervisor	\N	\N
+759	\N	\N	Meck Ngongi	meckngongi86@gmail.com	0769034170	\N	free	17-03-2018	17-04-2018	4	0	\N	\N	2018-03-17 12:05:27	2018-03-17 12:05:27	\N	f	f	NOVUS	\N	0
+757	\N	\N	Emiliana Aristides	emilianaaristides@gmail.com	0658853085	\N	free	16-03-2018	16-04-2018	0	0	\N	\N	2018-03-16 13:59:08	2018-03-16 13:59:08	\N	f	f	NOVUS	\N	0
+756	\N	\N	janeth nimrod	janethnimrod28@gmail.com	0688121308	\N	free	16-03-2018	16-04-2018	0	0	\N	\N	2018-03-16 13:37:25	2018-03-16 13:37:25	\N	f	f	NOVUS	\N	0
+755	\N	\N	Funga Mwabha	fungamwabhaa@gmail.com	0768565085	\N	free	16-03-2018	16-04-2018	2	0	\N	\N	2018-03-16 08:23:13	2018-03-16 08:23:13	\N	f	f	NOVUS	\N	0
+753	\N	\N	Paul Penforde Jotham	paulpenfordjotham@gmail.com	0677730658	\N	free	16-03-2018	16-04-2018	1	0	https://lh3.googleusercontent.com/-LC9PC4igFd8/AAAAAAAAAAI/AAAAAAAAGFI/REX8S2ntHdE/photo.jpg	\N	2018-03-15 21:14:01	2018-03-15 21:14:01	\N	f	f	NOVUS	\N	0
+752	\N	\N	greatness kimaro	greatnesskimaro@gmail.com	0767819159	\N	free	15-03-2018	15-04-2018	2	0	\N	\N	2018-03-15 18:15:28	2018-03-15 18:15:28	\N	f	f	NOVUS	\N	0
+751	\N	\N	Nelson Ntabaye	ntabayenelson@gmail.com	0717647134	\N	free	15-03-2018	15-04-2018	0	0	\N	\N	2018-03-15 12:45:15	2018-03-15 12:45:15	\N	f	f	NOVUS	\N	0
+749	\N	\N	REBECCA JOSEPH	beckyrebby96@gmail.com	0743044076	\N	free	15-03-2018	15-04-2018	1	0	https://lh5.googleusercontent.com/-XcWN0L_35w0/AAAAAAAAAAI/AAAAAAAAABI/sy9TQw2QcNE/photo.jpg	\N	2018-03-14 22:18:43	2018-03-14 22:18:43	\N	f	f	NOVUS	\N	0
+748	\N	\N	Philip Joseph	phpjsp09@gmail.com	+255742164621	\N	free	14-03-2018	14-04-2018	10	0	https://lh5.googleusercontent.com/-UpNFnlAgnHY/AAAAAAAAAAI/AAAAAAAAB5I/w71551BGwFo/photo.jpg	\N	2018-03-14 19:27:05	2018-03-14 19:27:05	\N	f	f	NOVUS	\N	0
+745	\N	\N	Ester Makela	makelaester@gmail.com	0755198838	\N	free	14-03-2018	14-04-2018	0	0	\N	\N	2018-03-14 05:56:32	2018-03-14 05:56:32	\N	f	f	NOVUS	\N	0
+744	\N	\N	Zedmill Emlogo	zedmillemlogo95@gmail.com	0785058841	\N	free	13-03-2018	13-04-2018	2	0	https://lh5.googleusercontent.com/-CxuKiXNWpF8/AAAAAAAAAAI/AAAAAAAAAA8/LNl6nAwog8U/photo.jpg	\N	2018-03-13 15:41:26	2018-03-13 15:41:26	\N	f	f	NOVUS	\N	0
+743	\N	\N	As Lady Cute	ashasaidy200@gmail.com	0764933024	\N	free	13-03-2018	13-04-2018	2	0	https://lh5.googleusercontent.com/-msBDTt0DrWQ/AAAAAAAAAAI/AAAAAAAAABE/Oz47mej9XKY/photo.jpg	\N	2018-03-13 12:25:41	2018-03-13 12:25:41	\N	f	f	NOVUS	\N	0
+742	\N	\N	Margaret Makenzi	momakenzi@gmail.com	0722347625	\N	free	13-03-2018	13-04-2018	200	1	\N	\N	2018-03-13 12:18:15	2018-03-13 12:18:15	\N	f	f	NOVUS	\N	0
+741	\N	\N	Frank John	fj9397981@gmail.com	0675366965	\N	free	12-03-2018	12-04-2018	1997	0	\N	\N	2018-03-12 19:44:30	2018-03-12 19:44:30	\N	f	f	NOVUS	\N	0
+739	\N	\N	robert gitonga	robatosh42@gmail.com	0711291223	\N	free	12-03-2018	12-04-2018	0	1	https://lh5.googleusercontent.com/-3q3WJOv7-kY/AAAAAAAAAAI/AAAAAAAAADA/_H-6SIABbXk/photo.jpg	\N	2018-03-12 15:06:29	2018-03-12 15:06:29	\N	f	f	NOVUS	\N	0
+737	\N	\N	Mbuva Dissa	mbuvadissa95@gmail.com	0714647548	\N	free	12-03-2018	12-04-2018	5	0	\N	\N	2018-03-12 04:58:52	2018-03-12 04:58:52	\N	f	f	NOVUS	\N	0
+736	\N	\N	Even Zumba	zumbaeven8@gmail.com	0711336052	\N	free	12-03-2018	12-04-2018	0	0	\N	\N	2018-03-12 01:02:12	2018-03-12 01:02:12	\N	f	f	NOVUS	\N	0
+731	\N	\N	Naomi Zablon	naomizablon@gmail.com	0782574392	\N	free	11-03-2018	11-04-2018	0	0	https://lh5.googleusercontent.com/-DIlOMVPOsrk/AAAAAAAAAAI/AAAAAAAAG3s/5t7gbhXqSls/photo.jpg	\N	2018-03-11 05:42:06	2018-03-11 05:42:06	\N	f	f	NOVUS	\N	0
+730	\N	\N	alice martin	alicemartin240@gmail.com	0757141122	\N	free	10-03-2018	10-04-2018	0	0	\N	\N	2018-03-10 14:11:42	2018-03-10 14:11:42	\N	f	f	NOVUS	\N	0
+754	255200019877	\N	Paschal Mwaipungu	paschalmwaipungu26@gmail.com	0763122458	\N	free	16-03-2018	16-04-2018	1	0	https://lh4.googleusercontent.com/-sWWknir6mYw/AAAAAAAAAAI/AAAAAAAAAQU/SkDqj_H3ZPk/photo.jpg	\N	2018-03-16 08:21:44	2018-06-30 20:11:49	\N	f	f	Ass. Supervisor	\N	0
+823	\N	\N	mbuga isaya	lovehollo1945@gmail.com	0683190267	\N	free	29-03-2018	29-04-2018	0	0	\N	\N	2018-03-29 18:27:19	2018-03-29 18:27:19	\N	f	f	NOVUS	\N	0
+822	\N	\N	Elizabeth Sinodya	elizabethsinodya87@gmail.com	0766021646	\N	free	29-03-2018	29-04-2018	2	0	\N	\N	2018-03-29 15:42:45	2018-03-29 15:42:45	\N	f	f	NOVUS	\N	0
+820	\N	\N	Baheart Kundya	kundyab@gmail.com	0764222758	\N	free	29-03-2018	29-04-2018	946	0	\N	\N	2018-03-29 13:05:00	2018-03-29 13:05:00	\N	f	f	NOVUS	\N	0
+817	\N	\N	MARIACONSOLATA WAPALILA	consowap@gmail.com	+255787376278	\N	free	29-03-2018	29-04-2018	1	0	\N	\N	2018-03-29 09:30:58	2018-03-29 09:30:58	\N	f	f	NOVUS	\N	0
+816	\N	\N	Mkami Wambura	mkami873@gmail.com	0746146847	\N	free	29-03-2018	29-04-2018	0	0	\N	\N	2018-03-29 00:04:27	2018-03-29 00:04:27	\N	f	f	NOVUS	\N	0
+815	\N	\N	jecy muthoni	muhiajecy@gmail.com	0721290057	\N	free	28-03-2018	28-04-2018	75	1	https://lh4.googleusercontent.com/-RBdcm6r948c/AAAAAAAAAAI/AAAAAAAAABM/-uyK4_p8MIg/photo.jpg	\N	2018-03-28 13:42:23	2018-03-28 13:42:23	\N	f	f	NOVUS	\N	0
+814	\N	\N	Castor Mkabe	kombacastor06@gmail.com	+255757311154	\N	free	28-03-2018	28-04-2018	0	0	https://lh6.googleusercontent.com/-ncrYOCLF56A/AAAAAAAAAAI/AAAAAAAAHHU/xLPiKq53quk/photo.jpg	\N	2018-03-28 13:07:21	2018-03-28 13:07:21	\N	f	f	NOVUS	\N	0
+789	255000558870	\N	Najira Chambiri	najirachambiri2014@gmail.com	0767443109	\N	premium	23-07-2018	23-07-2019	799	0	https://lh5.googleusercontent.com/-16r9WXO4-HQ/AAAAAAAAAAI/AAAAAAAAQws/ly1CgQfRC7s/photo.jpg	\N	2018-03-23 10:11:13	2018-07-23 06:13:11	\N	f	f	Supervisor	\N	0
+818	255000566740	\N	upendo naftali	pendonaftali@gmail.com	0765735930	\N	free	29-03-2018	29-04-2018	25	0	\N	\N	2018-03-29 09:51:44	2018-08-09 18:02:23	\N	f	f	Ass. Supervisor	\N	0
+687	255000442985	\N	Bertha Peter	jayden2014.bp@gmail.com	0767211507	\N	premium	14-08-2018	13-09-2018	0	0	\N	\N	2018-03-03 04:56:22	2018-08-14 21:34:28	\N	f	f	Ass. Supervisor	\N	0
+821	254000043982	\N	Jonah Gikaru	jonahgikaru@gmail.com	0724924700	\N	free	29-03-2018	29-04-2018	750	1	\N	\N	2018-03-29 15:26:36	2018-08-17 18:56:01	\N	f	f	Manager	\N	0
+983	255000618241	\N	Erick Joseph	erickjoseph957@gmail.com	0717646851	\N	free	28-04-2018	29-05-2018	1	0	https://lh3.googleusercontent.com/-ysYEMzG3bLg/AAAAAAAAAAI/AAAAAAAAABg/nbbsyyvs29c/photo.jpg	\N	2018-04-28 07:13:37	2018-07-23 05:59:28	\N	f	f	Novus	\N	0
+523	254000073525	\N	Carolyne Iteba	itebacarolyne@gmail.com	0713816087	\N	premium	23-07-2018	22-08-2018	0	0	\N	\N	2018-02-05 21:41:05	2018-07-23 07:52:22	\N	f	f	Manager	\N	0
+1291	255200024095	\N	Bishara rashid	bisharanah@gmail.com	0772391102	\N	free	09-08-2018	09-09-2018	0	0	\N	\N	2018-08-09 19:50:36	2018-08-09 19:50:36	\N	f	f	Ass. Supervisor	\N	\N
+522	\N	\N	Hamed Awadh	hamedawadh60@gmail.com	0784859963	\N	free	05-02-2018	08-03-2018	2	0	\N	\N	2018-02-05 20:59:54	2018-02-05 20:59:54	\N	f	f	NOVUS	\N	0
+521	\N	\N	Sofia Ally	sofiabintally321@gmail.com	0679580353	\N	free	05-02-2018	08-03-2018	0	0	\N	\N	2018-02-05 16:44:36	2018-02-05 16:44:36	\N	f	f	NOVUS	\N	0
+1188	255000525885	\N	emmanuelsarara7@gmail.com	emmanuelsarara7@gmail.com	0764339064	\N	premium	03-07-2018	02-09-2018	0	0	\N	\N	2018-07-03 02:25:30	2018-07-07 19:30:42	\N	f	f	Ass. Supervisor	\N	0
+1205	255200011446	\N	Sophia Mussa	sophimuss.sm@gmail.com	0656845584	\N	free	09-07-2018	09-08-2018	0	0	\N	\N	2018-07-09 06:57:37	2018-07-09 06:57:37	\N	f	f	Ass. Supervisor	\N	0
+1230	255000597366	\N	Mkulu Tress	mkulutress@gmail.com	0689106761	\N	free	19-07-2018	19-08-2018	0	0	\N	\N	2018-07-19 12:50:49	2018-07-19 12:50:49	\N	f	f	Ass. Supervisor	\N	0
+813	\N	\N	Catherine Naboth, Ndelwa	cndelwa@gmail.com	0655981822	\N	free	28-03-2018	28-04-2018	0	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABECIP66sv-6arzwwEiC3ZjYXJkX3Bob3RvKigyZGQwZGE3ODZiMzVlMWExZjZiODU0OWExMjdkZDcwNDI4YTBmN2ZiMAHjeWbCIlBGHYS4T8hVHs8_5R7YeQ	\N	2018-03-28 12:20:09	2018-03-28 12:20:09	\N	f	f	NOVUS	\N	0
+812	\N	\N	Iya Mohamedi	iyamohamedi02@gmail.com	0659869821	\N	free	28-03-2018	28-04-2018	4	0	\N	\N	2018-03-28 07:22:00	2018-03-28 07:22:00	\N	f	f	NOVUS	\N	0
+808	\N	\N	Mohd Kiyumbo	mohdkiyumbo24@gmail.com	+255657698524	\N	free	28-03-2018	28-04-2018	2	0	\N	\N	2018-03-27 22:42:14	2018-03-27 22:42:14	\N	f	f	NOVUS	\N	0
+807	\N	\N	Fortina Kahimba	fortinakahimba71@gmail.com	0752188678	\N	free	27-03-2018	27-04-2018	10	0	\N	\N	2018-03-27 18:39:37	2018-03-27 18:39:37	\N	f	f	NOVUS	\N	0
+806	\N	\N	Salumu Rashidi	salumurashidi050@gmail.com	0785488057	\N	free	27-03-2018	27-04-2018	2	0	\N	\N	2018-03-27 15:04:28	2018-03-27 15:04:28	\N	f	f	NOVUS	\N	0
+805	\N	\N	Rama Katuzo	ramakatuzo18@gmail.com	0713004865	\N	free	27-03-2018	27-04-2018	10	0	\N	\N	2018-03-27 12:56:10	2018-03-27 12:56:10	\N	f	f	NOVUS	\N	0
+804	\N	\N	Neema Fungo	neemafungo423@gmail.com	0752349338	\N	free	27-03-2018	27-04-2018	1	0	\N	\N	2018-03-27 12:35:53	2018-03-27 12:35:53	\N	f	f	NOVUS	\N	0
+802	\N	\N	Charloh Charplin	charlohcharplin@gmail.com	0743407797	\N	free	26-03-2018	26-04-2018	100	1	\N	\N	2018-03-26 20:16:15	2018-03-26 20:16:15	\N	f	f	NOVUS	\N	0
+801	\N	\N	Maua Donat	mauadonat47@gmail.com	+255752883265	\N	free	26-03-2018	26-04-2018	1	0	\N	\N	2018-03-26 07:22:57	2018-03-26 07:22:57	\N	f	f	NOVUS	\N	0
+800	\N	\N	Darius Rwambibi	drwambibi09@gmail.com	0766095094	\N	free	26-03-2018	26-04-2018	2	0	\N	\N	2018-03-26 06:54:33	2018-03-26 06:54:33	\N	f	f	NOVUS	\N	0
+799	\N	\N	Zephaniah Apiyo	www.zephaniahapiyo@gmail.com	0765914274	\N	free	25-03-2018	25-04-2018	300000	0	\N	\N	2018-03-25 19:23:43	2018-03-25 19:23:43	\N	f	f	NOVUS	\N	0
+798	\N	\N	Lillian Urassa	lillianurassa13@gmail.com	0713030363	\N	free	25-03-2018	25-04-2018	2	0	\N	\N	2018-03-25 18:33:08	2018-03-25 18:33:08	\N	f	f	NOVUS	\N	0
+768	\N	\N	Malongo Eva	malongoeva@gmail.com	0622650083	\N	premium	19-03-2018	19-05-2018	4	0	https://lh4.googleusercontent.com/-R-uL--9-hJI/AAAAAAAAAAI/AAAAAAAAAhw/z1GX4BNW5cQ/photo.jpg	\N	2018-03-19 09:09:18	2018-03-25 14:47:29	\N	f	f	NOVUS	\N	0
+797	\N	\N	Jafari Namtima	namtimajk123@gmail.com	0676029497	\N	premium	25-03-2018	22-10-2018	2	0	\N	\N	2018-03-25 14:26:35	2018-03-25 14:34:34	\N	f	f	NOVUS	\N	0
+796	\N	\N	Edson Kamala	kamalaedso@gmail.com	0762814505	\N	free	25-03-2018	25-04-2018	25	0	https://lh3.googleusercontent.com/-WWmb4ETE5CY/AAAAAAAAAAI/AAAAAAAALAk/QhbF1L9DriE/photo.jpg	\N	2018-03-25 09:25:32	2018-03-25 09:25:32	\N	f	f	NOVUS	\N	0
+795	\N	\N	Mohammed Wazir	mwazir95@gmail.com	0773321484	\N	free	24-03-2018	24-04-2018	2	0	\N	\N	2018-03-24 14:28:49	2018-03-24 14:28:49	\N	f	f	NOVUS	\N	0
+794	\N	\N	Constancia Kavishe	constanciakavishe@gmail.com	0753776425	\N	free	24-03-2018	24-04-2018	1	0	\N	\N	2018-03-24 13:02:33	2018-03-24 13:02:33	\N	f	f	NOVUS	\N	0
+793	\N	\N	Oscar Mwenda	oscarmwenda3@gmail.com	0768310571	\N	free	24-03-2018	24-04-2018	4	0	\N	\N	2018-03-24 08:21:05	2018-03-24 08:21:05	\N	f	f	NOVUS	\N	0
+791	\N	\N	mvile Samuel	samuelmvile500@gmail.com	0752258480	\N	free	24-03-2018	24-04-2018	1665	0	https://lh4.googleusercontent.com/-0Jh25TQ_Jys/AAAAAAAAAAI/AAAAAAAAAAo/Nc5VVuDFrtw/photo.jpg	\N	2018-03-24 04:28:49	2018-03-24 04:28:49	\N	f	f	NOVUS	\N	0
+198	255000464761	\N	Mwajuma Lwaba	mwajumalwaba28@gmail.com	0718278278	\N	premium	15-03-2018	11-09-2018	62249	0	\N	\N	2017-12-18 19:18:42	2018-07-18 23:59:41	\N	f	f	Manager	\N	0
+786	\N	\N	Omega Mrema	mremaomega12@gmail.com	0767576176	\N	free	22-03-2018	22-04-2018	2	0	\N	\N	2018-03-22 15:18:27	2018-03-22 15:18:27	\N	f	f	NOVUS	\N	0
+785	\N	\N	Joseph Kwimba	josephkwimba08@gmail.com	0713592428	\N	free	22-03-2018	22-04-2018	1	0	\N	\N	2018-03-22 08:54:45	2018-03-22 08:54:45	\N	f	f	NOVUS	\N	0
+783	255200014203	\N	Gasper Mwamkinga	mwamkinga1993@gmail.com	0657738330	\N	premium	30-06-2018	29-12-2018	3438	0	https://lh4.googleusercontent.com/-zj6O5Zm3gmg/AAAAAAAAAAI/AAAAAAAAAAc/V9YQDGYLz9Y/photo.jpg	\N	2018-03-22 08:47:45	2018-06-30 08:50:52	\N	f	f	Ass. Supervisor	\N	0
+782	\N	\N	Zuhura Moustapha	zealouskaylaty@gmail.com	0718854518	\N	free	22-03-2018	22-04-2018	555	0	https://lh6.googleusercontent.com/-Uz2OSP8zQo8/AAAAAAAAAAI/AAAAAAAAAXE/1l4bjCJvsqc/photo.jpg	\N	2018-03-22 06:53:44	2018-03-22 06:53:44	\N	f	f	NOVUS	\N	0
+781	\N	\N	Noel jrt	tobiasnjunwa@gmail.com	0653142263	\N	free	22-03-2018	22-04-2018	0	0	https://lh4.googleusercontent.com/-BTutYEUDQBE/AAAAAAAAAAI/AAAAAAAACdo/-vPEed0506E/photo.jpg	\N	2018-03-22 05:05:33	2018-03-22 05:05:33	\N	f	f	NOVUS	\N	0
+780	\N	\N	Ackxa Herman	ackxaherman@gmail.com	0758312305	\N	free	21-03-2018	21-04-2018	255200019947	0	https://lh5.googleusercontent.com/-uPFVJRU8Lzg/AAAAAAAAAAI/AAAAAAAAAAo/SkLdrybBVNI/photo.jpg	\N	2018-03-21 18:58:02	2018-03-21 18:58:02	\N	f	f	NOVUS	\N	0
+1242	255000115105	\N	esther mella	esthermella@gmail.com	0767500069	\N	free	23-07-2018	23-08-2018	0	0	https://lh4.googleusercontent.com/-zSNV67sLBmM/AAAAAAAAAAI/AAAAAAAAIk4/FNJqcgO9g2Q/photo.jpg	\N	2018-07-23 15:23:30	2018-07-23 15:23:30	\N	f	f	Manager	\N	\N
+901	255000543566	\N	DESDELIUS KAYUMBE	2012dfkayumbe@gmail.com	0769761297	\N	premium	08-08-2018	06-02-2019	0	0	https://lh6.googleusercontent.com/-N-VEsD-PTt0/AAAAAAAAAAI/AAAAAAAAAMA/Novfq_CJwE0/photo.jpg	\N	2018-04-09 13:52:17	2018-08-08 12:05:58	\N	f	f	Ass. Supervisor	\N	0
+1292	255000292956	\N	Harun Chotimbao	hschotimbao@gmail.com	0623398932	\N	free	11-08-2018	11-09-2018	0	0	\N	\N	2018-08-11 09:55:10	2018-08-11 09:55:10	\N	f	f	Ass. Manager	\N	\N
+587	\N	\N	Tunsume Simon	annastaziajeremiah05@gmail.com	0768761164	\N	free	14-02-2018	17-03-2018	0	0	\N	\N	2018-02-14 13:21:12	2018-02-14 13:21:12	\N	f	f	NOVUS	\N	0
+586	\N	\N	Masmo Jree	masmojree@gmail.com	0656352425	\N	free	14-02-2018	17-03-2018	1954	0	https://lh5.googleusercontent.com/-FhLMIPmr9BA/AAAAAAAAAAI/AAAAAAAAAEg/toGUNMKV0fc/photo.jpg	\N	2018-02-14 12:53:31	2018-02-14 12:53:31	\N	f	f	NOVUS	\N	0
+1206	254200023402	\N	Ydolem Agatchel	ydolemagatchel@gmail.com	0707014928	\N	free	09-07-2018	09-08-2018	0	1	https://lh4.googleusercontent.com/-swKMRVe9H1w/AAAAAAAAAAI/AAAAAAAAA1A/8rqHhO-JSug/photo.jpg	\N	2018-07-09 10:12:14	2018-07-09 10:12:14	\N	f	f	Novus	\N	0
+1231	255200021177	\N	george adolph	georgeadolph10@gmail.com	0753983221	\N	free	19-07-2018	19-08-2018	0	0	\N	\N	2018-07-19 13:25:38	2018-07-19 13:25:38	\N	f	f	Ass. Supervisor	\N	0
+779	\N	\N	Noel Maarufu	maarufunoel@gmail.com	076951054*	\N	free	21-03-2018	21-04-2018	1	0	https://lh5.googleusercontent.com/-ssSgAk_5GSQ/AAAAAAAAAAI/AAAAAAAAAD8/BI5uXeL9m_g/photo.jpg	\N	2018-03-21 17:02:46	2018-03-21 17:02:46	\N	f	f	NOVUS	\N	0
+788	255000463688	\N	Philipo Abihudi	pabihudi@gmail.com	0759595959	\N	free	23-03-2018	23-04-2018	0	0	https://lh4.googleusercontent.com/-K_bn4ufajgs/AAAAAAAAAAI/AAAAAAAAAEc/p0-IGgbPYgk/photo.jpg	\N	2018-03-23 05:47:38	2018-07-05 05:40:24	\N	f	f	Supervisor	\N	0
+809	255000625256	\N	Wilfred Kipondya	wkipondya@gmail.com	0766687392	\N	free	28-03-2018	28-04-2018	0	0	\N	\N	2018-03-28 05:29:04	2018-06-11 04:19:23	\N	f	f	Ass. Supervisor	\N	0
+803	255000306547	\N	Veronica Ndaki	verondaki@gmail.com	0715555540	\N	free	27-03-2018	27-04-2018	2	0	\N	\N	2018-03-27 09:53:10	2018-06-07 09:04:00	\N	f	f	Supervisor	\N	0
+903	\N	\N	Yusufu Salumu	yusufusalumu9@gmail.com	0716427069	\N	free	09-04-2018	10-05-2018	1234	0	\N	\N	2018-04-09 20:42:14	2018-04-09 20:42:14	\N	f	f	NOVUS	\N	0
+902	\N	\N	teshaelizabeth92@gmail.com	teshaelizabeth92@gmail.com	0716842193	\N	free	09-04-2018	10-05-2018	0	0	\N	\N	2018-04-09 19:39:37	2018-04-09 19:39:37	\N	f	f	NOVUS	\N	0
+900	\N	\N	Agnes Kuratha	anyesi2004@gmail.com	+255756218300	\N	free	09-04-2018	10-05-2018	4	0	https://lh3.googleusercontent.com/-ifR3Fl01Nm0/AAAAAAAAAAI/AAAAAAAAABQ/h3FppZCWz5I/photo.jpg	\N	2018-04-09 11:46:49	2018-04-09 11:46:49	\N	f	f	NOVUS	\N	0
+899	\N	\N	Jacqueline Wilfred	tongaliz2737@gmail.com	0712482737	\N	free	08-04-2018	09-05-2018	34	0	\N	\N	2018-04-08 13:01:25	2018-04-08 13:01:25	\N	f	f	NOVUS	\N	0
+897	\N	\N	Hosiana Mushi	hosywangu@gmail.com	0752612542	\N	free	07-04-2018	08-05-2018	1234	0	https://lh6.googleusercontent.com/-853_H-3oPvE/AAAAAAAAAAI/AAAAAAAABE8/WQQ2g3sktRg/photo.jpg	\N	2018-04-07 18:43:54	2018-04-07 18:43:54	\N	f	f	NOVUS	\N	0
+895	\N	\N	Shaaban Munsinsa	shaabanmuns@gmail.com	0718610144	\N	free	07-04-2018	08-05-2018	4	0	\N	\N	2018-04-07 16:34:45	2018-04-07 16:34:45	\N	f	f	NOVUS	\N	0
+894	\N	\N	Naelijwa Mndeme	mndemenaelijwa97@gmail.com	0786241820	\N	free	07-04-2018	08-05-2018	4	0	\N	\N	2018-04-07 15:09:56	2018-04-07 15:09:56	\N	f	f	NOVUS	\N	0
+1243	255000421613	\N	barnabas shigellla	bshigellla@gmail.com	0744542920	\N	free	24-07-2018	24-08-2018	0	0	\N	\N	2018-07-24 04:18:18	2018-07-24 04:18:18	\N	f	f	Ass. Manager	\N	\N
+856	255000431723	\N	Miryam Kissawike	miryamkissawike@gmail.com	0763070434	\N	premium	27-07-2018	26-08-2018	2	0	\N	\N	2018-04-06 12:36:44	2018-07-27 11:19:41	\N	f	f	Ass. Supervisor	\N	0
+858	255200017221	\N	Glory Sanga	promise54.gs@gmail.com	0712860076	\N	free	06-04-2018	07-05-2018	0	0	https://lh4.googleusercontent.com/-GZfI-DNpbKE/AAAAAAAAAAI/AAAAAAAACcQ/ECn3hzkGSGA/photo.jpg	\N	2018-04-06 16:06:14	2018-08-01 15:59:18	\N	f	f	Ass. Supervisor	\N	0
+1190	255000479222	\N	Kaminy Chudasama	kaminy.chudasama@gmail.com	0789399388	\N	free	03-07-2018	02-08-2018	0	0	https://lh6.googleusercontent.com/-aCktg28X8yE/AAAAAAAAAAI/AAAAAAAAAJA/inrJjawz3Wc/s200/photo.jpg	\N	2018-07-03 05:01:03	2018-07-10 10:51:56	\N	f	f	Man	1.0	1
+633	\N	\N	Willington Munyaga	munyaga69@gmail.com	0786763491	\N	free	22-02-2018	25-03-2018	1	0	\N	\N	2018-02-22 09:13:14	2018-02-22 09:13:14	\N	f	f	NOVUS	\N	0
+632	\N	\N	Yethroy Jerome	yethroy.jerome@gmail.com	0753137339	\N	free	22-02-2018	25-03-2018	20000	0	https://lh5.googleusercontent.com/-5Ffpuv8OqPY/AAAAAAAAAAI/AAAAAAAAAnY/uswd4Qzhofs/photo.jpg	\N	2018-02-22 04:13:26	2018-02-22 04:13:26	\N	f	f	NOVUS	\N	0
+1207	255000507334	\N	mary mush	japhetcobs@gmail.com	0714588520	\N	free	10-07-2018	10-08-2018	0	0	https://lh3.googleusercontent.com/-euS5lC4G35s/AAAAAAAAAAI/AAAAAAAAh4s/LsjdpOx2Qcs/photo.jpg	\N	2018-07-10 04:56:46	2018-07-10 04:56:46	\N	f	f	Supervisor	\N	0
+1232	255000622627	\N	Latifa Abdallah	latifaabdallah222@gmail.com	0657203082	\N	free	20-07-2018	20-08-2018	0	0	\N	\N	2018-07-20 08:07:27	2018-07-20 08:07:27	\N	f	f	Ass. Supervisor	\N	0
+891	\N	\N	haika mero	haikamero@gmail.com	0755648294	\N	free	06-04-2018	07-05-2018	2	0	https://lh3.googleusercontent.com/-PPP_n5dB9XQ/AAAAAAAAAAI/AAAAAAAAAWY/Zl__lyPBwb0/photo.jpg	\N	2018-04-06 19:41:00	2018-04-06 19:41:00	\N	f	f	NOVUS	\N	0
+857	\N	\N	Grace Buyamba	buyambagrace@gmail.com	0754813872	\N	free	06-04-2018	07-05-2018	25	0	\N	\N	2018-04-06 13:16:21	2018-04-06 13:16:21	\N	f	f	NOVUS	\N	0
+855	\N	\N	PRISCILLA ABRAHAM	priscillahabraham@gmail.com	0655428886	\N	free	06-04-2018	07-05-2018	1734	0	\N	\N	2018-04-06 12:29:57	2018-04-06 12:29:57	\N	f	f	NOVUS	\N	0
+854	\N	\N	Chidy Boy	chidyboy372@gmail.com	0692405144	\N	free	06-04-2018	07-05-2018	12	0	https://lh6.googleusercontent.com/-SVecnLUHXzo/AAAAAAAAAAI/AAAAAAAAACo/kdbf_mc24zs/photo.jpg	\N	2018-04-06 09:10:03	2018-04-06 09:10:03	\N	f	f	NOVUS	\N	0
+853	\N	\N	Mti Juma	mtijuma1@gmail.com	0657080296	\N	free	06-04-2018	07-05-2018	1	0	\N	\N	2018-04-06 09:01:39	2018-04-06 09:01:39	\N	f	f	NOVUS	\N	0
+852	\N	\N	Sarha Rashid	sarharashid68@gmail.com	0689284852	\N	free	05-04-2018	06-05-2018	2	0	\N	\N	2018-04-05 17:42:27	2018-04-05 17:42:27	\N	f	f	NOVUS	\N	0
+849	\N	\N	MATHIAS MAHINGULE SAMWEL	matmahisa@gmail.com	0757953845	\N	free	05-04-2018	06-05-2018	2	0	\N	\N	2018-04-05 11:31:55	2018-04-05 11:31:55	\N	f	f	NOVUS	\N	0
+848	\N	\N	Johnny Lyander	johnnylyander@gmail.com	0715726559	\N	free	05-04-2018	06-05-2018	2	0	\N	\N	2018-04-05 06:57:31	2018-04-05 06:57:31	\N	f	f	NOVUS	\N	0
+847	\N	\N	Man Viruc	acramfabregas10@gmail.com	0714570139	\N	free	05-04-2018	06-05-2018	1010	0	\N	\N	2018-04-04 21:20:58	2018-04-04 21:20:58	\N	f	f	NOVUS	\N	0
+846	\N	\N	Phina Mambile	phinamambile@gmail.com	0757281893	\N	free	04-04-2018	05-05-2018	5	0	https://lh6.googleusercontent.com/-exnrTkd5NXA/AAAAAAAAAAI/AAAAAAAAAAo/KXvooKj3bw4/photo.jpg	\N	2018-04-04 14:34:14	2018-04-04 14:34:14	\N	f	f	NOVUS	\N	0
+844	\N	\N	Warda Musa	musawarda52@gmail.com	0692461862	\N	free	04-04-2018	05-05-2018	1	0	\N	\N	2018-04-04 09:21:12	2018-04-04 09:21:12	\N	f	f	NOVUS	\N	0
+843	\N	\N	Victoria Malisa	victoria.malisa2017@gmail.com	0766884190	\N	free	04-04-2018	05-05-2018	515	0	\N	\N	2018-04-04 06:27:52	2018-04-04 06:27:52	\N	f	f	NOVUS	\N	0
+842	\N	\N	Parvina Kazahura	parvinakoku.pk@gmail.com	0684197240	\N	free	03-04-2018	04-05-2018	0	0	\N	\N	2018-04-03 20:21:07	2018-04-03 20:21:07	\N	f	f	NOVUS	\N	0
+841	\N	\N	Lizzy Mash	lizzymash96@gmail.com	0723870306	\N	free	03-04-2018	04-05-2018	0	1	\N	\N	2018-04-03 18:51:12	2018-04-03 18:51:12	\N	f	f	NOVUS	\N	0
+839	\N	\N	Iveta Njau	ivetanjau18@gmail.com	0674522400	\N	free	03-04-2018	04-05-2018	2	0	\N	\N	2018-04-03 11:45:46	2018-04-03 11:45:46	\N	f	f	NOVUS	\N	0
+838	\N	\N	dickensi mlwafu	mlwafud@gmail.com	0752151185	\N	free	03-04-2018	04-05-2018	1	0	\N	\N	2018-04-03 06:44:06	2018-04-03 06:44:06	\N	f	f	NOVUS	\N	0
+845	255200019976	\N	Rose tairo	rosestevent@gmail.com	0657525564	\N	premium	09-08-2018	08-09-2018	2	0	\N	\N	2018-04-04 14:10:12	2018-08-09 16:54:52	\N	f	f	Ass. Supervisor	\N	0
+1293	255200024060	\N	Dotto Augustino	dottoaugustino@gmail.com	0655539575	\N	free	11-08-2018	11-09-2018	0	0	https://lh3.googleusercontent.com/-ajR_iYR0LPs/AAAAAAAAAAI/AAAAAAAAAA4/ordaZ0H2TrE/photo.jpg	\N	2018-08-11 10:26:00	2018-08-11 10:26:00	\N	f	f	Novus	\N	\N
+893	255200020040	\N	Amana Ali	amanaalli92@gmail.com	0773897527	\N	premium	18-07-2018	16-10-2018	2	0	\N	\N	2018-04-07 05:35:28	2018-08-16 13:43:23	\N	f	f	Ass. Supervisor	\N	0
+939	\N	\N	gattym60@gmail.com	gattym60@gmail.com	0715466622	\N	premium	24-07-2018	23-08-2018	2	0	\N	\N	2018-04-19 15:41:20	2018-07-24 11:11:51	\N	f	f	NOVUS	\N	0
+1294	255000457413	\N	Lina Bitakara	bitakarac@gmail.com	0713581927	\N	free	13-08-2018	13-09-2018	0	0	\N	\N	2018-08-13 04:41:39	2018-08-13 04:41:39	\N	f	f	Supervisor	\N	\N
+1191	255000072182	\N	Vincent Bukuru	bukuruvincent@gmail.com	0754689571	\N	free	03-07-2018	02-08-2018	0	0	https://lh5.googleusercontent.com/-_38YOAbj0hE/AAAAAAAAAAI/AAAAAAAAAAA/AB6qoq0xQeK9byOdGTYEjTn0LxzBi-9SdQ/s200/photo.jpg	\N	2018-07-03 05:27:32	2018-07-03 05:27:32	\N	f	f	Man	1.0	1
+156	255000529368	\N	Emmanuel Mputa	mputae84@gmail.com	0767962720	\N	premium	26-07-2018	25-08-2018	34	0	https://lh4.googleusercontent.com/-SgsY9QutyQ0/AAAAAAAAAAI/AAAAAAAAB_0/tiInFUJhwEI/photo.jpg	\N	2017-12-14 05:43:43	2018-08-03 11:46:02	\N	f	f	Supervisor	\N	0
+819	255000564236	\N	remmyrogasian@gmail.com	remmyrogasian@gmail.com	0756563151	\N	free	29-03-2018	29-04-2018	1	0	\N	\N	2018-03-29 11:28:34	2018-06-29 11:10:37	\N	f	f	Ass. Supervisor	\N	0
+936	255200020421	\N	kimmy chudasama	chudasamakimmy@gmail.com	0655833388	\N	premium	29-06-2018	29-07-2018	1	0	https://lh3.googleusercontent.com/-tiV2uI1A6yg/AAAAAAAAAAI/AAAAAAAAABo/YsFd7skjdrs/photo.jpg	\N	2018-04-19 09:14:13	2018-06-29 04:16:54	\N	f	f	Ass. Supervisor	\N	0
+439	255000428669	\N	Lusajo JM Jason	jasonlusajo98@gmail.com	0716160141	\N	premium	24-01-2018	19-02-2019	5	0	https://lh6.googleusercontent.com/-1vMhb3LqOKo/AAAAAAAAAAI/AAAAAAAAEpw/G_WSYp7-iak/photo.jpg	\N	2018-01-24 05:33:36	2018-06-28 09:13:52	\N	f	f	Supervisor	\N	0
+1006	255000425832	\N	Nelson Bisanganwa	bisangangwa@gmail.com	0719056617	\N	premium	28-06-2018	28-07-2018	697	0	\N	\N	2018-05-03 21:12:04	2018-06-28 07:39:47	\N	f	f	Ass. Supervisor	\N	0
+89	255000562427	\N	Aziza Rashid	azizarashid26@gmail.com	0718973955	\N	free	07-12-2017	07-01-2018	0	0	\N	\N	2017-12-06 22:24:31	2018-06-28 07:19:14	\N	f	f	Ass. Supervisor	\N	0
+321	255000552840	\N	William Kiteleki	willykiteleki74@gmail.com	0717558273	\N	free	07-01-2018	07-02-2018	0	0	https://lh6.googleusercontent.com/-JQta4wByUaM/AAAAAAAAAAI/AAAAAAAAAYU/VxKFNleaRNY/photo.jpg	\N	2018-01-07 14:27:26	2018-06-27 07:19:04	\N	f	f	Ass. Supervisor	\N	0
+79	255000466025	\N	Festo Boniface	festohb@gmail.com	0767119902	\N	free	06-12-2017	06-01-2018	0	0	https://lh6.googleusercontent.com/-01alx961-VU/AAAAAAAAAAI/AAAAAAAAAC4/rn0Ai8oiZ-g/photo.jpg	\N	2017-12-05 22:06:22	2018-06-27 03:39:04	\N	f	f	Ass. Manager	\N	0
+405	255000615017	\N	Yussuf Ali	yuwssuf13@gmail.com	0655717101	\N	free	20-01-2018	20-02-2018	2	0	\N	\N	2018-01-20 04:04:38	2018-06-26 13:04:02	\N	f	f	Ass. Supervisor	\N	0
+1162	255000540309	\N	Henry Stanley	henrystanley52@gmail.com	0659528560	\N	free	25-06-2018	26-07-2018	0	0	\N	\N	2018-06-25 17:14:17	2018-06-25 17:14:17	\N	f	f	Ass. Supervisor	\N	0
+603	255000546345	\N	Thomas Kibasa	thomaskibasa@gmail.com	0764961561	\N	free	16-02-2018	19-03-2018	0	0	\N	\N	2018-02-16 11:12:38	2018-06-25 13:30:24	\N	f	f	Ass. Supervisor	\N	0
+652	255000464440	\N	Jesca Phidelis	jescaphidelis77@gmail.com	0653537670	\N	premium	24-06-2018	23-08-2018	0	0	\N	\N	2018-02-27 01:34:09	2018-06-24 16:43:34	\N	f	f	Supervisor	\N	0
+235	255000399140	\N	juma akida	akidaj7@gmail.com	0767199686	\N	free	24-12-2017	24-01-2018	2345	0	https://lh5.googleusercontent.com/-n-vi7ACX80w/AAAAAAAAAAI/AAAAAAAAK1E/rfFTBnB-Kp0/photo.jpg	\N	2017-12-24 19:31:56	2018-06-23 18:49:41	\N	f	f	Supervisor	\N	0
+832	255200020466	\N	Weston Njeje	njejew@gmail.com	0765889263	\N	premium	21-06-2018	20-12-2018	2	0	\N	\N	2018-03-31 16:44:52	2018-06-22 04:28:56	\N	f	f	Ass. Supervisor	\N	0
+704	255000425073	\N	Immaculata Nkya	immankya90@gmail.com	0754781895	\N	free	05-03-2018	05-04-2018	372	0	\N	\N	2018-03-05 18:19:27	2018-06-20 19:48:01	\N	f	f	Ass. Supervisor	\N	0
+406	255000551772	\N	Christopher Sichila	christophersichila49@gmail.com	0766454364	\N	free	20-01-2018	20-02-2018	2	0	\N	\N	2018-01-20 04:50:54	2018-06-20 17:52:10	\N	f	f	Supervisor	\N	0
+503	255000615442	\N	Shafigha TV	shaally39@gmail.com	0713602383	\N	premium	20-06-2018	20-07-2018	2	0	https://lh6.googleusercontent.com/-bwj3TMvN7gw/AAAAAAAAAAI/AAAAAAAAF50/yGGFMgpWri4/photo.jpg	\N	2018-02-02 21:26:13	2018-06-20 16:39:53	\N	f	f	Ass. Supervisor	\N	0
+107	255000468700	\N	Willfred Brayson	wmboweldptz@gmail.com	0716588819	\N	free	08-12-2017	08-01-2018	3	0	https://lh3.googleusercontent.com/-v4Vx4op9dX4/AAAAAAAAAAI/AAAAAAAAoGc/YylA_gbJxvo/photo.jpg	\N	2017-12-07 23:24:42	2018-06-18 14:28:06	\N	f	f	Ass. Supervisor	\N	0
+776	255000606157	\N	Mbegadates	mbega2030@gmail.com	0687961686	\N	free	20-03-2018	20-04-2018	2	0	\N	\N	2018-03-20 16:06:22	2018-06-17 06:31:27	\N	f	f	Ass. Supervisor	\N	0
+1010	255000400380	\N	Joanita Cornellius	joanita.cornellius@gmail.com	0784111322	\N	premium	14-06-2018	13-12-2018	0	0	https://lh4.googleusercontent.com/-wwqUUe7tcR8/AAAAAAAAAAI/AAAAAAAAKBw/hG1zh8NI4YU/photo.jpg	\N	2018-05-04 10:11:16	2018-06-14 07:50:44	\N	f	f	Manager	\N	0
+549	255000607066	\N	Steward Simfukwe	stewardsimfukwe1@gmail.com	0746641655	\N	free	12-02-2018	15-03-2018	3	0	\N	\N	2018-02-12 05:11:05	2018-06-14 04:29:40	\N	f	f	Ass. Supervisor	\N	0
+1061	255000587866	\N	jaqueeen1	jaqueeen@gmail.com	0757627375	\N	free	13-05-2018	13-06-2018	4	0	https://lh6.googleusercontent.com/-GVAr-QAzK5g/AAAAAAAAAAI/AAAAAAAABks/9_up9UA0f1M/photo.jpg	\N	2018-05-13 17:18:55	2018-06-12 06:30:04	\N	f	f	Ass. Supervisor	\N	0
+946	\N	\N	rosemary andrea	rosemaryandrea14@gmail.com	0763919456	\N	free	20-04-2018	21-05-2018	255000555918	0	\N	\N	2018-04-20 17:46:30	2018-04-20 17:46:30	\N	f	f	NOVUS	\N	0
+732	255000491252	\N	Maxmillian Richard	max.shetto@gmail.com	0763355631	\N	premium	07-06-2018	07-06-2019	1.2649999999999999	0	https://lh6.googleusercontent.com/-VXfUNC2ugGU/AAAAAAAAAAI/AAAAAAAAAFo/t-96vsNBNlM/photo.jpg	\N	2018-03-11 08:53:11	2018-06-06 20:23:05	\N	f	f	Supervisor	\N	0
+554	255000603266	\N	Amour Khamis	jemsdamas@gmail.com	0773113262	\N	free	12-02-2018	15-03-2018	0	0	https://lh3.googleusercontent.com/-WciM1ZxvQ60/AAAAAAAAAAI/AAAAAAAAC8w/JdFPjQlmgaQ/photo.jpg	\N	2018-02-12 15:18:53	2018-06-06 13:28:30	\N	f	f	Ass. Supervisor	\N	0
+1026	\N	\N	DOREEN LYIMO	dlyimotz@gmail.com	0753336527	\N	free	07-05-2018	07-06-2018	2	0	https://lh3.googleusercontent.com/-iT1a36-dVjY/AAAAAAAAAAI/AAAAAAAACe4/OMHPD3rpoNY/photo.jpg	\N	2018-05-07 10:19:07	2018-05-07 10:19:07	\N	f	f	NOVUS	\N	0
+953	\N	\N	elizah shiro	shiroelizah@gmail.com	0722967840	\N	free	22-04-2018	23-05-2018	2	1	https://lh3.googleusercontent.com/-_YCHJkkXMrw/AAAAAAAAAAI/AAAAAAAAADA/8ga9f_gsFJM/photo.jpg	\N	2018-04-21 21:24:57	2018-04-21 21:24:57	\N	f	f	NOVUS	\N	0
+277	255000541442	\N	philemon mngoma	philemonmngoma@gmail.com	0652546464	\N	premium	03-07-2018	02-08-2018	4	0	https://lh5.googleusercontent.com/-PgDt462Ugbk/AAAAAAAAAAI/AAAAAAAAAGQ/btePmEd3MbU/photo.jpg	\N	2018-01-01 19:41:26	2018-07-03 08:01:24	\N	f	f	Ass. Supervisor	\N	0
+840	255200019414	\N	Hellen Massawe	hellenmassawe3@gmail.com	0719024181	\N	premium	04-07-2018	03-08-2018	5	0	\N	\N	2018-04-03 11:58:27	2018-07-04 11:59:19	\N	f	f	Ass. Supervisor	\N	0
+700	\N	\N	Karim Benzema	farsiatfaisar@gmail.com	0767464778	\N	free	05-03-2018	05-04-2018	11	0	\N	\N	2018-03-05 06:08:05	2018-03-05 06:08:05	\N	f	f	NOVUS	\N	0
+699	\N	\N	Shakira Mfaume	shakiramfaume121@gmail.com	0782061593	\N	free	05-03-2018	05-04-2018	782061593	0	https://lh6.googleusercontent.com/-PVxsgC7UiBs/AAAAAAAAAAI/AAAAAAAAAAc/VwQURDl-rBs/photo.jpg	\N	2018-03-05 05:56:37	2018-03-05 05:56:37	\N	f	f	NOVUS	\N	0
+1060	255200021972	\N	Fidahussein okera	beenufidz@gmail.com	0659979398	\N	premium	18-06-2018	15-02-2019	2.29999999999999982	0	\N	\N	2018-05-13 07:22:03	2018-08-16 17:23:35	\N	f	f	Ass. Supervisor	\N	0
+143	255000573561	\N	meryana Kayus	maryanakayus@gmail.com	0715040742	\N	premium	11-07-2018	09-09-2018	4	0	\N	\N	2017-12-12 07:50:55	2018-07-21 10:09:54	\N	f	f	Ass. Supervisor	\N	0
+30	254000069951	\N	stela nyakato	nyakatostela@gmail.com	0752222900	\N	premium	21-07-2018	20-08-2018	4	0	https://lh4.googleusercontent.com/-3pMRGwZQHuQ/AAAAAAAAAAI/AAAAAAAAABk/V_ryI4yfkKw/photo.jpg	\N	2017-12-02 14:19:57	2018-07-21 19:00:50	\N	f	f	Manager	\N	0
+36	255200017092	\N	Alexander Power	poweralexander246@gmail.com	0759197970	\N	free	02-12-2017	02-01-2018	0	0	\N	\N	2017-12-02 15:53:46	2018-07-26 06:11:21	\N	f	f	Ass. Supervisor	\N	0
+1295	255000615038	\N	Abdulkadir Suleiman Mussa	alvinsolomon23@gmail.com	0772760441	\N	free	13-08-2018	13-09-2018	0	0	https://lh3.googleusercontent.com/-18Ry9Itx14U/AAAAAAAAAAI/AAAAAAAAADU/0lbD27qxu5U/photo.jpg	\N	2018-08-13 07:56:51	2018-08-13 08:00:17	\N	f	f	Ass. Supervisor	\N	\N
+452	255000564652	\N	ROHINI CHUDASAMA	rohini.chudasama@gmail.com	0712727204	\N	premium	19-06-2018	17-01-2019	4	0	https://lh6.googleusercontent.com/-4KwZWH9fy58/AAAAAAAAAAI/AAAAAAAAAD0/9lfDE6phvgs/photo.jpg	\N	2018-01-25 15:40:45	2018-07-18 14:41:31	\N	f	f	Ass. Manager	\N	0
+1208	255000501491	\N	Safaa Said	safaasaid68@gmail.com	0777430221	\N	free	10-07-2018	10-08-2018	0	0	\N	\N	2018-07-10 11:03:38	2018-07-10 11:03:38	\N	f	f	Supervisor	\N	0
+750	\N	\N	Elizabeth Bihemo	bihemoelizabeth@gmail.com	0654802346	\N	free	15-03-2018	15-04-2018	569	0	\N	\N	2018-03-15 11:48:31	2018-03-15 11:48:31	\N	f	f	NOVUS	\N	0
+747	\N	\N	Josiah Otege	incomestrims@gmail.com	+255763986983	\N	free	14-03-2018	14-04-2018	4	0	\N	\N	2018-03-14 11:14:49	2018-03-14 11:14:49	\N	f	f	NOVUS	\N	0
+1209	255000005557	\N	catherine francis	crine2603@gmail.com	0713607030	\N	free	10-07-2018	10-08-2018	0	0	\N	\N	2018-07-10 18:47:04	2018-07-10 18:47:04	\N	f	f	Ass. Supervisor	\N	0
+28	255000445922	\N	Alinanuswe Ntondo	alinanuswe.abel@gmail.com	0718219500	\N	free	02-12-2017	02-01-2018	0	0	\N	\N	2017-12-02 11:15:24	2018-06-07 10:53:54	\N	f	f	Supervisor	\N	0
+35	254200012253	\N	Lilian Mwangangi	mlilndunge@gmail.com	0723125395	\N	free	02-12-2017	02-01-2018	5	1	https://lh3.googleusercontent.com/-hIAlz4_D5zE/AAAAAAAAAAI/AAAAAAAAD30/dqeT4anOoZo/photo.jpg	\N	2017-12-02 15:24:29	2018-06-07 11:55:26	\N	f	f	Supervisor	\N	0
+40	254000460059	\N	Josephine Gitiri	gitirijo@gmail.com	0720172923	\N	free	02-12-2017	02-01-2018	0	1	https://lh4.googleusercontent.com/-Dt9byb6Z9N0/AAAAAAAAAAI/AAAAAAAAAC0/1tTd51YVrwg/photo.jpg	\N	2017-12-02 20:09:19	2018-06-05 16:59:57	\N	f	f	Ass. Supervisor	\N	0
+34	\N	\N	Pauline Kairuki	paulinekairuki@gmail.com	0753685085	\N	premium	29-01-2018	27-08-2018	0	0	\N	\N	2017-12-02 15:23:55	2018-03-28 07:12:00	\N	f	f	NOVUS	\N	0
+50	\N	\N	Khamis Makange	khamismakange61@gmail.com	0718264129	\N	free	03-12-2017	03-01-2018	2	0	\N	\N	2017-12-03 07:40:00	2017-12-03 07:40:00	\N	f	f	NOVUS	\N	0
+49	\N	\N	Kaie Mujaya	kaiecom26@gmail.com	0719700745	\N	free	03-12-2017	03-01-2018	2	0	https://lh5.googleusercontent.com/-bHHA4d_HRYg/AAAAAAAAAAI/AAAAAAAABno/OVphb8bAcdo/photo.jpg	\N	2017-12-03 07:06:22	2017-12-03 07:06:22	\N	f	f	NOVUS	\N	0
+47	\N	\N	Make It Rain	maketrain1@gmail.com	0729029114	\N	free	03-12-2017	03-01-2018	5	1	\N	\N	2017-12-03 05:02:46	2017-12-03 05:02:46	\N	f	f	NOVUS	\N	0
+46	\N	\N	Poliect Mwafrika	poliect.mwafrika@gmail.com	0762335999	\N	free	03-12-2017	03-01-2018	0	0	\N	\N	2017-12-03 04:56:08	2017-12-03 04:56:08	\N	f	f	NOVUS	\N	0
+43	\N	\N	teddypius mateso	teddyma56@gmail.com	0757737973	\N	free	03-12-2017	03-01-2018	6	0	\N	\N	2017-12-03 03:04:13	2017-12-03 03:04:13	\N	f	f	NOVUS	\N	0
+39	\N	\N	Omar Ali	omaralibbb04@gmail.com	0655525454	\N	free	02-12-2017	02-01-2018	2155	0	\N	\N	2017-12-02 19:40:02	2017-12-02 19:40:02	\N	f	f	NOVUS	\N	0
+38	\N	\N	Wesley Waku	wesleywaku@gmail.com	+254718162219	\N	free	02-12-2017	02-01-2018	4	1	https://lh3.googleusercontent.com/-HDXBrv6MNqY/AAAAAAAAAAI/AAAAAAAAAPY/GbmoTK7geJs/photo.jpg	\N	2017-12-02 18:30:37	2017-12-02 18:30:37	\N	f	f	NOVUS	\N	0
+37	\N	\N	Peragia Bikongoro	pbikongoro19@gmail.com	0757894569	\N	free	02-12-2017	02-01-2018	9000	0	\N	\N	2017-12-02 17:10:18	2017-12-02 17:10:18	\N	f	f	NOVUS	\N	0
+33	\N	\N	David Anderson	da465649@gmail.com	+255717671643	\N	free	02-12-2017	02-01-2018	4	0	\N	\N	2017-12-02 15:15:29	2017-12-02 15:15:29	\N	f	f	NOVUS	\N	0
+31	\N	\N	Martin Abuya	otienoabuya@gmail.com	0727271728	\N	free	02-12-2017	02-01-2018	0	1	https://lh5.googleusercontent.com/-zW5Hdy5-P-0/AAAAAAAAAAI/AAAAAAAAAY4/o687umew-D0/photo.jpg	\N	2017-12-02 15:13:04	2017-12-02 15:13:04	\N	f	f	NOVUS	\N	0
+27	\N	\N	Pilly Mkomwa	mkomwapilly@gmail.com	0655366719	\N	free	02-12-2017	02-01-2018	10	0	\N	\N	2017-12-02 10:51:14	2017-12-02 10:51:14	\N	f	f	NOVUS	\N	0
+25	\N	\N	Lawrab Abel	abel.lawrence2000@gmail.com	254723067008	\N	free	02-12-2017	02-01-2018	40	1	https://lh4.googleusercontent.com/-VMxgcarcbYM/AAAAAAAAAAI/AAAAAAAAAOY/iFYV4qrdHs4/photo.jpg	\N	2017-12-02 09:49:08	2017-12-02 09:49:08	\N	f	f	NOVUS	\N	0
+23	\N	\N	Rodgers George	defleman7@gmail.com	0769280233	\N	free	02-12-2017	02-01-2018	0	0	https://lh6.googleusercontent.com/-OjnsHFxTRho/AAAAAAAAAAI/AAAAAAAAALY/UtTsU62gq4w/photo.jpg	\N	2017-12-02 09:42:20	2017-12-02 09:42:20	\N	f	f	NOVUS	\N	0
+1244	255200023927	\N	Juma Msogoti	jumamsogoti@gmail.com	0752475347	\N	free	24-07-2018	24-08-2018	0	0	\N	\N	2018-07-24 11:38:02	2018-07-24 11:38:02	\N	f	f	Novus	\N	\N
+19	255000462410	\N	Manase Masinza	manasemasinza@gmail.com	0673273125	\N	premium	12-08-2018	11-09-2018	160	0	https://lh4.googleusercontent.com/-U3o24ygh1dU/AAAAAAAAAAI/AAAAAAAACx4/1Ee0uou-1c0/photo.jpg	\N	2017-12-02 08:24:08	2018-08-12 14:57:15	\N	f	f	Supervisor	\N	0
+32	255000399646	\N	Neema Kiula	neemakiula@gmail.com	0713562436	\N	premium	15-08-2018	14-09-2018	1	0	https://lh6.googleusercontent.com/-_3Ug6W8bknE/AAAAAAAAAAI/AAAAAAAAAM4/QlNVmPD8dtY/photo.jpg	\N	2017-12-02 15:13:17	2018-08-15 08:36:28	\N	f	f	Ass. Manager	\N	0
+792	\N	\N	Boniphace Yohana	boniphacey41@gmail.com	0753566566	\N	free	24-03-2018	24-04-2018	6666	0	\N	\N	2018-03-24 04:31:46	2018-03-24 04:31:46	\N	f	f	NOVUS	\N	0
+790	\N	\N	Freddy Mtingala	freddymtingala@gmail.com	0756237913	\N	free	24-03-2018	24-04-2018	2	0	\N	\N	2018-03-24 03:53:39	2018-03-24 03:53:39	\N	f	f	NOVUS	\N	0
+1193	255200023228	\N	ally bakari	allykifaranga@gmail.com	0676528008	\N	free	03-07-2018	03-08-2018	0	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABDCLDkucbnkq_KRyILdmNhcmRfcGhvdG8qKDA1YWQxNTdlOGYwZGE2MjlmMGIyYjE4OWUwNWIwYmRkZWM0NWYzNjcwAcq-koamvCcAuEtn6oppX_n4Mt-C	\N	2018-07-03 12:26:39	2018-07-03 12:26:39	\N	f	f	Ass. Supervisor	\N	0
+1210	255000597776	\N	Kaitan Mgimba	kaitanmgimba@gmail.com	0768207237	\N	free	11-07-2018	11-08-2018	0	0	\N	\N	2018-07-11 13:23:26	2018-07-11 13:23:26	\N	f	f	Ass. Supervisor	\N	0
+54	255000563096	\N	Jodras Esdras	jodras.esdras@gmail.com	0768943334	\N	premium	07-09-2018	07-10-2018	0	0	\N	\N	2017-12-03 10:58:32	2018-07-09 14:29:50	\N	f	f	Ass. Supervisor	\N	0
+1220	255200023298	\N	Durriyah Mustafa	durriyahmustafa.h@gmail.com	0783001141	\N	free	16-07-2018	16-08-2018	0	0	\N	\N	2018-07-16 07:55:02	2018-07-16 07:55:02	\N	f	f	Novus	\N	0
+44	255000572360	\N	Shaban Ally Bakari	shaabanbakari@gmail.com	0716486261	\N	free	03-12-2017	03-01-2018	2	0	\N	\N	2017-12-03 04:43:34	2018-06-13 17:17:26	\N	f	f	Ass. Supervisor	\N	0
+62	254200014814	\N	Simon Tayo	simtayo@gmail.com	0723708508	\N	free	03-12-2017	03-01-2018	2	1	https://lh4.googleusercontent.com/-lWV0L8JWcNY/AAAAAAAAAAI/AAAAAAAAABI/VZvQjP0-MSo/photo.jpg	\N	2017-12-03 16:44:38	2018-06-12 08:30:48	\N	f	f	Ass. Supervisor	\N	0
+48	254000357206	\N	george haggi	georgehaggy@gmail.com	0789044043	\N	free	03-12-2017	03-01-2018	144	0	https://lh3.googleusercontent.com/-tu11U-aqSkE/AAAAAAAAAAI/AAAAAAAARAM/Uil0A3-EN3k/photo.jpg	\N	2017-12-03 06:36:01	2018-06-08 14:07:15	\N	f	f	Ass. Supervisor	\N	0
+55	255000602452	\N	Yousuf Ummar	yousufummar649@gmail.com	0675117574	\N	free	03-12-2017	03-01-2018	0	0	\N	\N	2017-12-03 11:17:09	2018-06-06 07:12:37	\N	f	f	Novus	\N	0
+65	\N	\N	Lengarivo Marti	lengarivo@gmail.com	0753336666	\N	premium	04-12-2017	03-01-2018	25	0	\N	\N	2017-12-04 13:55:57	2018-01-24 07:57:07	\N	f	f	NOVUS	\N	0
+101	\N	\N	ANTHAR Sanchez	anthar0341@gmail.com	0772093013	\N	free	07-12-2017	07-01-2018	25	0	https://lh3.googleusercontent.com/--KaZp4UntW8/AAAAAAAAAAI/AAAAAAAAAbA/fZl0PRCY9HE/photo.jpg	\N	2017-12-07 16:54:39	2017-12-07 16:54:39	\N	f	f	NOVUS	\N	0
+100	\N	\N	Edward Richard	noswize@gmail.com	+255784003737	\N	free	07-12-2017	07-01-2018	778	0	https://lh4.googleusercontent.com/-CjWDkdRz7iM/AAAAAAAAAAI/AAAAAAAAACQ/32EmhTIoK8c/photo.jpg	\N	2017-12-07 16:06:03	2017-12-07 16:06:03	\N	f	f	NOVUS	\N	0
+97	\N	\N	Richard Masalu	rimalusonfbo@gmail.com	0716405527	\N	free	07-12-2017	07-01-2018	0	0	https://lh4.googleusercontent.com/-QXJcx3RE0E4/AAAAAAAAAAI/AAAAAAAAGVA/ghUG01Zx4jU/photo.jpg	\N	2017-12-07 13:05:58	2017-12-07 13:05:58	\N	f	f	NOVUS	\N	0
+96	\N	\N	Forever Business Owner Evelius.	johnevelius@gmail.com	+255767763959	\N	free	07-12-2017	07-01-2018	0	0	https://lh6.googleusercontent.com/-vjEZPhl7eDk/AAAAAAAAAAI/AAAAAAAAAFk/yCbRYQPDzdg/photo.jpg	\N	2017-12-07 12:14:30	2017-12-07 12:14:30	\N	f	f	NOVUS	\N	0
+94	\N	\N	mariamu malakibungu	malakibungumariamu@gmail.com	0754091313	\N	free	07-12-2017	07-01-2018	1	0	\N	\N	2017-12-07 10:27:14	2017-12-07 10:27:14	\N	f	f	NOVUS	\N	0
+93	\N	\N	julius bett	bettj200@gmail.com	0721316230	\N	free	07-12-2017	07-01-2018	1000	1	\N	\N	2017-12-07 09:07:32	2017-12-07 09:07:32	\N	f	f	NOVUS	\N	0
+92	\N	\N	Ally ramadhani	allyramadhani04@gmail.com	0629132433	\N	free	07-12-2017	07-01-2018	25	0	https://lh6.googleusercontent.com/-hxuXC7gzniQ/AAAAAAAAAAI/AAAAAAAAAa4/20Hlz9K5Urg/photo.jpg	\N	2017-12-07 07:00:14	2017-12-07 07:00:14	\N	f	f	NOVUS	\N	0
+91	\N	\N	Rhoda Bernard	rhodabernard27@gmail.com	0718947366	\N	free	07-12-2017	07-01-2018	1	0	\N	\N	2017-12-07 05:44:35	2017-12-07 05:44:35	\N	f	f	NOVUS	\N	0
+84	\N	\N	John Madeje	johnmadeje99@gmail.com	0757933264	\N	free	06-12-2017	06-01-2018	0	0	\N	\N	2017-12-06 06:50:50	2017-12-06 06:50:50	\N	f	f	NOVUS	\N	0
+74	255000489023	\N	Rachel Matee	rachelmatee17@gmail.com	0677021329	\N	premium	10-07-2018	08-01-2019	2	0	\N	\N	2017-12-05 08:44:50	2018-07-10 08:22:00	\N	f	f	Ass. Manager	\N	0
+78	\N	\N	criss kimaryo	crisskimaryo@gmail.com	07454545	\N	free	05-12-2017	05-01-2018	1000000	0	https://lh3.googleusercontent.com/-SZWtE7aRG0k/AAAAAAAAAAI/AAAAAAAAE0w/dme1sCSoatg/photo.jpg	\N	2017-12-05 19:59:12	2017-12-05 19:59:12	\N	f	f	NOVUS	\N	0
+77	\N	\N	Ammy Sylivestet	ammysylivester125@gmail.com	0764960133	\N	free	05-12-2017	05-01-2018	0	0	\N	\N	2017-12-05 13:44:20	2017-12-05 13:44:20	\N	f	f	NOVUS	\N	0
+76	\N	\N	Fidelis Ngalikal	ngalikafl@gmail.com	0757158141	\N	free	05-12-2017	05-01-2018	0	0	https://lh5.googleusercontent.com/-Ldoux_XjlMg/AAAAAAAAAAI/AAAAAAAAABA/X8B84gnNZBI/photo.jpg	\N	2017-12-05 13:30:46	2017-12-05 13:30:46	\N	f	f	NOVUS	\N	0
+75	\N	\N	Godlucky Massawe	godlucky80@gmail.com	0764960133	\N	free	05-12-2017	05-01-2018	0	0	\N	\N	2017-12-05 10:00:29	2017-12-05 10:00:29	\N	f	f	NOVUS	\N	0
+102	255000606337	\N	GodfreyMsami official	msami.gp20@gmail.com	0764899798	\N	premium	23-07-2018	21-01-2019	6	0	https://lh4.googleusercontent.com/-_Emk3e2J_4U/AAAAAAAAAAI/AAAAAAAAADg/GZgS1gpcPSo/photo.jpg	\N	2017-12-07 17:18:43	2018-07-24 04:26:38	\N	f	f	Ass. Supervisor	\N	0
+1245	255200023081	\N	fagason amos	fagasonamos76@gmail.com	0786853806	\N	free	24-07-2018	24-08-2018	0	0	https://lh3.googleusercontent.com/-_81ao-i0yEw/AAAAAAAAAAI/AAAAAAAAAAc/jVJWtUkAJJQ/photo.jpg	\N	2018-07-24 13:59:08	2018-07-24 13:59:08	\N	f	f	Novus	\N	\N
+99	255000602261	\N	Amina Princess	emmycollection28@gmail.com	0772102886	\N	free	07-12-2017	07-01-2018	2	0	\N	\N	2017-12-07 13:24:58	2018-07-24 18:49:23	\N	f	f	Ass. Supervisor	\N	0
+70	255000422419	\N	Lucy Lupenza	lucylupenza.ll@gmail.com	0757286837	\N	premium	27-07-2018	26-08-2018	8	0	\N	\N	2017-12-04 18:33:50	2018-07-26 21:06:57	\N	f	f	Supervisor	\N	0
+95	255000433664	\N	Alice Ngubwene	ngubwene@gmail.com	0653660669	\N	premium	31-07-2018	30-08-2018	1	0	https://lh3.googleusercontent.com/-xAzLTg0qtyc/AAAAAAAAAAI/AAAAAAAAE_c/6FbjayE017A/photo.jpg	\N	2017-12-07 12:11:53	2018-08-03 12:29:41	\N	f	f	Manager	\N	0
+85	255000602412	\N	ENOCK LAZARO	enock.lazaro@gmail.com	0762363033	\N	premium	10-08-2018	09-09-2018	3	0	https://lh6.googleusercontent.com/-Pc2e0DH1dQs/AAAAAAAAAAI/AAAAAAAAAHg/qgk35lXZHBE/photo.jpg	\N	2017-12-06 10:27:19	2018-08-10 10:12:09	\N	f	f	Ass. Supervisor	\N	0
+1296	255000523465	\N	Dira Deusdedit	diradeusdedit17@gmail.com	0759001378	\N	free	13-08-2018	13-09-2018	0	0	https://lh3.googleusercontent.com/-vtFS4YMNvTk/AAAAAAAAAAI/AAAAAAAAG34/4sjJQxH8nB8/photo.jpg	\N	2018-08-13 09:49:10	2018-08-13 09:49:10	\N	f	f	Ass. Supervisor	\N	\N
+45	255000406555	\N	WITNESZ SIGBJORN	witnesztz@gmail.com	0753320009	\N	premium	19-08-2018	18-09-2018	0	0	https://lh4.googleusercontent.com/-18f05axG0Ys/AAAAAAAAAAI/AAAAAAAAA_o/S_l8Jjt2WQo/photo.jpg	\N	2017-12-03 04:52:48	2018-08-19 17:24:07	\N	f	f	Manager	\N	0
+1196	255200021207	\N	Stephen Minja	stephenminja2017@gmail.com	0742173523	\N	free	04-07-2018	04-08-2018	0	0	\N	\N	2018-07-04 20:06:31	2018-07-04 20:06:31	\N	f	f	Ass. Supervisor	\N	0
+1246	255000401626	\N	Marton Semuguruka	martonsemuguruka@gmail.com	0713621899	\N	free	24-07-2018	24-08-2018	0	0	https://lh4.googleusercontent.com/-Ofo87YXBk9w/AAAAAAAAAAI/AAAAAAAAND4/IOgc8ZlpPSI/photo.jpg	\N	2018-07-24 14:52:44	2018-07-24 14:52:44	\N	f	f	Manager	\N	\N
+831	\N	\N	Robinson Kisemei	fl.livingopportunity@gmail.com	+254727795223	\N	free	31-03-2018	01-05-2018	0	1	\N	\N	2018-03-31 10:17:54	2018-03-31 10:17:54	\N	f	f	NOVUS	\N	0
+158	255000474404	\N	Rosemary Kissimbo	rose.kissimbo.rk@gmail.com	0715335096	\N	free	14-12-2017	14-01-2018	0	0	https://lh4.googleusercontent.com/-BbNEYfrlXE4/AAAAAAAAAAI/AAAAAAAAZRU/mwNoq6kL5J8/photo.jpg	\N	2017-12-14 08:09:58	2018-07-30 11:30:18	\N	f	f	Ass. Supervisor	\N	0
+1211	255000413596	\N	Duncan Mosioma	duncanmosioma123@gmail.com	0658684841	\N	free	11-07-2018	11-08-2018	0	0	\N	\N	2018-07-11 14:17:00	2018-07-11 14:17:00	\N	f	f	Manager	\N	0
+73	\N	\N	Susie Sixtus	ssixtus.ss@gmail.com	+255656171626	\N	free	05-12-2017	05-01-2018	2	0	\N	\N	2017-12-05 06:47:57	2017-12-05 06:47:57	\N	f	f	NOVUS	\N	0
+72	\N	\N	Saidi Khalfan	saidikhalfa895@gmail.com	0772339951	\N	free	05-12-2017	05-01-2018	0	0	\N	\N	2017-12-05 06:46:56	2017-12-05 06:46:56	\N	f	f	NOVUS	\N	0
+71	\N	\N	Christopher Maboje	cmaboje7@gmail.com	0655247674	\N	free	04-12-2017	04-01-2018	22	0	https://lh3.googleusercontent.com/-sJBmv1HAh_A/AAAAAAAAAAI/AAAAAAAAAEQ/6Hlg9Xo6FRE/photo.jpg	\N	2017-12-04 20:09:30	2017-12-04 20:09:30	\N	f	f	NOVUS	\N	0
+66	\N	\N	anna humphrey	humphreyanna75@gmail.com	0717358790	\N	free	04-12-2017	04-01-2018	0	0	\N	\N	2017-12-04 14:33:57	2017-12-04 14:33:57	\N	f	f	NOVUS	\N	0
+64	\N	\N	Joseph Julius	josephjulius027@gmail.com	0752304044	\N	free	04-12-2017	04-01-2018	0	0	\N	\N	2017-12-04 13:48:43	2017-12-04 13:48:43	\N	f	f	NOVUS	\N	0
+61	\N	\N	kareem kassim	kareemkassim2008@gmail.com	0713875790	\N	free	03-12-2017	03-01-2018	0	0	\N	\N	2017-12-03 15:17:40	2017-12-03 15:17:40	\N	f	f	NOVUS	\N	0
+59	\N	\N	Fransisco Mlelwa	fransiscomlelwa2@gmail.com	0754850082	\N	free	03-12-2017	03-01-2018	5	0	\N	\N	2017-12-03 13:49:54	2017-12-03 13:49:54	\N	f	f	NOVUS	\N	0
+58	\N	\N	ajili mrope	ajilimrope713@gmail.com	0787203010	\N	free	03-12-2017	03-01-2018	2	0	\N	\N	2017-12-03 13:14:17	2017-12-03 13:14:17	\N	f	f	NOVUS	\N	0
+57	\N	\N	Joshua Pastory	pastory9@gmail.com	0714797103	\N	free	03-12-2017	03-01-2018	8	0	https://lh4.googleusercontent.com/-yGfNuQY9fxk/AAAAAAAAAAI/AAAAAAAAIEo/mR2XqjLQFEg/photo.jpg	\N	2017-12-03 11:55:47	2017-12-03 11:55:47	\N	f	f	NOVUS	\N	0
+123	255000458289	\N	Mary Ngalapa	ngalapamary0@gmail.com	0755683132	\N	premium	11-07-2018	10-08-2018	32	0	\N	\N	2017-12-09 17:21:21	2018-07-11 12:00:48	\N	f	f	Ass. Supervisor	\N	0
+157	\N	\N	Jane Philemon	janephilemon7@gmail.com	0758288387	\N	free	14-12-2017	14-01-2018	2	0	\N	\N	2017-12-14 06:37:39	2017-12-14 06:37:39	\N	f	f	NOVUS	\N	0
+152	\N	\N	Alayna Salum	alaynasalum@gmail.com	0678381621	\N	free	13-12-2017	13-01-2018	2	0	\N	\N	2017-12-13 13:16:23	2017-12-13 13:16:23	\N	f	f	NOVUS	\N	0
+151	\N	\N	Isakwisa Amulike	isakwisaamulike@gmail.com	0687142000	\N	free	13-12-2017	13-01-2018	8	0	\N	\N	2017-12-13 11:57:28	2017-12-13 11:57:28	\N	f	f	NOVUS	\N	0
+150	\N	\N	Paul Kadallah	paulekadallah@gmail.com	0717907284	\N	free	13-12-2017	13-01-2018	1300000	0	\N	\N	2017-12-13 11:04:56	2017-12-13 11:04:56	\N	f	f	NOVUS	\N	0
+147	\N	\N	Lily Kwezi	lilykwezi2@gmail.com	0715191565	\N	free	13-12-2017	13-01-2018	4	0	\N	\N	2017-12-13 04:26:13	2017-12-13 04:26:13	\N	f	f	NOVUS	\N	0
+146	\N	\N	anna barnabas	annabarnabas1@gmail.com	0753171854	\N	free	12-12-2017	12-01-2018	22	0	https://lh3.googleusercontent.com/-lXNSKLHIJ3M/AAAAAAAAAAI/AAAAAAAAADI/33v5yzceWYA/photo.jpg	\N	2017-12-12 17:14:30	2017-12-12 17:14:30	\N	f	f	NOVUS	\N	0
+144	\N	\N	Emil Temba	emiltembat@gmail.com	+255786160146	\N	free	12-12-2017	12-01-2018	2	0	\N	\N	2017-12-12 12:47:11	2017-12-12 12:47:11	\N	f	f	NOVUS	\N	0
+142	\N	\N	OMASAM TRADERS LTD	omasamtraders75@gmail.com	+255712567043	\N	free	12-12-2017	12-01-2018	212	0	https://lh5.googleusercontent.com/-RCXKjwtOxyo/AAAAAAAAAAI/AAAAAAAAACk/R_k7KLCRc0w/photo.jpg	\N	2017-12-12 07:16:21	2017-12-12 07:16:21	\N	f	f	NOVUS	\N	0
+141	\N	\N	Salum Khalfan	salumkhalfan09@gmail.com	0777157285	\N	free	12-12-2017	12-01-2018	0	0	https://lh6.googleusercontent.com/-Eic0YezT1UI/AAAAAAAAAAI/AAAAAAAAAB0/oheQ8dpIiRk/photo.jpg	\N	2017-12-12 02:41:32	2017-12-12 02:41:32	\N	f	f	NOVUS	\N	0
+140	\N	\N	makenga thomas	www.thomasmakenga24@gmail.com	0622317802	\N	free	12-12-2017	12-01-2018	1234	0	\N	\N	2017-12-11 21:11:34	2017-12-11 21:11:34	\N	f	f	NOVUS	\N	0
+139	\N	\N	Imelda Mallya	imeldamallya2@gmail.com	0753075772	\N	free	11-12-2017	11-01-2018	2	0	\N	\N	2017-12-11 20:09:22	2017-12-11 20:09:22	\N	f	f	NOVUS	\N	0
+138	\N	\N	ruthbarnabas1997@gmail.com	ruthbarnabas1997@gmail.com	0656490154	\N	free	11-12-2017	11-01-2018	1997	0	\N	\N	2017-12-11 17:17:17	2017-12-11 17:17:17	\N	f	f	NOVUS	\N	0
+137	\N	\N	Edina Cleophace	edinacleophace73@gmail.com	0652466013	\N	free	11-12-2017	11-01-2018	12	0	\N	\N	2017-12-11 14:35:54	2017-12-11 14:35:54	\N	f	f	NOVUS	\N	0
+135	\N	\N	Grace Njuguna	gracenjuguna2351983@gmail.com	0722153161	\N	free	11-12-2017	11-01-2018	4	1	\N	\N	2017-12-11 11:48:38	2017-12-11 11:48:38	\N	f	f	NOVUS	\N	0
+134	\N	\N	fadhili shelutimbwa	fshelutimbwa1966@gmail.com	0713823700	\N	free	11-12-2017	11-01-2018	250000	0	\N	\N	2017-12-11 09:25:57	2017-12-11 09:25:57	\N	f	f	NOVUS	\N	0
+132	\N	\N	Mercy Munisi	mercysebamunisi@gmail.com	+255754855774	\N	free	11-12-2017	11-01-2018	7	0	\N	\N	2017-12-11 07:30:24	2017-12-11 07:30:24	\N	f	f	NOVUS	\N	0
+129	\N	\N	Sylivester Daudi	silva2mwanzilwa@gmail.com	0762210756	\N	free	11-12-2017	11-01-2018	2	0	\N	\N	2017-12-11 00:34:18	2017-12-11 00:34:18	\N	f	f	NOVUS	\N	0
+128	\N	\N	Gabriel mshana	gabrielmshana@gmail.com	+255756559541	\N	free	10-12-2017	10-01-2018	0	0	\N	\N	2017-12-10 19:24:26	2017-12-10 19:24:26	\N	f	f	NOVUS	\N	0
+126	\N	\N	Elizabeth Juma	elizabethjuma736@gmail.com	0767545222	\N	free	10-12-2017	10-01-2018	1	0	\N	\N	2017-12-10 15:22:23	2017-12-10 15:22:23	\N	f	f	NOVUS	\N	0
+125	\N	\N	meali Khamis	mshibsy@gmail.com	0786677400	\N	free	10-12-2017	10-01-2018	1	0	\N	\N	2017-12-10 05:00:43	2017-12-10 05:00:43	\N	f	f	NOVUS	\N	0
+124	\N	\N	Roman Kazungu	romankazungu74@gmail.com	0722153161	\N	free	09-12-2017	09-01-2018	4	1	https://lh3.googleusercontent.com/-jsgYlvTKk38/AAAAAAAAAAI/AAAAAAAADtY/O-0nfSCERMA/photo.jpg	\N	2017-12-09 19:07:05	2017-12-09 19:07:05	\N	f	f	NOVUS	\N	0
+1194	255000570818	\N	Glory Makuka	gmakuka@gmail.com	0763223388	\N	premium	03-07-2018	01-02-2019	0	0	https://lh6.googleusercontent.com/-8TBXAMDR9JE/AAAAAAAAAAI/AAAAAAAAA90/Qt3xkRhYYHM/photo.jpg	\N	2018-07-03 14:23:30	2018-07-30 10:25:29	\N	f	f	Ass. Supervisor	\N	0
+87	254000584222	\N	Fransisko B Mgaya	mgayafransisco@gmail.com	0759628323	\N	premium	01-08-2018	31-08-2018	0	0	https://lh5.googleusercontent.com/-_A8LsVLFQ4o/AAAAAAAAAAI/AAAAAAAAT1k/gBX9C-ymG5k/photo.jpg	\N	2017-12-06 16:26:21	2018-08-01 17:46:07	\N	f	f	Ass. Supervisor	\N	0
+80	255000402875	\N	Godluck Swai	godluckswai50@gmail.com	0787960066	\N	premium	01-08-2018	31-08-2018	3	0	\N	\N	2017-12-06 05:23:02	2018-08-02 07:46:49	\N	f	f	Manager	\N	0
+1297	255000540027	\N	Minka Tours Tanzania Ltd	minkatours@gmail.com	0789448508	\N	free	13-08-2018	13-09-2018	0	0	https://lh4.googleusercontent.com/-tpbXHTNeiY8/AAAAAAAAAAI/AAAAAAAAABA/1Jo0VXLyh2g/photo.jpg	\N	2018-08-13 17:33:57	2018-08-13 17:33:57	\N	f	f	Supervisor	\N	\N
+1247	255000424547	\N	Happiness Mrema	mremahappiness@gmail.com	0718935492	\N	free	25-07-2018	25-08-2018	0	0	\N	\N	2018-07-25 03:47:12	2018-07-25 03:47:12	\N	f	f	Ass. Supervisor	\N	\N
+1213	255200022456	\N	JOHANNES MATHIAS	johannesmathias1@gmail.com	0743672423	\N	free	11-07-2018	11-08-2018	0	0	\N	\N	2018-07-11 18:51:11	2018-07-11 18:51:11	\N	f	f	Novus	\N	0
+1195	255000048381	\N	Blandina Njau	njaublandina@gmail.com	0713728080	\N	premium	13-08-2018	13-08-2019	0	0	https://lh6.googleusercontent.com/-Zcxe7rzn614/AAAAAAAAAAI/AAAAAAAAAAA/AB6qoq0Jo23B1WZAI56Hgu9X_neFXK2gcw/s200/photo.jpg	\N	2018-07-03 15:54:05	2018-08-13 13:37:16	\N	f	f	Man	1.0	1
+906	\N	\N	Tedy Mushi	sooephie12@gmail.com	0658404446	\N	free	10-04-2018	11-05-2018	12	0	\N	\N	2018-04-10 14:08:55	2018-04-10 14:08:55	\N	f	f	NOVUS	\N	0
+904	\N	\N	Janeth Lyimo	janethlyimo4@gmail.com	0676008132	\N	free	10-04-2018	11-05-2018	25	0	\N	\N	2018-04-10 06:57:02	2018-04-10 06:57:02	\N	f	f	NOVUS	\N	0
+1212	255200023289	\N	wilharda ndaisaba	wilharda92@gmail.com	0763414705	\N	free	11-07-2018	11-08-2018	0	0	https://lh3.googleusercontent.com/-VdYDOHEOjyk/AAAAAAAAAAI/AAAAAAAACas/giEathrpGno/photo.jpg	\N	2018-07-11 18:02:47	2018-07-11 18:02:47	\N	f	f	Novus	\N	0
+122	\N	\N	Emmanuel Archard	www.emmanuelalchard@gmail.com	0767135120	\N	free	09-12-2017	09-01-2018	11	0	\N	\N	2017-12-09 17:04:05	2017-12-09 17:04:05	\N	f	f	NOVUS	\N	0
+121	\N	\N	Caroline Sambai	caronesambai@gmail.com	0784709193	\N	free	09-12-2017	09-01-2018	5	0	\N	\N	2017-12-09 14:53:53	2017-12-09 14:53:53	\N	f	f	NOVUS	\N	0
+120	\N	\N	Duncan Mosioma	duncanmos964@gmail.com	0658684841	\N	free	09-12-2017	09-01-2018	12	0	\N	\N	2017-12-09 13:35:46	2017-12-09 13:35:46	\N	f	f	NOVUS	\N	0
+119	\N	\N	Chelsea tz1	fadhilmaulid23@gmail.com	0755992687	\N	free	09-12-2017	09-01-2018	4	0	https://lh3.googleusercontent.com/-j761Sg46ni8/AAAAAAAAAAI/AAAAAAAAHjM/9H6Ovvio2jM/photo.jpg	\N	2017-12-09 13:11:37	2017-12-09 13:11:37	\N	f	f	NOVUS	\N	0
+115	\N	\N	ELISHA MALAMBUGI	elishamalambugi@gmail.com	+255765186998	\N	free	09-12-2017	09-01-2018	2	0	https://lh3.googleusercontent.com/-J9TvUAMVFkk/AAAAAAAAAAI/AAAAAAAAAR0/gy143LEOM84/photo.jpg	\N	2017-12-09 09:53:15	2017-12-09 09:53:15	\N	f	f	NOVUS	\N	0
+113	\N	\N	Musa Lameck	musalameck7@gmail.com	+255764082924	\N	free	08-12-2017	08-01-2018	4	0	https://lh3.googleusercontent.com/-RhLhLUGFXSs/AAAAAAAAAAI/AAAAAAAAAG8/02s9saGAyYg/photo.jpg	\N	2017-12-08 11:03:20	2017-12-08 11:03:20	\N	f	f	NOVUS	\N	0
+112	\N	\N	Adam Fritz	adamfritz6@gmail.com	0766161845	\N	free	08-12-2017	08-01-2018	787	0	\N	\N	2017-12-08 10:27:31	2017-12-08 10:27:31	\N	f	f	NOVUS	\N	0
+111	\N	\N	Vumilia Siasa	siasavumilia@gmail.com	0753150530	\N	free	08-12-2017	08-01-2018	4	0	\N	\N	2017-12-08 09:17:57	2017-12-08 09:17:57	\N	f	f	NOVUS	\N	0
+110	\N	\N	Fatma Abdulkadir	fatmaamohd83@gmail.com	0773823426	\N	free	08-12-2017	08-01-2018	1	0	\N	\N	2017-12-08 08:48:03	2017-12-08 08:48:03	\N	f	f	NOVUS	\N	0
+109	\N	\N	May Munuo	msmunuo@gmail.com	0714616770	\N	free	08-12-2017	08-01-2018	800	0	https://lh3.googleusercontent.com/-qi7KW8GmLH4/AAAAAAAAAAI/AAAAAAAAAJ8/2U4ngM39zhM/photo.jpg	\N	2017-12-08 05:49:25	2017-12-08 05:49:25	\N	f	f	NOVUS	\N	0
+108	\N	\N	Bariki Kaberege	kabaregebariki@gmail.com	0654065266	\N	free	08-12-2017	08-01-2018	9	0	https://lh5.googleusercontent.com/-R4oe-kIiSZg/AAAAAAAAAAI/AAAAAAAACSE/6hUxvw0uPns/photo.jpg	\N	2017-12-08 05:43:47	2017-12-08 05:43:47	\N	f	f	NOVUS	\N	0
+106	\N	\N	Dominica Kimario	dominicakimario12@gmail.com	0767100883	\N	free	07-12-2017	07-01-2018	0	0	\N	\N	2017-12-07 20:16:41	2017-12-07 20:16:41	\N	f	f	NOVUS	\N	0
+105	\N	\N	sumeet dogra	sdogra009@gmail.com	0713549549	\N	free	07-12-2017	07-01-2018	4	0	\N	\N	2017-12-07 19:15:03	2017-12-07 19:15:03	\N	f	f	NOVUS	\N	0
+104	\N	\N	Godwin Mbwambo	mbwambogodwin717@gmail.com	0754561848	\N	free	07-12-2017	07-01-2018	2	0	\N	\N	2017-12-07 19:06:41	2017-12-07 19:06:41	\N	f	f	NOVUS	\N	0
+103	\N	\N	Salum Msangi	msangisalum63@gmail.com	0710489066	\N	free	07-12-2017	07-01-2018	4	0	\N	\N	2017-12-07 18:14:53	2017-12-07 18:14:53	\N	f	f	NOVUS	\N	0
+98	255200011643	\N	Faraja Msigwa	farajamsigwa3@gmail.com	0712980006	\N	premium	01-07-2018	01-07-2019	0	0	\N	\N	2017-12-07 13:13:38	2018-07-01 14:44:39	\N	f	f	Ass. Supervisor	\N	0
+154	255000563537	\N	Verdiana Kamugisha	verdianak@gmail.com	0715645433	\N	premium	17-06-2018	17-07-2018	0	0	https://lh5.googleusercontent.com/-Aj0execITOQ/AAAAAAAAAAI/AAAAAAAAUnE/qqoCQ5QoKKQ/photo.jpg	\N	2017-12-13 19:30:24	2018-06-17 12:56:20	\N	f	f	Ass. Supervisor	\N	0
+186	\N	\N	reila Kinega	reilakinega@gmail.com	0672532302	\N	premium	18-12-2017	17-01-2018	99	0	\N	\N	2017-12-18 08:45:15	2018-01-24 08:04:25	\N	f	f	NOVUS	\N	0
+246	\N	\N	Jacquiline lyimo	lyimojacqui@gmail.com	0713115921	\N	free	27-12-2017	27-01-2018	0	0	\N	\N	2017-12-27 08:55:11	2017-12-27 08:55:11	\N	f	f	NOVUS	\N	0
+207	\N	\N	shwari abdalah	shwariabdalah@gmail.com	0679575529	\N	free	19-12-2017	19-01-2018	1234	0	https://lh3.googleusercontent.com/-jPWRD1gbJC4/AAAAAAAAAAI/AAAAAAAAABE/PUFuz-NCRYk/photo.jpg	\N	2017-12-19 16:49:22	2017-12-19 16:49:22	\N	f	f	NOVUS	\N	0
+206	\N	\N	Edna Siima Majaliwa	ednasiima07@gmail.com	0717036246	\N	free	19-12-2017	19-01-2018	25	0	\N	\N	2017-12-19 14:17:10	2017-12-19 14:17:10	\N	f	f	NOVUS	\N	0
+203	\N	\N	mohamed ameir	mr.mohameddy@gmail.com	0718025218	\N	free	19-12-2017	19-01-2018	2	0	\N	\N	2017-12-19 10:00:00	2017-12-19 10:00:00	\N	f	f	NOVUS	\N	0
+202	\N	\N	hariet michael	harietmichael@gmail.com	0754074435	\N	free	19-12-2017	19-01-2018	2	0	\N	\N	2017-12-19 08:22:16	2017-12-19 08:22:16	\N	f	f	NOVUS	\N	0
+200	\N	\N	Nicholas Mawanda	mawanda83@gmail.com	+256702864253	\N	free	19-12-2017	19-01-2018	0	0	\N	\N	2017-12-19 03:50:19	2017-12-19 03:50:19	\N	f	f	NOVUS	\N	0
+199	\N	\N	Paul Bahame	pbahame@gmail.com	0715815826	\N	free	18-12-2017	18-01-2018	1	0	https://lh6.googleusercontent.com/-wuX5bLHV7R0/AAAAAAAAAAI/AAAAAAAAFBA/mZmCvBnV2vI/photo.jpg	\N	2017-12-18 19:36:18	2017-12-18 19:36:18	\N	f	f	NOVUS	\N	0
+197	\N	\N	Patrick Peter Paul	patrpeter88@gmail.com	712339005	\N	free	18-12-2017	18-01-2018	10	0	\N	\N	2017-12-18 18:39:23	2017-12-18 18:39:23	\N	f	f	NOVUS	\N	0
+195	\N	\N	Sanane Mapesa	sananemapesa@gmail.com	0672200328	\N	free	18-12-2017	18-01-2018	2	0	\N	\N	2017-12-18 15:21:45	2017-12-18 15:21:45	\N	f	f	NOVUS	\N	0
+193	\N	\N	Kendi Josline	kendijos.kj@gmail.com	0701272311	\N	free	18-12-2017	18-01-2018	1	1	\N	\N	2017-12-18 14:21:46	2017-12-18 14:21:46	\N	f	f	NOVUS	\N	0
+192	\N	\N	Tegemeo Samson	tegemeosamson2@gmail.com	0674299338	\N	free	18-12-2017	18-01-2018	5070	0	\N	\N	2017-12-18 13:54:01	2017-12-18 13:54:01	\N	f	f	NOVUS	\N	0
+191	\N	\N	John Balele	jcbalele@gmail.com	0757948704	\N	free	18-12-2017	18-01-2018	3	0	https://lh4.googleusercontent.com/-wPbPn5_PT1E/AAAAAAAAAAI/AAAAAAAAAJ8/AMjRBP2JOHU/photo.jpg	\N	2017-12-18 13:29:26	2017-12-18 13:29:26	\N	f	f	NOVUS	\N	0
+185	\N	\N	Jonas Godfrey	jonasgodfrey84@gmail.com	0674437778	\N	free	18-12-2017	18-01-2018	1	0	\N	\N	2017-12-18 06:58:22	2017-12-18 06:58:22	\N	f	f	NOVUS	\N	0
+204	255000575535	\N	immaculata kilasa	immaculatakilasa93@gmail.com	0785275487	\N	premium	12-07-2018	11-08-2018	0	0	https://lh4.googleusercontent.com/-sCRhrY1KZlo/AAAAAAAAAAI/AAAAAAAAAEA/KexjTAzpfQI/photo.jpg	\N	2017-12-19 11:18:50	2018-08-03 16:47:36	\N	f	f	Ass. Supervisor	\N	0
+1298	255200024319	\N	Gati Mseti	gatimseti@gmail.com	0713132303	\N	free	14-08-2018	14-09-2018	0	0	https://lh6.googleusercontent.com/-lI6amCUfJcI/AAAAAAAAAAI/AAAAAAAAATo/B5o0R5nnh7A/photo.jpg	\N	2018-08-14 06:31:47	2018-08-14 06:31:47	\N	f	f	Novus	\N	\N
+177	255200016979	\N	veronice harvey	harveyveronice@gmail.com	0715560363	\N	premium	22-06-2018	20-01-2019	1	0	https://lh3.googleusercontent.com/-wCnYRPirEIA/AAAAAAAAAAI/AAAAAAAAADg/qZnx5vRDzxc/photo.jpg	\N	2017-12-17 04:23:41	2018-07-21 11:41:57	\N	f	f	Ass. Supervisor	\N	0
+1248	255200017637	\N	Mwanaidi Mbaraka	mwanamubar1@gmail.com	0744398149	\N	free	25-07-2018	25-08-2018	0	0	\N	\N	2018-07-25 06:16:54	2018-07-25 06:16:54	\N	f	f	Novus	\N	\N
+947	\N	\N	Sele The Don	thedonsele7@gmail.com	0719233970	\N	free	21-04-2018	22-05-2018	1993	1	\N	\N	2018-04-21 07:47:17	2018-04-21 07:47:17	\N	f	f	NOVUS	\N	0
+184	\N	\N	David Kessi	kessi.david@gmail.com	0754419149	\N	free	18-12-2017	18-01-2018	0	0	https://lh4.googleusercontent.com/-AudpR4iZeKU/AAAAAAAAAAI/AAAAAAAAAhE/eyCwfvJZKMM/photo.jpg	\N	2017-12-18 03:20:21	2017-12-18 03:20:21	\N	f	f	NOVUS	\N	0
+182	\N	\N	Munira Makachaa	muniramakachaa@gmail.com	0779319210	\N	free	17-12-2017	17-01-2018	1	0	\N	\N	2017-12-17 15:46:19	2017-12-17 15:46:19	\N	f	f	NOVUS	\N	0
+181	255200004057	\N	John Suwi	johnjoelsuwi@gmail.com	0625641461	\N	premium	17-07-2018	16-08-2018	4	0	\N	\N	2017-12-17 13:36:12	2018-07-18 06:31:49	\N	f	f	Ass. Supervisor	\N	0
+179	\N	\N	Dr.Kabanga Adolph	adolphmpoyo@gmail.com	07529867777	\N	free	17-12-2017	17-01-2018	2	0	https://lh3.googleusercontent.com/-Xs2aLQ-KBCc/AAAAAAAAAAI/AAAAAAAAAAs/lBjkiXXsRAo/photo.jpg	\N	2017-12-17 10:07:03	2017-12-17 10:07:03	\N	f	f	NOVUS	\N	0
+175	\N	\N	Mariam Minga	mariamminga56@gmail.com	0658166233	\N	free	16-12-2017	16-01-2018	4	0	\N	\N	2017-12-16 14:14:22	2017-12-16 14:14:22	\N	f	f	NOVUS	\N	0
+170	\N	\N	Aziza Gelas	azizagelas7@gmail.com	0714475727	\N	free	16-12-2017	16-01-2018	123	0	\N	\N	2017-12-15 23:48:41	2017-12-15 23:48:41	\N	f	f	NOVUS	\N	0
+169	\N	\N	John Mkulia	johnfmkulia@gmail.com	0679286829	\N	free	15-12-2017	15-01-2018	10000	0	https://lh6.googleusercontent.com/-R0aj7OCBspc/AAAAAAAAAAI/AAAAAAAAAHY/_hve_RUZq80/photo.jpg	\N	2017-12-15 11:11:21	2017-12-15 11:11:21	\N	f	f	NOVUS	\N	0
+168	\N	\N	Khalphan Seiph	khalphan.ks@gmail.com	0712516719	\N	free	15-12-2017	15-01-2018	5	0	https://lh4.googleusercontent.com/-OgNSTKwNxMg/AAAAAAAAAAI/AAAAAAAAANg/DXglQCWGLa0/photo.jpg	\N	2017-12-15 10:53:32	2017-12-15 10:53:32	\N	f	f	NOVUS	\N	0
+167	\N	\N	maalim yahya	yamalixx@gmail.com	0713941599	\N	free	15-12-2017	15-01-2018	100000	0	https://lh6.googleusercontent.com/-PkJMGykoQi0/AAAAAAAAAAI/AAAAAAAAAEc/Ay0Woz0FsVk/photo.jpg	\N	2017-12-15 08:07:08	2017-12-15 08:07:08	\N	f	f	NOVUS	\N	0
+166	\N	\N	Elisha Kapilimka	elishjr@gmail.com	0712460522	\N	free	15-12-2017	15-01-2018	22	0	https://lh5.googleusercontent.com/-9BsrKaNQmzg/AAAAAAAAAAI/AAAAAAAAACQ/Ceh3Yryh370/photo.jpg	\N	2017-12-15 06:29:26	2017-12-15 06:29:26	\N	f	f	NOVUS	\N	0
+165	\N	\N	Charles Kimolo	kimoloc4@gmail.com	0764620425	\N	free	15-12-2017	15-01-2018	105	0	\N	\N	2017-12-15 06:23:23	2017-12-15 06:23:23	\N	f	f	NOVUS	\N	0
+164	\N	\N	Nicoline Musika	nicolinemusika@gmail.com	255754317088	\N	free	15-12-2017	15-01-2018	3	0	https://lh3.googleusercontent.com/-Qzer51im6N8/AAAAAAAAAAI/AAAAAAAAABA/eNDLmmXXvXg/photo.jpg	\N	2017-12-15 05:39:54	2017-12-15 05:39:54	\N	f	f	NOVUS	\N	0
+163	\N	\N	Bin Mussa	binmussa0@gmail.com	0776252808	\N	free	15-12-2017	15-01-2018	5	0	\N	\N	2017-12-15 05:36:05	2017-12-15 05:36:05	\N	f	f	NOVUS	\N	0
+174	255200010096	\N	Ashura Kihemba	ashurakihemba953@gmail.com	0713885574	\N	premium	05-07-2018	03-01-2019	8	0	\N	\N	2017-12-16 13:22:46	2018-07-05 17:03:47	\N	f	f	Ass. Supervisor	\N	0
+160	\N	\N	Cassie Don	doncassie361@gmail.com	0714628905	\N	free	14-12-2017	14-01-2018	3	0	\N	\N	2017-12-14 13:33:06	2017-12-14 13:33:06	\N	f	f	NOVUS	\N	0
+159	\N	\N	godfrey siriwa	siriwagodfrey1@gmail.com	0718164026	\N	free	14-12-2017	14-01-2018	0	0	https://lh4.googleusercontent.com/-eseUL5foyPQ/AAAAAAAAAAI/AAAAAAAAAAw/xQ-Y29O2GoE/photo.jpg	\N	2017-12-14 10:40:11	2017-12-14 10:40:11	\N	f	f	NOVUS	\N	0
+183	255000598629	\N	Francis Wambugu	franciswambugu590@gmail.com	0655327947	\N	free	17-12-2017	17-01-2018	63	0	\N	\N	2017-12-17 15:55:16	2018-06-17 17:53:30	\N	f	f	Ass. Supervisor	\N	0
+244	254200013997	\N	Fred Njoroge	frednjoroge2017@gmail.com	0703943040	\N	free	27-12-2017	27-01-2018	27	1	\N	\N	2017-12-27 05:55:54	2018-07-04 04:56:33	\N	f	f	Supervisor	\N	0
+223	254200018027	\N	jose mwai	josemwai4@gmail.com	0715892151	\N	free	22-12-2017	22-01-2018	10	1	https://lh4.googleusercontent.com/-UVwnvjnHORk/AAAAAAAAAAI/AAAAAAAAABI/qBTf1IZKpgE/photo.jpg	\N	2017-12-22 11:03:29	2018-07-11 09:54:37	\N	f	f	Ass. Supervisor	\N	0
+205	255000429287	\N	Nathanael Mchomvu	nathanaelmchomvu@gmail.com	0755674496	\N	premium	09-06-2018	09-07-2018	0	0	\N	\N	2017-12-19 13:04:38	2018-06-09 08:40:01	\N	f	f	Ass. Manager	\N	0
+176	255000565875	\N	GIBETH MLELWA	gibethmlelwa@gmail.com	0762235373	\N	free	16-12-2017	16-01-2018	57	0	https://lh6.googleusercontent.com/-e3GXbKSvmz8/AAAAAAAAAAI/AAAAAAAABgU/lj1TyOseGT4/photo.jpg	\N	2017-12-16 17:13:51	2018-06-07 09:36:35	\N	f	f	Supervisor	\N	0
+201	255000426915	\N	saraphina damas	phinawellness@gmail.com	0785541440	\N	premium	01-07-2018	30-12-2018	1	0	\N	\N	2017-12-19 04:21:05	2018-07-01 13:46:42	\N	f	f	Supervisor	\N	0
+208	255000410133	\N	Mark Mafikiri	mrkmafikiri@gmail.com	0713899680	\N	free	19-12-2017	19-01-2018	1	0	\N	\N	2017-12-19 18:33:53	2018-06-06 09:50:14	\N	f	f	Supervisor	\N	0
+245	\N	\N	clister dickson	clisterdickson@gmail.com	0719557017	\N	free	27-12-2017	27-01-2018	12	0	https://lh6.googleusercontent.com/-pYj8O5ixv1w/AAAAAAAAAAI/AAAAAAAAABk/8x0am65-f14/photo.jpg	\N	2017-12-27 07:07:56	2017-12-27 07:07:56	\N	f	f	NOVUS	\N	0
+243	\N	\N	Hamissi Mussa	hamissim91@gmail.com	+255659331331	\N	free	27-12-2017	27-01-2018	250000	0	\N	\N	2017-12-26 21:37:57	2017-12-26 21:37:57	\N	f	f	NOVUS	\N	0
+242	\N	\N	Willy Tite	titewilly6@gmail.com	0702907098	\N	free	26-12-2017	26-01-2018	7	1	\N	\N	2017-12-26 16:27:01	2017-12-26 16:27:01	\N	f	f	NOVUS	\N	0
+369	255000534577	\N	bindya kishor	bindya.kishor@gmail.com	0717125389	\N	premium	30-07-2018	29-08-2018	0	0	\N	\N	2018-01-16 15:05:51	2018-07-30 11:35:20	\N	f	f	Ass. Supervisor	\N	0
+133	255000410137	\N	Haki Nuhu	haki23nuhu@gmail.com	0762913628	\N	premium	20-06-2018	18-09-2018	2	0	\N	\N	2017-12-11 08:30:41	2018-08-18 06:10:07	\N	f	f	Ass. Supervisor	\N	0
+1299	255200024261	\N	eliminasiyame@gmail.com	eliminasiyame@gmail.com	0752223616	\N	free	14-08-2018	14-09-2018	0	0	\N	\N	2018-08-14 10:40:41	2018-08-14 10:40:41	\N	f	f	Novus	\N	\N
+180	255000418876	\N	Bertha Ignas	mwanaimaa@gmail.com	0752454888	\N	premium	30-07-2018	30-07-2019	1	1	\N	\N	2017-12-17 12:10:00	2018-08-16 13:17:29	\N	f	f	Manager	\N	0
+1249	255000504106	\N	Jesca Matemba	matembajessy@gmail.com	0719019423	\N	free	26-07-2018	26-08-2018	0	0	\N	\N	2018-07-26 08:03:30	2018-07-26 08:03:30	\N	f	f	Ass. Supervisor	\N	\N
+1300	255000483492	\N	Kabula Makoye	kmakoye@gmail.com	0764100005	\N	free	15-08-2018	15-09-2018	0	0	https://lh3.googleusercontent.com/-nyf3vuuo0oM/AAAAAAAAAAI/AAAAAAAAH5o/__75bcuIwl0/photo.jpg	\N	2018-08-15 07:22:17	2018-08-15 07:22:17	\N	f	f	Manager	\N	\N
+1000	\N	\N	John Rmremi	johnrmremi01@gmail.com	0692472504	\N	free	02-05-2018	02-06-2018	4	0	\N	\N	2018-05-02 15:56:06	2018-05-02 15:56:06	\N	f	f	NOVUS	\N	0
+989	\N	\N	Goodluck Shio	ghipoliti@gmail.com	0713481247	\N	free	29-04-2018	30-05-2018	2	0	\N	\N	2018-04-29 17:31:29	2018-04-29 17:31:29	\N	f	f	NOVUS	\N	0
+988	\N	\N	Agatha Kitundu	akitundu09@gmail.com	0766019556	\N	free	29-04-2018	30-05-2018	0	0	\N	\N	2018-04-29 12:18:39	2018-04-29 12:18:39	\N	f	f	NOVUS	\N	0
+1197	255000616492	\N	richthedon91@gmail.com	richthedon91@gmail.com	0719684424	\N	free	05-07-2018	05-08-2018	0	0	\N	\N	2018-07-05 13:29:01	2018-07-05 13:29:01	\N	f	f	Novus	\N	0
+1214	254004497442	\N	PETER KITUKU	ianpeterh@gmail.com	0727046892	\N	free	12-07-2018	12-08-2018	0	1	\N	\N	2018-07-12 09:23:24	2018-07-12 09:23:24	\N	f	f	Supervisor	\N	0
+241	\N	\N	Jema Rwihura	jemaclemence@gmail.com	0718975331	\N	free	26-12-2017	26-01-2018	135000	0	\N	\N	2017-12-26 16:01:20	2017-12-26 16:01:20	\N	f	f	NOVUS	\N	0
+239	\N	\N	Andambike Samson	andambike@gmail.com	0674513851	\N	free	25-12-2017	25-01-2018	1234	0	https://lh3.googleusercontent.com/-FgEFS3R-NCk/AAAAAAAAAAI/AAAAAAAAEnc/rb5tI1nqB94/photo.jpg	\N	2017-12-25 13:44:25	2017-12-25 13:44:25	\N	f	f	NOVUS	\N	0
+238	\N	\N	Bhoke Joseph	bhokemj@gmail.com	0759321755	\N	free	25-12-2017	25-01-2018	0	0	\N	\N	2017-12-25 08:54:56	2017-12-25 08:54:56	\N	f	f	NOVUS	\N	0
+236	\N	\N	Gina Mchao	ginamchao@gmail.com	0767306866	\N	free	25-12-2017	25-01-2018	3	0	https://lh5.googleusercontent.com/-98HJ8xWS7qs/AAAAAAAAAAI/AAAAAAAAM7I/WLkvUteKrG8/photo.jpg	\N	2017-12-24 22:10:52	2017-12-24 22:10:52	\N	f	f	NOVUS	\N	0
+234	\N	\N	Rose Choray	rosechoray50@gmail.com	0755177105	\N	free	24-12-2017	24-01-2018	0	0	\N	\N	2017-12-24 05:11:27	2017-12-24 05:11:27	\N	f	f	NOVUS	\N	0
+233	\N	\N	mike fanuel (M.K)	mikefanuel17@gmail.com	0718612609	\N	free	23-12-2017	23-01-2018	4	0	https://lh6.googleusercontent.com/-OyPEQ5JqCT8/AAAAAAAAAAI/AAAAAAAA-F0/Zh1d4L0DaJ4/photo.jpg	\N	2017-12-23 20:18:08	2017-12-23 20:18:08	\N	f	f	NOVUS	\N	0
+232	\N	\N	sabra abdullah	yasa9294@gmail.com	0655195907	\N	free	23-12-2017	23-01-2018	425	0	https://lh4.googleusercontent.com/-Nom99UDZ4pQ/AAAAAAAAAAI/AAAAAAAAADM/FAdCuuWNTwU/photo.jpg	\N	2017-12-23 11:09:56	2017-12-23 11:09:56	\N	f	f	NOVUS	\N	0
+231	\N	\N	evans geryon	evansgeryon@gmail.com	0752134333	\N	free	23-12-2017	23-01-2018	0	0	\N	\N	2017-12-23 09:18:59	2017-12-23 09:18:59	\N	f	f	NOVUS	\N	0
+230	255000472773	\N	Blesn Achim	blesn.achim45@gmail.com	0659608061	\N	premium	07-07-2018	07-07-2019	0	0	\N	\N	2017-12-23 06:08:36	2018-07-18 06:14:26	\N	f	f	Ass. Supervisor	\N	0
+229	\N	\N	kajuna baltazary	baltazarykajuna@gmail.com	0653751261	\N	free	23-12-2017	23-01-2018	100000	0	https://lh4.googleusercontent.com/-qnfJYN9oj3I/AAAAAAAAAAI/AAAAAAAAADo/ZphAV11Hlco/photo.jpg	\N	2017-12-23 05:20:47	2017-12-23 05:20:47	\N	f	f	NOVUS	\N	0
+228	\N	\N	Mwajuma Chota	mwajumachota9@gmail.com	0655746174	\N	free	22-12-2017	22-01-2018	5	0	\N	\N	2017-12-22 15:46:44	2017-12-22 15:46:44	\N	f	f	NOVUS	\N	0
+227	\N	\N	edina makingi	makingi183@gmail.com	0757354566	\N	free	22-12-2017	22-01-2018	2	0	\N	\N	2017-12-22 14:15:47	2017-12-22 14:15:47	\N	f	f	NOVUS	\N	0
+226	\N	\N	Thomas Mkwiji	tmkwiji@gmail.com	0658123678	\N	free	22-12-2017	22-01-2018	10	0	https://lh3.googleusercontent.com/-PbhUhq57cR0/AAAAAAAAAAI/AAAAAAAAFRk/0aHfVJTlu8Q/photo.jpg	\N	2017-12-22 12:10:02	2017-12-22 12:10:02	\N	f	f	NOVUS	\N	0
+222	\N	\N	James Nderitu	jemoforeverea@gmail.com	+254722597433	\N	free	22-12-2017	22-01-2018	0	1	\N	\N	2017-12-22 10:07:56	2017-12-22 10:07:56	\N	f	f	NOVUS	\N	0
+221	\N	\N	itika mwasimanga	mwasimangaitika@gmail.com	+255755818206	\N	free	21-12-2017	21-01-2018	120	0	\N	\N	2017-12-21 16:08:53	2017-12-21 16:08:53	\N	f	f	NOVUS	\N	0
+220	\N	\N	Munir Mohamed	munirmohamed243@gmail.com	0755043516	\N	free	21-12-2017	21-01-2018	1	0	\N	\N	2017-12-21 16:01:35	2017-12-21 16:01:35	\N	f	f	NOVUS	\N	0
+215	\N	\N	Anne Otieno	annesse.otieno@gmail.com	0786908470	\N	free	20-12-2017	20-01-2018	0	0	\N	\N	2017-12-20 18:58:07	2017-12-20 18:58:07	\N	f	f	NOVUS	\N	0
+214	\N	\N	Jane Seif	janeseif23@gmail.com	0789043108	\N	free	20-12-2017	20-01-2018	0	0	\N	\N	2017-12-20 18:51:11	2017-12-20 18:51:11	\N	f	f	NOVUS	\N	0
+213	\N	\N	Sophia Sanga	sangasophia673@gmail.com	0754559980	\N	free	20-12-2017	20-01-2018	2	0	\N	\N	2017-12-20 16:13:55	2017-12-20 16:13:55	\N	f	f	NOVUS	\N	0
+212	\N	\N	steven audax	stevenaudax@gmail.com	0752085869	\N	free	20-12-2017	20-01-2018	2	0	https://lh6.googleusercontent.com/-dxRmncucCaQ/AAAAAAAAAAI/AAAAAAAAAEU/SghfhkAI50Y/photo.jpg	\N	2017-12-20 12:23:38	2017-12-20 12:23:38	\N	f	f	NOVUS	\N	0
+210	\N	\N	Jacob Peter	jacobezzra@gmail.com	+255718890104	\N	free	20-12-2017	20-01-2018	50000	0	https://lh6.googleusercontent.com/-QdU6TnvABxo/AAAAAAAAAAI/AAAAAAAAABI/FjYw5zIkyUI/photo.jpg	\N	2017-12-20 08:15:30	2017-12-20 08:15:30	\N	f	f	NOVUS	\N	0
+196	255000445747	\N	Shina John	shinajohn1@gmail.com	0756337708	\N	premium	30-06-2018	30-06-2019	0	0	\N	\N	2017-12-18 16:20:09	2018-06-30 09:01:39	\N	f	f	Manager	\N	0
+249	255000572186	\N	Fortunate Mkiramweni	fmkiramweni@gmail.com	0255754992	\N	premium	17-07-2018	15-10-2018	2	0	\N	\N	2017-12-27 10:47:25	2018-07-18 11:18:39	\N	f	f	Ass. Supervisor	\N	0
+224	255000603300	\N	Beatrice Edward	beatriceedward93@gmail.com	0712890628	\N	free	22-12-2017	22-01-2018	2	0	\N	\N	2017-12-22 12:01:21	2018-06-09 09:44:24	\N	f	f	Ass. Supervisor	\N	0
+683	\N	\N	shufat mohammed	mshufad@yahoo.com	+254701815969	\N	free	02-03-2018	02-04-2018	1	0	\N	\N	2018-03-02 17:01:39	2018-03-02 17:01:39	\N	f	f	NOVUS	\N	0
+289	\N	\N	Glorie Benj	gloriebenj@gmail.com	+255782244662	\N	free	03-01-2018	03-02-2018	2	0	https://lh4.googleusercontent.com/-PN895wNv_W8/AAAAAAAAAAI/AAAAAAAAKyA/LefotUqijiA/photo.jpg	\N	2018-01-03 10:58:49	2018-01-03 10:58:49	\N	f	f	NOVUS	\N	0
+173	255000614702	\N	Didas Kidesu	didask20@gmail.com	0676911668	\N	premium	08-08-2018	07-09-2018	2	0	https://lh3.googleusercontent.com/-nLO7vz1pc-E/AAAAAAAAAAI/AAAAAAAAABc/-i0ceLWsk-M/photo.jpg	\N	2017-12-16 10:23:09	2018-08-17 16:45:11	\N	f	f	Novus	\N	0
+1250	255200022740	\N	Nurey hussein	nureyhussein81@gmail.com	0653309255	\N	free	26-07-2018	26-08-2018	0	0	\N	\N	2018-07-26 08:30:15	2018-07-26 08:30:15	\N	f	f	Novus	\N	\N
+1301	254200021745	\N	RAEL ALUSA	raelalusa@gmail.com	0723712263	\N	free	15-08-2018	15-09-2018	0	1	https://lh4.googleusercontent.com/-TiJ8FLSODG4/AAAAAAAAAAI/AAAAAAAAACw/UDdXeYmYO1k/photo.jpg	\N	2018-08-15 09:30:58	2018-08-15 09:30:58	\N	f	f	Ass. Supervisor	\N	\N
+1031	\N	\N	Rebecca Mukama	mukamarebecca@gmail.com	0689092193	\N	free	08-05-2018	08-06-2018	0	0	\N	\N	2018-05-08 03:54:47	2018-05-08 03:54:47	\N	f	f	NOVUS	\N	0
+1030	\N	\N	James Ntunduye	ntunduye@gmail.com	0754515475	\N	free	08-05-2018	08-06-2018	6	0	https://lh3.googleusercontent.com/-5c586EiwQZ0/AAAAAAAAAAI/AAAAAAAAB64/a7rLY0-0hiw/photo.jpg	\N	2018-05-07 21:17:02	2018-05-07 21:17:02	\N	f	f	NOVUS	\N	0
+161	255000545346	\N	Neryl R. Sgr	nerylrsgr@gmail.com	0772459490	\N	premium	06-07-2018	05-08-2018	0	0	https://lh3.googleusercontent.com/-ACug_ZjqRuY/AAAAAAAAAAI/AAAAAAAAAdA/6KMEQxiU0uE/photo.jpg	\N	2017-12-14 14:54:26	2018-07-06 11:19:45	\N	f	f	Ass. Supervisor	\N	0
+1215	255200021916	\N	happyness seswa	seswahappyness@gmail.com	0766539119	\N	free	12-07-2018	12-08-2018	0	0	https://lh3.googleusercontent.com/-uRtmQ8-uj3I/AAAAAAAAAAI/AAAAAAAAAA0/BjympxyxnUI/photo.jpg	\N	2018-07-12 13:42:22	2018-07-12 13:42:22	\N	f	f	Ass. Supervisor	\N	0
+288	\N	\N	Othman Sjumaa	othmansjumaa@gmail.com	0718667266	\N	free	03-01-2018	03-02-2018	2	0	https://lh4.googleusercontent.com/-8ni2WNl2NuE/AAAAAAAAAAI/AAAAAAAAAIU/ERnrAmxdBvE/photo.jpg	\N	2018-01-03 10:28:24	2018-01-03 10:28:24	\N	f	f	NOVUS	\N	0
+287	\N	\N	Istiqama Shamis	istiqama13@gmail.com	0625998682	\N	free	03-01-2018	03-02-2018	0	0	\N	\N	2018-01-03 09:56:41	2018-01-03 09:56:41	\N	f	f	NOVUS	\N	0
+286	\N	\N	Xavery mhagama	xmhagama@gmail.com	0674781507	\N	free	03-01-2018	03-02-2018	4637	0	https://lh4.googleusercontent.com/-KhDygOC3V-I/AAAAAAAAAAI/AAAAAAAAABE/Vev1p5jODcY/photo.jpg	\N	2018-01-03 07:36:58	2018-01-03 07:36:58	\N	f	f	NOVUS	\N	0
+285	\N	\N	hillary lema	hillaryvlema@gmail.com	0713616109	\N	free	03-01-2018	03-02-2018	0	0	https://lh6.googleusercontent.com/-G_ZRNjDRby0/AAAAAAAAAAI/AAAAAAAAADk/oMPaweENefw/photo.jpg	\N	2018-01-03 06:39:32	2018-01-03 06:39:32	\N	f	f	NOVUS	\N	0
+284	\N	\N	Masebo Emani	maseboemani@gmail.com	0713055662	\N	free	03-01-2018	03-02-2018	2	0	\N	\N	2018-01-03 06:17:03	2018-01-03 06:17:03	\N	f	f	NOVUS	\N	0
+283	\N	\N	joseph njoroge	joseki41@gmail.com	0714143723	\N	free	03-01-2018	03-02-2018	0	1	\N	\N	2018-01-03 01:05:08	2018-01-03 01:05:08	\N	f	f	NOVUS	\N	0
+282	\N	\N	Pendo John	pendojohn866@gmail.com	0745440062	\N	free	03-01-2018	03-02-2018	2	0	\N	\N	2018-01-02 21:42:57	2018-01-02 21:42:57	\N	f	f	NOVUS	\N	0
+281	\N	\N	Francis Njogu	fnjogu2000@gmail.com	075288504	\N	free	02-01-2018	02-02-2018	2	0	\N	\N	2018-01-02 19:12:17	2018-01-02 19:12:17	\N	f	f	NOVUS	\N	0
+280	\N	\N	Meckie Millz	meckiemillz@gmail.com	0719616156	\N	free	02-01-2018	02-02-2018	2	0	\N	\N	2018-01-02 09:49:01	2018-01-02 09:49:01	\N	f	f	NOVUS	\N	0
+278	\N	\N	Happiness Kasebele	hkasebele@gmail.com	0656150591	\N	free	02-01-2018	02-02-2018	0	0	https://lh3.googleusercontent.com/-bjnq2Dys0xA/AAAAAAAAAAI/AAAAAAAAABg/qu2Le2oTpXc/photo.jpg	\N	2018-01-02 05:59:38	2018-01-02 05:59:38	\N	f	f	NOVUS	\N	0
+276	\N	\N	Julius Sijaunga	juliussijaunga@gmail.com	0714207482	\N	free	01-01-2018	01-02-2018	2	0	\N	\N	2018-01-01 10:52:04	2018-01-01 10:52:04	\N	f	f	NOVUS	\N	0
+275	\N	\N	Mary Mwifunyi	marymwifunyi80@gmail.com	0754908093	\N	free	01-01-2018	01-02-2018	12345	0	https://lh5.googleusercontent.com/-NT4pdMJ-I_g/AAAAAAAAAAI/AAAAAAAAAA0/M-EtxF3AsqM/photo.jpg	\N	2018-01-01 10:28:25	2018-01-01 10:28:25	\N	f	f	NOVUS	\N	0
+274	\N	\N	mcha ally	allymcha87@gmail.com	0710804370	\N	free	01-01-2018	01-02-2018	12	0	https://lh6.googleusercontent.com/-ELov6VjkPwM/AAAAAAAAAAI/AAAAAAAAIz4/onSJZeBUiPY/photo.jpg	\N	2018-01-01 07:21:53	2018-01-01 07:21:53	\N	f	f	NOVUS	\N	0
+273	\N	\N	Eunice Mrema	eunicemrema90@gmail.com	0764587337	\N	free	31-12-2017	31-01-2018	2	0	\N	\N	2017-12-31 20:51:30	2017-12-31 20:51:30	\N	f	f	NOVUS	\N	0
+272	\N	\N	Johari Ktbrajabu	johariktbrajabu@gmail.com	0654724024	\N	free	31-12-2017	31-01-2018	0	0	\N	\N	2017-12-31 16:51:34	2017-12-31 16:51:34	\N	f	f	NOVUS	\N	0
+271	\N	\N	Ismael Mwinyi	ismamwinyi@gmail.com	0713544144	\N	free	31-12-2017	31-01-2018	0	0	\N	\N	2017-12-31 16:38:15	2017-12-31 16:38:15	\N	f	f	NOVUS	\N	0
+267	\N	\N	mathias majinge	majingemathias75@gmail.com	0678419669	\N	free	30-12-2017	30-01-2018	0	0	\N	\N	2017-12-30 15:40:34	2017-12-30 15:40:34	\N	f	f	NOVUS	\N	0
+266	\N	\N	Mwanaidi Abdulla	abdullamh90@gmail.com	0675361654	\N	free	30-12-2017	30-01-2018	0	0	\N	\N	2017-12-30 14:21:00	2017-12-30 14:21:00	\N	f	f	NOVUS	\N	0
+265	\N	\N	Jamila Machano	jamilamachano01@gmail.com	0772012776	\N	free	30-12-2017	30-01-2018	4	0	\N	\N	2017-12-30 10:58:28	2017-12-30 10:58:28	\N	f	f	NOVUS	\N	0
+264	\N	\N	mashoo shoo	lilianishoo@gmail.com	0713317059	\N	free	30-12-2017	30-01-2018	2	0	https://lh4.googleusercontent.com/-g-IzYbCenJs/AAAAAAAAAAI/AAAAAAAAADs/qsapnNvhWRA/photo.jpg	\N	2017-12-30 10:42:44	2017-12-30 10:42:44	\N	f	f	NOVUS	\N	0
+263	\N	\N	Aboubakar Shaibu	aboubakarshaibu864@gmail.com	0689723625	\N	free	30-12-2017	30-01-2018	1	0	\N	\N	2017-12-30 09:14:09	2017-12-30 09:14:09	\N	f	f	NOVUS	\N	0
+262	\N	\N	Letinno Mantion (Willie)	maygerletino@gmail.com	0653455228	\N	free	30-12-2017	30-01-2018	0	0	https://lh5.googleusercontent.com/-9-iwqvYd3qQ/AAAAAAAAAAI/AAAAAAAAC5g/XQ0FNga6D9k/photo.jpg	\N	2017-12-30 07:43:37	2017-12-30 07:43:37	\N	f	f	NOVUS	\N	0
+260	\N	\N	mrisho swagile	mswagile@gmail.com	+255654338955	\N	free	29-12-2017	29-01-2018	1655	0	https://lh6.googleusercontent.com/-TaxsKMKgf-M/AAAAAAAAAAI/AAAAAAAACIk/YGCN0dyXrIE/photo.jpg	\N	2017-12-29 16:37:03	2017-12-29 16:37:03	\N	f	f	NOVUS	\N	0
+259	\N	\N	Polina Apolinary	polinaapolinary034@gmail.com	0767218326	\N	free	29-12-2017	29-01-2018	25	0	\N	\N	2017-12-29 15:02:58	2017-12-29 15:02:58	\N	f	f	NOVUS	\N	0
+256	\N	\N	Christopher Lawrance	chrisskann@gmail.com	0715688507	\N	free	28-12-2017	28-01-2018	3	0	\N	\N	2017-12-28 09:58:08	2017-12-28 09:58:08	\N	f	f	NOVUS	\N	0
+255	\N	\N	USWEGE MWAIPOPO	mwaipopouswege@gmail.com	0755916087	\N	free	28-12-2017	28-01-2018	11	0	https://lh3.googleusercontent.com/-5SImmSgdfdg/AAAAAAAAAAI/AAAAAAAAABo/wdtlraS8-8g/photo.jpg	\N	2017-12-28 08:30:11	2017-12-28 08:30:11	\N	f	f	NOVUS	\N	0
+254	\N	\N	Godfrey Aminadab	godfreyaminadab@gmail.com	0716903902	\N	free	28-12-2017	28-01-2018	5055555	0	\N	\N	2017-12-28 07:11:58	2017-12-28 07:11:58	\N	f	f	NOVUS	\N	0
+253	\N	\N	Dianarose Salama	kachikedianaroset@gmail.com	0689578743	\N	free	28-12-2017	28-01-2018	2	0	\N	\N	2017-12-27 21:04:16	2017-12-27 21:04:16	\N	f	f	NOVUS	\N	0
+318	255000510070	\N	YUSUPH JACOB	yusjac1@gmail.com	0624055216	\N	free	07-01-2018	07-02-2018	0	0	https://lh5.googleusercontent.com/-bu-jx1nN3jE/AAAAAAAAAAI/AAAAAAAAAD4/0h19SOoR2ps/photo.jpg	\N	2018-01-07 08:06:16	2018-07-25 10:21:19	\N	f	f	Ass. Supervisor	\N	0
+1251	255200023885	\N	Emmanue72 Mmbando	emmanue72mmbando@gmail.com	0656456172	\N	premium	26-07-2018	25-09-2018	0	0	\N	\N	2018-07-26 09:43:08	2018-07-26 09:49:33	\N	f	f	Novus	\N	\N
+1216	255200020469	\N	Wakonta Kapunda	anonta565@gmail.com	0755836896	\N	premium	13-08-2018	12-09-2018	0	0	https://lh3.googleusercontent.com/-THX-WJXbUuM/AAAAAAAAAAI/AAAAAAAAAPc/p3NArqFx5Gc/photo.jpg	\N	2018-07-12 14:40:48	2018-08-13 14:49:06	\N	f	f	Novus	\N	0
+1302	255200024090	\N	Maida Hayola	maidahayola19@gmail.com	0766539064	\N	free	15-08-2018	15-09-2018	0	0	\N	\N	2018-08-15 18:19:08	2018-08-15 18:19:08	\N	f	f	Novus	\N	\N
+1077	\N	\N	Amina Manyama	aminamanyama1@gmail.com	0755417176	\N	free	17-05-2018	17-06-2018	1	0	\N	\N	2018-05-17 08:25:02	2018-05-17 08:25:02	\N	f	f	NOVUS	\N	0
+1076	\N	\N	Patrick Komba	kombap01@gmail.com	0767600745	\N	free	16-05-2018	16-06-2018	15	0	\N	\N	2018-05-16 20:38:36	2018-05-16 20:38:36	\N	f	f	NOVUS	\N	0
+1074	\N	\N	KAYOKA MOHAMED	kayokamohamed@gmail.com	0656990049	\N	free	16-05-2018	16-06-2018	10	0	https://lh4.googleusercontent.com/-j4-2fwG347Q/AAAAAAAAAAI/AAAAAAAAACs/ghcIxDo8u2k/photo.jpg	\N	2018-05-16 18:19:01	2018-05-16 18:19:01	\N	f	f	NOVUS	\N	0
+1198	255000604703	\N	Costansia Kavishe	costanciakavishe@gmail.com	0655776425	\N	free	07-07-2018	07-08-2018	0	0	https://lh3.googleusercontent.com/--SDqT60CKOE/AAAAAAAAAAI/AAAAAAAAAEE/eockUoDC9zc/photo.jpg	\N	2018-07-07 07:08:33	2018-07-07 07:08:33	\N	f	f	Supervisor	\N	0
+1075	\N	\N	Sakhiya Mzale	sakhiyamzale1@gmail.com	0772868618	\N	premium	12-07-2018	11-08-2018	444	0	\N	\N	2018-05-16 19:54:26	2018-07-12 11:28:35	\N	f	f	NOVUS	\N	0
+252	\N	\N	waziri yussuf	waziriyussuf13@gmail.com	+255784853900	\N	free	27-12-2017	27-01-2018	9	0	\N	\N	2017-12-27 18:47:37	2017-12-27 18:47:37	\N	f	f	NOVUS	\N	0
+251	\N	\N	Susan Ninalwo	sfninalwo@gmail.com	0712351276	\N	free	27-12-2017	27-01-2018	0	0	\N	\N	2017-12-27 14:09:08	2017-12-27 14:09:08	\N	f	f	NOVUS	\N	0
+250	\N	\N	Sheranly Khamis	sheranlykhamis@gmail.com	0773485132	\N	free	27-12-2017	27-01-2018	0	0	\N	\N	2017-12-27 13:40:10	2017-12-27 13:40:10	\N	f	f	NOVUS	\N	0
+248	\N	\N	Beatrice Lekule	bettylekule@gmail.com	0755519454	\N	free	27-12-2017	27-01-2018	12	0	\N	\N	2017-12-27 09:42:06	2017-12-27 09:42:06	\N	f	f	NOVUS	\N	0
+218	255000614266	\N	Anno pius	annopius92@gmail.com	0716789967	\N	premium	16-07-2018	15-08-2018	2	0	https://lh5.googleusercontent.com/-pPjxAPvGpyw/AAAAAAAAAAI/AAAAAAAAAAw/wEEuc0g48KQ/photo.jpg	\N	2017-12-21 11:45:00	2018-07-16 21:15:00	\N	f	f	Ass. Supervisor	\N	0
+247	255000607287	\N	Baltazary Haule	haulebh@gmail.com	0768806808	\N	free	27-12-2017	27-01-2018	2	0	https://lh3.googleusercontent.com/-1nVbWTMFpg8/AAAAAAAAAAI/AAAAAAAAGTY/qC4Cnt5s5PI/photo.jpg	\N	2017-12-27 09:34:09	2018-06-30 05:06:03	\N	f	f	Ass. Supervisor	\N	0
+268	254000065720	\N	Ayoub samwel	ayoubsamwel76@gmail.com	0759862580	\N	free	31-12-2017	31-01-2018	4	0	https://lh6.googleusercontent.com/-ojzzBmWPFuY/AAAAAAAAAAI/AAAAAAAAADk/BDIPNLEO1mg/photo.jpg	\N	2017-12-31 06:22:14	2018-06-06 06:26:48	\N	f	f	Manager	\N	0
+334	\N	\N	Angel Luvuvu	aluvuvu@gmail.com	0712905444	\N	free	09-01-2018	09-02-2018	0	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABDCNug8dXOhdjPOCILdmNhcmRfcGhvdG8qKDQ4NmQwODQ0NjBhN2VjODNiYWJjZDU4YmYyNzAyOTFmYmE5OTM3YjMwAVDKt3r6RJR3SLI6clfYELNwRPLg	\N	2018-01-09 05:10:20	2018-01-09 05:10:20	\N	f	f	NOVUS	\N	0
+332	\N	\N	leila suleleila	leilangunyi5@gmail.com	0727612999	\N	free	08-01-2018	08-02-2018	749	1	\N	\N	2018-01-08 17:02:28	2018-01-08 17:02:28	\N	f	f	NOVUS	\N	0
+331	\N	\N	Mathew Mwinuka	mathewmwinuka@gmail.com	0767063915	\N	free	08-01-2018	08-02-2018	0	0	https://lh3.googleusercontent.com/-p81B734OhhA/AAAAAAAAAAI/AAAAAAAAHf0/8qv9q4xiWXQ/photo.jpg	\N	2018-01-08 16:50:29	2018-01-08 16:50:29	\N	f	f	NOVUS	\N	0
+330	\N	\N	iconlogo255@gmail.com	iconlogo255@gmail.com	0655049366	\N	free	08-01-2018	08-02-2018	655049366	0	\N	\N	2018-01-08 16:15:12	2018-01-08 16:15:12	\N	f	f	NOVUS	\N	0
+329	\N	\N	Ignas Kapinga	ignaskapinga91@gmail.com	0762610907	\N	free	08-01-2018	08-02-2018	120	0	\N	\N	2018-01-08 12:56:22	2018-01-08 12:56:22	\N	f	f	NOVUS	\N	0
+328	\N	\N	Aboutwalib Jumanne Saleh GUNDA	salehtwalib@gmail.com	+255784854545	\N	free	08-01-2018	08-02-2018	0	0	https://lh5.googleusercontent.com/-Bp56025itQY/AAAAAAAAAAI/AAAAAAAAcGA/IjhrY5I4f0g/photo.jpg	\N	2018-01-08 12:51:04	2018-01-08 12:51:04	\N	f	f	NOVUS	\N	0
+327	\N	\N	Christopher Jandu	christopherjandu55@gmail.com	0786485891	\N	free	08-01-2018	08-02-2018	1920	0	https://lh6.googleusercontent.com/-Ib0u-HqEJpA/AAAAAAAAAAI/AAAAAAAADyM/KTvF7Sl0aVU/photo.jpg	\N	2018-01-08 11:14:47	2018-01-08 11:14:47	\N	f	f	NOVUS	\N	0
+325	\N	\N	Jackson Mbise	jacksmbise@gmail.com	0766859635	\N	free	08-01-2018	08-02-2018	2	0	\N	\N	2018-01-08 09:52:27	2018-01-08 09:52:27	\N	f	f	NOVUS	\N	0
+324	\N	\N	ntandu vallery	elivanta59@gmail.com	0783674990	\N	free	08-01-2018	08-02-2018	2	0	\N	\N	2018-01-08 07:52:55	2018-01-08 07:52:55	\N	f	f	NOVUS	\N	0
+323	\N	\N	Solomon Somel	solomonsomel@gmail.com	0756708111	\N	free	08-01-2018	08-02-2018	1	0	\N	\N	2018-01-08 07:29:39	2018-01-08 07:29:39	\N	f	f	NOVUS	\N	0
+322	\N	\N	omar nassor	omarnassor84@gmail.com	0712152529	\N	free	08-01-2018	08-02-2018	4	0	\N	\N	2018-01-08 06:50:22	2018-01-08 06:50:22	\N	f	f	NOVUS	\N	0
+319	\N	\N	Evaristo Mtenda	evaristomtenda994@gmail.com	0754465515	\N	free	07-01-2018	07-02-2018	2	0	\N	\N	2018-01-07 12:18:45	2018-01-07 12:18:45	\N	f	f	NOVUS	\N	0
+317	\N	\N	Zena Joseph	zenajoseph866@gmail.com	+255744098714	\N	free	07-01-2018	07-02-2018	100	0	\N	\N	2018-01-06 22:05:32	2018-01-06 22:05:32	\N	f	f	NOVUS	\N	0
+627	\N	\N	Aizack Sanga	aizack93@gmail.com	255767984333	\N	premium	30-03-2018	29-04-2018	969	0	\N	\N	2018-02-20 22:06:43	2018-04-03 05:06:08	\N	f	f	NOVUS	\N	0
+308	255400029749	\N	Grace Msoffe	gracemakenga@gmail.com	0754774580	\N	premium	25-07-2018	23-01-2019	200	0	https://lh6.googleusercontent.com/-dvqMqJDUos4/AAAAAAAAAAI/AAAAAAAAI6I/-5t7Lku7BJU/photo.jpg	\N	2018-01-06 03:54:25	2018-07-26 05:45:23	\N	f	f	Manager	\N	0
+1252	255000614642	\N	nancy rubby	tancytyancy@gmail.com	0715239490	\N	free	26-07-2018	26-08-2018	0	0	https://lh5.googleusercontent.com/-3xrNzB57s3M/AAAAAAAAAAI/AAAAAAAAE7s/FcjLM182Ig4/photo.jpg	\N	2018-07-26 09:47:04	2018-07-26 09:47:04	\N	f	f	Ass. Supervisor	\N	\N
+625	255200017151	\N	Frank Makusa	makusaandnatural@gmail.com	0621061685	\N	free	20-02-2018	23-03-2018	2	0	\N	\N	2018-02-20 19:53:57	2018-06-05 15:47:44	\N	f	f	Ass. Supervisor	\N	0
+219	255000488632	\N	Bupe Mwakasala	bupe257@gmail.com	0652460700	\N	premium	10-07-2018	08-01-2019	1	0	https://lh4.googleusercontent.com/-WxvjvvWrqzo/AAAAAAAAAAI/AAAAAAAAABs/lQQr64z1R6g/photo.jpg	\N	2017-12-21 13:47:30	2018-07-10 11:28:16	\N	f	f	Ass. Supervisor	\N	0
+1217	255200023594	\N	GASTO LESINDAM	lesindamgasto177uk@gmail.com	0767067672	\N	free	12-07-2018	12-08-2018	0	0	\N	\N	2018-07-12 15:19:28	2018-07-12 15:19:28	\N	f	f	Novus	\N	0
+316	\N	\N	Chiestar Dullahvich	dullahvich@gmail.com	0712654828	\N	free	07-01-2018	07-02-2018	4	0	https://lh3.googleusercontent.com/-n24SbnRkXlM/AAAAAAAAAAI/AAAAAAAAApY/PvZxgxj-QCo/photo.jpg	\N	2018-01-06 22:05:18	2018-01-06 22:05:18	\N	f	f	NOVUS	\N	0
+315	\N	\N	Rose Machibya	rosemachibya9@gmail.com	0653877147	\N	free	06-01-2018	06-02-2018	1	0	\N	\N	2018-01-06 19:58:56	2018-01-06 19:58:56	\N	f	f	NOVUS	\N	0
+313	\N	\N	Josephat Alphoncy	j.alphoncy11@gmail.com	0762610907	\N	free	06-01-2018	06-02-2018	120	0	\N	\N	2018-01-06 12:08:35	2018-01-06 12:08:35	\N	f	f	NOVUS	\N	0
+311	\N	\N	Chintan Kamania	cormorant.chintan@gmail.com	0783642609	\N	free	06-01-2018	06-02-2018	0	0	https://lh3.googleusercontent.com/-TSLhRaJitPU/AAAAAAAAAAI/AAAAAAAABPQ/TrLp1TGZDag/photo.jpg	\N	2018-01-06 08:55:08	2018-01-06 08:55:08	\N	f	f	NOVUS	\N	0
+310	\N	\N	Alois mtega	mtegaalois@gmail.com	768625057	\N	free	06-01-2018	06-02-2018	0	0	\N	\N	2018-01-06 08:03:05	2018-01-06 08:03:05	\N	f	f	NOVUS	\N	0
+309	\N	\N	scola kafu	scolakafu@gmail.com	+255686528216	\N	free	06-01-2018	06-02-2018	0	0	\N	\N	2018-01-06 05:39:05	2018-01-06 05:39:05	\N	f	f	NOVUS	\N	0
+307	\N	\N	fatma fadhil	fatmafadhil67@gmail.com	+255772102886	\N	free	05-01-2018	05-02-2018	6	0	\N	\N	2018-01-05 20:42:24	2018-01-05 20:42:24	\N	f	f	NOVUS	\N	0
+306	\N	\N	Sospeter Mgeta	sospetermgeta332@gmail.com	0621117697	\N	free	05-01-2018	05-02-2018	621117697	0	https://lh3.googleusercontent.com/-DxInsMjTScI/AAAAAAAAAAI/AAAAAAAAC78/U64KE3ORmSo/photo.jpg	\N	2018-01-05 17:57:31	2018-01-05 17:57:31	\N	f	f	NOVUS	\N	0
+304	\N	\N	Veronica Kaaya	mamaxwell2017@gmail.com	0755440734	\N	free	05-01-2018	05-02-2018	0	0	\N	\N	2018-01-05 11:36:58	2018-01-05 11:36:58	\N	f	f	NOVUS	\N	0
+303	\N	\N	Saida.A. Abubakar	saida78ally@gmail.com	0784595932	\N	free	04-01-2018	04-02-2018	2	0	\N	\N	2018-01-04 20:04:02	2018-01-04 20:04:02	\N	f	f	NOVUS	\N	0
+302	\N	\N	FRANK SWAYA	swayafrank01@gmail.com	0744552098	\N	free	04-01-2018	04-02-2018	422	0	\N	\N	2018-01-04 14:19:47	2018-01-04 14:19:47	\N	f	f	NOVUS	\N	0
+301	\N	\N	godliver mwamahonje	godyohanag@gmail.com	0755062648	\N	free	04-01-2018	04-02-2018	1	0	https://lh5.googleusercontent.com/-Ztp33OTakPk/AAAAAAAAAAI/AAAAAAAAABo/YLozsvKdwJY/photo.jpg	\N	2018-01-04 13:06:45	2018-01-04 13:06:45	\N	f	f	NOVUS	\N	0
+300	\N	\N	Eddyerick Kiwele	eddyerick81@gmail.com	0754029718	\N	free	04-01-2018	04-02-2018	0	0	https://lh4.googleusercontent.com/-06lpUL4aTGk/AAAAAAAAAAI/AAAAAAAAAHU/dhylTyN8vGw/photo.jpg	\N	2018-01-04 11:49:35	2018-01-04 11:49:35	\N	f	f	NOVUS	\N	0
+298	\N	\N	pascal kasele	kaselepascal@gmail.com	0754370805	\N	free	04-01-2018	04-02-2018	4	0	\N	\N	2018-01-04 08:55:43	2018-01-04 08:55:43	\N	f	f	NOVUS	\N	0
+296	\N	\N	Enock Mosses	enockmosses797@gmail.com	0743450214	\N	free	04-01-2018	04-02-2018	1	0	\N	\N	2018-01-04 07:50:59	2018-01-04 07:50:59	\N	f	f	NOVUS	\N	0
+294	\N	\N	SELELI JOHN	selelijohn2@gmail.com	0753730262	\N	free	04-01-2018	04-02-2018	0	0	\N	\N	2018-01-04 02:36:55	2018-01-04 02:36:55	\N	f	f	NOVUS	\N	0
+292	\N	\N	HAFSA ALIY	hafsaalnabhan@gmail.com	0655113374	\N	free	03-01-2018	03-02-2018	4	0	https://lh6.googleusercontent.com/-qhhdUc4eWvo/AAAAAAAAAAI/AAAAAAAAABI/rr8UWYDL96I/photo.jpg	\N	2018-01-03 14:56:32	2018-01-03 14:56:32	\N	f	f	NOVUS	\N	0
+291	\N	\N	yussuph mayuwe	mayuwemadevu530@gmail.com	0675897923	\N	free	03-01-2018	03-02-2018	1234	0	\N	\N	2018-01-03 13:35:38	2018-01-03 13:35:38	\N	f	f	NOVUS	\N	0
+290	\N	\N	khadija kassim	didachidi84@gmail.com	0773204585	\N	free	03-01-2018	03-02-2018	4	0	\N	\N	2018-01-03 11:48:21	2018-01-03 11:48:21	\N	f	f	NOVUS	\N	0
+335	\N	\N	Amos Maziku	ajmaziku@gmail.com	0719259797	\N	premium	19-07-2018	18-08-2018	1	0	https://lh3.googleusercontent.com/-Fdyg8w9mWng/AAAAAAAAAAI/AAAAAAAAACo/zz1zmEzPNtE/photo.jpg	\N	2018-01-09 05:18:34	2018-07-19 04:42:37	\N	f	f	NOVUS	\N	0
+380	\N	\N	Evince Njau	esenjanjauu@gmail.com	0689225764	\N	free	17-01-2018	17-02-2018	1700000	0	\N	\N	2018-01-17 10:42:56	2018-01-17 10:42:56	\N	f	f	NOVUS	\N	0
+378	\N	\N	Grace Mwangwa	gmwangwa@gmail.com	0787260348	\N	free	17-01-2018	17-02-2018	120	0	\N	\N	2018-01-17 09:19:44	2018-01-17 09:19:44	\N	f	f	NOVUS	\N	0
+377	\N	\N	evelyn kiama	ekimkiama@gmail.com	0754333059	\N	free	17-01-2018	17-02-2018	1	0	https://lh4.googleusercontent.com/-pgwp2zDsVr4/AAAAAAAAAAI/AAAAAAAAAas/AnXZaEeaDGg/photo.jpg	\N	2018-01-17 07:59:37	2018-01-17 07:59:37	\N	f	f	NOVUS	\N	0
+376	\N	\N	CHRISTINE MBONYA	mbonyachristine@gmail.com	0767178153	\N	free	17-01-2018	17-02-2018	0	0	https://lh3.googleusercontent.com/-3N-fuiQE2WE/AAAAAAAAAAI/AAAAAAAAABo/SpK_owopUMQ/photo.jpg	\N	2018-01-17 07:13:07	2018-01-17 07:13:07	\N	f	f	NOVUS	\N	0
+375	\N	\N	Sam Pancho	sampancho70@gmail.com	0716455386	\N	free	17-01-2018	17-02-2018	10	0	https://lh3.googleusercontent.com/-5yKN-8SXJRw/AAAAAAAAAAI/AAAAAAAAAAw/UG_UrbTaQao/photo.jpg	\N	2018-01-17 07:05:47	2018-01-17 07:05:47	\N	f	f	NOVUS	\N	0
+374	\N	\N	angel alphonce	angelalphonce26@gmail.com	0768665285	\N	free	17-01-2018	17-02-2018	768665285	0	\N	\N	2018-01-17 06:14:46	2018-01-17 06:14:46	\N	f	f	NOVUS	\N	0
+373	\N	\N	nikolaus mgina	nikolausmginq@gmail.com	0756453357	\N	free	16-01-2018	16-02-2018	1994	0	\N	\N	2018-01-16 19:00:48	2018-01-16 19:00:48	\N	f	f	NOVUS	\N	0
+293	255000606566	\N	William Sylvia	williamsylvia@gmail.com	0764715181	\N	free	03-01-2018	03-02-2018	0	0	https://lh4.googleusercontent.com/-F4NR3kqP7BU/AAAAAAAAAAI/AAAAAAAAB7Y/eFOGXHDdjnA/photo.jpg	\N	2018-01-03 18:33:12	2018-08-02 08:58:34	\N	f	f	Ass. Supervisor	\N	0
+1303	255200024450	\N	Farhan Abdillah	unibrainer@gmail.com	0713358935	\N	free	16-08-2018	16-09-2018	0	0	\N	\N	2018-08-16 09:29:25	2018-08-16 09:29:25	\N	f	f	Ass. Supervisor	\N	\N
+1253	255000588928	\N	FLORENCE ELIUS	florenceelius77@gmail.com	0742026629	\N	premium	26-07-2018	25-09-2018	0	0	\N	\N	2018-07-26 11:28:37	2018-07-26 12:01:02	\N	f	f	Supervisor	\N	\N
+342	255000310592	\N	Lucy Kayolo	kaiyolosaimon@gmail.com	0758156781	\N	premium	08-08-2018	07-09-2018	22	0	\N	\N	2018-01-10 17:09:19	2018-08-08 07:21:37	\N	f	f	Manager	\N	0
+357	255000565784	\N	benny Mhagama	bennymhagama15@gmail.com	0767238788	\N	premium	11-08-2018	10-09-2018	2	0	\N	\N	2018-01-13 18:03:17	2018-08-11 15:53:35	\N	f	f	Ass. Supervisor	\N	0
+352	255000131400	\N	onkyangel@yahoo.com	onkyangel@yahoo.com	0713396033	\N	free	12-01-2018	12-02-2018	0	0	\N	\N	2018-01-12 12:08:54	2018-08-12 10:53:23	\N	f	f	Supervisor	\N	0
+52	\N	\N	Emmanuel David	emanuelmtangi@gmail.com	0658739203	\N	free	03-12-2017	03-01-2018	100000	0	https://lh6.googleusercontent.com/-QLoAhrL1Lmc/AAAAAAAAAAI/AAAAAAAAARI/I_waOxBMOFw/photo.jpg	\N	2017-12-03 08:47:11	2017-12-03 08:47:11	\N	f	f	NOVUS	\N	0
+51	\N	\N	Baraka Tumain Kaskas	bitubaraka@gmail.com	0656535943	\N	free	03-12-2017	03-01-2018	10	0	https://lh4.googleusercontent.com/-Gf9-cci19Fo/AAAAAAAAAAI/AAAAAAAAB04/A20tv54M4zw/photo.jpg	\N	2017-12-03 08:16:24	2017-12-03 08:16:24	\N	f	f	NOVUS	\N	0
+1304	255000591749	\N	Joseph Sogoseye	josephsogoseye.05@gmail.com	0756892737	\N	free	16-08-2018	16-09-2018	0	0	\N	\N	2018-08-16 10:37:30	2018-08-16 10:37:30	\N	f	f	Ass. Supervisor	\N	\N
+361	255200017934	\N	Aminata Iddi	aminataiddi892@gmail.com	0777721026	\N	free	15-01-2018	15-02-2018	1	0	\N	\N	2018-01-15 09:06:34	2018-07-06 08:54:21	\N	f	f	Novus	\N	0
+370	\N	\N	Hovokela Sanga	hovokelasng37@googlemail.com	0755180449	\N	free	16-01-2018	16-02-2018	8	0	https://lh6.googleusercontent.com/-N1EnwvhIw1o/AAAAAAAAAAI/AAAAAAAAAQ0/W2qaoRiMTsA/photo.jpg	\N	2018-01-16 16:29:32	2018-01-16 16:29:32	\N	f	f	NOVUS	\N	0
+368	\N	\N	Misana Mutani	misanaalexmutani@gmail.com	0767638829	\N	free	16-01-2018	16-02-2018	2	0	https://lh4.googleusercontent.com/-XrbUnfrrwjs/AAAAAAAAAAI/AAAAAAAADNc/Y4DGhm5Pq6M/photo.jpg	\N	2018-01-16 12:26:32	2018-01-16 12:26:32	\N	f	f	NOVUS	\N	0
+367	\N	\N	Elizabeth Joseph	josephelizabeth556@gmail.com	0768749904	\N	free	16-01-2018	16-02-2018	2	0	\N	\N	2018-01-16 07:47:07	2018-01-16 07:47:07	\N	f	f	NOVUS	\N	0
+365	\N	\N	HELEN SARIA	helensariamwakipunda@gmail.com	0754200216	\N	free	15-01-2018	15-02-2018	0	0	https://lh6.googleusercontent.com/-3Bl94CXeHro/AAAAAAAAAAI/AAAAAAAAABM/3KpY5XfW3qY/photo.jpg	\N	2018-01-15 14:02:36	2018-01-15 14:02:36	\N	f	f	NOVUS	\N	0
+364	\N	\N	Tabitha Kitundu	tabykitundu@gmail.com	0754858143	\N	free	15-01-2018	15-02-2018	2	0	\N	\N	2018-01-15 13:41:22	2018-01-15 13:41:22	\N	f	f	NOVUS	\N	0
+363	\N	\N	Sara Siwale	siwalesara@gmail.com	0769817699	\N	free	15-01-2018	15-02-2018	2000	0	https://lh5.googleusercontent.com/-qDBVR-s0tzU/AAAAAAAAAAI/AAAAAAAACZE/YvNFNhoffdM/photo.jpg	\N	2018-01-15 11:41:00	2018-01-15 11:41:00	\N	f	f	NOVUS	\N	0
+362	\N	\N	Monica Chilly	monicachilly1996@gmail.com	0714262911	\N	free	15-01-2018	15-02-2018	1	0	\N	\N	2018-01-15 09:38:21	2018-01-15 09:38:21	\N	f	f	NOVUS	\N	0
+360	\N	\N	Frank Mwasalukwa	frankmwasab@gmail.com	0746117817	\N	free	15-01-2018	15-02-2018	4	0	\N	\N	2018-01-15 06:52:20	2018-01-15 06:52:20	\N	f	f	NOVUS	\N	0
+359	\N	\N	Zahra Kitara	zahrakitara@gmail.com	0765888806	\N	free	15-01-2018	15-02-2018	2	0	https://lh6.googleusercontent.com/-X-35VuVe7vY/AAAAAAAAAAI/AAAAAAAAAHk/6iH9i9UvlP8/photo.jpg	\N	2018-01-14 23:46:45	2018-01-14 23:46:45	\N	f	f	NOVUS	\N	0
+358	\N	\N	Mariam Agatha	maramagatha@gmail.com	0717140441	\N	free	14-01-2018	14-02-2018	0	0	\N	\N	2018-01-14 11:03:56	2018-01-14 11:03:56	\N	f	f	NOVUS	\N	0
+372	255000565884	\N	Benny Mhagama	bennymhagama58@gmail.com	0712625193	\N	free	16-01-2018	16-02-2018	2	0	\N	\N	2018-01-16 18:58:36	2018-07-04 17:41:24	\N	f	f	Ass. Supervisor	\N	0
+314	255000491240	\N	Theddy Kisoka	theddykisoka@gmail.com	0762420922	\N	premium	11-07-2018	09-01-2019	0	0	\N	\N	2018-01-06 15:17:55	2018-07-11 11:07:44	\N	f	f	Ass. Supervisor	\N	0
+355	\N	\N	Gloria Nyiti	glorianyiti@gmail.com	0767661128	\N	free	13-01-2018	13-02-2018	0	0	\N	\N	2018-01-13 10:36:23	2018-01-13 10:36:23	\N	f	f	NOVUS	\N	0
+354	\N	\N	Joyce Rweyemamu	rweyemamujoyce97@gmail.com	+255754728126	\N	free	13-01-2018	13-02-2018	255000468640	0	\N	\N	2018-01-13 10:15:21	2018-01-13 10:15:21	\N	f	f	NOVUS	\N	0
+353	\N	\N	GASTOR GODIAN	kamugishagodian@gmail.com	0753656636	\N	free	13-01-2018	13-02-2018	2	0	https://lh6.googleusercontent.com/-27yBo2qqrws/AAAAAAAAAAI/AAAAAAAAABQ/L0h0Svy6DAE/photo.jpg	\N	2018-01-13 08:01:49	2018-01-13 08:01:49	\N	f	f	NOVUS	\N	0
+351	\N	\N	NEEMA STEPHANO	neemastephano70@gmail.com	0687961686	\N	free	12-01-2018	12-02-2018	2	0	\N	\N	2018-01-12 09:13:03	2018-01-12 09:13:03	\N	f	f	NOVUS	\N	0
+349	\N	\N	Desmon Simon	desmonvad@gmail.com	+255754025762	\N	free	12-01-2018	12-02-2018	0	0	\N	\N	2018-01-12 06:15:28	2018-01-12 06:15:28	\N	f	f	NOVUS	\N	0
+348	\N	\N	Veronica adamson	veronicaadamson015@gmail.com	0758449501	\N	free	11-01-2018	11-02-2018	643	0	\N	\N	2018-01-11 18:45:43	2018-01-11 18:45:43	\N	f	f	NOVUS	\N	0
+347	\N	\N	Magdalena itambu	magdalenaitambu120@gmail.com	0655028382	\N	free	11-01-2018	11-02-2018	5	0	\N	\N	2018-01-11 15:56:47	2018-01-11 15:56:47	\N	f	f	NOVUS	\N	0
+345	\N	\N	Jacqueline Mwamkinga	atupelile89@gmail.com	0753117137	\N	free	11-01-2018	11-02-2018	0	0	\N	\N	2018-01-11 05:54:10	2018-01-11 05:54:10	\N	f	f	NOVUS	\N	0
+344	\N	\N	Joyce Nzuna	joynzuna89@gmail.com	0769578685	\N	free	11-01-2018	11-02-2018	5	0	\N	\N	2018-01-11 02:59:57	2018-01-11 02:59:57	\N	f	f	NOVUS	\N	0
+343	\N	\N	Rashidi Kitenge	rashidikitenge@gmail.com	0717976670	\N	free	10-01-2018	10-02-2018	9519	0	\N	\N	2018-01-10 20:13:32	2018-01-10 20:13:32	\N	f	f	NOVUS	\N	0
+338	\N	\N	Godon Felix	godonfelix32@gmail.com	0766167793	\N	free	09-01-2018	09-02-2018	56	0	\N	\N	2018-01-09 12:59:49	2018-01-09 12:59:49	\N	f	f	NOVUS	\N	0
+337	\N	\N	warda karama	warda.karama@gmail.com	255784539918	\N	free	09-01-2018	09-02-2018	0	0	https://lh3.googleusercontent.com/-qGO791lyqAQ/AAAAAAAAAAI/AAAAAAAAAXM/zt9XaUIjvC8/photo.jpg	\N	2018-01-09 09:08:10	2018-01-09 09:08:10	\N	f	f	NOVUS	\N	0
+371	582564	\N	Wilson Israel Michael	wilsonisraelmichael@gmail.com	0713343775	\N	premium	08-06-2018	03-06-2019	694	0	https://lh4.googleusercontent.com/-bQGu0bVuGY4/AAAAAAAAAAI/AAAAAAAAAXY/AEEQNsCOfZE/photo.jpg	\N	2018-01-16 16:59:17	2018-07-21 06:14:22	\N	f	f	Ass. Supervisor	\N	0
+53	\N	\N	Abrahman Sultan	abrahmansultan2233@gmail.com	0773238351	\N	free	03-12-2017	03-01-2018	2	0	\N	\N	2017-12-03 09:22:20	2017-12-03 09:22:20	\N	f	f	NOVUS	\N	0
+24	255000566049	\N	melkiad masha	melkiadmasha@gmail.com	0757435670	\N	free	02-12-2017	02-01-2018	0	0	https://lh3.googleusercontent.com/-s4MHBIAPg78/AAAAAAAAAAI/AAAAAAAAAMU/fkXgy2QyA4E/photo.jpg	\N	2017-12-02 09:44:37	2018-06-27 06:54:57	\N	f	f	Ass. Supervisor	\N	0
+1219	255200022460	\N	Praksed Florence	fpraksed@gmail.com	0753260208	\N	free	14-07-2018	14-08-2018	0	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABDCKynzrmD8vWFXCILdmNhcmRfcGhvdG8qKGQ5OGY2MjQ1OWUyNmMyZGU1Y2ZlZWZiMjI3ZmNjZDJiMzM0ZjI1NmUwAWkqP7ipbG-mnRnMnulg0J1UkDXA	\N	2018-07-14 14:51:58	2018-07-14 14:51:58	\N	f	f	Ass. Supervisor	\N	0
+350	254200017082	\N	mary macharia	marynmacharia2018@gmail.com	0722699033	\N	free	12-01-2018	12-02-2018	8	1	\N	\N	2018-01-12 08:59:05	2018-06-30 04:47:29	\N	f	f	Supervisor	\N	0
+356	255000569266	\N	Amina Said	aminasaid87@gmail.com	0658123759	\N	premium	11-07-2018	09-09-2018	2	0	\N	\N	2018-01-13 14:33:28	2018-07-11 09:19:22	\N	f	f	Ass. Supervisor	\N	0
+396	255000429016	\N	Akwinata Fabian	akwinatafabian@gmail.com	0756372474	\N	free	18-01-2018	18-02-2018	0	0	\N	\N	2018-01-18 20:14:23	2018-06-19 10:11:20	\N	f	f	Supervisor	\N	0
+419	255000478321	\N	Anthony Simon	anthonysimon674@gmail.com	0716246577	\N	free	20-01-2018	20-02-2018	10	0	\N	\N	2018-01-20 16:32:38	2018-06-18 17:31:08	\N	f	f	Supervisor	\N	0
+387	255000526062	\N	sulleyman omary	selemanomary@gmail.com	0655347353	\N	free	18-01-2018	18-02-2018	1	0	https://lh5.googleusercontent.com/-9M8b1YaoF34/AAAAAAAAAAI/AAAAAAAAIJQ/YxSn73fwCk8/photo.jpg	\N	2018-01-18 03:28:13	2018-06-14 04:26:47	\N	f	f	Ass. Supervisor	\N	0
+346	254000049774	\N	Lily Mtawali	lilianmtawali@gmail.com	0784493987	\N	free	11-01-2018	11-02-2018	0	0	\N	\N	2018-01-11 08:51:30	2018-06-05 16:22:37	\N	f	f	Manager	\N	0
+407	\N	\N	Enatha Karumuna	enathak@gmail.com	0716131567	\N	premium	20-01-2018	19-08-2018	0	0	https://lh3.googleusercontent.com/-YLx11Qc_XFI/AAAAAAAAAAI/AAAAAAAAAA4/IPkYVPVURg4/photo.jpg	\N	2018-01-20 05:31:48	2018-01-24 08:02:12	\N	f	f	NOVUS	\N	0
+416	255200023437	\N	Lilian Mlay	lillianmlay715@gmail.com	0715862423	\N	free	20-01-2018	20-02-2018	4	0	\N	\N	2018-01-20 14:17:04	2018-07-14 12:29:56	\N	f	f	Novus	\N	0
+426	\N	\N	mariam mahona	mariammahona1@gmail.com	+255714190589	\N	free	21-01-2018	21-02-2018	4	0	\N	\N	2018-01-21 19:54:43	2018-01-21 19:54:43	\N	f	f	NOVUS	\N	0
+425	\N	\N	Mariana Michael	marianamichael13@gmail.com	+255715586648	\N	free	21-01-2018	21-02-2018	10	0	\N	\N	2018-01-21 18:00:23	2018-01-21 18:00:23	\N	f	f	NOVUS	\N	0
+424	\N	\N	Fred Charles	cfred7035@gmail.com	0679070875	\N	free	21-01-2018	21-02-2018	679070875	0	\N	\N	2018-01-21 12:42:36	2018-01-21 12:42:36	\N	f	f	NOVUS	\N	0
+413	255000621480	\N	Wivina Nicholaus	wivinanicholaus1993@gmail.com	0655473143	\N	free	20-01-2018	20-02-2018	4	0	\N	\N	2018-01-20 10:43:01	2018-07-12 17:25:15	\N	f	f	Ass. Supervisor	\N	0
+422	\N	\N	William Pharles	pharleswilliam0@gmail.com	0754299939	\N	free	21-01-2018	21-02-2018	389	0	\N	\N	2018-01-21 10:14:35	2018-01-21 10:14:35	\N	f	f	NOVUS	\N	0
+421	\N	\N	Doreen Kimbe	kimbedoreen3@gmail.com	0764812844	\N	free	20-01-2018	20-02-2018	4	0	https://lh5.googleusercontent.com/-td-Yw0XQNCM/AAAAAAAAAAI/AAAAAAAADCw/lMIxT-qXijw/photo.jpg	\N	2018-01-20 19:57:33	2018-01-20 19:57:33	\N	f	f	NOVUS	\N	0
+420	\N	\N	Tumaini Akundael	tumainiakundael1@gmail.com	0756551991	\N	free	20-01-2018	20-02-2018	2	0	\N	\N	2018-01-20 16:55:25	2018-01-20 16:55:25	\N	f	f	NOVUS	\N	0
+418	\N	\N	Careen Boniface	bonifacecareen@gmail.com	0712007912	\N	free	20-01-2018	20-02-2018	0	0	\N	\N	2018-01-20 15:09:49	2018-01-20 15:09:49	\N	f	f	NOVUS	\N	0
+403	255000569342	\N	mungo maale	mungomaale@gmail.com	0752898461	\N	free	19-01-2018	19-02-2018	3	0	\N	\N	2018-01-19 17:41:28	2018-07-15 16:49:26	\N	f	f	Ass. Supervisor	\N	0
+414	\N	\N	Crisencia Shedura	sheduracrisencia@gmail.com	0713995669	\N	free	20-01-2018	20-02-2018	1235	0	\N	\N	2018-01-20 10:57:43	2018-01-20 10:57:43	\N	f	f	NOVUS	\N	0
+415	255000623431	\N	Rassam Abdallah	ommyshirco@gmail.com	0774111819	\N	free	20-01-2018	20-02-2018	150	0	https://lh3.googleusercontent.com/-E0sbb7X_ios/AAAAAAAAAAI/AAAAAAAAI4Y/fGnr7fN5Elc/photo.jpg	\N	2018-01-20 14:08:58	2018-07-12 21:28:08	\N	f	f	Supervisor	\N	0
+409	\N	\N	Kelly Weston	kellyweston22@gmail.com	0758543650	\N	free	20-01-2018	20-02-2018	2205	0	https://lh6.googleusercontent.com/-buDIN8xbqvY/AAAAAAAAAAI/AAAAAAAAAME/fUVYezh1w08/photo.jpg	\N	2018-01-20 08:06:18	2018-01-20 08:06:18	\N	f	f	NOVUS	\N	0
+404	\N	\N	Akwinata Mahule	mamakjm@gmail.com	0756372474	\N	free	19-01-2018	19-02-2018	2	0	https://lh4.googleusercontent.com/-XijsHZqhM_w/AAAAAAAAAAI/AAAAAAAACO4/G7kplbU561A/photo.jpg	\N	2018-01-19 18:57:35	2018-01-19 18:57:35	\N	f	f	NOVUS	\N	0
+402	\N	\N	Jafar Mtezo	jafarsaidmtezo@gmail.com	0784727502	\N	free	19-01-2018	19-02-2018	400899998	0	\N	\N	2018-01-19 17:15:20	2018-01-19 17:15:20	\N	f	f	NOVUS	\N	0
+401	\N	\N	mbugua martin	mbuguamartin2030@gmail.com	0717003688	\N	free	19-01-2018	19-02-2018	1	1	https://lh3.googleusercontent.com/-GCOLlweaLhA/AAAAAAAAAAI/AAAAAAAAABg/OgS0QoaQrE0/photo.jpg	\N	2018-01-19 12:03:02	2018-01-19 12:03:02	\N	f	f	NOVUS	\N	0
+400	\N	\N	Jacktan Baraka	jacktanbaraka1@gmail.com	0714066991	\N	free	19-01-2018	19-02-2018	467	0	\N	\N	2018-01-19 11:13:41	2018-01-19 11:13:41	\N	f	f	NOVUS	\N	0
+399	\N	\N	Beatus Nyasebwa	bnyasebwa@gmail.com	0713493286	\N	free	19-01-2018	19-02-2018	0	0	\N	\N	2018-01-19 09:49:43	2018-01-19 09:49:43	\N	f	f	NOVUS	\N	0
+395	\N	\N	Asha Fikiri Malanga	ashafikirimalanga@gmail.com	0787654386	\N	free	18-01-2018	18-02-2018	3	0	\N	\N	2018-01-18 18:27:09	2018-01-18 18:27:09	\N	f	f	NOVUS	\N	0
+394	\N	\N	Bill Mathias	billq2nyi@gmail.com	0759826435	\N	free	18-01-2018	18-02-2018	1000000	0	\N	\N	2018-01-18 13:57:16	2018-01-18 13:57:16	\N	f	f	NOVUS	\N	0
+392	\N	\N	dorcas nassary	dorcasnassary@gmail.com	0766077644	\N	free	18-01-2018	18-02-2018	2	0	\N	\N	2018-01-18 10:12:40	2018-01-18 10:12:40	\N	f	f	NOVUS	\N	0
+1254	255000568193	\N	SAMWEL ABEID	samwelabeid38@gmail.com	0753239323	\N	free	26-07-2018	26-08-2018	0	0	https://lh3.googleusercontent.com/-cN6lq4Sw2Cg/AAAAAAAAAAI/AAAAAAAAACE/UnXuqDQKReU/photo.jpg	\N	2018-07-26 18:09:28	2018-07-26 18:09:28	\N	f	f	Ass. Supervisor	\N	\N
+411	255000481059	\N	Fanuel Gwimo	fgwimo@gmail.com	0766023377	\N	free	20-01-2018	20-02-2018	0	0	https://lh5.googleusercontent.com/-_5fUHMdMax4/AAAAAAAAAAI/AAAAAAAAABc/EXg7iCLL2mI/photo.jpg	\N	2018-01-20 09:50:30	2018-08-09 07:28:23	\N	f	f	Ass. Supervisor	\N	0
+398	255000497389	\N	Gilbert Mwamba	mwamba765@gmail.com	0714675769	\N	premium	09-08-2018	08-09-2018	4	0	\N	\N	2018-01-19 09:06:26	2018-08-09 12:18:53	\N	f	f	Supervisor	\N	0
+1305	255200021393	\N	Asha Faki	fasha9018@gmail.com	0655024580	\N	free	16-08-2018	16-09-2018	0	0	\N	\N	2018-08-16 10:47:13	2018-08-16 10:47:13	\N	f	f	Ass. Supervisor	\N	\N
+412	255000457968	\N	Hussein Majid	husseinmajid72@gmail.com	0712149445	\N	premium	19-07-2018	17-09-2018	4	0	\N	\N	2018-01-20 10:31:35	2018-08-17 11:38:07	\N	f	f	Supervisor	\N	0
+386	255000066150	\N	Mariam Kombo	mariamkombo2010@gmail.com	0767211745	\N	premium	17-08-2018	15-02-2019	0	0	\N	\N	2018-01-17 22:49:54	2018-08-17 17:05:22	\N	f	f	Supervisor	\N	0
+1255	255200023855	\N	Kanozo Organic	organikanozo@gmail.com	0683945222	\N	free	27-07-2018	27-08-2018	0	0	\N	\N	2018-07-27 05:25:58	2018-07-27 05:25:58	\N	f	f	Novus	\N	\N
+1306	255200024035	\N	Maryam Hamad	maryamhamad07@gmail.com	0778484963	\N	free	17-08-2018	17-09-2018	0	0	\N	\N	2018-08-17 09:38:31	2018-08-17 09:38:31	\N	f	f	Ass. Supervisor	\N	\N
+1171	255200022726	\N	Gigi Maenda	gigimaenda@gmail.com	0714975504	\N	free	27-06-2018	28-07-2018	0	0	https://lh4.googleusercontent.com/-r5wMlTZhyGc/AAAAAAAAAAI/AAAAAAAAAKg/bsr50fFrH7Q/photo.jpg	\N	2018-06-27 11:06:48	2018-06-27 11:06:48	\N	f	f	Ass. Supervisor	\N	0
+1170	255000597809	\N	rashid mwambange	chidymwamba@gmail.com	0759547275	\N	free	27-06-2018	28-07-2018	0	0	https://lh5.googleusercontent.com/-Jr85_h33Xdw/AAAAAAAAAAI/AAAAAAAAABo/N7H-n03YXdU/photo.jpg	\N	2018-06-27 10:35:37	2018-06-27 10:35:37	\N	f	f	Ass. Supervisor	\N	0
+21	254000034165	\N	Khushe M. Hauli	khushele@gmail.com	0753333320	\N	premium	23-06-2018	23-06-2019	1	0	https://lh3.googleusercontent.com/-xkMYzY9d25Q/AAAAAAAAAAI/AAAAAAAAGnI/gKsIoeHQAtQ/photo.jpg	\N	2017-12-02 08:58:54	2018-06-23 10:30:47	\N	f	f	Manager	\N	0
+1256	255000543204	\N	Anicia Blasio	blasioanicia@gmail.com	0769692159	\N	free	27-07-2018	27-08-2018	0	0	https://lh4.googleusercontent.com/-7UGy5OWJcrI/AAAAAAAAAAI/AAAAAAAAAC8/FuwBbmCF5Ww/photo.jpg	\N	2018-07-27 06:26:06	2018-07-27 06:26:06	\N	f	f	Ass. Supervisor	\N	\N
+81	255000424476	\N	Adelina Karugaba	adelinakarugaba77@gmail.com	0716896389	\N	premium	30-07-2018	29-08-2018	4	0	\N	\N	2017-12-06 05:47:48	2018-07-30 18:58:59	\N	f	f	Ass. Supervisor	\N	0
+1307	254000478595	\N	katrina KIlonzo	mwendekilonzo88@gmail.com	0726461746	\N	free	18-08-2018	18-09-2018	0	1	\N	\N	2018-08-18 10:01:11	2018-08-18 10:01:11	\N	f	f	Supervisor	\N	\N
+67	255200016794	\N	Evagria Temo	evagriatemo@gmail.com	0715893029	\N	premium	28-06-2018	28-07-2018	0	0	\N	\N	2017-12-04 17:26:27	2018-06-28 16:55:23	\N	f	f	Novus	\N	0
+1257	254000270659	\N	Marian Mulwa	marianmulwa@gmail.com	0728235335	\N	free	27-07-2018	27-08-2018	0	1	https://lh4.googleusercontent.com/-zLItenQktM4/AAAAAAAAAAI/AAAAAAAAoaw/YLf8YRe8Yys/photo.jpg	\N	2018-07-27 11:04:45	2018-07-27 11:04:45	\N	f	f	Manager	\N	\N
+1308	255200018827	\N	hafidh haroub	chichimazroui@gmail.com	0779242122	\N	free	18-08-2018	18-09-2018	0	0	\N	\N	2018-08-18 13:38:13	2018-08-18 13:38:13	\N	f	f	Ass. Supervisor	\N	\N
+114	255000606795	\N	Ferdinand M. Biedrawa	fbiedi4@gmail.com	0715018329	\N	premium	14-07-2018	12-01-2019	4	0	\N	\N	2017-12-08 12:09:23	2018-07-14 11:49:13	\N	f	f	Manager	\N	0
+1258	255200023489	\N	Elizabeth Tibasima	lizzytibasima@gmail.com	0767733528	\N	free	27-07-2018	27-08-2018	0	0	\N	\N	2018-07-27 13:27:34	2018-07-27 13:27:34	\N	f	f	Ass. Supervisor	\N	\N
+1309	255200024514	\N	Suzan Siame	suzansiame9@gmail.com	0657005979	\N	premium	19-08-2018	19-10-2018	0	0	\N	\N	2018-08-19 06:43:10	2018-08-20 14:55:09	\N	f	f	Novus	\N	\N
+153	255200017272	\N	Joyce Lito	joycelipo@gmail.com	0677865254	\N	premium	07-04-2018	04-10-2018	2	0	\N	\N	2017-12-13 13:22:11	2018-06-27 18:23:33	\N	f	f	Ass. Supervisor	\N	0
+88	255000618466	\N	Kinariki Son	kinarikison49@gmail.com	0753462068	\N	premium	06-12-2017	05-02-2018	5	0	\N	\N	2017-12-06 16:36:08	2018-06-21 09:22:11	\N	f	f	Novus	\N	0
+149	255000469060	\N	Shadrack Mwelela	shadrackrabison@gmail.com	0764828337	\N	free	13-12-2017	13-01-2018	0	0	\N	\N	2017-12-13 08:13:21	2018-06-20 16:34:47	\N	f	f	Ass. Supervisor	\N	0
+1016	255200020699	\N	Rachel Munis	rachel.exaud62@gmail.com	0752529237	\N	premium	27-07-2018	26-08-2018	1	0	\N	\N	2018-05-04 19:34:55	2018-07-27 19:56:18	\N	f	f	Ass. Supervisor	\N	0
+431	255000445488	\N	Theopista Masenge	thiyojacob@gmail.com	0767029904	\N	premium	19-08-2018	17-02-2019	0	0	https://lh5.googleusercontent.com/-zeRDDZ2PirA/AAAAAAAAAAI/AAAAAAAABkc/G-sQ8xuPYdE/photo.jpg	\N	2018-01-23 05:31:40	2018-08-19 08:04:01	\N	f	f	Manager	\N	0
+209	255000312727	\N	Adolph Ndyeabura	canserado@gmail.com	0714628788	\N	premium	25-06-2018	25-06-2019	714628788	0	https://lh5.googleusercontent.com/-2UflzNAxK74/AAAAAAAAAAI/AAAAAAAADX4/G4rcqzG50Bo/photo.jpg	\N	2017-12-19 19:57:19	2018-06-25 12:56:45	\N	f	f	Manager	\N	0
+1259	255200024029	\N	emson kisanga	ebkisanga@gmail.com	0715303972	\N	free	28-07-2018	28-08-2018	0	0	https://lh3.googleusercontent.com/-hzD0UxA_UEQ/AAAAAAAAAAI/AAAAAAAADtk/SuHrtKCIIYg/photo.jpg	\N	2018-07-28 11:20:56	2018-07-28 11:20:56	\N	f	f	Novus	\N	\N
+1310	255000138365	\N	nepha mulungu	fatmajuned1@gmail.com	0654073233	\N	free	20-08-2018	20-09-2018	0.426999999999999991	1	https://lh4.googleusercontent.com/-3iN65uagJtg/AAAAAAAAAAI/AAAAAAAAAK8/qN8GzWx-tC0/photo.jpg	\N	2018-08-20 12:45:39	2018-08-20 12:48:33	\N	f	f	Manager	\N	\N
+216	255000601684	\N	Andrew Kilasi	andykilasi@gmail.com	0754371077	\N	premium	13-06-2018	13-07-2018	0	0	https://lh3.googleusercontent.com/-pJIEld_-wd0/AAAAAAAAAAI/AAAAAAAAAyY/wKeDgoZO720/photo.jpg	\N	2017-12-20 21:20:18	2018-06-13 09:53:03	\N	f	f	Ass. Supervisor	\N	0
+1260	255000584523	\N	Gido Mutembei	gidomutembei@gmail.com	0787602656	\N	free	28-07-2018	28-08-2018	0	0	\N	\N	2018-07-28 13:42:31	2018-07-28 13:42:31	\N	f	f	Supervisor	\N	\N
+295	255000590982	\N	Zainab Awadh	habibtyenam21@gmail.com	0676317838	\N	premium	28-06-2018	28-06-2019	4	0	\N	\N	2018-01-04 06:27:43	2018-06-28 02:34:05	\N	f	f	Supervisor	\N	0
+333	\N	\N	Robert Nganga	rkamuyu@gmail.com	0726550338	\N	free	09-01-2018	09-02-2018	0	1	https://lh6.googleusercontent.com/-HIlAY2ViVsQ/AAAAAAAAAAI/AAAAAAAAABU/BtbYkWSWFXE/photo.jpg	\N	2018-01-08 21:49:58	2018-01-08 21:49:58	\N	f	f	NOVUS	\N	0
+1261	255200023902	\N	Gabriel Kavishe	gabikavishe05@gmail.com	0762931486	\N	free	30-07-2018	30-08-2018	0	0	\N	\N	2018-07-30 11:18:02	2018-07-30 11:18:02	\N	f	f	Novus	\N	\N
+336	255000413901	\N	Revocatus Ibrahim	revoibrahim92@gmail.com	0718897266	\N	premium	18-06-2018	18-06-2019	5	0	\N	\N	2018-01-09 09:01:29	2018-08-08 14:21:27	\N	f	f	Supervisor	\N	0
+312	255200013740	\N	sia lazaro	sialazaro44@gmail.com	0715487974	\N	premium	19-06-2018	19-07-2018	2	0	\N	\N	2018-01-06 10:04:44	2018-06-19 12:23:42	\N	f	f	Ass. Supervisor	\N	0
+1262	255200018306	\N	theonest malele	theonestmalele02@gmail.com	0712143302	\N	free	30-07-2018	30-08-2018	0	0	\N	\N	2018-07-30 12:34:06	2018-07-30 12:34:06	\N	f	f	Ass. Supervisor	\N	\N
+397	255000105190	\N	Jonayce Mungure	kjonayce@gmail.com	0753549224	\N	premium	19-06-2018	18-12-2018	2000	0	\N	\N	2018-01-19 03:51:45	2018-08-07 13:48:17	\N	f	f	Manager	\N	0
+1263	255200054066	\N	Oscar Alphonce	oscaralphonce19@gmail.com	0768198826	\N	free	30-07-2018	30-08-2018	0	0	\N	\N	2018-07-30 17:18:48	2018-07-30 17:18:48	\N	f	f	Supervisor	\N	\N
+450	255000615490	\N	Amedeus Didas	amedeusdidas@gmail.com	0757722054	\N	premium	26-07-2018	25-08-2018	1	0	https://lh6.googleusercontent.com/-prTK1hwKR-g/AAAAAAAAAAI/AAAAAAAAAEI/TcCPz0O9aUQ/photo.jpg	\N	2018-01-25 10:24:52	2018-08-17 12:14:16	\N	f	f	Ass. Supervisor	\N	0
+427	255000397327	\N	Baraka Mwansasu	barakamwansasu@gmail.com	0767211457	\N	premium	21-06-2018	20-12-2018	2	0	\N	\N	2018-01-21 22:47:10	2018-06-21 17:21:42	\N	f	f	Ass. Supervisor	\N	0
+660	\N	\N	Michael Mdope	mdopemichael@gmail.com	0755497206	\N	free	28-02-2018	31-03-2018	1	0	\N	\N	2018-02-28 11:52:51	2018-02-28 11:52:51	\N	f	f	NOVUS	\N	0
+1264	255000615326	\N	Abdulla Hamad	abdulla69hamad@gmail.com	0777496303	\N	free	30-07-2018	30-08-2018	0	0	\N	\N	2018-07-30 18:52:35	2018-07-30 18:52:35	\N	f	f	Supervisor	\N	\N
+681	\N	\N	Zainabu Mdach	mdachzainabu@gmail.com	+255763434850	\N	free	02-03-2018	02-04-2018	2	0	\N	\N	2018-03-02 13:10:29	2018-03-02 13:10:29	\N	f	f	NOVUS	\N	0
+531	\N	\N	Sadam Mjaka	smjaka9212@gmail.com	0718361500	\N	free	07-02-2018	10-03-2018	500	0	https://lh5.googleusercontent.com/-OBMy2XEGzhg/AAAAAAAAAAI/AAAAAAAAACM/DdqbwvC11u4/photo.jpg	\N	2018-02-07 16:16:35	2018-02-07 16:16:35	\N	f	f	NOVUS	\N	0
+1265	255200021915	\N	maryam said	maryamabdalla665@gmail.com	0625876805	\N	free	31-07-2018	31-08-2018	0	0	\N	\N	2018-07-31 14:42:32	2018-07-31 14:42:32	\N	f	f	Ass. Supervisor	\N	\N
+541	255000603596	\N	Nazvive Vivian	nazvivevivian@gmail.com	0689505251	\N	premium	10-06-2018	05-06-2019	1	0	\N	\N	2018-02-09 14:43:09	2018-06-10 13:20:01	\N	f	f	Ass. Supervisor	\N	0
+1266	255200021692	\N	Dorice David	doricedavid20@gmail.com	0653201904	\N	free	01-08-2018	01-09-2018	0	0	\N	\N	2018-08-01 08:59:20	2018-08-01 08:59:20	\N	f	f	Novus	\N	\N
+610	255000029678	\N	victor majenge	victormajenge@gmail.com	0764509966	\N	premium	19-06-2018	19-07-2018	4	0	https://lh3.googleusercontent.com/-z0T65LHYFIA/AAAAAAAAAAI/AAAAAAAAAhM/EciSqqNUvhU/photo.jpg	\N	2018-02-17 10:55:24	2018-06-19 11:49:23	\N	f	f	Manager	\N	0
+1267	254000498248	\N	Martha Muhoho	mmmuhoho@gmail.com	0725257791	\N	free	01-08-2018	01-09-2018	0	1	\N	\N	2018-08-01 15:43:10	2018-08-01 15:43:10	\N	f	f	Supervisor	\N	\N
+261	255000602341	\N	Christian Mgeyekwa	cmgeyekwa@gmail.com	0754243276	\N	premium	09-08-2018	08-09-2018	2	0	https://lh6.googleusercontent.com/-99EMrL2uSLE/AAAAAAAAAAI/AAAAAAAAAlE/8JtUJCPaSRA/photo.jpg	\N	2017-12-30 07:36:20	2018-08-09 10:18:52	\N	f	f	Ass. Supervisor	\N	0
+727	\N	\N	May Lusasi	may615605@gmail.com	0673657357	\N	free	10-03-2018	10-04-2018	2	0	\N	\N	2018-03-09 21:38:42	2018-03-09 21:38:42	\N	f	f	NOVUS	\N	0
+1268	254000497589	\N	Talysiah Khoiy	talysiahkhoiy9@gmail.com	0700819854	\N	free	02-08-2018	02-09-2018	0	1	\N	\N	2018-08-02 06:36:57	2018-08-02 06:36:57	\N	f	f	Supervisor	\N	\N
+738	255200018672	\N	Martha Luena	marthaluena62@gmail.com	0717602248	\N	premium	20-08-2018	19-09-2018	4	0	\N	\N	2018-03-12 14:20:14	2018-08-20 13:44:37	\N	f	f	Ass. Supervisor	\N	0
+709	255000584504	\N	Faraja Sanga I	farajasang@gmail.com	0762010334	\N	free	06-03-2018	06-04-2018	120	0	\N	\N	2018-03-06 12:16:46	2018-06-06 17:41:20	\N	f	f	Ass. Supervisor	\N	0
+735	255000591798	\N	JULIUS SOHONEKI	juliussohonek@gmail.com	0767478247	\N	free	11-03-2018	11-04-2018	4	0	\N	\N	2018-03-11 18:25:13	2018-06-06 07:29:44	\N	f	f	Novus	\N	0
+1269	255000624557	\N	Rehema Mbunda	rehema8mbunda@gmail.com	0686644744	\N	free	02-08-2018	02-09-2018	0	0	\N	\N	2018-08-02 17:25:50	2018-08-02 17:25:50	\N	f	f	Supervisor	\N	\N
+850	255000527431	\N	HABESH MAN	habeshman4@gmail.com	0758907148	\N	premium	23-07-2018	22-08-2018	4	0	\N	\N	2018-04-05 14:56:34	2018-08-17 12:56:56	\N	f	f	Ass. Supervisor	\N	0
+784	255000284832	\N	wende Pancho	sampancho79@gmail.com	0716455386	\N	free	22-03-2018	22-04-2018	5	0	\N	\N	2018-03-22 08:49:05	2018-06-12 07:19:08	\N	f	f	Supervisor	\N	0
+1270	255000606350	\N	Magreth Pallangyo	magypally86@gmail.com	0756266302	\N	free	03-08-2018	03-09-2018	0	0	https://lh6.googleusercontent.com/-SXHMWfQDWSA/AAAAAAAAAAI/AAAAAAAAFxE/O50aqhme3sg/photo.jpg	\N	2018-08-02 21:29:49	2018-08-02 21:29:49	\N	f	f	Ass. Supervisor	\N	\N
+811	255000490534	\N	Ada Dangwa	adahpeterdangwa@gmail.com	0714560991	\N	premium	19-06-2018	19-07-2018	0	0	\N	\N	2018-03-28 06:55:03	2018-06-19 11:45:06	\N	f	f	Manager	\N	0
+835	255200020027	\N	Bryan Peter	visualeffects309@gmail.com	0719454277	\N	premium	23-07-2018	21-01-2019	2	0	https://lh4.googleusercontent.com/-aTROZ46rkKw/AAAAAAAAAAI/AAAAAAAACWE/vmU3IJYu9ho/photo.jpg	\N	2018-04-02 10:02:34	2018-07-23 06:31:44	\N	f	f	Ass. Supervisor	\N	0
+1271	255000608792	\N	Veronica Ludgerius	ludgeriusv@gmail.com	0789360404	\N	free	03-08-2018	03-09-2018	0	0	\N	\N	2018-08-03 04:27:07	2018-08-03 04:27:07	\N	f	f	Ass. Manager	\N	\N
+1272	255000608360	\N	Neema Mafie	neynmbro@gmail.com	0716362782	\N	free	03-08-2018	03-09-2018	0	0	\N	\N	2018-08-03 07:05:24	2018-08-03 07:05:24	\N	f	f	Ass. Supervisor	\N	\N
+916	255000615030	\N	Said Haji	haji37127@gmail.com	0655098283	\N	free	12-04-2018	13-05-2018	8	0	\N	\N	2018-04-12 11:33:29	2018-06-25 12:44:22	\N	f	f	Ass. Supervisor	\N	0
+914	255000606585	\N	Cecilia Yonah	cecile.yonah30@gmail.com	0752396212	\N	free	11-04-2018	12-05-2018	3	0	\N	\N	2018-04-11 15:33:05	2018-06-22 09:24:59	\N	f	f	Ass. Supervisor	\N	0
+980	255000464017	\N	Godlove Mapunda	gmatabwa.gm@gmail.com	0764783838	\N	premium	22-06-2018	22-07-2018	0	0	\N	\N	2018-04-27 22:16:37	2018-06-22 04:33:53	\N	f	f	Ass. Supervisor	\N	0
+1273	254000226210	\N	Teresia Nduta	terryfocus15@gmail.com	0726695205	\N	free	03-08-2018	03-09-2018	0	1	https://lh6.googleusercontent.com/-kHLAkgDL9uk/AAAAAAAAAAI/AAAAAAAAABU/G7iuGXXd9Vk/photo.jpg	\N	2018-08-03 08:05:53	2018-08-03 08:05:53	\N	f	f	Manager	\N	\N
+1038	\N	\N	Lizzy Michael	lizzymichael98@gmail.com	0753302648	\N	free	08-05-2018	08-06-2018	1000	0	\N	\N	2018-05-08 18:51:00	2018-05-08 18:51:00	\N	f	f	NOVUS	\N	0
+1274	255200023116	\N	neymanjau8@gmail.com	neymanjau8@gmail.com	0685999911	\N	free	03-08-2018	03-09-2018	0	0	\N	\N	2018-08-03 13:29:32	2018-08-03 13:29:32	\N	f	f	Ass. Supervisor	\N	\N
+13	\N	Edwin John	Edwin John	edwin.johnny2016@gmail.com	+255769688544	\N	free	14-11-2017	25/12/2017	4	0	photo	\N	\N	2018-05-28 10:38:26	2018-05-28 10:38:26	f	f	NOVUS	\N	0
+1275	255200023778	\N	Tinna Mrisho	tinnajmrisho@gmail.com	0715123165	\N	free	03-08-2018	03-09-2018	0	0	\N	\N	2018-08-03 13:38:02	2018-08-03 13:38:02	\N	f	f	Novus	\N	\N
+1100	255693785624	\N	Samuel Thomass	samuthojo@gmail.com	0658185608	\N	free	06-06-2018	07-07-2018	0	0	https://lh4.googleusercontent.com/-QHUKSuIjcGk/AAAAAAAAAAI/AAAAAAAAASE/cYFHPFxEmxQ/photo.jpg	\N	2018-06-06 13:45:27	2018-07-02 12:18:48	\N	f	f	Ass. Manager	4.2	0
+155	255000295565	\N	Wilfred Anangisye	anangisyew@gmail.com	0718981390	\N	premium	30-06-2018	30-07-2018	1	0	https://lh6.googleusercontent.com/-ma5Z6XX_CPE/AAAAAAAAAAI/AAAAAAAAAEU/pPr-PwDrfRw/photo.jpg	\N	2017-12-14 05:07:18	2018-06-30 11:35:31	\N	f	f	Supervisor	\N	0
+1276	255200022401	\N	Margareth Lawrence	lawrencemargareth40@gmail.com	0689795254	\N	free	04-08-2018	04-09-2018	0	0	https://lh3.googleusercontent.com/-SqrxMMEBnSo/AAAAAAAAAAI/AAAAAAAAAAs/MeA18KbEvSw/photo.jpg	\N	2018-08-04 12:00:48	2018-08-04 12:00:48	\N	f	f	Ass. Supervisor	\N	\N
+1110	255000551820	\N	Evamary Henry	evamaryhenry@gmail.com	0656989113	\N	premium	18-07-2018	17-08-2018	0	0	\N	\N	2018-06-08 14:13:55	2018-07-19 06:39:49	\N	f	f	Ass. Supervisor	\N	0
+1138	255000182417	\N	Khatib Shafi	khatibshafi70@gmail.com	0711809929	\N	free	16-06-2018	17-07-2018	0	0	\N	\N	2018-06-16 13:11:57	2018-06-16 13:11:57	\N	f	f	Novus	\N	0
+1277	254000328986	\N	jacinta mwikali	mwikali49@gmail.com	0729509394	\N	free	05-08-2018	05-09-2018	0	1	\N	\N	2018-08-05 04:56:05	2018-08-05 04:56:05	\N	f	f	Manager	\N	\N
+1161	255000618435	\N	exestusi daudi	exestusidaudi@gmail.com	0657611576	\N	free	25-06-2018	26-07-2018	0	0	\N	\N	2018-06-25 14:25:53	2018-06-25 14:25:53	\N	f	f	Novus	\N	0
+1160	254200017372	\N	bevonny mokaya	bevonnym@gmail.com	0725278622	\N	free	25-06-2018	26-07-2018	0	1	\N	\N	2018-06-25 13:52:54	2018-06-25 13:52:54	\N	f	f	Novus	\N	0
+1172	255000436502	\N	Lightness Justine	lightnessjustine@gmail.com	0765828888	\N	premium	30-07-2018	29-08-2018	0	0	\N	\N	2018-06-27 12:25:42	2018-07-30 10:48:34	\N	f	f	Ass. Supervisor	\N	0
+1278	255200018620	\N	Khamis Abdallah	khamisabdallah2210@gmail.com	0774188669	\N	free	05-08-2018	05-09-2018	0	0	\N	\N	2018-08-05 07:28:59	2018-08-05 07:28:59	\N	f	f	Ass. Supervisor	\N	\N
+385	255000608547	\N	James Mleli	mlelijames0@gmail.com	0654357059	\N	premium	10-08-2018	09-09-2018	3	0	\N	\N	2018-01-17 19:29:23	2018-08-11 09:39:30	\N	f	f	Ass. Manager	\N	0
+1177	255123456789	\N	grayson julius	graysonjulius@gmail.com	0712288231	\N	premium	12-08-2018	12-08-2019	0.5	0	https://lh5.googleusercontent.com/-lxiZc_nOgS8/AAAAAAAAAAI/AAAAAAAAN78/WB9XE7mC0Wg/s200/photo.jpg	\N	2018-06-28 13:35:23	2018-08-12 13:31:08	\N	f	f	Ass Supervisor	1.0.3	1
+1180	255200019461	\N	Zafrin Hasham	zafrin.hasham@gmail.com	0777913919	\N	free	29-06-2018	30-07-2018	0	1	\N	\N	2018-06-29 10:44:26	2018-06-29 10:44:26	\N	f	f	Novus	\N	0
+56	255000528585	\N	Gaudence Sirikwa	soze.kazee@gmail.com	0787605123	\N	free	03-12-2017	03-01-2018	0	0	https://lh5.googleusercontent.com/-Wk4GyL2ymiY/AAAAAAAAAAI/AAAAAAAAAJQ/UzvOosmP5JU/photo.jpg	\N	2017-12-03 11:25:02	2018-07-16 12:54:09	\N	f	f	Novus	\N	0
+1178	255200020502	\N	Abby Sigauke	abievina@gmail.com	0753686720	\N	free	28-06-2018	29-07-2018	0	0	https://lh4.googleusercontent.com/-ZkLYSCOKf8o/AAAAAAAAAAI/AAAAAAAAKPs/7NVjrjN8yvw/photo.jpg	\N	2018-06-28 14:53:59	2018-06-28 14:53:59	\N	f	f	Ass. Supervisor	\N	0
+1176	255000422082	\N	Naomi Malema	naomimalema@gmail.com	0755709940	\N	free	28-06-2018	29-07-2018	0	0	\N	\N	2018-06-28 11:05:06	2018-06-28 11:05:06	\N	f	f	Ass. Manager	\N	0
+1175	255200003945	\N	Rose Kessy	kessyrose.rk@gmail.com	0765639728	\N	free	28-06-2018	29-07-2018	0	0	\N	\N	2018-06-28 10:02:07	2018-06-28 10:02:07	\N	f	f	Ass. Supervisor	\N	0
+391	\N	\N	Kibudia Mwaimu	mkibudia@gmail.com	0769359990	\N	free	18-01-2018	18-02-2018	1	0	https://lh5.googleusercontent.com/-PX--RM43oHY/AAAAAAAAAAI/AAAAAAAAAAo/js4DK7Wei-0/photo.jpg	\N	2018-01-18 08:54:00	2018-01-18 08:54:00	\N	f	f	NOVUS	\N	0
+390	\N	\N	Sophia Msafiri	sophymsafiri17@gmail.com	0717552766	\N	free	18-01-2018	18-02-2018	0	0	\N	\N	2018-01-18 08:31:41	2018-01-18 08:31:41	\N	f	f	NOVUS	\N	0
+389	\N	\N	Irene Dubi	iryn612@gmail.com	0769581319	\N	free	18-01-2018	18-02-2018	0	0	\N	\N	2018-01-18 06:51:12	2018-01-18 06:51:12	\N	f	f	NOVUS	\N	0
+388	\N	\N	Frank Mwangoka	frankemwangoka88@gmail.com	0764510025	\N	free	18-01-2018	18-02-2018	2	0	\N	\N	2018-01-18 05:51:26	2018-01-18 05:51:26	\N	f	f	NOVUS	\N	0
+1174	255200023141	\N	Victoria Domician	victoriadomy@gmail.com	0676092675	\N	free	27-06-2018	28-07-2018	0	0	\N	\N	2018-06-27 14:42:50	2018-06-27 14:42:50	\N	f	f	Ass. Supervisor	\N	0
+1173	255000519566	\N	Elibariki Justine	elixmasuja@gmail.com	0759038799	\N	free	27-06-2018	28-07-2018	0	0	\N	\N	2018-06-27 14:37:37	2018-06-27 14:37:37	\N	f	f	Ass. Supervisor	\N	0
+381	255000410002	\N	Anitha James	jamesanitha569@gmail.com	0762770734	\N	free	17-01-2018	17-02-2018	12	0	\N	\N	2018-01-17 12:52:41	2018-07-10 11:29:13	\N	f	f	Supervisor	\N	0
+423	255000512247	\N	Halima Ramadhan	halimaramadhan1988@gmail.com	0785431589	\N	premium	18-06-2018	17-08-2018	0	0	\N	\N	2018-01-21 12:36:01	2018-07-10 14:48:49	\N	f	f	Ass. Supervisor	\N	0
+429	255000542545	\N	lucas mashemashe	lmashemashe@gmail.com	0764084956	\N	free	22-01-2018	22-02-2018	1	0	\N	\N	2018-01-22 12:51:16	2018-06-12 08:09:53	\N	f	f	Ass. Supervisor	\N	0
+447	254200018262	\N	Franklin Rimui	frimui60@gmail.com	0702883504	\N	free	24-01-2018	24-02-2018	200	1	\N	\N	2018-01-24 15:08:03	2018-06-10 12:22:45	\N	f	f	Ass. Supervisor	\N	0
+1169	255000088850	\N	Robert Sulus	robertsulus@gmail.com	0714206089	\N	free	27-06-2018	28-07-2018	0	0	https://lh5.googleusercontent.com/-5Z6dP6bRXU8/AAAAAAAAAAI/AAAAAAAAAEI/1dS0Z-QROKU/photo.jpg	\N	2018-06-27 10:21:11	2018-06-27 10:21:11	\N	f	f	Supervisor	\N	0
+837	\N	\N	Nema Salum	nemasalum39@gmail.com	0718110811	\N	free	02-04-2018	03-05-2018	1	0	\N	\N	2018-04-02 13:59:42	2018-04-02 13:59:42	\N	f	f	NOVUS	\N	0
+833	\N	\N	Samwel Mika	samwelmicka@gmail.com	07463522088	\N	free	01-04-2018	02-05-2018	553	0	\N	\N	2018-04-01 07:15:11	2018-04-01 07:15:11	\N	f	f	NOVUS	\N	0
+830	\N	\N	Sarafina David	sarafinadavid67@gmail.com	0756961094	\N	free	31-03-2018	01-05-2018	2	0	\N	\N	2018-03-31 09:54:36	2018-03-31 09:54:36	\N	f	f	NOVUS	\N	0
+829	\N	\N	Cyprian Mwasanga	mwasanga66cc@gmail.com	0767451976	\N	free	31-03-2018	01-05-2018	6	0	\N	\N	2018-03-31 09:13:22	2018-03-31 09:13:22	\N	f	f	NOVUS	\N	0
+828	\N	\N	Abeida Nassor Mussa Mussa	abeidanassormussa@gmail.com	0777773754	\N	free	31-03-2018	01-05-2018	4	0	\N	\N	2018-03-31 05:16:34	2018-03-31 05:16:34	\N	f	f	NOVUS	\N	0
+827	\N	\N	dennis hezron	hezdennis83@gmail.com	+255719841061	\N	free	31-03-2018	01-05-2018	0	0	\N	\N	2018-03-31 04:46:01	2018-03-31 04:46:01	\N	f	f	NOVUS	\N	0
+826	\N	\N	Wanko Kapunda	wankokapunda1@gmail.com	0755836896	\N	free	30-03-2018	30-04-2018	220000	0	https://lh4.googleusercontent.com/-N3quajndl2E/AAAAAAAAAAI/AAAAAAAAAEg/yhwTDEFbNMo/photo.jpg	\N	2018-03-30 20:30:49	2018-03-30 20:30:49	\N	f	f	NOVUS	\N	0
+825	\N	\N	Deogratius Alexanda Telesphory	deogratiusat95@gmail.com	0756472767	\N	free	30-03-2018	30-04-2018	1	0	https://lh5.googleusercontent.com/-caJy0c7Jigc/AAAAAAAAAAI/AAAAAAAAABY/LQ6pXDr5aPk/photo.jpg	\N	2018-03-30 12:14:47	2018-03-30 12:14:47	\N	f	f	NOVUS	\N	0
+834	254200022036	\N	Amour Gitonga	gitongamercy2@gmail.com	0705095874	\N	free	01-04-2018	02-05-2018	1	1	\N	\N	2018-04-01 09:08:38	2018-07-19 09:29:01	\N	f	f	Novus	\N	0
+836	255200019992	\N	Glory Moshy	glorymoshy@gmail.com	0683261616	\N	premium	20-06-2018	19-12-2018	1	0	https://lh6.googleusercontent.com/-whUm9Y38g9M/AAAAAAAAAAI/AAAAAAAAABg/XciOsNozeyA/photo.jpg	\N	2018-04-02 13:39:26	2018-06-20 12:04:10	\N	f	f	Ass. Supervisor	\N	0
+898	255000425778	\N	Sebu Panya	sebu.panya@gmail.com	0752079453	\N	premium	09-06-2018	04-06-2019	4	0	https://lh6.googleusercontent.com/-ps_LPZSLqx0/AAAAAAAAAAI/AAAAAAAACJ0/CoaoUxRutI8/photo.jpg	\N	2018-04-08 07:34:59	2018-06-09 08:38:02	\N	f	f	Supervisor	\N	0
+892	255000584297	\N	Dorice Kimambo	doricekimambo1@gmail.com	0688218533	\N	free	07-04-2018	08-05-2018	12	0	\N	\N	2018-04-07 04:05:11	2018-06-09 08:07:32	\N	f	f	Ass. Supervisor	\N	0
+941	255000559016	\N	Francis Kasenyenda	fkasenyenda0@gmail.com	0754367056	\N	free	19-04-2018	20-05-2018	4	0	https://lh4.googleusercontent.com/-cgUwC3EjFiQ/AAAAAAAAAAI/AAAAAAAAB3k/Dhy6m-aZoN0/photo.jpg	\N	2018-04-19 16:30:21	2018-06-08 19:06:06	\N	f	f	Ass. Supervisor	\N	0
+945	\N	\N	Angel Mwandele	angelmwandele@gmail.com	0757806670	\N	free	20-04-2018	21-05-2018	527	0	\N	\N	2018-04-20 15:25:33	2018-04-20 15:25:33	\N	f	f	NOVUS	\N	0
+944	\N	\N	Divya Joshi.Bhatt	divya.joshi.bhatt@gmail.com	+254713321777	\N	free	20-04-2018	21-05-2018	1000000	0	https://lh4.googleusercontent.com/-DEBLu10gyv4/AAAAAAAAAAI/AAAAAAAAAA0/4G8R73TpVh0/photo.jpg	\N	2018-04-20 10:20:37	2018-04-20 10:20:37	\N	f	f	NOVUS	\N	0
+943	\N	\N	Esther Benedict	estherbenedict95@gmail.com	0656005910	\N	free	20-04-2018	21-05-2018	85	0	\N	\N	2018-04-19 22:27:31	2018-04-19 22:27:31	\N	f	f	NOVUS	\N	0
+942	\N	\N	bruno ngosongo	brunongosongo88@gmail.com	0765503176	\N	free	20-04-2018	21-05-2018	10	0	https://lh5.googleusercontent.com/-buTneAebNSk/AAAAAAAAAAI/AAAAAAAAABA/-XPHFN54sSs/photo.jpg	\N	2018-04-19 21:07:34	2018-04-19 21:07:34	\N	f	f	NOVUS	\N	0
+940	\N	\N	emmanuel muga	emuga19777@gmail.com	+255713291631	\N	free	19-04-2018	20-05-2018	5	0	\N	\N	2018-04-19 16:00:06	2018-04-19 16:00:06	\N	f	f	NOVUS	\N	0
+938	\N	\N	Ann Shish	shiroann2@gmail.com	0714539831	\N	free	19-04-2018	20-05-2018	150	1	https://lh4.googleusercontent.com/-pOK1zMuS1M4/AAAAAAAAAAI/AAAAAAAAAXQ/9lLqMoFDhZc/photo.jpg	\N	2018-04-19 14:07:16	2018-04-19 14:07:16	\N	f	f	NOVUS	\N	0
+937	\N	\N	Valiant Simchimba	valianteric@gmail.com	0765334892	\N	free	19-04-2018	20-05-2018	1	0	\N	\N	2018-04-19 11:48:09	2018-04-19 11:48:09	\N	f	f	NOVUS	\N	0
+917	254200015347	\N	Richard Seifer	thelistener34@gmail.com	0713075281	\N	free	12-04-2018	13-05-2018	60	1	\N	\N	2018-04-12 12:09:30	2018-07-16 14:25:41	\N	f	f	Supervisor	\N	0
+934	\N	\N	Chiito Msuku	csylviahen@gmail.com	0785363456	\N	free	18-04-2018	19-05-2018	4	0	\N	\N	2018-04-18 10:03:30	2018-04-18 10:03:30	\N	f	f	NOVUS	\N	0
+933	\N	\N	Juma Hassan	juma295hassan@gmail.com	0713616109	\N	free	17-04-2018	18-05-2018	0	0	\N	\N	2018-04-17 17:43:24	2018-04-17 17:43:24	\N	f	f	NOVUS	\N	0
+932	\N	\N	Alipo Mwatujobe	alipomwatujobe@gmail.com	07559364192	\N	free	17-04-2018	18-05-2018	2	0	https://lh3.googleusercontent.com/-WWCaXOpbX8s/AAAAAAAAAAI/AAAAAAAAAKE/P528Zvky4v0/photo.jpg	\N	2018-04-17 16:42:16	2018-04-17 16:42:16	\N	f	f	NOVUS	\N	0
+931	\N	\N	jediawadh022@gmail.com	jediawadh022@gmail.com	+255686077223	\N	free	16-04-2018	17-05-2018	10	0	\N	\N	2018-04-16 17:18:47	2018-04-16 17:18:47	\N	f	f	NOVUS	\N	0
+930	\N	\N	ANITHA LIVINGSTON	anithalivingston@gmail.com	0687512975	\N	free	16-04-2018	17-05-2018	4	0	\N	\N	2018-04-16 15:53:12	2018-04-16 15:53:12	\N	f	f	NOVUS	\N	0
+929	\N	\N	Jennifer Yohana	yohanajennifer034@gmail.com	0715218699	\N	free	16-04-2018	17-05-2018	438	0	\N	\N	2018-04-16 12:56:43	2018-04-16 12:56:43	\N	f	f	NOVUS	\N	0
+928	\N	\N	zeku man	zeku015@gmail.com	0759366288	\N	free	16-04-2018	17-05-2018	0	0	\N	\N	2018-04-16 12:12:07	2018-04-16 12:12:07	\N	f	f	NOVUS	\N	0
+926	\N	\N	ally kibara	allykibara9@gmail.com	0773103846	\N	free	15-04-2018	16-05-2018	1000	0	https://lh4.googleusercontent.com/-4mT0fiKFH8U/AAAAAAAAAAI/AAAAAAAAADw/r3AyEkH5ezs/photo.jpg	\N	2018-04-15 06:20:03	2018-04-15 06:20:03	\N	f	f	NOVUS	\N	0
+925	\N	\N	victor mataba	vmataba0@gmail.com	0759727612	\N	free	14-04-2018	15-05-2018	8	0	https://lh4.googleusercontent.com/-qkIwRIkNecU/AAAAAAAAAAI/AAAAAAAAAlE/v7SO44a31Ek/photo.jpg	\N	2018-04-14 19:06:55	2018-04-14 19:06:55	\N	f	f	NOVUS	\N	0
+924	\N	\N	Deneze Barton	www.denezemwamkinga@gmail.com	0657932898	\N	free	14-04-2018	15-05-2018	1	0	\N	\N	2018-04-14 15:26:52	2018-04-14 15:26:52	\N	f	f	NOVUS	\N	0
+923	\N	\N	lydia richard	lydoriich@gmail.com	0762220205	\N	free	14-04-2018	15-05-2018	25	0	https://lh5.googleusercontent.com/-wwOc1wfaJCQ/AAAAAAAAAAI/AAAAAAAAACg/D8WZoI3lbok/photo.jpg	\N	2018-04-14 12:11:44	2018-04-14 12:11:44	\N	f	f	NOVUS	\N	0
+921	\N	\N	Rashidi seleman	rashdseleman666@gmail.com	0673333080	\N	free	13-04-2018	14-05-2018	1	0	https://lh3.googleusercontent.com/-R5nu0Um_NKU/AAAAAAAAAAI/AAAAAAAAAF4/4cEzlsJjQN8/photo.jpg	\N	2018-04-13 17:12:01	2018-04-13 17:12:01	\N	f	f	NOVUS	\N	0
+920	\N	\N	Hilda Doffa	doffahilda@gmail.com	0755191846	\N	free	13-04-2018	14-05-2018	20	0	\N	\N	2018-04-13 17:04:02	2018-04-13 17:04:02	\N	f	f	NOVUS	\N	0
+919	255000470552	\N	Lilynice Chami	ownlife63@gmail.com	0713418475	\N	premium	09-07-2018	08-08-2018	0	0	https://lh4.googleusercontent.com/-ie7Jlw-bCWg/AAAAAAAAAAI/AAAAAAAAABQ/UZHYq6Zxytg/photo.jpg	\N	2018-04-13 11:49:15	2018-07-09 07:40:06	\N	f	f	Ass. Supervisor	\N	0
+918	\N	\N	Reuben Busumba	busumbareuben@gmail.com	0717908928	\N	free	12-04-2018	13-05-2018	333	0	\N	\N	2018-04-12 15:52:29	2018-04-12 15:52:29	\N	f	f	NOVUS	\N	0
+915	\N	\N	Hussein Chum	chumhussein@gmail.com	0712846230	\N	free	11-04-2018	12-05-2018	2	0	\N	\N	2018-04-11 17:02:32	2018-04-11 17:02:32	\N	f	f	NOVUS	\N	0
+927	255200021061	\N	Alfonsia Mwenda	fonsia2012@gmail.com	0712694445	\N	free	16-04-2018	17-05-2018	4	0	https://lh5.googleusercontent.com/-QO61Ka3dGyo/AAAAAAAAAAI/AAAAAAAAAJ4/1FowneAdruM/photo.jpg	\N	2018-04-16 09:27:23	2018-08-13 07:38:40	\N	f	f	Ass. Supervisor	\N	0
+913	\N	\N	lynerene Maina	irenetravismaina@gmail.com	0706080875	\N	free	11-04-2018	12-05-2018	0	1	\N	\N	2018-04-11 14:05:50	2018-04-11 14:05:50	\N	f	f	NOVUS	\N	0
+912	\N	\N	Yusuph Eliamin	yeliamini@gmail.com	+255621359337	\N	free	11-04-2018	12-05-2018	2	0	\N	\N	2018-04-11 13:56:20	2018-04-11 13:56:20	\N	f	f	NOVUS	\N	0
+910	\N	\N	Adam Mamdai	mamdaia04@gmail.com	0621037798	\N	free	11-04-2018	12-05-2018	10000	0	\N	\N	2018-04-11 06:06:32	2018-04-11 06:06:32	\N	f	f	NOVUS	\N	0
+908	\N	\N	Riziki Fumao	fumaoriziki@gmail.com	0689697019	\N	free	10-04-2018	11-05-2018	0	0	\N	\N	2018-04-10 18:35:44	2018-04-10 18:35:44	\N	f	f	NOVUS	\N	0
+907	\N	\N	Riziki Mohamedi Fumao	ridhikif@gmail.com	0689697019	\N	free	10-04-2018	11-05-2018	2	0	\N	\N	2018-04-10 18:29:12	2018-04-10 18:29:12	\N	f	f	NOVUS	\N	0
+911	255200019422	\N	Mwatima Massego	mwatimassego@gmail.com	0773471800	\N	free	11-04-2018	12-05-2018	2	0	\N	\N	2018-04-11 07:18:50	2018-07-07 09:15:04	\N	f	f	Ass. Supervisor	\N	0
+958	255000402058	\N	Glory Minja	gminja22@gmail.com	0656365953	\N	free	23-04-2018	24-05-2018	25	0	\N	\N	2018-04-22 21:02:21	2018-06-20 13:29:53	\N	f	f	Manager	\N	0
+967	255000536855	\N	DENIS JIMMY	denisjimmy2@gmail.com	0752440754	\N	free	24-04-2018	25-05-2018	8	0	\N	\N	2018-04-24 19:30:31	2018-06-17 05:47:49	\N	f	f	Ass. Supervisor	\N	0
+978	255000546205	\N	joseph francis	josephfransour@gmail.com	0719909025	\N	free	27-04-2018	28-05-2018	1	0	\N	\N	2018-04-27 12:39:02	2018-06-15 08:28:33	\N	f	f	Ass. Supervisor	\N	0
+987	\N	\N	Mkuki Yusuph	mkukiyusuph0@gmail.com	0769711608	\N	free	29-04-2018	30-05-2018	3018	0	https://lh5.googleusercontent.com/-nw9cv68zMw4/AAAAAAAAAAI/AAAAAAAABXg/eewYoSCs3_A/photo.jpg	\N	2018-04-29 11:14:36	2018-04-29 11:14:36	\N	f	f	NOVUS	\N	0
+986	\N	\N	Patric Chikomo	chikomopatric96@gmail.com	0652641696	\N	free	29-04-2018	30-05-2018	230496	0	\N	\N	2018-04-28 22:58:58	2018-04-28 22:58:58	\N	f	f	NOVUS	\N	0
+985	\N	\N	Abdull Calim	www.abdulcalim000@gmail.com	0786154015	\N	free	28-04-2018	29-05-2018	2722	0	\N	\N	2018-04-28 16:59:01	2018-04-28 16:59:01	\N	f	f	NOVUS	\N	0
+984	\N	\N	Marion Rubia	marionrubia42@gmail.com	0742809805	\N	free	28-04-2018	29-05-2018	500	1	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABDCKekiObu7busMSILdmNhcmRfcGhvdG8qKDRmMzYzODI1MTU4ZWViNDI0YzY3Mzk0YjYyN2UwMjhjYzFiNjAxZGIwAdPlwxlFyiWVe0gr8j46iFBLW4db	\N	2018-04-28 10:16:12	2018-04-28 10:16:12	\N	f	f	NOVUS	\N	0
+982	\N	\N	Rosalia Kabakama	rosaliakabakama@gmail.com	0717178285	\N	free	28-04-2018	29-05-2018	563	0	\N	\N	2018-04-28 05:25:59	2018-04-28 05:25:59	\N	f	f	NOVUS	\N	0
+981	\N	\N	Victoria Mkunya	victoriamkunya@gmail.com	0657280053	\N	free	28-04-2018	29-05-2018	0	0	https://lh6.googleusercontent.com/-gjNs6V-i5VE/AAAAAAAAAAI/AAAAAAAABtM/TtdHvawjF3s/photo.jpg	\N	2018-04-28 01:50:18	2018-04-28 01:50:18	\N	f	f	NOVUS	\N	0
+979	\N	\N	Lilian Chambulikazi	chambulikazi.lilian5@gmail.com	0655969614	\N	free	27-04-2018	28-05-2018	0	0	\N	\N	2018-04-27 20:20:14	2018-04-27 20:20:14	\N	f	f	NOVUS	\N	0
+976	\N	\N	Emmanuel Augenus	augenusemmanuelg@gmail.com	0743214833	\N	free	27-04-2018	28-05-2018	3322	0	\N	\N	2018-04-27 10:45:22	2018-04-27 10:45:22	\N	f	f	NOVUS	\N	0
+974	\N	\N	Erasto Mabiti	erasto.mabiti@gmail.com	0655020840	\N	free	26-04-2018	27-05-2018	2	0	https://lh4.googleusercontent.com/-8OP1oRvUZoY/AAAAAAAAAAI/AAAAAAAAAC4/oQ2tQDbsaWI/photo.jpg	\N	2018-04-26 17:31:20	2018-04-26 17:31:20	\N	f	f	NOVUS	\N	0
+973	\N	\N	Yangibona Katole	yangibonakatole@gmail.com	0759044942	\N	free	26-04-2018	27-05-2018	2	0	https://lh4.googleusercontent.com/-8SaOK_83fPw/AAAAAAAAAAI/AAAAAAAAAAk/wU3UXjZqK54/photo.jpg	\N	2018-04-26 15:28:40	2018-04-26 15:28:40	\N	f	f	NOVUS	\N	0
+972	\N	\N	Catalogue Printers	cataloguep@gmail.com	0755191970	\N	free	25-04-2018	26-05-2018	4	0	https://lh6.googleusercontent.com/-3iH-LmJjMs0/AAAAAAAAAAI/AAAAAAAADvE/FziUaUMnaRI/photo.jpg	\N	2018-04-25 09:42:33	2018-04-25 09:42:33	\N	f	f	NOVUS	\N	0
+970	\N	\N	Dadi Hassan	dadihassanc@gmail.com	0763497826	\N	free	25-04-2018	26-05-2018	1524	0	https://lh4.googleusercontent.com/-18lycdMt9sw/AAAAAAAAAAI/AAAAAAAAABQ/YVM1FaLoAVA/photo.jpg	\N	2018-04-25 08:08:11	2018-04-25 08:08:11	\N	f	f	NOVUS	\N	0
+969	\N	\N	neema Mwasongwe	neymwasongwe@gmail.com	0658175104	\N	free	25-04-2018	26-05-2018	0	0	\N	\N	2018-04-25 05:52:00	2018-04-25 05:52:00	\N	f	f	NOVUS	\N	0
+968	\N	\N	TATU MADIKAH	tatumadikah@gmail.com	0715273625	\N	free	24-04-2018	25-05-2018	107	0	\N	\N	2018-04-24 20:29:35	2018-04-24 20:29:35	\N	f	f	NOVUS	\N	0
+966	\N	\N	Omary Bakar	omarybakar3@gmail.com	0672563036	\N	free	24-04-2018	25-05-2018	18	0	\N	\N	2018-04-24 17:56:53	2018-04-24 17:56:53	\N	f	f	NOVUS	\N	0
+965	\N	\N	Yekonia Baliyendeza	yekoniabaliyendeza@gmail.com	0763745424	\N	free	24-04-2018	25-05-2018	4	0	https://lh4.googleusercontent.com/-ixpKA1RWFd0/AAAAAAAAAAI/AAAAAAAABXU/qpkT7rF5_Gg/photo.jpg	\N	2018-04-24 15:15:36	2018-04-24 15:15:36	\N	f	f	NOVUS	\N	0
+964	\N	\N	Tunga Raza	razatunga@gmail.com	0764885671	\N	premium	24-04-2018	24-06-2018	1	0	https://lh5.googleusercontent.com/-SpsFxoZ671c/AAAAAAAAAAI/AAAAAAAAAI4/gq6eTh__l84/photo.jpg	\N	2018-04-24 14:06:48	2018-04-24 14:21:28	\N	f	f	NOVUS	\N	0
+963	\N	\N	airini machange	airinimachange18@gmail.com	0763775929	\N	free	24-04-2018	25-05-2018	1	0	\N	\N	2018-04-24 10:05:59	2018-04-24 10:05:59	\N	f	f	NOVUS	\N	0
+962	\N	\N	ALINDA SAWE	alindasawe@gmail.com	0757696165	\N	free	23-04-2018	24-05-2018	2	0	\N	\N	2018-04-23 11:55:43	2018-04-23 11:55:43	\N	f	f	NOVUS	\N	0
+961	\N	\N	Asha Jape	ashakhj72@gmail.com	0773547272	\N	free	23-04-2018	24-05-2018	96	0	\N	\N	2018-04-23 11:26:57	2018-04-23 11:26:57	\N	f	f	NOVUS	\N	0
+960	\N	\N	Rukia Mustapha	rukiamustapha51@gmail.com	0714095165	\N	free	23-04-2018	24-05-2018	1	0	\N	\N	2018-04-23 10:21:45	2018-04-23 10:21:45	\N	f	f	NOVUS	\N	0
+957	\N	\N	Abdallah Shariff	shariffabdallah189@gmail.com	0716439492	\N	free	22-04-2018	23-05-2018	1	0	\N	\N	2018-04-22 19:55:25	2018-04-22 19:55:25	\N	f	f	NOVUS	\N	0
+956	\N	\N	Vaileth Masaka	masakavaileth@gmail.com	0657938738	\N	free	22-04-2018	23-05-2018	1	0	\N	\N	2018-04-22 14:53:54	2018-04-22 14:53:54	\N	f	f	NOVUS	\N	0
+955	\N	\N	SALVIUS MKULU	mkulusalvius00@gmail.com	075698799	\N	free	22-04-2018	23-05-2018	0	0	https://lh3.googleusercontent.com/-N3rEjzaIMoY/AAAAAAAAAAI/AAAAAAAAAAs/unue3DzWKwY/photo.jpg	\N	2018-04-22 12:58:43	2018-04-22 12:58:43	\N	f	f	NOVUS	\N	0
+954	\N	\N	jumahawa.hj@gmail.com	jumahawa.hj@gmail.com	0753200965	\N	free	22-04-2018	23-05-2018	1070000	0	\N	\N	2018-04-22 04:01:01	2018-04-22 04:01:01	\N	f	f	NOVUS	\N	0
+952	\N	\N	Nuzhat Kht	kht.nuzhat@gmail.com	0654970258	\N	free	21-04-2018	22-05-2018	4	0	\N	\N	2018-04-21 16:08:47	2018-04-21 16:08:47	\N	f	f	NOVUS	\N	0
+951	\N	\N	mecky mary	meckyjmary@gmail.com	+255673932974	\N	free	21-04-2018	22-05-2018	574	0	https://lh6.googleusercontent.com/-396D6p7LTg0/AAAAAAAAAAI/AAAAAAAAAAw/dM-m5pxTl8s/photo.jpg	\N	2018-04-21 14:26:40	2018-04-21 14:26:40	\N	f	f	NOVUS	\N	0
+950	\N	\N	The Talented Emma Genius Tz	emmathegenius1@gmail.com	0746605534	\N	free	21-04-2018	22-05-2018	5000	0	\N	\N	2018-04-21 13:18:06	2018-04-21 13:18:06	\N	f	f	NOVUS	\N	0
+949	255000428729	\N	caroline swai	carolswai@gmail.com	0713223253	\N	premium	23-07-2018	22-08-2018	6	0	\N	\N	2018-04-21 10:52:15	2018-07-23 18:44:31	\N	f	f	Ass. Supervisor	\N	0
+935	255200021185	\N	Simon Simumba	simumbasimon@gmail.com	0755359191	\N	premium	02-08-2018	31-01-2019	1	0	https://lh4.googleusercontent.com/-4HYHbFaKKWI/AAAAAAAAAAI/AAAAAAAADQ8/Lq9nOCwHTKw/photo.jpg	\N	2018-04-19 01:42:52	2018-08-02 07:50:26	\N	f	f	Ass. Supervisor	\N	0
+948	\N	\N	Prudence Eustace	prudenceeustace832@gmail.com	0754472201	\N	free	21-04-2018	22-05-2018	3	0	\N	\N	2018-04-21 09:51:44	2018-04-21 09:51:44	\N	f	f	NOVUS	\N	0
+975	255000550777	\N	Suma Mwaipasi	mwaisuma5@gmail.com	0753705179	\N	free	27-04-2018	28-05-2018	4	0	\N	\N	2018-04-27 09:00:26	2018-07-02 04:22:16	\N	f	f	Ass. Supervisor	\N	0
+1037	\N	\N	Kines Kisuda	kineskisuda@gmail.com	0755712887	\N	free	08-05-2018	08-06-2018	9	0	\N	\N	2018-05-08 17:41:12	2018-05-08 17:41:12	\N	f	f	NOVUS	\N	0
+1035	\N	\N	Hemed Salumu	salumuhemed55@gmail.com	0717494057	\N	free	08-05-2018	08-06-2018	1	0	\N	\N	2018-05-08 10:28:17	2018-05-08 10:28:17	\N	f	f	NOVUS	\N	0
+1034	\N	\N	Kabi Rumisha	jumannezuberi85@gmail.com	0755733034	\N	free	08-05-2018	08-06-2018	1	0	https://lh6.googleusercontent.com/-vY3PyL1Tczs/AAAAAAAAAAI/AAAAAAAAACk/OEdcibo1wDk/photo.jpg	\N	2018-05-08 10:20:25	2018-05-08 10:20:25	\N	f	f	NOVUS	\N	0
+1033	\N	\N	Jackline Josephat	jackiejosephat22@gmail.com	0717366403	\N	free	08-05-2018	08-06-2018	1	0	\N	\N	2018-05-08 10:19:50	2018-05-08 10:19:50	\N	f	f	NOVUS	\N	0
+1029	\N	\N	Geoker Boy	geofreymodestusy@gmail.com	0753567758	\N	free	07-05-2018	07-06-2018	1	0	https://lh3.googleusercontent.com/-Ys5nwLHgyOg/AAAAAAAAAAI/AAAAAAAAAaI/Jhp2kTl1W3U/photo.jpg	\N	2018-05-07 19:51:56	2018-05-07 19:51:56	\N	f	f	NOVUS	\N	0
+1028	\N	\N	Munira Natai	natai.munira@gmail.com	+255714525699	\N	free	07-05-2018	07-06-2018	1	0	\N	\N	2018-05-07 13:11:22	2018-05-07 13:11:22	\N	f	f	NOVUS	\N	0
+1025	\N	\N	FAISARI ZUBERI	faisarizuberi7@gmail.com	0759611065	\N	free	07-05-2018	07-06-2018	100000	0	\N	\N	2018-05-07 09:18:42	2018-05-07 09:18:42	\N	f	f	NOVUS	\N	0
+1024	\N	\N	Jacobda Kingmayo	jacobdakingmayo@gmail.com	0762241426	\N	free	07-05-2018	07-06-2018	1	0	\N	\N	2018-05-07 05:09:35	2018-05-07 05:09:35	\N	f	f	NOVUS	\N	0
+1023	\N	\N	SALIM ABDULLA NASSOR	salimsokonitrader2@gmail.com	0777418541	\N	free	07-05-2018	07-06-2018	8	0	\N	\N	2018-05-07 04:23:14	2018-05-07 04:23:14	\N	f	f	NOVUS	\N	0
+1022	\N	\N	Prima Gift	primagift34@gmail.com	0657413922	\N	free	06-05-2018	06-06-2018	465	0	https://lh3.googleusercontent.com/-bbnpZF8DbEQ/AAAAAAAAAAI/AAAAAAAAAAU/Dyst8msv-u4/photo.jpg	\N	2018-05-06 15:44:17	2018-05-06 15:44:17	\N	f	f	NOVUS	\N	0
+1021	\N	\N	dj hunfred	jerremiahmbwilo100@gmail.com	0687743640	\N	free	06-05-2018	06-06-2018	1	0	https://lh6.googleusercontent.com/-6WXxNDcfeps/AAAAAAAAAAI/AAAAAAAAAB4/60Dg9BoI49Q/photo.jpg	\N	2018-05-06 06:23:33	2018-05-06 06:23:33	\N	f	f	NOVUS	\N	0
+1020	\N	\N	Lameck Nestory	bjjms4248@gmail.com	714925274	\N	free	06-05-2018	06-06-2018	2000	0	https://lh3.googleusercontent.com/-peqd_53axZ0/AAAAAAAAAAI/AAAAAAAAAHI/YbNttmGKAGE/photo.jpg	\N	2018-05-05 21:55:32	2018-05-05 21:55:32	\N	f	f	NOVUS	\N	0
+1019	\N	\N	edimundilinda@gmail.com Gloriasway	edimundilinda90@gmail.com	0765433599	\N	free	05-05-2018	05-06-2018	2	0	\N	\N	2018-05-05 14:50:53	2018-05-05 14:50:53	\N	f	f	NOVUS	\N	0
+1018	\N	\N	Mwahija Kiwamba	kiwambamwahija@gmail.com	0679411370	\N	free	05-05-2018	05-06-2018	25	0	\N	\N	2018-05-05 10:06:03	2018-05-05 10:06:03	\N	f	f	NOVUS	\N	0
+1017	\N	\N	George Urila	george73kiboga@gmail.com	+255686125175	\N	free	05-05-2018	05-06-2018	1	0	\N	\N	2018-05-04 21:02:03	2018-05-04 21:02:03	\N	f	f	NOVUS	\N	0
+1015	\N	\N	emanuelsilvester9@gmail.com	emanuelsilvester9@gmail.com	0743393620	\N	free	04-05-2018	04-06-2018	25802580	0	\N	\N	2018-05-04 16:53:04	2018-05-04 16:53:04	\N	f	f	NOVUS	\N	0
+1014	\N	\N	Sola Jr	solajr23@gmail.com	0778746064	\N	free	04-05-2018	04-06-2018	4	0	https://lh4.googleusercontent.com/-ukOGkLrO4Zs/AAAAAAAAAAI/AAAAAAAAHGc/qvo9IMHk-6A/photo.jpg	\N	2018-05-04 13:43:18	2018-05-04 13:43:18	\N	f	f	NOVUS	\N	0
+1013	\N	\N	Sekunda Shirima	matrona1000@gmail.com	0759207388	\N	free	04-05-2018	04-06-2018	2	0	https://lh6.googleusercontent.com/-NPp0FahtkBA/AAAAAAAAAAI/AAAAAAAAF0Y/dx5ceVTQZPc/photo.jpg	\N	2018-05-04 12:05:50	2018-05-04 12:05:50	\N	f	f	NOVUS	\N	0
+1012	\N	\N	Edward Magesa	eddymagesa@gmail.com	+255784955926	\N	free	04-05-2018	04-06-2018	1	0	https://lh6.googleusercontent.com/-hnSLY3W8zKA/AAAAAAAAAAI/AAAAAAAAAJs/6gxWjV_BiBw/photo.jpg	\N	2018-05-04 11:31:02	2018-05-04 11:31:02	\N	f	f	NOVUS	\N	0
+1011	\N	\N	Glory Mkenda	glorymkenda1@gmail.com	0656187464	\N	free	04-05-2018	04-06-2018	4	0	\N	\N	2018-05-04 10:12:57	2018-05-04 10:12:57	\N	f	f	NOVUS	\N	0
+1008	\N	\N	romacharia@gmail.com	romacharia@gmail.com	0727585885	\N	free	04-05-2018	04-06-2018	6	1	\N	\N	2018-05-04 05:10:56	2018-05-04 05:10:56	\N	f	f	NOVUS	\N	0
+1007	\N	\N	Isacky Godfrey	ikyabula@gmail.com	0717617595	\N	free	04-05-2018	04-06-2018	0	0	\N	\N	2018-05-04 00:21:20	2018-05-04 00:21:20	\N	f	f	NOVUS	\N	0
+1005	\N	\N	Andrew C Godfrey	godfreyandr@gmail.com	0716508496	\N	free	03-05-2018	03-06-2018	6	0	https://lh6.googleusercontent.com/-j1wPiNtsEvk/AAAAAAAAAAI/AAAAAAAAABA/mnJINkxBuEA/photo.jpg	\N	2018-05-03 13:24:47	2018-05-03 13:24:47	\N	f	f	NOVUS	\N	0
+1004	255000463228	\N	cute neyda	cuteneyda02@gmail.com	0754771122	\N	premium	04-07-2018	03-08-2018	11	0	https://lh5.googleusercontent.com/-ThnvWe1AThg/AAAAAAAAAAI/AAAAAAAAAG0/eXR1Tn1PbFM/photo.jpg	\N	2018-05-03 10:44:02	2018-07-04 13:13:29	\N	f	f	Ass. Supervisor	\N	0
+1003	\N	\N	peace rubagora	rubagorap@gmail.com	0783999044	\N	free	03-05-2018	03-06-2018	1	0	\N	\N	2018-05-03 08:12:48	2018-05-03 08:12:48	\N	f	f	NOVUS	\N	0
+1002	\N	\N	anna Mtitu	annamtitu3@gmail.com	0655925086	\N	free	03-05-2018	03-06-2018	4	0	\N	\N	2018-05-03 06:01:48	2018-05-03 06:01:48	\N	f	f	NOVUS	\N	0
+1001	\N	\N	Marero Anthony	mareroanthony38@gmail.com	07165387	\N	free	02-05-2018	02-06-2018	2	0	\N	\N	2018-05-02 19:53:26	2018-05-02 19:53:26	\N	f	f	NOVUS	\N	0
+999	\N	\N	William Mato	matobill@gmail.com	0713781882	\N	free	02-05-2018	02-06-2018	565	0	https://lh3.googleusercontent.com/-g6690ECExEE/AAAAAAAAAAI/AAAAAAAAGOs/Jpw7TCf8ANE/photo.jpg	\N	2018-05-02 14:40:21	2018-05-02 14:40:21	\N	f	f	NOVUS	\N	0
+997	\N	\N	diana ruheta	diana2ruheta@gmail.com	0765251201	\N	free	02-05-2018	02-06-2018	0	0	https://lh5.googleusercontent.com/-AP4iO6CtjlA/AAAAAAAAAAI/AAAAAAAAARw/DwJYIbf58s0/photo.jpg	\N	2018-05-02 14:05:13	2018-05-02 14:05:13	\N	f	f	NOVUS	\N	0
+996	\N	\N	Benjamin Gwaku	benjaminigwaku2017@gmail.com	0687200211	\N	free	02-05-2018	02-06-2018	3	0	\N	\N	2018-05-02 12:31:03	2018-05-02 12:31:03	\N	f	f	NOVUS	\N	0
+995	\N	\N	Ester Kawishe	ekawishe@gmail.com	0713566551	\N	free	02-05-2018	02-06-2018	2	0	https://lh3.googleusercontent.com/-5hHAp93D7u8/AAAAAAAAAAI/AAAAAAAAAHI/Ct8sYkEMsqg/photo.jpg	\N	2018-05-02 06:44:23	2018-05-02 06:44:23	\N	f	f	NOVUS	\N	0
+994	\N	\N	Fatma Hemed	fatmahemedkassim@gmail.com	0715193370	\N	free	02-05-2018	02-06-2018	4	0	\N	\N	2018-05-02 06:13:06	2018-05-02 06:13:06	\N	f	f	NOVUS	\N	0
+993	\N	\N	hadija bakari	bakari.hadija0@gmail.com	0716486076	\N	free	01-05-2018	01-06-2018	0	0	https://lh3.googleusercontent.com/-nrUtu6asz-E/AAAAAAAAAAI/AAAAAAAAAB0/oQIMAQ1nF7k/photo.jpg	\N	2018-05-01 13:29:02	2018-05-01 13:29:02	\N	f	f	NOVUS	\N	0
+992	\N	\N	health talk with ivon mdeta	ivonmdeta@gmail.com	+255652986927	\N	free	01-05-2018	01-06-2018	2	0	https://lh5.googleusercontent.com/-T0yaaI2Ubhw/AAAAAAAAAAI/AAAAAAAAAAg/-Cy-rJkaZvA/photo.jpg	\N	2018-05-01 10:06:57	2018-05-01 10:06:57	\N	f	f	NOVUS	\N	0
+991	\N	\N	Hamza David	hamzadavidchikweo@gmail.com	0718682227	\N	free	30-04-2018	31-05-2018	1411	0	\N	\N	2018-04-30 13:39:11	2018-04-30 13:39:11	\N	f	f	NOVUS	\N	0
+990	\N	\N	Mwanne Kambangwa	kambangwamwanne@gmail.com	0755146793	\N	free	30-04-2018	31-05-2018	2	0	\N	\N	2018-04-30 09:10:33	2018-04-30 09:10:33	\N	f	f	NOVUS	\N	0
+1009	255200020688	\N	Hellen Mrema	hellyhelz.mrema1990@gmail.com	0766064176	\N	premium	17-06-2018	16-08-2018	1451	0	\N	\N	2018-05-04 09:07:18	2018-07-16 08:04:09	\N	f	f	Ass. Supervisor	\N	0
+1043	255000547583	\N	Deborah Khan	deborahjulius31@gmail.com	0769317690	\N	free	09-05-2018	09-06-2018	10	0	\N	\N	2018-05-09 10:41:34	2018-06-18 04:28:42	\N	f	f	Ass. Supervisor	\N	0
+1036	255000098604	\N	Allen Massam	allenmassam3@gmail.com	0713394901	\N	premium	13-06-2018	12-12-2018	0	0	\N	\N	2018-05-08 16:32:06	2018-06-13 08:07:35	\N	f	f	Manager	\N	0
+1050	255000443097	\N	Judith Mwafula	mwafulajudith@gmail.com	0715836052	\N	free	10-05-2018	10-06-2018	4	0	\N	\N	2018-05-10 05:29:57	2018-06-11 21:23:53	\N	f	f	Supervisor	\N	0
+1041	255200000375	\N	Gerald Kessy	geraldkessy86@gmail.com	0717430646	\N	free	09-05-2018	09-06-2018	0	0	\N	\N	2018-05-09 07:40:19	2018-06-07 19:03:56	\N	f	f	Novus	\N	0
+1070	255200021520	\N	Msofe King	msofeking03@gmail.com	0672971700	\N	free	15-05-2018	15-06-2018	1	0	https://lh3.googleusercontent.com/-z40vML4PWzY/AAAAAAAAAAI/AAAAAAAAAAk/zu1Q5XnfEfk/photo.jpg	\N	2018-05-15 13:26:14	2018-06-05 19:25:45	\N	f	f	Novus	\N	0
+341	255000540323	\N	veronica kayusi	veronicakayus123@gmail.com	0719123453	\N	free	10-01-2018	10-02-2018	0	0	\N	\N	2018-01-10 16:50:30	2018-06-05 11:23:16	\N	f	f	Ass. Supervisor	\N	0
+8	1234856985	Walter Kimaro	Walter Kimaro	wakyj07@gmail.com	0717138056	\N	premium	14-11-2017	08-09-2018	1	0	https://lh4.googleusercontent.com/-BDNoliXjAL8/AAAAAAAAAAI/AAAAAAAADQQ/p6Lt59dTzs0/photo.jpg	\N	\N	2018-06-01 08:34:42	\N	f	f	Supervisor	\N	0
+1062	\N	\N	Edwin Lutiga	edwin.lutiga@gmail.com	+255769688544	\N	premium	14-05-2018	09-06-2019	4	0	https://lh5.googleusercontent.com/-DIhxiVmK5uU/AAAAAAAAAAI/AAAAAAAAAC0/Ka4G0W19x7g/photo.jpg	\N	2018-05-14 06:13:56	2018-05-28 10:39:56	\N	f	f	NOVUS	\N	0
+1080	\N	\N	zacharia sanga	zachariasanga99@gmail.com	0753173971	\N	free	18-05-2018	18-06-2018	12	0	https://lh3.googleusercontent.com/-pHh46cjQndY/AAAAAAAAAAI/AAAAAAAAABg/POoBxdzDl-8/photo.jpg	\N	2018-05-18 03:29:58	2018-05-18 03:29:58	\N	f	f	NOVUS	\N	0
+1079	\N	\N	hood ahmad	hoodahmad612@gmail.com	0659841870	\N	free	17-05-2018	17-06-2018	8	0	\N	\N	2018-05-17 17:57:22	2018-05-17 17:57:22	\N	f	f	NOVUS	\N	0
+1078	\N	\N	Wiliam Seleman	wiliamseleman@gmail.com	0718501338	\N	free	17-05-2018	17-06-2018	2	0	\N	\N	2018-05-17 17:20:45	2018-05-17 17:20:45	\N	f	f	NOVUS	\N	0
+1073	\N	\N	David Damiho	ddamiho@gmail.com	0713316259	\N	free	16-05-2018	16-06-2018	5	0	\N	\N	2018-05-16 10:52:44	2018-05-16 10:52:44	\N	f	f	NOVUS	\N	0
+1072	\N	\N	Mandy Online Tv	mandyonlinetv1@gmail.com	0718642005	\N	free	16-05-2018	16-06-2018	2	0	\N	\N	2018-05-16 09:18:17	2018-05-16 09:18:17	\N	f	f	NOVUS	\N	0
+1069	\N	\N	Sylvia Pertet	sylviapertet@gmail.com	0721589181	\N	free	15-05-2018	15-06-2018	1	1	https://lh6.googleusercontent.com/-OD9ge3oAmaI/AAAAAAAAAAI/AAAAAAAAYAQ/l3rwjKw7VAU/photo.jpg	\N	2018-05-15 09:15:31	2018-05-15 09:15:31	\N	f	f	NOVUS	\N	0
+1068	\N	\N	Patricia Mhekwa	patriciamhekwa@gmail.com	0788500669	\N	free	15-05-2018	15-06-2018	2	0	\N	\N	2018-05-15 04:19:03	2018-05-15 04:19:03	\N	f	f	NOVUS	\N	0
+1067	\N	\N	Ali Haji	alihajisaleh90@gmail.com	0778258959	\N	free	14-05-2018	14-06-2018	12580	0	\N	\N	2018-05-14 16:33:33	2018-05-14 16:33:33	\N	f	f	NOVUS	\N	0
+1066	\N	\N	aysher mahamoud	ayshermahamoud@gmail.com	0754402025	\N	free	14-05-2018	14-06-2018	2	0	\N	\N	2018-05-14 15:29:34	2018-05-14 15:29:34	\N	f	f	NOVUS	\N	0
+1065	\N	\N	Julie Lucas	julielucas34@gmail.com	0783601715	\N	free	14-05-2018	14-06-2018	5	0	\N	\N	2018-05-14 12:35:10	2018-05-14 12:35:10	\N	f	f	NOVUS	\N	0
+1064	\N	\N	Elihuruma Madangi	madangielihuruma@gmail.com	0769925896	\N	free	14-05-2018	14-06-2018	1	0	\N	\N	2018-05-14 11:17:07	2018-05-14 11:17:07	\N	f	f	NOVUS	\N	0
+1063	\N	\N	Beenishfida 14	beenishfida14@gmail.com	0685620883	\N	free	14-05-2018	14-06-2018	10000	0	\N	\N	2018-05-14 09:33:39	2018-05-14 09:33:39	\N	f	f	NOVUS	\N	0
+1059	\N	\N	Lidia Elly	lidiaelly65@gmail.com	0673843407	\N	free	12-05-2018	12-06-2018	0	0	https://lh3.googleusercontent.com/-azGmyIFYyq4/AAAAAAAAAAI/AAAAAAAAAA0/4S1Mah3rTFs/photo.jpg	\N	2018-05-12 15:41:11	2018-05-12 15:41:11	\N	f	f	NOVUS	\N	0
+1058	\N	\N	Clement Bankuwiha	clementbankuwiha1995@gmail.com	0759511190	\N	free	12-05-2018	12-06-2018	200	0	\N	\N	2018-05-12 06:17:22	2018-05-12 06:17:22	\N	f	f	NOVUS	\N	0
+1057	\N	\N	Nuruel Njau	njaunuruel@gmail.com	+255765457708	\N	free	11-05-2018	11-06-2018	20	0	\N	\N	2018-05-11 20:16:09	2018-05-11 20:16:09	\N	f	f	NOVUS	\N	0
+1056	\N	\N	dorah sumari	dorahsumari@gmail.com	0715286035	\N	free	11-05-2018	11-06-2018	520	0	\N	\N	2018-05-11 14:18:06	2018-05-11 14:18:06	\N	f	f	NOVUS	\N	0
+1055	\N	\N	Bertha Dotto	dottobertha@gmail.com	0714776639	\N	free	11-05-2018	11-06-2018	1	0	\N	\N	2018-05-11 12:32:32	2018-05-11 12:32:32	\N	f	f	NOVUS	\N	0
+1054	\N	\N	Theodorah John	theodorahjohn317@gmail.com	0768410722	\N	free	11-05-2018	11-06-2018	0	0	\N	\N	2018-05-11 07:36:37	2018-05-11 07:36:37	\N	f	f	NOVUS	\N	0
+1053	\N	\N	bongo ads	infobongoads@gmail.com	0756325805	\N	free	11-05-2018	11-06-2018	5632	0	https://lh6.googleusercontent.com/--TDIW6rdgCc/AAAAAAAAAAI/AAAAAAAAAXg/HeRiXqXaC8c/photo.jpg	\N	2018-05-10 21:42:40	2018-05-10 21:42:40	\N	f	f	NOVUS	\N	0
+1052	\N	\N	Bahati Kundya	kundyabahati12@gmail.com	0764222758	\N	free	10-05-2018	10-06-2018	944	0	\N	\N	2018-05-10 14:26:18	2018-05-10 14:26:18	\N	f	f	NOVUS	\N	0
+1049	\N	\N	Wolfram Mwalongo	wmwalongo@gmail.com	0754931305	\N	free	10-05-2018	10-06-2018	10	0	https://lh5.googleusercontent.com/-UhlJBTpWaD8/AAAAAAAAAAI/AAAAAAAAAHA/IYpNlzz8rNY/photo.jpg	\N	2018-05-10 04:08:42	2018-05-10 04:08:42	\N	f	f	NOVUS	\N	0
+1048	\N	\N	hezron barack	barackhez@gmail.com	0658637710	\N	free	09-05-2018	09-06-2018	4	0	https://lh6.googleusercontent.com/-FB8mwL7ZBw0/AAAAAAAAAAI/AAAAAAAAMdg/LNV9AirvWbE/photo.jpg	\N	2018-05-09 17:24:20	2018-05-09 17:24:20	\N	f	f	NOVUS	\N	0
+1046	\N	\N	Fredrick Abisai	fredabisai@gmail.com	0653588291	\N	free	09-05-2018	09-06-2018	500000	0	https://lh6.googleusercontent.com/-rxTLuKZpFGw/AAAAAAAAAAI/AAAAAAAABRc/xvWHxB80CWo/photo.jpg	\N	2018-05-09 12:23:14	2018-05-09 12:23:14	\N	f	f	NOVUS	\N	0
+1045	\N	\N	theresa bagenda	theresa.bagenda@gmail.com	0767551166	\N	free	09-05-2018	09-06-2018	4	0	\N	\N	2018-05-09 11:52:08	2018-05-09 11:52:08	\N	f	f	NOVUS	\N	0
+1044	\N	\N	Sevaness Lemington	sevanesslemington@gmail.com	0715458773	\N	free	09-05-2018	09-06-2018	4	0	\N	\N	2018-05-09 11:13:14	2018-05-09 11:13:14	\N	f	f	NOVUS	\N	0
+1042	\N	\N	Getrude Magawa	magawa30@gmail.com	0754877006	\N	free	09-05-2018	09-06-2018	0	0	\N	\N	2018-05-09 08:20:15	2018-05-09 08:20:15	\N	f	f	NOVUS	\N	0
+1040	\N	\N	Cyrus Peter	danextle@gmail.com	0752887231	\N	free	09-05-2018	09-06-2018	200000	0	https://lh4.googleusercontent.com/-_Sw4xOe-5JA/AAAAAAAAAAI/AAAAAAAAADo/SkM4ibGBUa4/photo.jpg	\N	2018-05-08 21:22:03	2018-05-08 21:22:03	\N	f	f	NOVUS	\N	0
+1039	\N	\N	Boniphace Pillar	boniphacepillar@gmail.com	0682167102	\N	free	08-05-2018	08-06-2018	1	0	\N	\N	2018-05-08 20:24:03	2018-05-08 20:24:03	\N	f	f	NOVUS	\N	0
+194	255000438903	\N	Beatrice Roman	triceroman@gmail.com	0784286340	\N	premium	25-06-2018	25-06-2019	2	0	https://lh4.googleusercontent.com/-BY1SVGatjHs/AAAAAAAAAAI/AAAAAAAAAC4/Ob2VmHdoJM4/photo.jpg	\N	2017-12-18 14:48:12	2018-06-30 04:48:49	\N	f	f	Ass. Manager	\N	0
+1071	255000590703	\N	Azmina Aamir	azmina.aamir@gmail.com	0785313786	\N	premium	16-07-2018	14-09-2018	2	0	\N	\N	2018-05-15 19:52:42	2018-08-14 09:58:44	\N	f	f	Supervisor	\N	0
+1047	255000606875	\N	Masigati Charles	masigaticharles@gmail.com	0769766997	\N	premium	13-07-2018	12-09-2018	0	0	\N	\N	2018-05-09 13:11:19	2018-08-20 08:25:08	\N	f	f	Ass. Supervisor	\N	0
+540	255000041895	\N	Silem Godfrey	silemgf@gmail.com	0715868673	\N	premium	19-06-2018	19-06-2019	1	0	https://lh5.googleusercontent.com/-8hSV76p64_Y/AAAAAAAAAAI/AAAAAAAAqRY/Bmcq7iU9-dM/photo.jpg	\N	2018-02-09 14:25:27	2018-07-19 09:06:47	\N	f	f	Manager	\N	0
+1111	255200022568	\N	Tinah Kweka	kwekatinah@gmail.com	0757628933	\N	free	08-06-2018	09-07-2018	0	0	\N	\N	2018-06-08 19:29:09	2018-06-08 19:29:09	\N	f	f	Novus	\N	0
+500	255000305966	\N	marcia john	mashayo100@gmail.com	0759899466	\N	free	02-02-2018	05-03-2018	1	0	https://lh6.googleusercontent.com/-R7isonLJdqI/AAAAAAAAAAI/AAAAAAAAC2E/_W-DDVaklzc/photo.jpg	\N	2018-02-02 12:38:53	2018-06-07 19:52:07	\N	f	f	Supervisor	\N	0
+1104	255200021537	\N	Elia Israel	eliaisrael44@gmail.com	0714150552	\N	free	07-06-2018	08-07-2018	0	0	\N	\N	2018-06-07 19:51:40	2018-06-07 19:51:40	\N	f	f	Ass. Supervisor	\N	0
+1103	255200022268	\N	Jo'e Jose'p	kbusinare@gmail.com	0766005316	\N	free	07-06-2018	08-07-2018	0	0	https://lh3.googleusercontent.com/-GASYSRGgNn8/AAAAAAAAAAI/AAAAAAAAADQ/FiCatsmjQgM/photo.jpg	\N	2018-06-07 15:23:25	2018-06-07 15:23:25	\N	f	f	Ass. Supervisor	\N	0
+1102	255200020610	\N	NADHIFA SASILO	nadhifasasilo2017@gmail.com	0754828803	\N	free	07-06-2018	08-07-2018	0	0	\N	\N	2018-06-07 15:15:03	2018-06-07 15:15:03	\N	f	f	Ass. Supervisor	\N	0
+240	255000592347	\N	lizzy dommy	lizzydommy2@gmail.com	0686250006	\N	free	26-12-2017	26-01-2018	0	0	https://lh3.googleusercontent.com/-AO7bUb2vFMQ/AAAAAAAAAAI/AAAAAAAAAq4/xadVfk-_n0I/photo.jpg	\N	2017-12-26 09:09:01	2018-06-07 04:52:52	\N	f	f	Supervisor	\N	0
+1101	255000618240	\N	teddlicious silvery	teddlicioussilvery95@gmail.com	0782778829	\N	free	06-06-2018	07-07-2018	0	0	\N	\N	2018-06-06 15:32:53	2018-06-06 15:32:53	\N	f	f	Ass. Supervisor	\N	0
+1085	255200022228	\N	Said omary	kweka12@gmail.com	0712763697	\N	premium	05-07-2018	05-07-2019	0	0	https://lh3.googleusercontent.com/-p0iexI5Cmrc/AAAAAAAAAAI/AAAAAAAAAew/afKJ48LlkEc/photo.jpg	\N	2018-06-04 13:46:54	2018-07-05 08:46:57	\N	f	f	Supervisor	\N	0
+1092	255520000243	\N	Haji Limka	hajilimka@gmail.com	0777843310	\N	free	06-06-2018	07-07-2018	0	0	\N	\N	2018-06-06 09:38:57	2018-06-06 09:38:57	\N	f	f	Ass. Supervisor	\N	0
+1027	255000426269	\N	Slayo Fitness	ipriscus@gmail.com	0714928546	\N	free	07-05-2018	07-06-2018	0	0	https://lh6.googleusercontent.com/-dvI8m07Ah5g/AAAAAAAAAAI/AAAAAAAAALg/3aW00xD_RAk/photo.jpg	\N	2018-05-07 11:05:57	2018-06-06 08:47:22	\N	f	f	Ass. Supervisor	\N	0
+1091	255000621759	\N	fredinafredinand@gmail.com	fredinafredinand@gmail.com	0764189885	\N	free	06-06-2018	07-07-2018	0	0	\N	\N	2018-06-06 06:44:46	2018-06-06 06:44:46	\N	f	f	Ass. Supervisor	\N	0
+896	255000426481	\N	Getrude Shayo	shayogetrude11@gmail.com	0715045177	\N	free	07-04-2018	08-05-2018	1	0	\N	\N	2018-04-07 18:25:47	2018-06-06 03:17:47	\N	f	f	Supervisor	\N	0
+1123	255000411577	\N	cecilia patiu	otienolilian269@gmail.com	0753330730	\N	premium	17-07-2018	16-08-2018	0	0	\N	\N	2018-06-12 12:58:29	2018-07-17 09:41:25	\N	f	f	Ass. Supervisor	\N	0
+909	255000512569	\N	Frank Agrey	greyfranluk@gmail.com	0713131400	\N	premium	05-06-2018	05-07-2018	0	0	\N	\N	2018-04-11 05:05:44	2018-06-05 17:52:45	\N	f	f	Ass. Supervisor	\N	0
+1089	255000614470	\N	HUSNA SAID	husnasaid300@gmail.com	0776773434	\N	premium	12-07-2018	11-08-2018	0	0	\N	\N	2018-06-05 18:04:44	2018-07-12 16:27:53	\N	f	f	Ass. Supervisor	\N	0
+1087	255000307243	\N	Gloria Mark	gladyhsty@gmail.com	0756336184	\N	free	05-06-2018	06-07-2018	0	0	https://lh6.googleusercontent.com/-kSceFFw8WbA/AAAAAAAAAAI/AAAAAAAAAAA/wLqAnqZj5Nk/photo.jpg	\N	2018-06-05 15:24:23	2018-06-05 15:24:23	\N	f	f	Manager	\N	0
+297	255000501255	\N	Neema Kajuni	kajuniney@gmail.com	0754923552	\N	premium	16-03-2018	12-09-2018	0	0	\N	\N	2018-01-04 07:55:10	2018-06-05 15:16:14	\N	f	f	Supervisor	\N	0
+674	255000450839	\N	Farid Rashid	frseif@gmail.com	0754710542	\N	premium	28-05-2018	23-05-2019	4	0	https://lh4.googleusercontent.com/-MmlWMgwmq78/AAAAAAAAAAI/AAAAAAAAADk/WIeJu2dlgBw/photo.jpg	\N	2018-03-01 19:07:39	2018-06-05 15:01:48	\N	f	f	Ass. Supervisor	\N	0
+118	255000273956	\N	William Marisha	williammarisha@gmail.com	0784200844	\N	free	09-12-2017	09-01-2018	2	0	\N	\N	2017-12-09 11:18:29	2018-06-05 14:58:51	\N	f	f	Manager	\N	0
+211	255000550032	\N	Paloku Thereza	palokutrivis@gmail.com	0625700167	\N	premium	20-12-2017	15-01-2019	1	0	\N	\N	2017-12-20 11:42:23	2018-06-05 14:44:31	\N	f	f	Supervisor	\N	0
+279	255000598660	\N	Jacque Joej	jacquejoej7@gmail.com	0718147784	\N	free	02-01-2018	02-02-2018	73	0	\N	\N	2018-01-02 08:51:14	2018-06-05 14:31:55	\N	f	f	Ass. Supervisor	\N	0
+1086	255141412369	\N	Moses Kabungo	kbng.moses@gmail.com	0753111039	\N	free	05-06-2018	06-07-2018	0	0	https://lh5.googleusercontent.com/-NHf4Xx-odD0/AAAAAAAAAAI/AAAAAAAAChI/-j5PVYedNUk/photo.jpg	\N	2018-06-05 14:18:20	2018-06-05 14:18:20	\N	f	f	Supervisor	\N	0
+63	254000270676	\N	Ebooks Pdf Kenya	aloysiusbota@gmail.com	0729029114	\N	free	04-12-2017	04-01-2018	102	1	https://lh5.googleusercontent.com/-ozEMZvZFv2o/AAAAAAAAAAI/AAAAAAAASTw/k8B2ZKOpVMU/photo.jpg	\N	2017-12-03 21:10:49	2018-06-05 13:39:41	\N	f	f	Manager	\N	0
+1134	255200022494	\N	Bim Dashi	bimdashi7@gmail.com	0762890129	\N	premium	18-07-2018	17-07-2019	0	0	\N	\N	2018-06-14 20:45:32	2018-07-18 04:18:12	\N	f	f	Novus	\N	0
+1133	255000602063	\N	Noel Maarufu	noelmaarufu@gmail.com	0769510547	\N	free	14-06-2018	15-07-2018	0	0	\N	\N	2018-06-14 20:17:10	2018-06-14 20:17:10	\N	f	f	Ass. Supervisor	\N	0
+1132	255200022549	\N	Glory Ludan	ludanglory@gmail.com	0769241137	\N	free	14-06-2018	15-07-2018	0	0	\N	\N	2018-06-14 18:20:55	2018-06-14 18:20:55	\N	f	f	Novus	\N	0
+1032	255200020597	\N	Ahmada Hussein	ahmadahussein19@gmail.com	0779898619	\N	free	08-05-2018	08-06-2018	1	0	https://lh4.googleusercontent.com/-hDP9pODcUNo/AAAAAAAAAAI/AAAAAAAACuA/9kHFNGJ_Jv0/photo.jpg	\N	2018-05-08 08:35:25	2018-06-14 06:54:47	\N	f	f	Novus	\N	0
+417	255200018187	\N	Ramadhani Shabani	rs7291266@gmail.com	0766158810	\N	free	20-01-2018	20-02-2018	1	0	\N	\N	2018-01-20 14:34:05	2018-06-13 13:01:58	\N	f	f	Ass. Supervisor	\N	0
+9	255200023944	Chriss Geremy	Mselem Abeidy Saleh	geremychriss@gmail.com	0768144870	\N	premium	14-11-2017	06-03-2019	6	0	https://lh3.googleusercontent.com/-qp8cjcE94-Y/AAAAAAAAAAI/AAAAAAAAHSU/l24MuIxm54M/photo.jpg	\N	\N	2018-07-25 10:34:05	\N	f	f	Supervisor	\N	0
+1090	255200022349	\N	VAILETH SWALE	swalevaileth@gmail.com	0768471767	\N	premium	30-07-2018	29-08-2018	0	0	\N	\N	2018-06-06 06:25:21	2018-07-30 12:29:42	\N	f	f	Novus	\N	0
+720	255200020024	\N	Samson Masalu	masalu912.sm@gmail.com	0683168545	\N	premium	14-06-2018	13-08-2019	2	0	https://lh5.googleusercontent.com/-Ah20033JmnA/AAAAAAAAAAI/AAAAAAAAArE/VgO_QNRdKgs/photo.jpg	\N	2018-03-08 13:55:01	2018-08-12 15:03:22	\N	f	f	Ass. Supervisor	\N	0
+1130	255000063489	\N	Eunice Togoro	eunicetogoro7@gmail.com	0762249841	\N	premium	13-08-2018	12-09-2018	0	0	\N	\N	2018-06-13 10:33:51	2018-08-13 08:45:32	\N	f	f	Manager	\N	0
+1088	255200021685	\N	Kissa Kabuje	kissakabuje8@gmail.com	0765441647	\N	premium	14-08-2018	14-08-2019	0	0	https://lh6.googleusercontent.com/-GF6_JVaOtvs/AAAAAAAAAAI/AAAAAAAAASA/Vk_CWPbwIt4/photo.jpg	\N	2018-06-05 15:51:21	2018-08-14 09:42:54	\N	f	f	Ass. Supervisor	\N	0
+326	255200017807	\N	Venance Munyasa	vmunyasa@gmail.com	0677269388	\N	premium	15-08-2018	14-09-2018	2	0	https://lh6.googleusercontent.com/-IgTWI9PBBJA/AAAAAAAAAAI/AAAAAAAAACQ/X6Pot1wZKwM/photo.jpg	\N	2018-01-08 10:47:06	2018-08-15 12:14:48	\N	f	f	Ass. Supervisor	\N	0
+1129	255200020167	\N	Joanmary Mayunga	joanmary.mayunga@gmail.com	0754420042	\N	free	13-06-2018	14-07-2018	0	0	https://lh6.googleusercontent.com/-DHn_F5YzNBk/AAAAAAAAAAI/AAAAAAAAEc0/IVoaD1zLmuw/photo.jpg	\N	2018-06-13 10:19:23	2018-06-13 10:19:23	\N	f	f	Ass. Supervisor	\N	0
+1127	255000214918	\N	Abdul-latif Othman	abdulmziki@gmail.com	0711809929	\N	free	13-06-2018	14-07-2018	0	0	https://lh6.googleusercontent.com/-nwYEq3P0qjk/AAAAAAAAAAI/AAAAAAAAF7Y/l7HJJJaOBPs/photo.jpg	\N	2018-06-13 08:45:39	2018-06-13 08:45:39	\N	f	f	Novus	\N	0
+1126	255000492728	\N	Innocent Francis Kisima	ikissima1@gmail.com	0719899282	\N	free	12-06-2018	13-07-2018	0	0	\N	\N	2018-06-12 20:02:25	2018-06-12 20:05:28	\N	f	f	Ass. Manager	\N	0
+1125	255000601406	\N	Daudi Philipo Amasi	daudi.philipo@gmail.com	0764986631	\N	free	12-06-2018	13-07-2018	0	0	https://lh6.googleusercontent.com/-v3Iun4SLYOw/AAAAAAAAAAI/AAAAAAAAK7E/qeohMqf6qmA/photo.jpg	\N	2018-06-12 15:48:45	2018-06-12 15:48:45	\N	f	f	Ass. Supervisor	\N	0
+1124	255000604103	\N	Michael James	mj393749@gmail.com	0716838648	\N	free	12-06-2018	13-07-2018	0	0	\N	\N	2018-06-12 13:25:37	2018-06-12 13:25:37	\N	f	f	Ass. Supervisor	\N	0
+1122	254200022653	\N	omar adam	omardev10@gmail.com	0653128687	\N	free	12-06-2018	13-07-2018	0	0	\N	\N	2018-06-12 11:10:05	2018-06-12 11:10:05	\N	f	f	Novus	\N	0
+1121	255000256532	\N	Ferdinand Biedrawa	fmanirerekana@gmail.com	0735018229	\N	free	12-06-2018	13-07-2018	0	0	https://lh3.googleusercontent.com/--aoyW7StYBk/AAAAAAAAAAI/AAAAAAAAFrE/e7dt8UAnsnE/photo.jpg	\N	2018-06-12 10:23:46	2018-06-12 10:23:46	\N	f	f	Ass. Supervisor	\N	0
+746	255000537412	\N	laura m.panga	lauram.pangak24@gmail.com	0767851747	\N	premium	12-06-2018	10-09-2018	461	0	https://lh3.googleusercontent.com/-2pBsJ0mF46w/AAAAAAAAAAI/AAAAAAAAABU/B3OhIjVnI3k/photo.jpg	\N	2018-03-14 06:19:30	2018-07-11 13:32:09	\N	f	f	Ass. Supervisor	\N	0
+1120	255000615282	\N	HAMADI FADHILI	hamadifadhili1@gmail.com	0767421678	\N	free	11-06-2018	12-07-2018	0	0	https://lh3.googleusercontent.com/-iJnrUNR1f-A/AAAAAAAAAAI/AAAAAAAAAEQ/amtLrQBDs5k/photo.jpg	\N	2018-06-11 20:34:50	2018-06-11 20:34:50	\N	f	f	Ass. Supervisor	\N	0
+1119	254000497474	\N	liam sam	sliam254@gmail.com	0717359689	\N	free	11-06-2018	12-07-2018	0	1	https://lh3.googleusercontent.com/-i5ini7bVyIM/AAAAAAAAAAI/AAAAAAAAQRc/mIc7d5pxC1Y/photo.jpg	\N	2018-06-11 19:57:14	2018-06-11 19:57:14	\N	f	f	Novus	\N	0
+1117	255200022489	\N	Jane Regu	iscobabu9@gmail.com	0659447042	\N	premium	13-07-2018	12-08-2018	0	0	\N	\N	2018-06-11 12:18:43	2018-07-13 11:45:58	\N	f	f	Novus	\N	0
+1116	255200022804	\N	Salha Ali Said	chalachanny@gmail.com	0776344442	\N	free	10-06-2018	11-07-2018	0	0	\N	\N	2018-06-10 10:24:18	2018-06-11 14:11:42	\N	f	f	Novus	\N	0
+1114	255200013557	\N	Husna Kiwanga	kiwangahusna@gmail.com	0714955949	\N	free	10-06-2018	11-07-2018	0	0	https://lh4.googleusercontent.com/-FDxRas6r53M/AAAAAAAAAAI/AAAAAAAAABw/NySZOsVUHo4/photo.jpg	\N	2018-06-10 04:14:41	2018-06-10 04:14:41	\N	f	f	Ass. Supervisor	\N	0
+1113	255000608263	\N	Fam Domination	famdomination90@gmail.com	0756237913	\N	free	09-06-2018	10-07-2018	0	0	https://lh6.googleusercontent.com/-KPjmDF-kGRY/AAAAAAAAAAI/AAAAAAAAAB8/38DsoosCu0Q/photo.jpg	\N	2018-06-09 19:19:09	2018-06-09 19:19:09	\N	f	f	Ass. Supervisor	\N	0
+1112	255000578955	\N	Adily Waziri	adilywaziri@gmail.com	0768407410	\N	free	09-06-2018	10-07-2018	0	0	\N	\N	2018-06-08 21:03:31	2018-06-08 21:03:31	\N	f	f	Ass. Supervisor	\N	0
+1109	255200021687	\N	christina mbilinyi	tinalumuliko2017@gmail.com	0763470388	\N	free	08-06-2018	09-07-2018	0	0	\N	\N	2018-06-08 13:59:23	2018-06-08 13:59:23	\N	f	f	Ass. Supervisor	\N	0
+366	255000537047	\N	Becky Lynec	beckymafia.ej@gmail.com	0756344164	\N	premium	08-06-2018	08-07-2018	0	0	https://lh3.googleusercontent.com/-uGZS8fG1Llk/AAAAAAAAAAI/AAAAAAAALy0/g2YLAl2TS0I/photo.jpg	\N	2018-01-15 20:32:14	2018-06-08 13:48:52	\N	f	f	Ass. Supervisor	\N	0
+1108	255000607070	\N	Dyegula Juma	dyegula2014@gmail.com	0764962800	\N	free	08-06-2018	09-07-2018	0	0	\N	\N	2018-06-08 09:34:04	2018-06-08 09:34:04	\N	f	f	Supervisor	\N	0
+1107	255000586277	\N	Abdulkadir Mbarouk	mbaroukabdulkadir@gmail.com	0655113374	\N	free	08-06-2018	09-07-2018	0	0	\N	\N	2018-06-08 08:55:04	2018-06-08 08:55:04	\N	f	f	Supervisor	\N	0
+810	255000518308	\N	gerady magaigwa	geradymagaigwa@gmail.com	0763923150	\N	free	28-03-2018	28-04-2018	4	0	https://lh6.googleusercontent.com/-3-mw7hzUB3M/AAAAAAAAAAI/AAAAAAAABSc/awA5Z_Dq9Fs/photo.jpg	\N	2018-03-28 06:27:05	2018-06-08 08:16:39	\N	f	f	Ass. Supervisor	\N	0
+1105	255200022746	\N	Ghati Mnanka	ghatimnanka23@gmail.com	0684804108	\N	free	08-06-2018	09-07-2018	0	0	\N	\N	2018-06-08 06:55:16	2018-06-08 06:55:16	\N	f	f	Novus	\N	0
+534	255000420818	\N	Grace Joseph Chale	gbashagi@gmail.com	0765860205	\N	premium	06-06-2018	06-07-2018	0	0	https://lh5.googleusercontent.com/-Eqg-QUG1HZg/AAAAAAAAAAI/AAAAAAAAAHo/_Rp9OQ--aiw/photo.jpg	\N	2018-02-08 09:23:37	2018-06-07 21:13:11	\N	f	f	Manager	\N	0
+1159	255000202340	\N	Rose Ihadike	rosemalemba96@gmail.com	0767999008	\N	free	25-06-2018	26-07-2018	0	0	\N	\N	2018-06-25 12:11:46	2018-06-25 12:11:46	\N	f	f	Manager	\N	0
+1158	255200000374	\N	opprnee@gmail.com	opprnee@gmail.com	0656124777	\N	free	25-06-2018	26-07-2018	0	0	\N	\N	2018-06-25 10:09:02	2018-06-25 10:09:02	\N	f	f	Novus	\N	0
+410	255000538520	\N	Alice in Tanzaland- Liccy Mdada	agmbelwa@gmail.com	0717167262	\N	premium	23-06-2018	23-07-2018	1	0	https://lh4.googleusercontent.com/-RN633MnfKpc/AAAAAAAAAAI/AAAAAAAADB4/uEmicr_SfJQ/photo.jpg	\N	2018-01-20 09:18:43	2018-06-23 08:14:09	\N	f	f	Ass. Supervisor	\N	0
+1154	255200022203	\N	Lucas mwilwa	lucasmwilwa@gmail.com	0753968552	\N	free	21-06-2018	22-07-2018	0	0	https://lh6.googleusercontent.com/-Sf5NrgDayyo/AAAAAAAAAAI/AAAAAAAAEb4/5YtanRRdOcY/photo.jpg	\N	2018-06-21 17:06:30	2018-06-21 17:06:30	\N	f	f	Ass. Supervisor	\N	0
+1153	255200022505	\N	Yusuph Kisiba	kisibay@gmail.com	0655323305	\N	free	21-06-2018	22-07-2018	0	0	https://lh6.googleusercontent.com/-XpbZKjVhmgQ/AAAAAAAAAAI/AAAAAAAAABg/W1EVkrFYLSM/photo.jpg	\N	2018-06-21 16:54:56	2018-06-21 16:54:56	\N	f	f	Novus	\N	0
+1152	255200022520	\N	Aneth Jasper	anethjasper158@gmail.com	0676474188	\N	free	20-06-2018	21-07-2018	0	0	\N	\N	2018-06-20 18:19:52	2018-06-20 18:19:52	\N	f	f	Novus	\N	0
+1156	255000625471	\N	joe mwatowine	joemwatowine@gmail.com	0656939210	\N	premium	24-07-2018	23-08-2018	0	0	\N	\N	2018-06-23 21:43:10	2018-07-25 05:42:33	\N	f	f	Ass. Supervisor	\N	0
+1155	255200022715	\N	Nemilaki Peter	nemilakipeter@gmail.com	0765080687	\N	premium	03-08-2018	01-02-2019	0	0	\N	\N	2018-06-23 05:36:35	2018-08-03 08:12:59	\N	f	f	Novus	\N	0
+1115	255000456412	\N	Nepha Mulungu	nepha.jm@gmail.com	0762805651	\N	premium	12-08-2018	11-09-2018	0	0	\N	\N	2018-06-10 07:09:24	2018-08-13 04:25:12	\N	f	f	Manager	\N	0
+1118	255000593975	\N	Claudia Silayo	claudiasilayo2010@gmail.com	0766852167	\N	premium	13-08-2018	11-02-2019	0	0	\N	\N	2018-06-11 16:30:26	2018-08-13 13:53:21	\N	f	f	Manager	\N	0
+1139	255200021281	\N	Jackson Ntamallah	jacksonntamallah93@gmail.com	0753332206	\N	premium	17-08-2018	16-09-2018	0	0	\N	\N	2018-06-17 07:34:37	2018-08-17 17:39:52	\N	f	f	Novus	\N	0
+1157	255000602278	\N	Ramadhan issa mohammed/assstant spvr	ramaissamohd@gmail.com	0773530442	\N	premium	02-08-2018	01-09-2018	0	1	\N	\N	2018-06-24 11:38:59	2018-08-20 13:39:46	\N	f	f	Ass. Supervisor	\N	0
+1150	255000537957	\N	Edith Maganga	edithmaganga16@gmail.com	0754270297	\N	free	20-06-2018	21-07-2018	0	1	\N	\N	2018-06-20 12:34:59	2018-06-20 12:35:22	\N	f	f	Manager	\N	0
+971	255000615028	\N	Khalfan Ngeleja	khalfanmanesty@gmail.com	0759509126	\N	free	25-04-2018	26-05-2018	2	0	https://lh5.googleusercontent.com/-JHoHyM1JjCE/AAAAAAAAAAI/AAAAAAAAARU/tWqfuFtyZio/photo.jpg	\N	2018-04-25 08:45:07	2018-06-20 12:12:21	\N	f	f	Ass. Supervisor	\N	0
+1148	255200001741	\N	rhoda sendama	rhodasl07@gmail.com	0712977022	\N	free	20-06-2018	21-07-2018	0	0	https://lh3.googleusercontent.com/-JxpPYL3BoFk/AAAAAAAAAAI/AAAAAAAAABk/rnj-bwR6CjI/photo.jpg	\N	2018-06-20 09:05:14	2018-06-20 09:05:14	\N	f	f	Ass. Supervisor	\N	0
+1147	255200022830	\N	Joshua BONGOLE	joshuabongole8@gmail.com	0719737571	\N	free	19-06-2018	20-07-2018	0	0	\N	\N	2018-06-19 17:27:37	2018-06-19 17:27:37	\N	f	f	Novus	\N	0
+1146	255200000779	\N	Sarah Kimathire	sarahkimathire68@gmail.com	0754546004	\N	free	19-06-2018	20-07-2018	0	0	\N	\N	2018-06-19 14:38:22	2018-06-19 14:38:22	\N	f	f	Ass. Supervisor	\N	0
+1145	254000273492	\N	mathew lesanjo	lesanjom@gmail.com	0733403933	\N	free	19-06-2018	20-07-2018	0	1	https://lh6.googleusercontent.com/-6Om6iWuFmkQ/AAAAAAAAAAI/AAAAAAAADkI/lfyP5scze1w/photo.jpg	\N	2018-06-19 12:56:04	2018-06-19 12:56:04	\N	f	f	Ass. Supervisor	\N	0
+1141	255000002200	\N	Anderson Kimaryo	andersonkimaryo@gmail.com	0785800900	\N	premium	18-06-2018	18-08-2018	0	1	\N	\N	2018-06-18 13:48:11	2018-06-19 08:24:40	\N	f	f	Ass. Supervisor	\N	0
+1143	254000497628	\N	Destiny Achievers	destinyachievershg1@gmail.com	0789044046	\N	free	18-06-2018	19-07-2018	0	1	\N	\N	2018-06-18 18:27:05	2018-06-18 18:27:05	\N	f	f	Ass. Supervisor	\N	0
+1142	255200013273	\N	Irene Munisi	irenemunisiaminiely@gmail.com	0757245342	\N	free	18-06-2018	19-07-2018	0	0	\N	\N	2018-06-18 15:43:56	2018-06-18 15:43:56	\N	f	f	Ass. Supervisor	\N	0
+1140	255000584505	\N	Emma Mputa	emmamputa@gmail.com	0625748804	\N	free	18-06-2018	19-07-2018	0	0	\N	\N	2018-06-18 09:50:15	2018-06-18 09:50:15	\N	f	f	Ass. Supervisor	\N	0
+922	255000490264	\N	Nancy Sway	nancysway40@gmail.com	0759843989	\N	premium	18-06-2018	17-12-2018	1	0	https://lh5.googleusercontent.com/-ih3KvgNNBok/AAAAAAAAAAI/AAAAAAAAAMU/cqRK-sGHZKQ/photo.jpg	\N	2018-04-14 10:42:31	2018-06-18 09:02:22	\N	f	f	Ass. Supervisor	\N	0
+583	255200068868	\N	Isaac Raphael	isaacraphaelsex@gmail.com	0767269729	\N	free	14-02-2018	17-03-2018	1	0	https://lh4.googleusercontent.com/-GJ-nIzQYlyM/AAAAAAAAAAI/AAAAAAAAAQw/x8Cwq38DxY4/photo.jpg	\N	2018-02-14 10:38:29	2018-06-16 11:59:31	\N	f	f	Novus	\N	0
+1137	255000602482	\N	Samuel Mvile	s.mvile500@gmail.com	0752258480	\N	free	16-06-2018	17-07-2018	0	0	\N	\N	2018-06-16 07:22:16	2018-06-16 07:22:16	\N	f	f	Ass. Supervisor	\N	0
+1136	255200000207	\N	Rahma Killo	rahmakillo@gmail.com	0714554515	\N	free	15-06-2018	16-07-2018	0	0	\N	\N	2018-06-15 15:58:18	2018-06-15 15:58:18	\N	f	f	Supervisor	\N	0
+1135	255000601469	\N	Jeremiah Furaha	furahajeremy1990@gmail.com	0756456999	\N	free	15-06-2018	16-07-2018	0	0	https://lh3.googleusercontent.com/-S9eEJlXNJIc/AAAAAAAAAAI/AAAAAAAABco/H9YIzrZ7_jw/photo.jpg	\N	2018-06-15 05:56:04	2018-06-15 05:56:04	\N	f	f	Ass. Supervisor	\N	0
+1131	255200022894	\N	PHONY JOACHIM	phonyjoachim@gmail.com	0766256973	\N	free	14-06-2018	15-07-2018	0	0	\N	\N	2018-06-14 11:48:16	2018-06-14 11:48:16	\N	f	f	Novus	\N	0
+959	255000623033	\N	Nikhil Mansukh	nikhildharsi91@gmail.com	0713616717	\N	free	23-04-2018	24-05-2018	0	0	https://lh5.googleusercontent.com/-E9NeSxFhLXc/AAAAAAAAAAI/AAAAAAAAACQ/qKH4Ci6BdT8/photo.jpg	\N	2018-04-23 09:37:28	2018-06-14 10:44:34	\N	f	f	Ass. Supervisor	\N	0
+1168	255000620072	\N	Kikuwi Sinna	kikuwisina@gmail.com	0719804481	\N	free	27-06-2018	28-07-2018	0	0	\N	\N	2018-06-27 01:26:09	2018-06-27 01:26:09	\N	f	f	Ass. Supervisor	\N	0
+1128	255200018295	\N	Jessica Kagendo	jessica.kagendo@gmail.com	0754835679	\N	premium	13-06-2018	14-07-2019	0	0	https://plus.google.com/_/focus/photos/private/AIbEiAIAAABECNmA6-Oh2LO9_gEiC3ZjYXJkX3Bob3RvKigyZjRiOWIzNjg1MzBlNDYzZDI0Y2VhZmY0NTQzNDY1ODJjMWM0OGQxMAHtiIf9SGL3ROOjP8U_PZYQEsaNWg	\N	2018-06-13 08:51:27	2018-06-26 19:10:42	\N	f	f	Supervisor	\N	0
+1166	255200022686	\N	Atu Longo	atulongo34@gmail.com	0755896060	\N	free	26-06-2018	27-07-2018	0	0	\N	\N	2018-06-26 11:00:28	2018-06-26 11:00:28	\N	f	f	Novus	\N	0
+1165	255656695890	\N	Ally S. Kaboko	a.kaboko686@gmail.com	0656695890	\N	free	26-06-2018	27-07-2018	0	0	https://lh3.googleusercontent.com/-dydCjJ8ySrc/AAAAAAAAAAI/AAAAAAAAAAc/GG-Hf4DLKv4/photo.jpg	\N	2018-06-26 10:50:27	2018-06-26 10:50:27	\N	f	f	Novus	\N	0
+1164	255000415467	\N	tusa mahava	tmahava@gmail.com	0716953095	\N	free	26-06-2018	27-07-2018	0	0	\N	\N	2018-06-26 10:46:50	2018-06-26 10:46:50	\N	f	f	Manager	\N	0
+148	255000624529	\N	Rhobi wambura nyituga	robynawambura193@gmail.com	0674418259	\N	premium	24-07-2018	23-08-2018	4	0	https://lh6.googleusercontent.com/-7qQDxt5FSaM/AAAAAAAAAAI/AAAAAAAAAPc/Wmw3U9ZgXu0/photo.jpg	\N	2017-12-13 06:31:36	2018-08-16 07:13:04	\N	f	f	Ass. Supervisor	\N	0
+270	255000569337	\N	Hussein Salehe	hussein.salehe11@gmail.com	0656756464	\N	premium	24-07-2018	23-08-2018	4	0	https://lh3.googleusercontent.com/-Z4rx6qdW3F0/AAAAAAAAAAI/AAAAAAAAABk/nAymJsT0Dek/photo.jpg	\N	2017-12-31 12:09:03	2018-07-25 05:34:12	\N	f	f	Ass. Supervisor	\N	0
+1144	255000024396	\N	Mary Kiginga	kigingamary@gmail.com	0713422952	\N	premium	25-07-2018	23-01-2019	0	0	\N	\N	2018-06-19 09:59:08	2018-07-25 14:40:42	\N	f	f	Manager	\N	0
+187	255000590889	\N	Winnie-rose Jeremiah	winniejeremiah@gmail.com	0672952458	\N	premium	27-07-2018	25-01-2019	0	0	https://lh5.googleusercontent.com/-qN-pIQMJCD0/AAAAAAAAAAI/AAAAAAAAKo8/qejfF0JLkXY/photo.jpg	\N	2017-12-18 09:37:00	2018-07-27 06:49:18	\N	f	f	Ass. Supervisor	\N	0
+1167	255000468487	\N	Dola Kalinga	dolakalinga@gmail.com	0755303686	\N	premium	24-07-2018	22-01-2019	0	0	\N	\N	2018-06-26 17:30:48	2018-07-27 12:10:30	\N	f	f	Manager	\N	0
+1163	255200020756	\N	joseph sabinus	josephsabinus36@gmail.com	0768550170	\N	premium	31-07-2018	30-08-2018	0	0	https://lh4.googleusercontent.com/-U_ExStd1WeI/AAAAAAAAAAI/AAAAAAAAASI/Psqp58i5kJo/photo.jpg	\N	2018-06-26 07:19:17	2018-07-31 10:57:54	\N	f	f	Ass. Supervisor	\N	0
+1151	255000452669	\N	Robert Tairo	robbytairo210@gmail.com	0712713006	\N	premium	03-08-2018	03-08-2019	0	0	\N	\N	2018-06-20 16:08:36	2018-08-03 08:16:23	\N	f	f	Ass. Supervisor	\N	0
+1149	255200022979	\N	johnchami27@gmail.com	johnchami27@gmail.com	0715351827	\N	premium	31-07-2018	30-08-2018	0	0	\N	\N	2018-06-20 09:50:43	2018-07-31 10:59:38	\N	f	f	Novus	\N	0
+629	255200004845	\N	regina nsanya	ginansanya@gmail.com	0656722567	\N	premium	30-07-2018	28-01-2019	10	0	https://lh4.googleusercontent.com/-Zbr0Fpc-qpE/AAAAAAAAAAI/AAAAAAAAAY4/gzCApMzUNsk/photo.jpg	\N	2018-02-21 12:03:09	2018-08-17 13:00:33	\N	f	f	Ass. Supervisor	\N	0
+1179	255000483063	\N	Esther Faber	angerisfaber@gmail.com	0622999998	\N	premium	29-06-2018	28-01-2019	0	0	https://lh4.googleusercontent.com/-xW34X6GvrYM/AAAAAAAAAAI/AAAAAAAAPMI/pCFg1UTqwyc/photo.jpg	\N	2018-06-29 05:54:31	2018-08-03 07:38:40	\N	f	f	Ass. Supervisor	\N	0
+1279	255200022629	\N	Salma Yahya	salmafbo89@gmail.com	0773184944	\N	free	06-08-2018	06-09-2018	0	0	\N	\N	2018-08-06 00:58:20	2018-08-06 00:58:20	\N	f	f	Ass. Supervisor	\N	\N
+1	\N	\N	admin	\N	\N	$2y$10$IKfk9FGqfzM6Bcr69FNzieSbgRQvuV0bb1pas2A5g3giV6Hh2W20S	free	14-11-2017	\N	\N	\N	\N	Y2VfPeod3LXXgVD3rcGglibeW0lXJGBSSH28nbsIa0eTiqBjYv8stW3qViOL	2017-11-29 12:35:07	2018-05-28 09:02:03	\N	t	f	NOVUS	\N	0
+1192	255000465027	\N	abdulghanim nassor	abdulltiky@gmail.com	0717222361	\N	premium	03-07-2018	02-08-2019	0	1	https://lh4.googleusercontent.com/-lBcQENmAv_o/AAAAAAAAAAI/AAAAAAAAAAA/AB6qoq3yo-eThHK_CFWsNT8gvUZxcDo43g/s200/photo.jpg	\N	2018-07-03 07:45:38	2018-08-21 07:54:46	\N	f	f	Man	1.0	1
+458	\N	\N	Enos Salema	enos.salema@gmail.com	0713327777	\N	premium	26-01-2018	21-08-2019	4	0	\N	\N	2018-01-26 14:28:35	2018-01-26 14:28:35	\N	f	f	NOVUS	\N	0
+1189	2552000491240	\N	Theresia Kisoka	realsuccess@flp.com	0713327777	\N	premium	03-07-2018	21-08-2019	0	0	https://lh3.googleusercontent.com/-w3gST4nmWSk/AAAAAAAAAAI/AAAAAAAAACU/ofKMiByU--0/s200/photo.jpg	\N	2018-07-03 04:47:22	2018-07-10 14:16:10	\N	f	f	Man	1.0	1
+1311	255001001001	\N	Jackson Twalipo	echasste@gmail.com	0756723040	\N	free	21-08-2018	21-09-2018	0	0	https://lh6.googleusercontent.com/-3r7FUAGm02k/AAAAAAAAAAI/AAAAAAAAACE/POjI0cHY8oo/photo.jpg	\N	2018-08-21 11:38:19	2018-08-21 11:38:19	\N	f	f	Ass. Manager	3.0.6	0
+\.
+
+
+--
+-- Data for Name: versions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.versions (id, version_number, status, features, created_at, updated_at, deleted_at, critical, os_type) FROM stdin;
 1	3.0.6	t	Greate new features	\N	\N	\N	t	0
-2	1.0.3	t	Greate new features	\N	\N	\N	f	1
+2	1.0.7	t	Greate new features	\N	\N	\N	f	1
 \.
 
 
 --
--- Name: bundles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: meventeufdltog
+-- Name: bundles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.bundles_id_seq', 3, true);
 
 
 --
--- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: meventeufdltog
+-- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.categories_id_seq', 10, true);
 
 
 --
--- Name: countries_id_seq; Type: SEQUENCE SET; Schema: public; Owner: meventeufdltog
+-- Name: countries_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.countries_id_seq', 3, true);
 
 
 --
--- Name: feedback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: meventeufdltog
+-- Name: feedback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.feedback_id_seq', 229, true);
+SELECT pg_catalog.setval('public.feedback_id_seq', 321, true);
 
 
 --
--- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: meventeufdltog
+-- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.migrations_id_seq', 211, true);
 
 
 --
--- Name: oauth_clients_id_seq; Type: SEQUENCE SET; Schema: public; Owner: meventeufdltog
+-- Name: oauth_clients_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.oauth_clients_id_seq', 2, true);
 
 
 --
--- Name: oauth_personal_access_clients_id_seq; Type: SEQUENCE SET; Schema: public; Owner: meventeufdltog
+-- Name: oauth_personal_access_clients_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.oauth_personal_access_clients_id_seq', 1, true);
 
 
 --
--- Name: pay_bill_numbers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: meventeufdltog
+-- Name: pay_bill_numbers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.pay_bill_numbers_id_seq', 1, false);
 
 
 --
--- Name: payments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: meventeufdltog
+-- Name: payments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.payments_id_seq', 187, true);
+SELECT pg_catalog.setval('public.payments_id_seq', 343, true);
 
 
 --
--- Name: price_lists_id_seq; Type: SEQUENCE SET; Schema: public; Owner: meventeufdltog
+-- Name: price_lists_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.price_lists_id_seq', 6, true);
 
 
 --
--- Name: prices_id_seq; Type: SEQUENCE SET; Schema: public; Owner: meventeufdltog
+-- Name: prices_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.prices_id_seq', 516, true);
 
 
 --
--- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: meventeufdltog
+-- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.products_id_seq', 938, true);
 
 
 --
--- Name: user_devices_id_seq; Type: SEQUENCE SET; Schema: public; Owner: meventeufdltog
+-- Name: user_devices_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.user_devices_id_seq', 1739, true);
-
-
---
--- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: meventeufdltog
---
-
-SELECT pg_catalog.setval('public.users_id_seq', 1206, true);
+SELECT pg_catalog.setval('public.user_devices_id_seq', 1980, true);
 
 
 --
--- Name: versions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: meventeufdltog
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 1311, true);
+
+
+--
+-- Name: versions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.versions_id_seq', 2, true);
+
+
+--
+-- Name: bundles bundles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.bundles
+    ADD CONSTRAINT bundles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categories
+    ADD CONSTRAINT categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: countries countries_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.countries
+    ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: feedback feedback_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.feedback
+    ADD CONSTRAINT feedback_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: migrations migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.migrations
+    ADD CONSTRAINT migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: oauth_access_tokens oauth_access_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.oauth_access_tokens
+    ADD CONSTRAINT oauth_access_tokens_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: oauth_auth_codes oauth_auth_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.oauth_auth_codes
+    ADD CONSTRAINT oauth_auth_codes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: oauth_clients oauth_clients_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.oauth_clients
+    ADD CONSTRAINT oauth_clients_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: oauth_personal_access_clients oauth_personal_access_clients_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.oauth_personal_access_clients
+    ADD CONSTRAINT oauth_personal_access_clients_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: oauth_refresh_tokens oauth_refresh_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.oauth_refresh_tokens
+    ADD CONSTRAINT oauth_refresh_tokens_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pay_bill_numbers pay_bill_numbers_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pay_bill_numbers
+    ADD CONSTRAINT pay_bill_numbers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: payments payments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.payments
+    ADD CONSTRAINT payments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: price_lists price_lists_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.price_lists
+    ADD CONSTRAINT price_lists_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: prices prices_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.prices
+    ADD CONSTRAINT prices_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_devices user_devices_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_devices
+    ADD CONSTRAINT user_devices_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_business_id_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_business_id_unique UNIQUE (business_id);
+
+
+--
+-- Name: users users_email_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_email_unique UNIQUE (email);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: versions versions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.versions
+    ADD CONSTRAINT versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: oauth_access_tokens_user_id_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX oauth_access_tokens_user_id_index ON public.oauth_access_tokens USING btree (user_id);
+
+
+--
+-- Name: oauth_clients_user_id_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX oauth_clients_user_id_index ON public.oauth_clients USING btree (user_id);
+
+
+--
+-- Name: oauth_personal_access_clients_client_id_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX oauth_personal_access_clients_client_id_index ON public.oauth_personal_access_clients USING btree (client_id);
+
+
+--
+-- Name: oauth_refresh_tokens_access_token_id_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX oauth_refresh_tokens_access_token_id_index ON public.oauth_refresh_tokens USING btree (access_token_id);
+
+
+--
+-- Name: password_resets_email_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX password_resets_email_index ON public.password_resets USING btree (email);
+
+
+--
+-- Name: prices prices_price_list_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.prices
+    ADD CONSTRAINT prices_price_list_id_foreign FOREIGN KEY (price_list_id) REFERENCES public.price_lists(id);
+
+
+--
+-- Name: prices prices_product_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.prices
+    ADD CONSTRAINT prices_product_id_foreign FOREIGN KEY (product_id) REFERENCES public.products(id);
+
+
+--
+-- Name: products products_category_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_category_id_foreign FOREIGN KEY (category_id) REFERENCES public.categories(id);
+
+
+--
+-- Name: user_devices user_devices_user_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_devices
+    ADD CONSTRAINT user_devices_user_id_foreign FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM postgres;
 
 
 --
