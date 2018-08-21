@@ -92,7 +92,11 @@ class Users extends Controller
         $client = new Client();
         $client->post(
           'http://46.101.93.56/api/v2/send_user_details',
-          array('body' => $request->all())
+          [
+              'json' => [
+                $request->all()
+            ]
+          ]
         );
         
         $user = null;
