@@ -93,9 +93,7 @@ class Users extends Controller
         $client->post(
           'http://46.101.93.56/api/v2/send_user_details',
           [
-              'json' => [
-                $request->all()
-            ]
+              'json' => $request->all()
           ]
         );
         
