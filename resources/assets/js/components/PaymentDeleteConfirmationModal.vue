@@ -4,10 +4,10 @@
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
         <div class="modal-header">
+          <h4 class="modal-title">Confirm</h4>
           <button class="close" @click="$emit('close')">
             &times;
           </button>
-          <h4 class="modal-title">Confirm</h4>
         </div>
         <div class="modal-body">
           <div class="container">

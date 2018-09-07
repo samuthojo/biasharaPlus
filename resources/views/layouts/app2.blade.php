@@ -17,7 +17,7 @@
       
     <link rel="stylesheet" href="/css/app.css">
     
-    <link rel="stylesheet" href="/css/biasharaplus.css">
+    <link rel="stylesheet" href="/css/biasharaplus-cms.css">
     
     <script type="text/javascript">
       window.base_url = '{{ asset('') }}'
@@ -30,9 +30,9 @@
     <script type="text/javascript" charset="utf8"
       src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
       
-    <script src="{{asset('js/main.js')}}"></script>
-
     @yield('more')
+      
+    <script src="{{asset('js/main.js')}}"></script>
       
   </head>
   
