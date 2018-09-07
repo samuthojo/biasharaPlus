@@ -102,8 +102,11 @@
   });
 
   function callMe() {
-    table = $("#myTable").DataTable({
+    $.fn.dataTable.moment('DD-MM-YYYY') //Sort the date column if present
+
+    table = $("#myTable").dataTable({
        dom: 'Bfrtip',
+       "order": [[0, "desc"]],
        buttons: [
            {
              extend: 'print',
@@ -133,7 +136,7 @@
        iDisplayLength: 20,
        bLengthChange: false
      });
-
+          
      $(":text").keydown(function() {
        $(this).next().fadeOut(0);
      });
